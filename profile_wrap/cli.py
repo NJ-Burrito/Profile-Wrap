@@ -22,7 +22,7 @@ from .migrations import runner as migration_runner
 EXTENSIONS = (
     "facts", "gate", "plan", "research", "profile", "visuals", "linkedin", "board", "engage",
     "track", "schedule", "demo", "claude_runner", "leakcheck", "compliance", "deps",
-    "import_legacy", "update", "agents_render",
+    "import_legacy", "update", "agents_render", "providers",
 )
 
 

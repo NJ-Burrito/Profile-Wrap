@@ -1,102 +1,109 @@
-# Install the Profile-Wrap desktop app
+# Install Profile-Wrap on your computer
 
-Profile-Wrap is an independent tool. It is not affiliated with LinkedIn. The desktop app is the same
-software as the command line, in a native window. The builds are **not code-signed**, so Windows and
-macOS show a warning the first time. This page shows each step.
+⏱️ About 5 minutes. No coding. No admin password.
 
-## 1. Download
+Profile-Wrap is an independent tool. It is not affiliated with LinkedIn.
 
-Open the [latest release](https://github.com/NJ-Burrito/profile-wrap/releases/latest) and take the file for your machine:
+## 1️⃣ Download
 
-| Your computer | File |
+Open the [Releases page](https://github.com/NJ-Burrito/profile-wrap/releases/latest).
+
+Scroll down to **Assets**. Click the file for your computer:
+
+| Your computer | The file ends with |
 |---|---|
-| Windows (64-bit) | `profile-wrap-<version>-windows-x64.zip` |
-| Mac with Apple silicon (M1 and later) | `profile-wrap-<version>-macos-arm64.zip` |
-| Mac with an Intel chip | `profile-wrap-<version>-macos-x64.zip` |
-| Linux (64-bit) | `profile-wrap-<version>-linux-x64.tar.gz` |
+| 🪟 Windows | `windows-x64.zip` |
+| 🍎 Mac with an Apple chip (M1 or newer) | `macos-arm64.zip` |
+| 💻 Mac with an Intel chip | `macos-x64.zip` |
+| 🐧 Linux | `linux-x64.tar.gz` |
 
-Optional check: download `SHA256SUMS` from the same page and compare.
+Not sure which Mac you have? Click the Apple menu, then **About This Mac**. It says "Apple M..." or "Intel".
 
-```text
-Windows (PowerShell):  Get-FileHash .\profile-wrap-<version>-windows-x64.zip -Algorithm SHA256
-macOS / Linux:         shasum -a 256 profile-wrap-<version>-*.zip   (or sha256sum)
-```
+You will see: the file appears in your Downloads folder.
 
-The release also carries a GitHub build-provenance attestation: `gh attestation verify <file> --repo NJ-Burrito/profile-wrap`.
+## 2️⃣ Unzip
 
-## 2. Unzip
+🪟 Windows: right-click the file, then **Extract All**.
 
-Unzip into a folder you keep, for example `%LOCALAPPDATA%\Profile-Wrap` or `~/Applications/Profile-Wrap`. The folder
-is self-contained: no installer, no admin rights, nothing written outside it except your workspace and settings.
+🍎 Mac: double-click the file.
 
-## 3. First run
+Put the new **Profile-Wrap** folder somewhere you will remember, like your Documents folder.
 
-Start `Profile-Wrap.exe` (Windows) or `Profile-Wrap` (macOS, Linux). A window opens. On the very first run the app
-creates a **demo workspace** in `~/profile-wrap/default` (a fictional persona, no network, no account) so you can look
-around the board, the providers screen and the settings before you add your own facts. To use your own data, run
-`Profile-Wrap init` from a terminal in the install folder, or follow the quickstart in the README.
+Nothing is installed. No installer. Delete the folder and it is gone.
 
-If the window cannot open (no web view on the machine), the app opens your default browser on `127.0.0.1` instead.
-Nothing listens on any other address.
+## 3️⃣ Open
 
-## Windows: SmartScreen
+Open the folder. Double-click **Profile-Wrap**.
 
-Because the file is unsigned, Windows may say "Windows protected your PC".
+Your computer will probably show a warning first. Do not worry. It shows this for any new app that is not on a big app store yet. Here is what to do.
 
-1. Click **More info**.
-2. Click **Run anyway**.
+### 🪟 Windows: "Windows protected your PC"
 
-You do this once per downloaded copy. If the zip shows "This file came from another computer", right-click the zip,
-choose **Properties**, tick **Unblock**, then unzip.
+You will see a blue box.
 
-## macOS: Gatekeeper
+1. Click **More info** (small text in the box).
+2. A new button appears. Click **Run anyway**.
 
-macOS may say the app "cannot be opened because the developer cannot be verified".
+You only do this once.
 
-1. In Finder, **right-click** (or Control-click) `Profile-Wrap`, choose **Open**, then **Open** again in the dialog.
-2. If there is no Open button, open **System Settings > Privacy & Security**, scroll to the message about
-   `Profile-Wrap`, and click **Open Anyway**. Confirm with your password.
-3. As a last resort, in Terminal: `xattr -dr com.apple.quarantine ~/Applications/Profile-Wrap`.
+If Windows says the file "came from another computer": right-click the zip, click **Properties**, tick **Unblock**, click **OK**, then unzip again.
 
-Apple silicon requires a signature on downloaded code; the build is ad-hoc signed by PyInstaller, which is why the
-steps above are enough.
+### 🍎 Mac: "cannot be opened because the developer cannot be verified"
 
-## Linux
+1. **Right-click** the Profile-Wrap app. (Two-finger tap, or hold Control and click.)
+2. Click **Open**.
+3. Click **Open** again in the box.
 
-- Extract with `tar xzf profile-wrap-<version>-linux-x64.tar.gz` and run `./Profile-Wrap/Profile-Wrap`.
-- The native window needs GTK 3 and WebKitGTK (Debian and Ubuntu: `sudo apt install gir1.2-gtk-3.0 gir1.2-webkit2-4.1`;
-  Fedora: `sudo dnf install gtk3 webkit2gtk4.1`). Without them the app opens your browser instead.
-- Keys: the keychain needs a running Secret Service or KWallet. On a headless machine use the environment variable (below).
-- The build targets glibc systems at least as new as Ubuntu 22.04.
+You only do this once.
 
-## Where your keys are stored
+No Open button? Open the Apple menu, then **System Settings**, then **Privacy & Security**. Scroll down. You will see a line about Profile-Wrap. Click **Open Anyway**. Type your Mac password.
 
-API keys you paste into the Providers screen go to your **operating-system keychain** (macOS Keychain, Windows
-Credential Locker, Linux Secret Service or KWallet), under the service name `profile-wrap`. They are never written to a
-config file, the ledger, a log, or the board. Only the last four characters are shown. If there is no keychain (for
-example a headless Linux box), set `PROFILE_WRAP_<PROVIDER>_API_KEY` (for example `PROFILE_WRAP_ANTHROPIC_API_KEY`) in the
-environment instead. The app never proxies, shares or uploads a key; it is sent only to the provider you chose.
-Details: `docs/PROVIDERS.md`.
+### 🐧 Linux
 
-## Check that it works
+Unpack the file, then start the app inside the folder.
 
-```text
-Profile-Wrap --selftest
-```
+If no window opens, the app opens in your web browser instead. That is fine. It only works on your own computer.
 
-starts the local server without a window, checks every screen and exits 0. It makes no network call.
+Some Linux systems need two small extras for the window. Ask whoever set up your computer, or use the browser version.
 
-## Update
+## 4️⃣ What you will see
 
-Download the newer release and unzip it over the old folder (or into a new one). Your workspace and keys are not
-inside the app folder, so they stay. See `UPDATING.md`.
+A window opens with a practice account called **Maya Rivera**. She is made up.
 
-## Uninstall
+Nothing here touches your real LinkedIn. Click around:
 
-1. Delete the `Profile-Wrap` folder.
-2. Optional: delete the workspace `~/profile-wrap/` (your facts, drafts, ledger) and the settings folder
-   (`%APPDATA%\profile-wrap` on Windows, `~/Library/Application Support/profile-wrap` on macOS, `~/.config/profile-wrap` on Linux).
-3. Optional: remove saved keys. Windows: Credential Manager > Windows Credentials > entries named `profile-wrap`.
-   macOS: Keychain Access > search `profile-wrap`. Linux: your keyring manager (Seahorse), or
-   `python -c "import keyring; keyring.delete_password('profile-wrap','anthropic')"` per provider.
-4. If you set up scheduled jobs, remove them first with `Profile-Wrap schedule remove`.
+📋 **Board**: posts waiting for you
+
+⚙️ **Settings**: the big pause button lives here
+
+🔑 **Providers**: where the app gets its writing help
+
+When you are ready, the app asks a few easy questions to make it yours.
+
+## 5️⃣ Tap Allow
+
+Every post waits on the board. Read it. Tap **Allow** if you like it. Tap **Reject** if you do not.
+
+Nothing goes to LinkedIn without your tap.
+
+## 🔐 Where your keys are kept
+
+If you add a writing helper (a key from a company like Anthropic or OpenAI), the app stores it in your computer's own secure place: Keychain on Mac, Credential Manager on Windows.
+
+It is never written in a plain file and never shown in full. It goes only to the company you picked.
+
+## ⬆️ Update
+
+Download the newer release. Unzip it over the old folder. Your posts and settings stay, because they live outside the app folder.
+
+## 🗑️ Uninstall
+
+1. Delete the **Profile-Wrap** folder.
+2. Optional: delete the **profile-wrap** folder in your home folder. That is where your posts and facts live.
+3. Optional: remove saved keys. Windows: Credential Manager, entries called `profile-wrap`. Mac: Keychain Access, search `profile-wrap`.
+
+## 🆘 Still stuck?
+
+Open an [issue](https://github.com/NJ-Burrito/profile-wrap/issues) and say what you saw on screen.
+
+Developers: [FOR-DEVELOPERS.md](FOR-DEVELOPERS.md) has the checksums, the Linux packages and the command line.

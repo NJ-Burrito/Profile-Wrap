@@ -176,7 +176,7 @@ def _code_commands(text: str):
                 yield line
 
 
-@pytest.mark.parametrize("doc", ["README.md", "QUICKSTART.md", "UPDATING.md"])
+@pytest.mark.parametrize("doc", ["docs/FOR-DEVELOPERS.md", "UPDATING.md"])
 def test_every_profile_wrap_command_in_the_docs_exists(doc, tmp_path):
     """README quickstart commands are real: each ``profile-wrap <command>`` must parse (its --help exits 0)."""
     text = (REPO / doc).read_text(encoding="utf-8")
@@ -189,14 +189,39 @@ def test_every_profile_wrap_command_in_the_docs_exists(doc, tmp_path):
 
 
 def test_readme_has_the_required_parts():
+    """The front page is plain language: hero, promise, downloads, 3 steps, safety, FAQ, one developer link."""
     text = (REPO / "README.md").read_text(encoding="utf-8")
-    for needle in ("docs/assets/hero.gif", "docs/assets/flow.svg", "profile-wrap init --demo --yes", "profile-wrap demo run",
-                   "## What it does", "## Quickstart", "## FAQ", "## Roadmap", "## Licence", "MIT", "v0.2"):
+    for needle in ("docs/assets/hero.gif", "docs/assets/board.png", "Your LinkedIn, on autopilot.", "You stay the boss.",
+                   "## 3 steps", "## What it does for you", "## Is it safe?", "## Questions",
+                   "docs/FOR-DEVELOPERS.md", "docs/INSTALL-DESKTOP.md", "MIT", "not affiliated with or endorsed by LinkedIn"):
         assert needle in text, needle
-    for needle in ("official api", "no dms", "own developer app", "no invites"):
+    for os_name in ("Windows", "Mac (Apple chip)", "Mac (Intel chip)", "Linux"):
+        assert re.search(r"\[[^\]]*" + re.escape(os_name) + r"\]\(https://github\.com/NJ-Burrito/profile-wrap/releases/latest\)", text), os_name
+    assert text.count("not affiliated") == 1
+    # plain language: no code, no commands, no jargon on the front page
+    assert "```" not in text and "profile-wrap " not in text
+    low = text.lower()
+    for jargon in ("api", "cli", "mcp", "uv", "pip", "gate", "token", "workspace", "terminal"):
+        assert not re.search(r"\b" + jargon + r"\b", low), jargon
+    assert "\u2014" not in text
+    assert len(re.findall(r"^\*\*[^\n]*\?\*\*$", text, re.M)) <= 5
+
+
+def test_developer_page_keeps_the_technical_and_safety_content():
+    text = (REPO / "docs" / "FOR-DEVELOPERS.md").read_text(encoding="utf-8")
+    for needle in ("profile-wrap init --demo --yes", "profile-wrap demo run", "## Quickstart", "## FAQ", "## Roadmap",
+                   "## Licence", "MIT", "v0.2", "uv tool install profile-wrap", "profile-wrap-mcp", "CODEX.md"):
+        assert needle in text, needle
+    for needle in ("official api", "no dms", "own developer app", "no invites", "caps that config cannot raise", "kill switch"):
         assert needle in text.lower(), needle
     assert re.search(r"shields\.io|badge", text)
 
+
+def test_plain_docs_explain_the_os_warnings():
+    for doc in ("QUICKSTART.md", "docs/INSTALL-DESKTOP.md"):
+        text = (REPO / doc).read_text(encoding="utf-8")
+        assert "More info" in text and "Run anyway" in text and "Open" in text and "right-click" in text.lower(), doc
+        assert "```" not in text, doc
 
 def test_release_metadata_agrees_on_the_version():
     try:

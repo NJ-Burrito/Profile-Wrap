@@ -1,0 +1,42 @@
+"""Gemini native generateContent API (key in the ``x-goog-api-key`` header, never in the URL).
+
+The OpenAI-compatible Gemini endpoint is not used: its URL has not been verified, see
+docs/PROVIDERS.md.
+"""
+from __future__ import annotations
+
+from typing import Any, Dict, List, Mapping, Optional
+from urllib.parse import quote
+
+from .base import Provider, ProviderError, Result, schema_instruction
+from .wire import post_json
+
+
+class GeminiProvider(Provider):
+    def _complete(self, system: str, messages: List[Dict[str, str]],
+                  json_schema: Optional[Mapping[str, Any]], max_tokens: int, timeout: float) -> Result:
+        key = self.api_key()
+        sys_text = system
+        gen: Dict[str, Any] = {"maxOutputTokens": max_tokens}
+        if json_schema:
+            sys_text = (system + "\n\n" if system else "") + schema_instruction(json_schema)
+            gen["responseMimeType"] = "application/json"
+        payload: Dict[str, Any] = {
+            "contents": [{"role": "model" if m["role"] == "assistant" else "user",
+                          "parts": [{"text": m["content"]}]} for m in messages],
+            "generationConfig": gen,
+        }
+        if sys_text:
+            payload["systemInstruction"] = {"parts": [{"text": sys_text}]}
+        url = f"{self.base_url}/v1beta/models/{quote(self.model, safe='')}:generateContent"
+        obj = post_json(url, {"x-goog-api-key": key}, payload, timeout, (key,))
+        try:
+            parts = obj["candidates"][0]["content"]["parts"]
+            text = "".join(p.get("text", "") for p in parts if isinstance(p, dict))
+        except (TypeError, IndexError, KeyError):
+            raise ProviderError("bad_response", "the answer had no candidates[0].content.parts "
+                                "(it may have been blocked)") from None
+        u = obj.get("usageMetadata") or {}
+        return Result(text=text, raw_id=str(obj.get("responseId", "")),
+                      usage={"input_tokens": int(u.get("promptTokenCount", 0) or 0),
+                             "output_tokens": int(u.get("candidatesTokenCount", 0) or 0)})

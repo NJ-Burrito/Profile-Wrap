@@ -345,6 +345,11 @@ _TEXT_RULES: list[tuple[str, re.Pattern, object]] = [
     ("signed-cdn-url", re.compile(r"https?://[^\s\"'<>]*licdn\.com[^\s\"'<>]*[?&](?:e|v|t|Expires|Signature|Policy|Key-Pair-Id)=", re.I), _always),
     ("linkedin-url", re.compile(r"linkedin\.com/(?:in|pub|posts|feed/update|company)/([^\s\"')<>/?#\]]+)", re.I), _bad_url),
 ]
+# Provider key shapes (sk-, sk-ant-, OpenRouter, AIza) come from the providers package.
+from .providers.keypatterns import KEY_RULES as _PROVIDER_KEY_RULES  # noqa: E402
+for _rule_id, _src in _PROVIDER_KEY_RULES:
+    if not any(r[0] == _rule_id for r in _TEXT_RULES):  # sk- and sk-ant- rules already exist
+        _TEXT_RULES.append((_rule_id, re.compile(_src), _always))
 _FONT_RE = re.compile(_FONT_NAME, re.I)
 _FONT_OK_PATHS = {"docs/FONTS.md"}
 

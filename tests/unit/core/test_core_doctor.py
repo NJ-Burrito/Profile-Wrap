@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import doctor, policy, schemalite
+from profile_wrap import doctor, policy, schemalite
 from core_helpers import needs_tzdata
 
 REPO = Path(__file__).resolve().parents[3]
@@ -93,16 +93,16 @@ def test_tools_found_on_path_pass(tmp_path):
 def test_claude_can_come_from_the_env_override(tmp_path, monkeypatch, empty_path):
     fake = tmp_path / "fake-claude"
     fake.write_text("x")
-    monkeypatch.setenv("NJLI_CLAUDE_BIN", str(fake))
+    monkeypatch.setenv("PROFILE_WRAP_CLAUDE_BIN", str(fake))
     assert by_id(doctor.run(path=empty_path), "claude")["status"] == "pass"
 
 
 def test_chrome_discovery_order(tmp_path, monkeypatch, empty_path):
     chrome = tmp_path / "mychrome"
     chrome.write_text("x")
-    monkeypatch.setenv("NJLI_BROWSER", str(chrome))
+    monkeypatch.setenv("PROFILE_WRAP_BROWSER", str(chrome))
     assert by_id(doctor.run(path=empty_path), "chrome")["detail"] == str(chrome)
-    monkeypatch.delenv("NJLI_BROWSER")
+    monkeypatch.delenv("PROFILE_WRAP_BROWSER")
     d = doctor.Doctor(path=empty_path, cfg={"render": {"chrome_path": str(chrome)}})
     assert d._chrome() == str(chrome)
 
@@ -114,7 +114,7 @@ def test_python_check_and_summary_counts(empty_path):
     assert total == len(result["checks"])
     assert doctor.exit_code(result) == (policy.EXIT_FAIL if result["summary"]["fail"] else 0)
     text = doctor.render_table(result)
-    assert "njli doctor" in text and "pass" in text
+    assert "profile-wrap doctor" in text and "pass" in text
 
 
 def test_exit_code_is_fail_when_a_check_fails():
@@ -135,7 +135,7 @@ def test_workspace_checks(make_workspace, empty_path):
     assert by_id(result, "config")["status"] == "pass"
     assert by_id(result, "pause")["status"] == "pass"
     assert by_id(result, "schedule")["status"] == "warn"
-    from njli import limits
+    from profile_wrap import limits
 
     limits.pause(ws, "posting")
     result = doctor.run(workspace=ws, path=empty_path)
@@ -145,12 +145,12 @@ def test_workspace_checks(make_workspace, empty_path):
 def test_not_a_workspace_fails(tmp_path, empty_path):
     result = doctor.run(workspace=tmp_path, path=empty_path)
     assert by_id(result, "workspace")["status"] == "fail"
-    assert "njli init" in by_id(result, "workspace")["hint"]
+    assert "profile-wrap init" in by_id(result, "workspace")["hint"]
 
 
 def test_invalid_config_is_a_fail(make_workspace, empty_path):
     ws = make_workspace()
-    path = ws / "config" / "njli.json"
+    path = ws / "config" / "profile-wrap.json"
     raw = json.loads(path.read_text(encoding="utf-8"))
     raw["posting"]["per_week"] = 99
     path.write_text(json.dumps(raw), encoding="utf-8")
@@ -163,7 +163,7 @@ def test_user_gates_and_failed_jobs_are_flagged(make_workspace, empty_path):
     ws = make_workspace()
     (ws / "hooks").mkdir(exist_ok=True)
     (ws / "hooks" / "gate_custom.py").write_text("# user code\n")
-    from njli import fsutil
+    from profile_wrap import fsutil
 
     fsutil.append_jsonl(ws / "data" / "logs" / "runs.jsonl", {"job": "build_week", "exit": 0})
     fsutil.append_jsonl(ws / "data" / "logs" / "runs.jsonl", {"job": "post_due", "exit": 1})
@@ -178,7 +178,7 @@ def test_token_expiry_levels(make_workspace, empty_path):
     import datetime as dt
 
     ws = make_workspace()
-    cfg_dir = Path(os.environ["NJLI_CONFIG_DIR"]) / "en-only"
+    cfg_dir = Path(os.environ["PROFILE_WRAP_CONFIG_DIR"]) / "en-only"
     cfg_dir.mkdir(parents=True)
     token = cfg_dir / "token.json"
 
@@ -200,7 +200,7 @@ def test_token_expiry_levels(make_workspace, empty_path):
 @pytest.mark.skipif(sys.platform == "win32", reason="POSIX permission bits")
 def test_loose_secret_permissions_fail(make_workspace, empty_path):
     ws = make_workspace()
-    cfg_dir = Path(os.environ["NJLI_CONFIG_DIR"]) / "en-only"
+    cfg_dir = Path(os.environ["PROFILE_WRAP_CONFIG_DIR"]) / "en-only"
     cfg_dir.mkdir(parents=True)
     secret = cfg_dir / "linkedin.env"
     secret.write_text("ID=x\n")
@@ -256,7 +256,7 @@ def test_compliance_lint_check_reports_a_violation_and_a_crash(tmp_path, empty_p
     import types
 
     fake = types.SimpleNamespace(lint=lambda root: ["v1", "v2"])
-    monkeypatch.setitem(sys.modules, "njli.compliance.lint", fake)
+    monkeypatch.setitem(sys.modules, "profile_wrap.compliance.lint", fake)
     assert by_id(doctor.run(path=empty_path), "compliance")["status"] == "fail"
     fake.lint = lambda root: []
     assert by_id(doctor.run(path=empty_path), "compliance")["status"] == "pass"

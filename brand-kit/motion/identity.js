@@ -2,7 +2,7 @@
    Everything personal is read from window.__brand, which YOUR project fills from brand/identity/ (never from this file):
      window.__brand = { identity: { name: "...", role: "...", names: { ar: "..." }, roles: { ar: "..." },
                         photo: "./motion/photo.jpg", signature: { viewBox: [x, y, w, h], strokes: [[id, len, width, "M... C..."], ...] } } };
-   The signature data is written by "njli motion signature" (typed or traced) into brand/identity/signature.data.js, which
+   The signature data is written by "profile-wrap motion signature" (typed or traced) into brand/identity/signature.data.js, which
    assigns window.__brand.identity.signature. This module has no default name, role, photo or stroke.
 
    identity(tl, { plan | total, at?, where?, lang, accent, root, id, signature?, ... }) -> { el, at, end, problems: [], signature }.

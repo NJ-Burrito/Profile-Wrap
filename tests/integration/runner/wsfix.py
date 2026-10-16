@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 from typing import Dict, List
 
-from njli import config
+from profile_wrap import config
 
 HERE = Path(__file__).resolve().parent
 FAKE = HERE / "fake_claude.py"

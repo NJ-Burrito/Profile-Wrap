@@ -1,6 +1,6 @@
 # Fix prompt (writer worker, one bounded pass)
 
-Template. `njli build-week` sends this once when the render or the gate failed for a draft it just built. The
+Template. `profile-wrap build-week` sends this once when the render or the gate failed for a draft it just built. The
 worker may use Edit. The orchestrator re-renders and re-runs the gate after it exits; there is no second fix pass.
 
 ---

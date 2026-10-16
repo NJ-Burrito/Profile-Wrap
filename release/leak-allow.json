@@ -9,13 +9,13 @@
     },
     {
       "rule": "media-unlisted",
-      "sha256": "dcadefb3dc0e111c0d00e40f1fdaab93de01c7a3ae0cb23e495d8bbc84e0c7ec",
-      "reason": "README hero animation, synthetic demo content only (fictional persona)"
+      "sha256": "38c93f358fd676f042b31a5daad3f80bd2f966df0ceabe4d3db3cfa9eb27e24b",
+      "reason": "README hero animation (Profile-Wrap wordmark), synthetic demo content, IBM Plex Sans (OFL)"
     },
     {
       "rule": "media-unlisted",
-      "sha256": "3c57c697667315895beb05e824e772e4a5f3ca8a08c9b1be92d3daa9b02305be",
-      "reason": "README screenshot of the review board on the fictional demo workspace"
+      "sha256": "b9d5513de6ebd84090d028b2b4d371cf21771805a77c5834ca3c4d1e57e029f9",
+      "reason": "README review board screenshot, fictional demo persona"
     }
   ]
 }

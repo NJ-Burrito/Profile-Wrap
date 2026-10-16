@@ -1,8 +1,8 @@
 # Platforms: Windows, macOS and Linux
 
-nj-linkedin runs on all three. The core is Python 3.10 or newer with the standard library only. The
+Profile-Wrap runs on all three. The core is Python 3.10 or newer with the standard library only. The
 text and slides lane needs nothing else to start; the GIF lane needs Node 22 or newer, a browser and
-ffmpeg. `njli doctor` checks every item below and prints the install line for **your** OS.
+ffmpeg. `profile-wrap doctor` checks every item below and prints the install line for **your** OS.
 
 ## What is needed for what
 
@@ -22,11 +22,11 @@ PATH, nothing is installed globally.
 
 | What | Windows | macOS | Linux |
 |---|---|---|---|
-| Secrets (`linkedin.env`, `token.json`, `ack.json`) | `%APPDATA%\nj-linkedin\<profile>\` | `~/Library/Application Support/nj-linkedin/<profile>/` | `${XDG_CONFIG_HOME:-~/.config}/nj-linkedin/<profile>/` |
-| Stable runtime copy, venv, caches | `%APPDATA%\nj-linkedin\` | `~/Library/Application Support/nj-linkedin/` | same root as secrets |
-| Workspace (your data, its own git repo) | `~\nj-linkedin\<profile>` | `~/nj-linkedin/<profile>` | `~/nj-linkedin/<profile>` |
+| Secrets (`linkedin.env`, `token.json`, `ack.json`) | `%APPDATA%\Profile-Wrap\<profile>\` | `~/Library/Application Support/profile-wrap/<profile>/` | `${XDG_CONFIG_HOME:-~/.config}/profile-wrap/<profile>/` |
+| Stable runtime copy, venv, caches | `%APPDATA%\Profile-Wrap\` | `~/Library/Application Support/profile-wrap/` | same root as secrets |
+| Workspace (your data, its own git repo) | `~\Profile-Wrap\<profile>` | `~/profile-wrap/<profile>` | `~/profile-wrap/<profile>` |
 
-Override with `NJLI_CONFIG_DIR`, `NJLI_DATA_DIR`, `NJLI_HOME` or `--workspace`. The CLI refuses a
+Override with `PROFILE_WRAP_CONFIG_DIR`, `PROFILE_WRAP_DATA_DIR`, `PROFILE_WRAP_HOME` or `--workspace`. The CLI refuses a
 workspace inside the plugin directory. An existing `~/.config/linkedin` is read only, as input to
 `import-legacy`.
 
@@ -45,30 +45,30 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 | poppler (optional) | `scoop install poppler` | `brew install poppler` | `sudo apt install poppler-utils` |
 | uv (optional) | `winget install astral-sh.uv` | `brew install uv` | the installer from astral.sh |
 
-## Starting njli
+## Starting profile-wrap
 
-- **Plugin:** `${CLAUDE_PLUGIN_ROOT}/bin/njli` (macOS, Linux, Git Bash) or `bin\njli.cmd` (Windows).
+- **Plugin:** `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap` (macOS, Linux, Git Bash) or `bin\profile-wrap.cmd` (Windows).
   The launcher looks for Python 3.13, 3.12, 3.11, 3.10 and then `python3` and `python`. Set
-  `NJLI_PYTHON` to force one. On Python 3.9 or older it prints one message with the exact fix and
+  `PROFILE_WRAP_PYTHON` to force one. On Python 3.9 or older it prints one message with the exact fix and
   stops.
-- **Source or wheel:** `uv tool install nj-linkedin` or `pipx install nj-linkedin`, then `njli`.
+- **Source or wheel:** `uv tool install profile-wrap` or `pipx install profile-wrap`, then `profile-wrap`.
 - **Schedulers** never use the plugin directory. They call the stable copy that
-  `njli runtime install` writes: `<python> <data>/runtime/current <arguments>`. The path is stable
-  across plugin updates, so jobs keep working until you run `njli runtime sync`.
+  `profile-wrap runtime install` writes: `<python> <data>/runtime/current <arguments>`. The path is stable
+  across plugin updates, so jobs keep working until you run `profile-wrap runtime sync`.
 
 ### Windows
 
 - Use forward or back slashes; paths with spaces and non-ASCII user names are supported. Set
-  `PYTHONUTF8=1` if you run scripts yourself (njli sets it for its own runs).
+  `PYTHONUTF8=1` if you run scripts yourself (profile-wrap sets it for its own runs).
 - `tzdata` is installed with the package because Windows has no IANA time zone database.
 - `runtime/current` is a symlink when allowed, otherwise a junction, otherwise a plain copy. All
   three run the same way.
-- Task Scheduler is used for jobs (installed by `njli schedule install`).
+- Task Scheduler is used for jobs (installed by `profile-wrap schedule install`).
 
 ### macOS
 
 - launchd runs jobs with a minimal PATH. The scheduler install captures the absolute paths of
-  `node`, `npx`, `ffmpeg`, `ffprobe` and `claude` into the plist. `njli doctor --launchd-dryrun`
+  `node`, `npx`, `ffmpeg`, `ffprobe` and `claude` into the plist. `profile-wrap doctor --launchd-dryrun`
   tests that.
 - A browser downloaded outside the App Store may be quarantined: run
   `xattr -dr com.apple.quarantine <path-to-browser>`. Apple Silicon needs the arm64 build.
@@ -85,5 +85,5 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 
 ## Behind a proxy or offline
 
-`njli doctor --online` tests the network. Behind a proxy set `HTTPS_PROXY`. Everything except
+`profile-wrap doctor --online` tests the network. Behind a proxy set `HTTPS_PROXY`. Everything except
 posting works offline once the renderers are installed.

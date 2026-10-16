@@ -4,17 +4,17 @@ from __future__ import annotations
 import pytest
 from board_helpers import Client, FakeRunner, make_ws
 
-from njli.board.server import BoardServer
+from profile_wrap.board.server import BoardServer
 
 
 @pytest.fixture(autouse=True)
 def _env(tmp_path, monkeypatch):
-    for name in ("NJLI_WORKER", "NJLI_WORKSPACE", "NJLI_CLAUDE_BIN"):
+    for name in ("PROFILE_WRAP_WORKER", "PROFILE_WRAP_WORKSPACE", "PROFILE_WRAP_CLAUDE_BIN"):
         monkeypatch.delenv(name, raising=False)
-    monkeypatch.setenv("NJLI_TEST", "1")
-    monkeypatch.setenv("NJLI_CONFIG_DIR", str(tmp_path / "cfgdir"))
-    monkeypatch.setenv("NJLI_DATA_DIR", str(tmp_path / "datadir"))
-    monkeypatch.setenv("NJLI_HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(tmp_path / "cfgdir"))
+    monkeypatch.setenv("PROFILE_WRAP_DATA_DIR", str(tmp_path / "datadir"))
+    monkeypatch.setenv("PROFILE_WRAP_HOME", str(tmp_path / "home"))
     monkeypatch.setenv("PYTHONUTF8", "1")
 
 

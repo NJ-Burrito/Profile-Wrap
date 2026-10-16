@@ -9,7 +9,7 @@ import time
 
 import pytest
 
-from njli import locks
+from profile_wrap import locks
 
 
 def test_acquire_release_and_reacquire(tmp_path):
@@ -130,7 +130,7 @@ def test_named_lock_sanitises_name(tmp_path):
 
 def _race(args):
     path, out_dir, idx = args
-    from njli import locks as L
+    from profile_wrap import locks as L
 
     try:
         with L.FileLock(path):

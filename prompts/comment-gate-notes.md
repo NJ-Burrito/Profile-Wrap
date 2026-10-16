@@ -3,7 +3,7 @@
 Applies to `crew-engagement` and anyone drafting a comment, a reply to a comment on your own post, or a
 connection note. These are drafts for a person to post. Nothing here posts anything.
 
-Every draft passes `njli.gate.check_text(text, kind, workspace, claims=[...])` before it is queued for
+Every draft passes `profile_wrap.gate.check_text(text, kind, workspace, claims=[...])` before it is queued for
 review. The gate is the same code as for posts, with short-text limits.
 
 ## Limits

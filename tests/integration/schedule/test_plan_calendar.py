@@ -9,9 +9,9 @@ import threading
 import pytest
 
 from schedhelp import cfg_of
-from njli import cli
-from njli.plan import calendar as cal
-from njli.plan import holidays as hol
+from profile_wrap import cli
+from profile_wrap.plan import calendar as cal
+from profile_wrap.plan import holidays as hol
 
 
 def entry(slug="2026-11-03-a", date="2026-11-03", **kw):
@@ -216,8 +216,8 @@ def test_holiday_presets_install_merge_and_block(mkws):
 
 
 def test_ramadan_window_width_keeps_the_gap_rule_satisfiable():
-    from njli.plan.spread import parse_hhmm
-    from njli.limits import window_width_minutes
+    from profile_wrap.plan.spread import parse_hhmm
+    from profile_wrap.limits import window_width_minutes
     preset = hol.load_preset("gulf")
     for s in preset["window_shifts"]:
         assert window_width_minutes(s["window"]) <= 24 * 60 - 20 * 60 - 30

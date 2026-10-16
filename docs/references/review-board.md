@@ -1,6 +1,6 @@
 # Review board
 
-`njli board` starts a small local web page where you look at each draft as it will appear on LinkedIn and
+`profile-wrap board` starts a small local web page where you look at each draft as it will appear on LinkedIn and
 decide: **Allow**, **Reject** or **Improve**. It is a standard-library `ThreadingHTTPServer`; there is no
 framework and nothing to install. This page is the reference for what it does, what it writes and what it
 refuses. It is not legal advice; the safety contract is `compliance.md` and `docs/TERMS-AND-RISK.md`.
@@ -8,19 +8,19 @@ refuses. It is not legal advice; the safety contract is `compliance.md` and `doc
 ## Start it
 
 ```
-njli board [--port N] [--open] [--workspace PATH]
+profile-wrap board [--port N] [--open] [--workspace PATH]
 ```
 
 - Binds `127.0.0.1` (or `::1`, `localhost`) only. `board.host` in the config must be one of those; anything
   else is refused at start.
 - Default port `8770` (`board.port`). If it is taken the command says so, tells you to open the running board
-  or pick `--port`, and exits with 1. `GET /api/health` answers `{"ok": true, "board": "nj-linkedin", ...}`
+  or pick `--port`, and exits with 1. `GET /api/health` answers `{"ok": true, "board": "profile-wrap", ...}`
   without a token, which is how the second start recognises a board that is already running.
 - A scheduler job (`board`, at login) runs the same command.
 - Stop it with Ctrl+C. A draft left `revising` by a previous run is returned to `draft` at start.
 
-From the terminal, without a browser: `njli review list|allow|reject|improve` use the same code as the buttons.
-`allow` and `reject` ask for confirmation in a terminal, or take `--yes`. `allow` refuses when `NJLI_WORKER=1`.
+From the terminal, without a browser: `profile-wrap review list|allow|reject|improve` use the same code as the buttons.
+`allow` and `reject` ask for confirmation in a terminal, or take `--yes`. `allow` refuses when `PROFILE_WRAP_WORKER=1`.
 
 ## Statuses and decisions
 
@@ -29,7 +29,7 @@ Statuses: `draft`, `revising`, `hold`, `queued`, `missed`, `needs_check`, `poste
 
 | Decision | Allowed from | What happens |
 |---|---|---|
-| **Allow** | `draft`, `hold`, `missed` | The gate must PASS (and the council, if `gate.require_council_pass`). Then `queued`. A missing or past `scheduled_at` comes back as a warning, not a refusal. Refused with 409 for `revising`, `queued`, `needs_check`, `rejected` and the read-only statuses. A worker can never allow (403 when `NJLI_WORKER=1`). |
+| **Allow** | `draft`, `hold`, `missed` | The gate must PASS (and the council, if `gate.require_council_pass`). Then `queued`. A missing or past `scheduled_at` comes back as a warning, not a refusal. Refused with 409 for `revising`, `queued`, `needs_check`, `rejected` and the read-only statuses. A worker can never allow (403 when `PROFILE_WRAP_WORKER=1`). |
 | **Reject** | `draft`, `hold`, `queued`, `missed` | Needs `confirm: true` (the button asks twice). Then `rejected`. |
 | **Improve** | `draft`, `hold`, `queued`, `missed` | A note is required. The draft becomes `revising`, a worker edits it, the board re-renders and re-gates, and it comes back as `draft`. Never auto-queued, whatever the worker wrote into `meta.json`. |
 
@@ -59,11 +59,11 @@ blockers, else `revise`) just before an Allow. `history` is the decision log. A 
    only `drafts/<slug>/` and its `video_project` (which must sit under `videos/`).
 4. The board runs its own guard as well: every file outside those two folders is hashed first, and what changed
    or appeared is restored or deleted afterwards and logged as `RESTORED` in `review/jobs/<time>-improve-<slug>.log` and in the draft's history. Files the board itself wrote during the job (a click on another tab) are left alone.
-5. For any format other than `text` it runs `njli render <slug>`, then the gate. The draft returns as `draft` with
+5. For any format other than `text` it runs `profile-wrap render <slug>`, then the gate. The draft returns as `draft` with
    `last_revision`, `last_revision_gates` (`PASS` or `FAIL`) and, on failure, a one-line `review-reply.txt`.
 6. A failed, crashed or timed-out worker is an error line, never a post stuck in `revising`.
 
-If no Claude CLI is found, Improve answers 503 and changes nothing; edit by hand and run `njli gate <slug>`.
+If no Claude CLI is found, Improve answers 503 and changes nothing; edit by hand and run `profile-wrap gate <slug>`.
 While `work/PAUSE` exists no worker starts.
 
 ## Tabs
@@ -133,7 +133,7 @@ and one changed draft under 1.5 s.
 
 Read: `drafts/*/{meta.json,gates.json,review.json,review/*.json,caption.txt,first_comment.txt,alt.txt,out/*}`,
 `published/*`, `published/ledger.jsonl`, `engage/{pending,connect}.json`, `profile/{steps,progress}.json`,
-`metrics/track.jsonl`, `config/njli.json`, `data/logs/notifications.jsonl`.
+`metrics/track.jsonl`, `config/profile-wrap.json`, `data/logs/notifications.jsonl`.
 Written: `drafts/*/{meta.json,review.json,review-reply.txt}`, `review/decisions.jsonl`, `review/jobs/*.log`,
 `engage/{pending,connect}.json` (status only), `published/comments.jsonl`, `profile/progress.json`, `work/PAUSE*`.
 It never writes outside the workspace and never reads the config dir (secrets) except the expiry of the token through `doctor`.

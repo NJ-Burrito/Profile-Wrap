@@ -1,6 +1,6 @@
 # Remake prompt (rebuild an existing GIF to the current motion standard)
 
-Template. After the motion standard changes, `njl-visuals` can rebuild one queued or draft GIF to the new
+Template. After the motion standard changes, `pw-visuals` can rebuild one queued or draft GIF to the new
 standard. The story, the words and the facts stay; the motion is rebuilt. The orchestrator renders, runs the gate
 and measures after the worker exits, and restores the backup if the result fails.
 

@@ -11,10 +11,10 @@ import sys
 import pytest
 from gate_helpers import FIX, ROOT
 
-from njli.facts import registers as reg
-from njli.facts.cli_ext import register as register_facts
-from njli.facts.numspec import norm_unit, parse_entry, parse_number_cell, unitless_entries
-from njli.facts.table import join_row, parse_table, split_row
+from profile_wrap.facts import registers as reg
+from profile_wrap.facts.cli_ext import register as register_facts
+from profile_wrap.facts.numspec import norm_unit, parse_entry, parse_number_cell, unitless_entries
+from profile_wrap.facts.table import join_row, parse_table, split_row
 
 
 def test_table_roundtrip_keeps_text_around_the_table():
@@ -154,9 +154,9 @@ def test_verify_refuses_without_a_tty(ws):
     assert load_fixture(ws).get("F03").status == "draft"
 
 
-def test_verify_refuses_when_njli_worker_is_set_even_with_a_tty(ws):
-    with pytest.raises(reg.VerifyRefused, match="NJLI_WORKER=1"):
-        verify(ws, env={"NJLI_WORKER": "1"})
+def test_verify_refuses_when_profile_wrap_worker_is_set_even_with_a_tty(ws):
+    with pytest.raises(reg.VerifyRefused, match="PROFILE_WRAP_WORKER=1"):
+        verify(ws, env={"PROFILE_WRAP_WORKER": "1"})
     assert load_fixture(ws).get("F03").status == "draft"
 
 
@@ -250,7 +250,7 @@ def test_cli_stats(ws, capsys):
 
 def _verify_subprocess(ws, env_extra):
     env = {**os.environ, "PYTHONUTF8": "1", "PYTHONPATH": str(ROOT), **env_extra}
-    code = ("import argparse,sys;from njli.facts.cli_ext import register;p=argparse.ArgumentParser();"
+    code = ("import argparse,sys;from profile_wrap.facts.cli_ext import register;p=argparse.ArgumentParser();"
             "register(p.add_subparsers(dest='c',required=True));a=p.parse_args(sys.argv[1:]);sys.exit(a.func(a))")
     return subprocess.run([sys.executable, "-c", code, "facts", "verify", "F03", "--evidence", "notes/clinics.md",
                            "--workspace", str(ws)], capture_output=True, text=True, env=env, stdin=subprocess.DEVNULL)
@@ -262,9 +262,9 @@ def test_verify_through_the_real_cli_refuses_without_a_tty(ws):
     assert load_fixture(ws).get("F03").status == "draft"
 
 
-def test_verify_through_the_real_cli_refuses_when_njli_worker_is_set(ws):
-    r = _verify_subprocess(ws, {"NJLI_WORKER": "1"})
-    assert r.returncode == 1 and "NJLI_WORKER=1" in r.stderr
+def test_verify_through_the_real_cli_refuses_when_profile_wrap_worker_is_set(ws):
+    r = _verify_subprocess(ws, {"PROFILE_WRAP_WORKER": "1"})
+    assert r.returncode == 1 and "PROFILE_WRAP_WORKER=1" in r.stderr
     assert load_fixture(ws).get("F03").status == "draft"
 
 

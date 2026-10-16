@@ -1,13 +1,13 @@
 # Fonts
 
 Fonts are configuration. Nothing in this repository is a font file, and no family is banned or privileged: family names are
-plain strings in `config/njli.json` (`brand.fonts`).
+plain strings in `config/profile-wrap.json` (`brand.fonts`).
 
 ## Three sources (`brand.font_source`)
 
 | Source | What happens |
 |---|---|
-| `google_ofl` (default) | `njli fonts fetch` installs IBM Plex Sans and IBM Plex Sans Arabic (SIL Open Font License 1.1) from the pinned fontsource npm packages into `brand/fonts/`, with their licence files. The folder is git-ignored. Other OFL families can be added to `data/fonts-ofl.json`. |
+| `google_ofl` (default) | `profile-wrap fonts fetch` installs IBM Plex Sans and IBM Plex Sans Arabic (SIL Open Font License 1.1) from the pinned fontsource npm packages into `brand/fonts/`, with their licence files. The folder is git-ignored. Other OFL families can be added to `data/fonts-ofl.json`. |
 | `user_files` | You point `brand.fonts.<role>.files` at your own font files. They are read in place; the package never copies, bundles or redistributes them. |
 | `system` | The family is expected to be installed on this computer. No files are read. |
 
@@ -18,7 +18,7 @@ Roles: `display` (headlines), `text` (body), `arabic` (Arabic text; Latin runs f
 If you use a commercial or custom typeface (for example a foundry's family), check its licence before using it in images and
 videos. Many end-user licences cover desktop use but not embedding glyphs in distributed images, PDFs or video. That is your
 decision and your responsibility; this package only reads the files you name. Never commit them: `brand/fonts/` and common font
-extensions are git-ignored, and `njli leaks scan` flags any font binary in a repository.
+extensions are git-ignored, and `profile-wrap leaks scan` flags any font binary in a repository.
 
 ## Loading rule
 
@@ -29,6 +29,6 @@ lane refuses to start without the files. There is no silent fallback face.
 
 ## Checks
 
-- `njli fonts check` lists what resolves and what is missing.
+- `profile-wrap fonts check` lists what resolves and what is missing.
 - `gate.required_font_substrings` for the PDF check derives from the same config: the families with spaces removed, unless you set it.
 - Document posts are checked with `pdffonts` (optional): no Type 3 fonts, no families outside the configured ones.

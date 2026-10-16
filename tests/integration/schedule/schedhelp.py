@@ -6,7 +6,7 @@ import json
 import sys
 from pathlib import Path
 
-from njli import config
+from profile_wrap import config
 
 PYTHON = sys.executable
 
@@ -24,7 +24,7 @@ def make_ws(root: Path, profile: str = "demo", tz: str = "UTC", **patch) -> Path
         for part in parts[:-1]:
             node = node[part]
         node[parts[-1]] = value
-    (ws / "config" / "njli.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(cfg, indent=2), encoding="utf-8")
     (ws / ".njl" / "workspace.json").write_text(json.dumps({
         "schema_version": 1, "template_version": "1", "plugin_version": "0.1.0", "profile_id": profile,
         "files": {}, "created_schedule": []}), encoding="utf-8")

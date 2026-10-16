@@ -2,7 +2,7 @@
 
 ## Reporting a vulnerability
 
-Do not open a public issue for a security problem. Use GitHub's private vulnerability reporting ("Security" tab, "Report a vulnerability") on this repository. Include the version (`njli --version`), your OS, and the smallest steps that reproduce it. Expect an acknowledgement within 7 days and a fix or a written assessment within 30 days. There is no bug bounty.
+Do not open a public issue for a security problem. Use GitHub's private vulnerability reporting ("Security" tab, "Report a vulnerability") on this repository. Include the version (`profile-wrap --version`), your OS, and the smallest steps that reproduce it. Expect an acknowledgement within 7 days and a fix or a written assessment within 30 days. There is no bug bounty.
 
 ## What counts
 
@@ -16,9 +16,9 @@ Do not open a public issue for a security problem. Use GitHub's private vulnerab
 - Secrets live only in the config directory with user-only permissions; never in a workspace or repository.
 - The package never reads or stores a LinkedIn password.
 - Content workers run in a sandbox directory with a scrubbed environment and no shell; their output is scanned for token shapes.
-- The only module that talks to the LinkedIn API is `njli/linkedin/`, with an endpoint allowlist. `njli compliance lint` enforces that and runs in tests, CI and `doctor`.
-- `njli leaks scan` blocks fonts, photos, secrets, personal paths, real LinkedIn identifiers and denylisted private terms before a release.
-- `njli pause` is a kill switch every job checks first.
+- The only module that talks to the LinkedIn API is `profile_wrap/linkedin/`, with an endpoint allowlist. `profile-wrap compliance lint` enforces that and runs in tests, CI and `doctor`.
+- `profile-wrap leaks scan` blocks fonts, photos, secrets, personal paths, real LinkedIn identifiers and denylisted private terms before a release.
+- `profile-wrap pause` is a kill switch every job checks first.
 
 ## Supported versions
 

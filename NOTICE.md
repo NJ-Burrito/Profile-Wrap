@@ -1,6 +1,6 @@
 # Notice
 
-nj-linkedin is released under the MIT License (see `LICENSE`). Copyright (c) 2026 nj-linkedin contributors.
+Profile-Wrap is released under the MIT License (see `LICENSE`). Copyright (c) 2026 Profile-Wrap contributors.
 
 ## What this project is not
 

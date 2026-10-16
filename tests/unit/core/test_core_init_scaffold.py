@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import config, handoff, init_wizard, paths, policy, scaffold, schemalite
+from profile_wrap import config, handoff, init_wizard, paths, policy, scaffold, schemalite
 
 from core_helpers import FIXTURES, REPO, load_answers_fixture
 
@@ -64,7 +64,7 @@ def test_job_seeking_ofl_and_licensed_fonts(tmp_path, plugin_root):
 
 def test_scaffold_layout_matches_the_design(tmp_path, plugin_root):
     ws = Path(make(tmp_path, plugin_root, "en.json")["workspace"])
-    for rel in (".njl/backup", ".njl/conflicts", "config/njli.json", "profile/exports", "research/sources",
+    for rel in (".njl/backup", ".njl/conflicts", "config/profile-wrap.json", "profile/exports", "research/sources",
                 "strategy/weekly", "drafts/.gitkeep", "videos/.gitkeep", "brand/fonts", "published",
                 "engage/inbox", "metrics/exports", "hooks/.gitkeep", "data/locks", "work/sandbox",
                 "review", ".claude/agents", "CLAUDE.md", "handoff.md", "package.json",
@@ -113,7 +113,7 @@ def test_git_check_ignore_confirms_the_generated_gitignore(tmp_path, plugin_root
         "drafts/a/out/pal256.png", "drafts/a/out/x.tmp.gif",
     ]
     must_track = [
-        "config/njli.json", "CLAUDE.md", "handoff.md", "research/facts.md", "drafts/a/meta.json",
+        "config/profile-wrap.json", "CLAUDE.md", "handoff.md", "research/facts.md", "drafts/a/meta.json",
         "drafts/a/caption.txt", "strategy/calendar.json", "videos/a/data/notes.json",
         "brand/identity/signature.svg", ".gitignore", "package.json", ".njl/workspace.json",
         "profile/persona.json", "review/notes.md",
@@ -132,7 +132,7 @@ def test_wrapup_makes_a_first_commit_and_secrets_stay_out(tmp_path, plugin_root)
     assert log.returncode == 0 and "initial workspace" in log.stdout
     tracked = subprocess.run(["git", "ls-files"], cwd=str(ws), capture_output=True,
                              text=True).stdout.split()
-    assert "config/njli.json" in tracked and "profile/voice.md" not in tracked
+    assert "config/profile-wrap.json" in tracked and "profile/voice.md" not in tracked
     assert any("first commit made" in n for n in summary["notes"])
 
 
@@ -225,7 +225,7 @@ def test_demo_workspace(tmp_path, plugin_root):
 def test_demo_default_location_is_a_temp_folder(monkeypatch, tmp_path, plugin_root):
     summary = init_wizard.init_demo(plugin_root=plugin_root)
     ws = Path(summary["workspace"])
-    assert "njli-demo-" in str(ws) and ws.name == "demo" and ws.is_dir()
+    assert "profile-wrap-demo-" in str(ws) and ws.name == "demo" and ws.is_dir()
     shutil.rmtree(ws.parent)
 
 
@@ -362,16 +362,16 @@ def test_agents_render_hook_is_used_when_present(tmp_path, plugin_root, monkeypa
     import types
 
     calls = []
-    fake = types.ModuleType("njli.agents_render")
+    fake = types.ModuleType("profile_wrap.agents_render")
     fake.render_all = lambda ws: calls.append(Path(ws))
-    monkeypatch.setitem(sys.modules, "njli.agents_render", fake)
+    monkeypatch.setitem(sys.modules, "profile_wrap.agents_render", fake)
     summary = make(tmp_path, plugin_root, "en.json")
     assert calls == [Path(summary["workspace"])]
     assert "agents rendered" in summary["notes"]
     fake.render_all = lambda ws, cfg: calls.append(cfg)       # a different signature still works
-    fake2 = types.ModuleType("njli.agents_render")
+    fake2 = types.ModuleType("profile_wrap.agents_render")
     fake2.render = lambda ws, cfg: calls.append("cfg")
-    monkeypatch.setitem(sys.modules, "njli.agents_render", fake2)
+    monkeypatch.setitem(sys.modules, "profile_wrap.agents_render", fake2)
     make(tmp_path, plugin_root, "en.json", "ws2")
     assert "cfg" in calls
 
@@ -381,6 +381,6 @@ def test_agents_render_hook_is_used_when_present(tmp_path, plugin_root, monkeypa
     fake2.render = explode
     out = make(tmp_path, plugin_root, "en.json", "ws3")
     assert any("render failed" in n for n in out["notes"])
-    monkeypatch.setitem(sys.modules, "njli.agents_render", types.ModuleType("njli.agents_render"))
+    monkeypatch.setitem(sys.modules, "profile_wrap.agents_render", types.ModuleType("profile_wrap.agents_render"))
     out = make(tmp_path, plugin_root, "en.json", "ws4")
     assert any("no render function" in n for n in out["notes"])

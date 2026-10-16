@@ -1,4 +1,4 @@
-These rules bind every agent. `njli agents render` copies this file into each rendered agent, so there is one
+These rules bind every agent. `profile-wrap agents render` copies this file into each rendered agent, so there is one
 copy to read and one to change. A brief may make a limit stricter (for example a shorter report); it may
 never relax one.
 

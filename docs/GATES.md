@@ -1,12 +1,12 @@
 # Gates
 
-`njli gate <slug>` runs deterministic checks on `drafts/<slug>/` and writes `drafts/<slug>/gates.json`.
+`profile-wrap gate <slug>` runs deterministic checks on `drafts/<slug>/` and writes `drafts/<slug>/gates.json`.
 No model is called. Exit code 0 is PASS, 1 is FAIL. A gate guarantees that a number can be traced to
 your register of facts. It does not prove the register is true.
 
 ```text
-njli gate my-post            # human output: PASS/FAIL line, then one FAIL or WARN line per finding
-njli gate my-post --json     # the gates.json content
+profile-wrap gate my-post            # human output: PASS/FAIL line, then one FAIL or WARN line per finding
+profile-wrap gate my-post --json     # the gates.json content
 ```
 
 Allow (queueing a post) requires a PASS, and the gate runs again just before a post is sent. A build
@@ -61,7 +61,7 @@ nothing: "7 bugs" fails when the cited fact says "7 dashboards" or when no fact 
 These are not treated as claims: dates and times, years and months, version numbers, phone numbers
 and ids, URLs, list markers (`1.`, `2)`), ordinals (`3rd`), ages ("aged 8"), labels such as "step 3" or
 "chapter 2", and the post's own list counts ("5 tips"). The exact lists are in
-`njli/gate/numbers.py`. If one of these is really a claim in your post, rewrite it or cite a fact.
+`profile_wrap/gate/numbers.py`. If one of these is really a claim in your post, rewrite it or cite a fact.
 
 ## Overrides
 
@@ -99,23 +99,23 @@ because a tool, the facts file, the config or a BOM is missing; each gives a rea
 ## Facts and stats registers
 
 ```text
-njli facts add --claim "..." --numbers "30 minutes" --source notes/x.md
-njli facts lint
-njli facts verify F01 --evidence notes/x.md        # terminal only
-njli facts export [--verified-only]
-njli stats add --stat "..." --numbers "60%" --url https://... --grade A
-njli stats expire [--dry-run]
-njli stats verify S01 --evidence https://...
+profile-wrap facts add --claim "..." --numbers "30 minutes" --source notes/x.md
+profile-wrap facts lint
+profile-wrap facts verify F01 --evidence notes/x.md        # terminal only
+profile-wrap facts export [--verified-only]
+profile-wrap stats add --stat "..." --numbers "60%" --url https://... --grade A
+profile-wrap stats expire [--dry-run]
+profile-wrap stats verify S01 --evidence https://...
 ```
 
-`verify` refuses without an interactive terminal and refuses when `NJLI_WORKER=1`, which every agent
+`verify` refuses without an interactive terminal and refuses when `PROFILE_WRAP_WORKER=1`, which every agent
 and scheduled job runs with. It asks you to type the id back. The verifier name and date are recorded.
 "Verifier is not author" is a convention here, not something the software can enforce for one user.
 Third-party stats must be grade A, verified and unexpired before a post may quote them.
 
 ## Comments, replies and connection notes
 
-`njli.gate.check_text(text, kind, workspace, claims=[...])` applies the same text rules (slop, private
+`profile_wrap.gate.check_text(text, kind, workspace, claims=[...])` applies the same text rules (slop, private
 terms, links, dashes, Arabic hygiene, claim-bound numbers) to a short text. `kind` is `comment`, `reply`
 or `note`. A note is limited to 200 characters and cannot hold a hashtag; the limit cannot be raised by
 configuration.
@@ -125,4 +125,4 @@ configuration.
 A file `hooks/gate_<name>.py` in the workspace may define
 `check(draft_dir, meta, surfaces, cfg)` and return a list of strings (failures) or dicts
 `{"severity": "fail|warn", "message": "...", "token": "..."}`. It is your code and runs with your rights,
-so `njli doctor` lists such files. An error inside one becomes a FAIL line.
+so `profile-wrap doctor` lists such files. An error inside one becomes a FAIL line.

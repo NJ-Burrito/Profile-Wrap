@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="profile-wrap-token" content="__TOKEN__">
+<title>Review board</title>
+<link rel="stylesheet" href="/app/fonts.css">
+<link rel="stylesheet" href="/app/board.css">
+</head>
+<body>
+<header class="top">
+  <h1 id="app-title">Review board</h1>
+  <nav id="tabs" role="tablist"></nav>
+  <div class="top-right">
+    <span id="live" class="live"></span>
+    <label class="visually-hidden" for="lang">Language</label>
+    <select id="lang">
+      <option value="en">English</option>
+      <option value="ar">العربية</option>
+    </select>
+  </div>
+</header>
+<div id="banners"></div>
+<main id="view"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+<noscript>This board needs JavaScript.</noscript>
+<script src="/app/board.js" defer></script>
+</body>
+</html>

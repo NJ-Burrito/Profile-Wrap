@@ -23,22 +23,22 @@ On the Auth tab add exactly this redirect URL:
 
     http://localhost:8765/callback
 
-(or the value you set in `linkedin.redirect_uri`). If the portal refuses an http address, use the Token Generator in the portal as a manual fallback and paste the token with `njli auth --paste-redirect`. See `references/linkedin-api.md` (U2).
+(or the value you set in `linkedin.redirect_uri`). If the portal refuses an http address, use the Token Generator in the portal as a manual fallback and paste the token with `profile-wrap auth --paste-redirect`. See `references/linkedin-api.md` (U2).
 
 ## 4. Sign in once
 
-    njli auth
+    profile-wrap auth
 
 You are asked for the client id and the client secret (the secret is typed into a hidden prompt). They are stored in the config directory with user-only permissions, never in the workspace. Your browser opens the consent page; press Allow. The token is valid for about 60 days.
 
-- On a server or over SSH: `njli auth --paste-redirect` prints a link, you open it anywhere, press Allow, and paste back the address the browser ends on.
-- Check the state any time with `njli auth check`. `njli doctor` and the board warn from 10 days before expiry.
-- There is no refresh token for an ordinary app. Run `njli auth` again before the token expires; if you are still signed in to LinkedIn in that browser, the consent step is skipped.
+- On a server or over SSH: `profile-wrap auth --paste-redirect` prints a link, you open it anywhere, press Allow, and paste back the address the browser ends on.
+- Check the state any time with `profile-wrap auth check`. `profile-wrap doctor` and the board warn from 10 days before expiry.
+- There is no refresh token for an ordinary app. Run `profile-wrap auth` again before the token expires; if you are still signed in to LinkedIn in that browser, the consent step is skipped.
 - If you change the scopes, earlier tokens stop working.
 
 ## 5. Check it
 
-    njli selftest
+    profile-wrap selftest
 
 It reads your member id and checks the API version. It never posts.
 
@@ -50,5 +50,5 @@ It reads your member id and checks the API version. It never posts.
 
 ## Keep safe
 
-- Never paste the client secret or the token into chat, an issue or a commit. `njli leaks scan --workspace` checks before you push a workspace.
+- Never paste the client secret or the token into chat, an issue or a commit. `profile-wrap leaks scan --workspace` checks before you push a workspace.
 - The package never asks for, stores or uses your LinkedIn sign-in details.

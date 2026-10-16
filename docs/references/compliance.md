@@ -1,6 +1,6 @@
 # Compliance contract
 
-This file is the contract every skill, agent and command of nj-linkedin follows. Its sha256 (together with `docs/TERMS-AND-RISK.md`) binds every acknowledgement you type with `njli config ack`. If this file changes in an update, the hash no longer matches and the affected action drops back to draft or notify until you accept it again.
+This file is the contract every skill, agent and command of Profile-Wrap follows. Its sha256 (together with `docs/TERMS-AND-RISK.md`) binds every acknowledgement you type with `profile-wrap config ack`. If this file changes in an update, the hash no longer matches and the affected action drops back to draft or notify until you accept it again.
 
 Not legal advice. LinkedIn's terms change; read the current text yourself before you rely on anything here.
 
@@ -12,7 +12,7 @@ Not legal advice. LinkedIn's terms change; read the current text yourself before
 
 ## What the package does not do (layer 1: no code path)
 
-The following are not implemented, and `njli compliance lint` fails the build if code or skill text appears for them:
+The following are not implemented, and `profile-wrap compliance lint` fails the build if code or skill text appears for them:
 
 - Handling the account owner's LinkedIn sign-in secrets, browser sessions or stored login state.
 - Driving a browser against linkedin.com. The renderer opens only local files or `127.0.0.1`.
@@ -23,7 +23,7 @@ The following are not implemented, and `njli compliance lint` fails the build if
 - Hiding automation. Scheduling jitter and the time-of-day spread exist to match your audience's hours and to keep request rates low. They are not a way to look like a person, and every ledger row records the automation mode that produced it.
 - Using third-party scheduling or session-based tools. See `automation-landscape.md`.
 
-The only module allowed to reach the LinkedIn API host is `njli/linkedin/`, and it may call only `/v2/userinfo`, `/rest/posts`, `/rest/images` and `/rest/documents`. The legacy social-actions route exists only in the experimental extra described below.
+The only module allowed to reach the LinkedIn API host is `profile_wrap/linkedin/`, and it may call only `/v2/userinfo`, `/rest/posts`, `/rest/images` and `/rest/documents`. The legacy social-actions route exists only in the experimental extra described below.
 
 ## Hard ceilings (layer 2: `policy.py`, not configurable upward)
 
@@ -54,7 +54,7 @@ Each needs a typed acknowledgement stored with the date and the hash of this fil
 - The post flow is ledger-first and idempotent: a `pending` row is written before anything is sent. A POST that errors or times out after sending, or a crash after the row is written, leaves the row `pending`. The next run marks it `needs_check` and never reposts. A person confirms on the board whether it went out. There is no blind retry.
 - A 429 or 403 answer stops the run. Later runs honour the stop.
 - The Bearer token is sent only to the LinkedIn API and OAuth hosts. It is never sent to the media upload host or to any other host.
-- `njli pause` writes a kill-switch file; every job and API call checks it first and exits with code 4.
+- `profile-wrap pause` writes a kill-switch file; every job and API call checks it first and exits with code 4.
 
 ## Truth
 

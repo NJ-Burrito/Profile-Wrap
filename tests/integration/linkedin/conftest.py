@@ -15,10 +15,10 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from njli import config as config_mod  # noqa: E402
-from njli import policy  # noqa: E402
-from njli.demo.fake_linkedin import FakeLinkedIn  # noqa: E402
-from njli.linkedin import auth  # noqa: E402
+from profile_wrap import config as config_mod  # noqa: E402
+from profile_wrap import policy  # noqa: E402
+from profile_wrap.demo.fake_linkedin import FakeLinkedIn  # noqa: E402
+from profile_wrap.linkedin import auth  # noqa: E402
 
 FIX = ROOT / "tests" / "fixtures" / "captions"
 PNG = b"\x89PNG\r\n\x1a\n" + b"\x00" * 32
@@ -46,7 +46,7 @@ class Env:
         return config_mod.load(self.ws)
 
     def set_config(self, **sections) -> None:
-        path = self.ws / "config" / "njli.json"
+        path = self.ws / "config" / "profile-wrap.json"
         raw = json.loads(path.read_text(encoding="utf-8"))
         for key, val in sections.items():
             if isinstance(val, dict) and isinstance(raw.get(key), dict):
@@ -95,16 +95,16 @@ class Env:
 
 @pytest.fixture()
 def env(tmp_path, monkeypatch):
-    for name in ("NJLI_WORKER", "NJLI_WORKSPACE", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"):
+    for name in ("PROFILE_WRAP_WORKER", "PROFILE_WRAP_WORKSPACE", "LINKEDIN_CLIENT_ID", "LINKEDIN_CLIENT_SECRET"):
         monkeypatch.delenv(name, raising=False)
     cfg_dir = tmp_path / "cfg"
     data_dir = tmp_path / "data"
-    monkeypatch.setenv("NJLI_CONFIG_DIR", str(cfg_dir))
-    monkeypatch.setenv("NJLI_DATA_DIR", str(data_dir))
-    monkeypatch.setenv("NJLI_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(cfg_dir))
+    monkeypatch.setenv("PROFILE_WRAP_DATA_DIR", str(data_dir))
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
     monkeypatch.setenv("PYTHONUTF8", "1")
     fake = FakeLinkedIn().start()
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", fake.base_url)
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", fake.base_url)
     ws = tmp_path / "ws"
     (ws / "config").mkdir(parents=True)
     (ws / "research").mkdir()
@@ -114,7 +114,7 @@ def env(tmp_path, monkeypatch):
     raw = json.loads((FIX / "config.json").read_text(encoding="utf-8"))
     raw["profile_id"] = "it"
     raw["linkedin"] = {"timeout_s": 2}
-    (ws / "config" / "njli.json").write_text(json.dumps(raw, indent=2), encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(raw, indent=2), encoding="utf-8")
     profile_dir = cfg_dir / "it"
     auth.save_token(profile_dir, {"access_token": "tok-secret-1", "expires_at": time.time() + 30 * 86400,
                                   "author": "urn:li:person:DEMO000000", "name": "Maya Rivera"})

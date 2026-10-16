@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/targets.schema.json",
+  "$id": "https://example.invalid/profile-wrap/targets.schema.json",
   "title": "People to engage with (engage/targets.json)",
   "type": "object",
   "properties": {

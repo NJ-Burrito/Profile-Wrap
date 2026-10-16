@@ -1,59 +1,59 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-labelledby="t d">
-<title id="t">nj-linkedin flow</title><desc id="d">Plan, Write, Gate, Visuals, Review board, Post, Engage. A human approves at the review board and posting uses the official LinkedIn API only.</desc>
+<title id="t">Profile-Wrap flow</title><desc id="d">Plan, Write, Gate, Visuals, Review board, Post, Engage. A human approves at the review board and posting uses the official LinkedIn API only.</desc>
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16233a"/><stop offset="1" stop-color="#0d1626"/></linearGradient>
 <marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M1 1l8 4-8 4z" fill="#8fa3c2"/></marker>
 <filter id="sh" x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity=".35"/></filter></defs>
 <rect width="1280" height="440" rx="28" fill="url(#bg)"/>
-<text x="40" y="62" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#f4efe6"><tspan fill="#ff6a3d">nj</tspan>-linkedin</text>
+<text x="40" y="62" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="34" font-weight="700" fill="#f4efe6">Profile<tspan fill="#ff6a3d">-Wrap</tspan></text>
 <text x="40" y="92" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" fill="#8fa3c2">Seven steps from an idea to a post. You approve at step 6; nothing posts without it.</text>
 <g filter="url(#sh)"><rect x="43" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="none" stroke-width="3"/></g>
 <circle cx="73" cy="184" r="16" fill="#14213d"/><text x="73" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">1</text>
 <text x="59" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Plan</text>
 <text x="59" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">a week at a time</text>
 <text x="59" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">calendar, facts</text>
-<rect x="59" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="118.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njl-plan</text>
+<rect x="59" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="118.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw-plan</text>
 <path d="M197 245.0 H213" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="217" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="none" stroke-width="3"/></g>
 <circle cx="247" cy="184" r="16" fill="#14213d"/><text x="247" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">2</text>
 <text x="233" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Write</text>
 <text x="233" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">in your voice</text>
 <text x="233" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">hook, short lines</text>
-<rect x="233" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="292.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njl-write</text>
+<rect x="233" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="292.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw-write</text>
 <path d="M371 245.0 H387" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="391" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="none" stroke-width="3"/></g>
 <circle cx="421" cy="184" r="16" fill="#14213d"/><text x="421" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">3</text>
 <text x="407" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Gate</text>
 <text x="407" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">mechanical checks</text>
 <text x="407" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">words and claims</text>
-<rect x="407" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="466.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njli gate</text>
+<rect x="407" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="466.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw gate</text>
 <path d="M545 245.0 H561" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="565" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="none" stroke-width="3"/></g>
 <circle cx="595" cy="184" r="16" fill="#14213d"/><text x="595" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">4</text>
 <text x="581" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Visuals</text>
 <text x="581" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">HyperFrames GIF</text>
 <text x="581" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">or 2x slides</text>
-<rect x="581" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="640.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njl-visuals</text>
+<rect x="581" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="640.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw-visuals</text>
 <path d="M719 245.0 H735" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="739" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="#ff6a3d" stroke-width="3"/></g>
 <circle cx="769" cy="184" r="16" fill="#ff6a3d"/><text x="769" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">5</text>
 <text x="755" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Review</text>
 <text x="755" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">council seats</text>
 <text x="755" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">pass or revise</text>
-<rect x="755" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="814.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njli board</text>
+<rect x="755" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="814.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw board</text>
 <path d="M893 245.0 H909" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="913" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="#ff6a3d" stroke-width="3"/></g>
 <circle cx="943" cy="184" r="16" fill="#ff6a3d"/><text x="943" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">6</text>
 <text x="929" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Post</text>
 <text x="929" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">you click Allow</text>
 <text x="929" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">official API only</text>
-<rect x="929" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="988.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njli post</text>
+<rect x="929" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="988.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw post</text>
 <path d="M1067 245.0 H1083" stroke="#8fa3c2" stroke-width="3" stroke-linecap="round" marker-end="url(#ar)"/>
 <g filter="url(#sh)"><rect x="1087" y="150" width="150" height="190" rx="18" fill="#f4efe6" stroke="none" stroke-width="3"/></g>
 <circle cx="1117" cy="184" r="16" fill="#14213d"/><text x="1117" y="190" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="700" fill="#fff">7</text>
 <text x="1103" y="236" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="21" font-weight="700" fill="#14213d">Engage</text>
 <text x="1103" y="262" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">drafts only</text>
 <text x="1103" y="282" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#3f3d36">you click Send</text>
-<rect x="1103" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="1162.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">njl-ship</text>
+<rect x="1103" y="298" width="118" height="26" rx="8" fill="#e5dfd1"/><text x="1162.0" y="316" text-anchor="middle" font-family="Consolas,'Courier New',monospace" font-size="13" font-weight="700" fill="#14213d">pw-ship</text>
 <path d="M1162.0 350 V392 H118.0 V354" fill="none" stroke="#ff6a3d" stroke-width="3" stroke-dasharray="2 9" stroke-linecap="round" marker-end="url(#ar)"/>
 <text x="640.0" y="384" text-anchor="middle" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="17" font-weight="500" fill="#f4efe6">what people answer shapes the next week</text>
 <text x="1240" y="426" text-anchor="end" font-family="'IBM Plex Sans','Inter','Segoe UI',Helvetica,Arial,sans-serif" font-size="13" fill="#8fa3c2">Demo persona only</text>

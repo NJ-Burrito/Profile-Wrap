@@ -31,7 +31,7 @@ def _setup(stack_ws, slug, html, fmt="document"):
 def test_arabic_rtl_slides_pass_overflow_gates(stack_ws):
     need_static_stack()
     need_playwright(stack_ws)
-    from njli.visuals import render
+    from profile_wrap.visuals import render
     d = _setup(stack_ws, "ar", AR)
     data = render.render("ar", stack_ws, load_cfg(stack_ws))
     assert data["slides"] == 2 and data["scale"] == 2.0
@@ -45,7 +45,7 @@ def test_arabic_rtl_slides_pass_overflow_gates(stack_ws):
 def test_overflow_and_small_text_fail(stack_ws):
     need_static_stack()
     need_playwright(stack_ws)
-    from njli.visuals import VisualsError, render
+    from profile_wrap.visuals import VisualsError, render
     bad = AR.replace("<p>جملة قصيرة", '<p style="position:absolute;left:-200px;top:10px">جملة قصيرة')
     _setup(stack_ws, "ovf", bad)
     with pytest.raises(VisualsError, match="overflows"):
@@ -62,10 +62,10 @@ def test_unloadable_system_family_fails(stack_ws):
     """font_source=system with a family nobody installed must fail in the browser, not fall back."""
     need_static_stack()
     need_playwright(stack_ws)
-    from njli.visuals import VisualsError, render
+    from profile_wrap.visuals import VisualsError, render
     cfg = load_cfg(stack_ws)
     cfg["brand"]["font_source"] = "system"
-    cfg["brand"]["fonts"]["display"]["family"] = "Njli Test Family That Does Not Exist"
+    cfg["brand"]["fonts"]["display"]["family"] = "Profile Wrap Test Family That Does Not Exist"
     _setup(stack_ws, "sysfont", AR)
     with pytest.raises(VisualsError, match="fonts fell back"):
         render.render("sysfont", stack_ws, cfg)

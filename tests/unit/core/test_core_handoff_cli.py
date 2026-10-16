@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import cli, handoff, policy
+from profile_wrap import cli, handoff, policy
 
 from core_helpers import FIXTURES, REPO, run_cli
 
@@ -86,7 +86,7 @@ def test_check_file(tmp_path):
 @pytest.fixture()
 def fake_root(plugin_root, monkeypatch):
     """Point the CLI at the throwaway plugin root the test workspaces were built from."""
-    monkeypatch.setenv("NJLI_PLUGIN_ROOT", str(plugin_root))
+    monkeypatch.setenv("PROFILE_WRAP_PLUGIN_ROOT", str(plugin_root))
     return plugin_root
 
 
@@ -96,13 +96,13 @@ def call(*argv):
 
 def test_no_command_prints_help_and_usage_code(capsys):
     assert call() == policy.EXIT_USAGE
-    assert "usage: njli" in capsys.readouterr().out
+    assert "usage: profile-wrap" in capsys.readouterr().out
 
 
 def test_version(capsys):
     with pytest.raises(SystemExit) as exc:
         call("--version")
-    assert exc.value.code == 0 and "njli" in capsys.readouterr().out
+    assert exc.value.code == 0 and "profile-wrap" in capsys.readouterr().out
 
 
 def test_config_commands(make_workspace, capsys):
@@ -129,7 +129,7 @@ def test_config_commands(make_workspace, capsys):
 
 def test_config_validate_rejects_unknown_keys_and_ceilings(make_workspace, capsys):
     ws = make_workspace()
-    path = ws / "config" / "njli.json"
+    path = ws / "config" / "profile-wrap.json"
     raw = json.loads(path.read_text(encoding="utf-8"))
     raw["surprise"] = 1
     raw["posting"]["per_week"] = 12
@@ -146,7 +146,7 @@ def test_config_validate_rejects_unknown_keys_and_ceilings(make_workspace, capsy
 
 def test_config_ack_rules(make_workspace, plugin_root, monkeypatch, capsys):
     ws = make_workspace()
-    monkeypatch.setenv("NJLI_PLUGIN_ROOT", str(plugin_root))
+    monkeypatch.setenv("PROFILE_WRAP_PLUGIN_ROOT", str(plugin_root))
     monkeypatch.setenv(policy.WORKER_ENV, "1")
     assert call("config", "ack", "likes", "--phrase", policy.ACK_PHRASE, "--workspace", str(ws)) == 1
     assert "agent cannot record" in capsys.readouterr().err
@@ -166,7 +166,7 @@ def test_doctor_command(make_workspace, capsys):
     ws = make_workspace()
     code = call("doctor", "--workspace", str(ws), "--os", "linux")
     out = capsys.readouterr().out
-    assert code in (0, 1) and "njli doctor" in out and "linux" in out
+    assert code in (0, 1) and "profile-wrap doctor" in out and "linux" in out
     assert call("doctor", "--json", "--workspace", str(ws), "--os", "macos") in (0, 1)
     assert json.loads(capsys.readouterr().out)["os"] == "macos"
 
@@ -218,7 +218,7 @@ def test_init_answers_flow(tmp_path, capsys, plugin_root, monkeypatch):
     capsys.readouterr()
     assert call("init", str(tmp_path / "w3"), "--answers", str(answers), "--yes", "--no-git",
                 "--profile", "other") == 0
-    cfg = json.loads((tmp_path / "w3" / "config" / "njli.json").read_text(encoding="utf-8"))
+    cfg = json.loads((tmp_path / "w3" / "config" / "profile-wrap.json").read_text(encoding="utf-8"))
     assert cfg["profile_id"] == "other"
 
 
@@ -230,14 +230,14 @@ def test_init_section_flow(make_workspace, tmp_path, capsys):
     part.write_text(json.dumps({"schema_version": 1, "who": {
         "name": "Jordan Sample", "languages": ["en"], "goal": "authority", "role": "Lead"}}))
     assert call("init", "--section", "who", "--answers", str(part), "--workspace", str(ws)) == 0
-    assert json.loads((ws / "config" / "njli.json").read_text(encoding="utf-8"))[
+    assert json.loads((ws / "config" / "profile-wrap.json").read_text(encoding="utf-8"))[
         "persona"]["role"] == "Lead"
 
 
 def test_init_demo_flow(tmp_path, capsys):
     assert call("init", "--demo", str(tmp_path / "d")) == 0
     out = capsys.readouterr().out
-    assert "workspace:" in out and "next: njli doctor" in out
+    assert "workspace:" in out and "next: profile-wrap doctor" in out
     assert call("config", "validate", "--workspace", str(tmp_path / "d")) == 0
 
 
@@ -249,7 +249,7 @@ def test_init_express_in_a_terminal(tmp_path, monkeypatch, capsys):
     monkeypatch.setattr(cli.init_wizard.doctor, "run", lambda **k: {
         "summary": {"fail": 0, "warn": 0, "pass": 1, "skip": 0}, "checks": []})
     assert call("init", str(tmp_path / "ex"), "--express", "--no-git") == 0
-    assert (tmp_path / "ex" / "config" / "njli.json").is_file()
+    assert (tmp_path / "ex" / "config" / "profile-wrap.json").is_file()
 
 
 def test_upgrade_commands(fake_root, make_workspace, capsys):
@@ -277,7 +277,7 @@ def test_upgrade_exit_3_on_conflict(fake_root, make_workspace, monkeypatch, caps
 
 def test_upgrade_outside_a_workspace(tmp_path, capsys):
     assert call("upgrade", "--check", "--workspace", str(tmp_path)) == policy.EXIT_FAIL
-    assert "not an nj-linkedin workspace" in capsys.readouterr().err
+    assert "not an Profile-Wrap workspace" in capsys.readouterr().err
 
 
 def test_migrate_command(fake_root, make_workspace, capsys):
@@ -288,9 +288,9 @@ def test_migrate_command(fake_root, make_workspace, capsys):
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
     meta["applied_migrations"] = []
     meta_path.write_text(json.dumps(meta), encoding="utf-8")
-    raw = json.loads((ws / "config" / "njli.json").read_text(encoding="utf-8"))
+    raw = json.loads((ws / "config" / "profile-wrap.json").read_text(encoding="utf-8"))
     del raw["persona"]["style_preset"]
-    (ws / "config" / "njli.json").write_text(json.dumps(raw), encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(raw), encoding="utf-8")
     assert call("migrate", "--dry-run", "--workspace", str(ws)) == 0
     assert "would apply 0001_style_preset" in capsys.readouterr().out
     assert call("migrate", "--workspace", str(ws), "--json") == 0
@@ -351,7 +351,7 @@ def test_workspace_resolution(make_workspace, monkeypatch, tmp_path):
 def test_errors_are_one_line_not_tracebacks(tmp_path, capsys):
     code = call("config", "validate", "--workspace", str(tmp_path / "nowhere"))
     assert code == policy.EXIT_FAIL
-    assert "njli init" in capsys.readouterr().out
+    assert "profile-wrap init" in capsys.readouterr().out
     plugin = Path(cli.paths.plugin_root())
     assert call("config", "show", "--workspace", str(plugin / "inside")) == policy.EXIT_FAIL
     assert "inside the plugin" in capsys.readouterr().err
@@ -379,8 +379,8 @@ def test_keyboard_interrupt(monkeypatch, capsys):
 def test_extension_registration_conventions(monkeypatch, capsys):
     calls = []
 
-    ext_pkg = types.ModuleType("njli.zeta")
-    ext_mod = types.ModuleType("njli.zeta.cli_ext")
+    ext_pkg = types.ModuleType("profile_wrap.zeta")
+    ext_mod = types.ModuleType("profile_wrap.zeta.cli_ext")
 
     def register(sub):
         calls.append("zeta")
@@ -388,21 +388,21 @@ def test_extension_registration_conventions(monkeypatch, capsys):
         p.set_defaults(func=lambda a: 7)
 
     ext_mod.register = register
-    solo = types.ModuleType("njli.solo")
+    solo = types.ModuleType("profile_wrap.solo")
     solo.register = lambda sub: (calls.append("solo"), sub.add_parser("solo").set_defaults(
         func=lambda a: 9))
-    broken = types.ModuleType("njli.broken")
+    broken = types.ModuleType("profile_wrap.broken")
 
     def boom(sub):
         raise RuntimeError("register failed")
 
     broken.register = boom
-    no_register = types.ModuleType("njli.noreg")
-    monkeypatch.setitem(sys.modules, "njli.zeta", ext_pkg)
-    monkeypatch.setitem(sys.modules, "njli.zeta.cli_ext", ext_mod)
-    monkeypatch.setitem(sys.modules, "njli.solo", solo)
-    monkeypatch.setitem(sys.modules, "njli.broken", broken)
-    monkeypatch.setitem(sys.modules, "njli.noreg", no_register)
+    no_register = types.ModuleType("profile_wrap.noreg")
+    monkeypatch.setitem(sys.modules, "profile_wrap.zeta", ext_pkg)
+    monkeypatch.setitem(sys.modules, "profile_wrap.zeta.cli_ext", ext_mod)
+    monkeypatch.setitem(sys.modules, "profile_wrap.solo", solo)
+    monkeypatch.setitem(sys.modules, "profile_wrap.broken", broken)
+    monkeypatch.setitem(sys.modules, "profile_wrap.noreg", no_register)
     monkeypatch.setattr(cli, "EXTENSIONS", ("zeta", "solo", "broken", "noreg", "absent"))
     assert call("zeta") == 7
     assert call("solo") == 9
@@ -416,9 +416,9 @@ def test_a_broken_extension_import_is_reported_but_does_not_stop_the_core(monkey
     real = cli.importlib.import_module
 
     def fake(name, *a, **k):
-        if name.startswith("njli.explodes"):
+        if name.startswith("profile_wrap.explodes"):
             raise ModuleNotFoundError("No module named 'numpy'", name="numpy")
-        if name.startswith("njli.crashes"):
+        if name.startswith("profile_wrap.crashes"):
             raise RuntimeError("syntax problem inside the extension")
         return real(name, *a, **k)
 
@@ -433,15 +433,15 @@ def test_a_broken_extension_import_is_reported_but_does_not_stop_the_core(monkey
 
 def test_core_pause_defers_to_an_extension_that_registers_it(monkeypatch, make_workspace):
     ws = make_workspace()
-    ext = types.ModuleType("njli.schedule")
-    ext_cli = types.ModuleType("njli.schedule.cli_ext")
+    ext = types.ModuleType("profile_wrap.schedule")
+    ext_cli = types.ModuleType("profile_wrap.schedule.cli_ext")
 
     def register(sub):
         sub.add_parser("pause").set_defaults(func=lambda a: 42)
 
     ext_cli.register = register
-    monkeypatch.setitem(sys.modules, "njli.schedule", ext)
-    monkeypatch.setitem(sys.modules, "njli.schedule.cli_ext", ext_cli)
+    monkeypatch.setitem(sys.modules, "profile_wrap.schedule", ext)
+    monkeypatch.setitem(sys.modules, "profile_wrap.schedule.cli_ext", ext_cli)
     monkeypatch.setattr(cli, "EXTENSIONS", ("schedule",))
     assert call("pause") == 42
     assert not (ws / "work" / "PAUSE").exists()

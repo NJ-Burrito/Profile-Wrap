@@ -8,8 +8,8 @@ from pathlib import Path
 import pytest
 
 import wsfix
-from njli import claude_runner as cr
-from njli.schedule import proctree
+from profile_wrap import claude_runner as cr
+from profile_wrap.schedule import proctree
 
 ALLOW = ["drafts/d1/**"]
 
@@ -77,10 +77,10 @@ def test_a_worker_failure_is_an_error_not_a_skip(ws, cfg):
 
 def test_a_missing_claude_cli_is_a_clear_status(ws, cfg, monkeypatch, tmp_path):
     monkeypatch.setenv("PATH", str(tmp_path))
-    monkeypatch.delenv("NJLI_CLAUDE_BIN", raising=False)
+    monkeypatch.delenv("PROFILE_WRAP_CLAUDE_BIN", raising=False)
     monkeypatch.setattr(cr.paths, "home", lambda: tmp_path / "nohome")
     res = cr.run_worker(ws, cfg, job="x", kind="build", prompt="p", allow=ALLOW)
-    assert res.status == cr.NO_CLAUDE and "NJLI_CLAUDE_BIN" in res.err
+    assert res.status == cr.NO_CLAUDE and "PROFILE_WRAP_CLAUDE_BIN" in res.err
 
 
 def test_binary_discovery_order(tmp_path, monkeypatch):
@@ -99,8 +99,8 @@ def test_binary_discovery_order(tmp_path, monkeypatch):
     assert cr.find_claude({}, env={"PATH": ""}, home=home).endswith(str(Path(".claude/local/claude")))
     explicit = tmp_path / "mine"
     explicit.write_bytes(b"")
-    assert cr.find_claude({}, env={"NJLI_CLAUDE_BIN": str(explicit), "PATH": ""}, home=home) == str(explicit)
-    assert cr.find_claude({"models": {"runner": {"bin": str(explicit)}}}, env={"NJLI_CLAUDE_BIN": "x"}, home=home) == str(explicit)
+    assert cr.find_claude({}, env={"PROFILE_WRAP_CLAUDE_BIN": str(explicit), "PATH": ""}, home=home) == str(explicit)
+    assert cr.find_claude({"models": {"runner": {"bin": str(explicit)}}}, env={"PROFILE_WRAP_CLAUDE_BIN": "x"}, home=home) == str(explicit)
 
 
 def test_probe_records_flags_and_writes_the_probe_file(ws, cfg, tmp_path):
@@ -111,7 +111,7 @@ def test_probe_records_flags_and_writes_the_probe_file(ws, cfg, tmp_path):
 
 
 def test_probe_command_line(ws, tmp_path, monkeypatch, capsys):
-    from njli import cli
+    from profile_wrap import cli
     shim = tmp_path / ("claude.cmd" if sys.platform == "win32" else "claude")
     if sys.platform == "win32":
         shim.write_text(f'@echo off\r\n"{sys.executable}" "{wsfix.FAKE}" %*\r\n', encoding="utf-8")

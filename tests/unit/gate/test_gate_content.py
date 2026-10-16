@@ -7,10 +7,10 @@ import re
 import pytest
 from gate_helpers import ROOT
 
-from njli.facts import registers as reg
-from njli.gate import check_text, rules
+from profile_wrap.facts import registers as reg
+from profile_wrap.gate import check_text, rules
 
-OWNED_DIRS = ["njli/facts", "njli/gate", "data/banned-words", "skills/njl-write", "tests/unit/gate",
+OWNED_DIRS = ["profile_wrap/facts", "profile_wrap/gate", "data/banned-words", "skills/pw-write", "tests/unit/gate",
               "tests/fixtures/captions"]
 OWNED_FILES = ["data/hook-formulas.json", "templates/facts.example.md", "templates/voice.example.md",
                "templates/story-bank.example.md", "prompts/review.md", "prompts/comment-gate-notes.md",
@@ -80,7 +80,7 @@ def test_hook_formulas_are_twenty_unique_and_their_examples_pass_the_gate(ws):
                 "example_en"} <= set(f)
         res = check_text(f["example_en"], "comment", ws)
         assert res["ok"], (f["id"], res["fails"])
-    md = (ROOT / "skills" / "njl-write" / "references" / "hook-formulas.md").read_text(encoding="utf-8")
+    md = (ROOT / "skills" / "pw-write" / "references" / "hook-formulas.md").read_text(encoding="utf-8")
     assert all(f"`{f['id']}`" in md for f in forms)
 
 
@@ -95,12 +95,12 @@ def test_example_templates_parse_and_lint_clean():
 
 
 def test_skill_agents_and_prompts_have_the_expected_shape():
-    skill = (ROOT / "skills" / "njl-write" / "SKILL.md").read_text(encoding="utf-8")
-    assert skill.startswith("---\nname: njl-write\ndescription:")
+    skill = (ROOT / "skills" / "pw-write" / "SKILL.md").read_text(encoding="utf-8")
+    assert skill.startswith("---\nname: pw-write\ndescription:")
     assert "docs/references/compliance.md" in skill
     for ref in ("caption-rules", "impact-copy", "adhd-style-preset", "no-slop", "arabic-hygiene", "council",
                 "hook-formulas"):
-        assert (ROOT / "skills" / "njl-write" / "references" / f"{ref}.md").is_file()
+        assert (ROOT / "skills" / "pw-write" / "references" / f"{ref}.md").is_file()
         assert f"references/{ref}.md" in skill
     for agent in ("crew-writer", "council-editor", "council-language-voice"):
         text = (ROOT / "agents" / f"{agent}.md").read_text(encoding="utf-8")
@@ -117,5 +117,5 @@ def test_skill_agents_and_prompts_have_the_expected_shape():
 def test_gates_doc_covers_every_check_name():
     doc = (ROOT / "docs" / "GATES.md").read_text(encoding="utf-8")
     for name in ("meta", "facts", "claims", "numbers", "private_terms", "links", "hashtags", "arabic", "render",
-                 "NJLI_WORKER", "overrides", "gates.json", "tools_missing", "hooks/gate_"):
+                 "PROFILE_WRAP_WORKER", "overrides", "gates.json", "tools_missing", "hooks/gate_"):
         assert name in doc, name

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/manifest.schema.json",
+  "$id": "https://example.invalid/profile-wrap/manifest.schema.json",
   "title": "Workspace template manifest (templates/manifest.json)",
   "type": "object",
   "properties": {

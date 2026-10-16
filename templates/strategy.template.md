@@ -1,7 +1,7 @@
 # Content strategy
 
 Written for <name> on <date>. One page. Every choice names its evidence or says `INFERRED`.
-`njl-plan` rewrites this file when the plan changes; edit it freely, the next run reads your version.
+`pw-plan` rewrites this file when the plan changes; edit it freely, the next run reads your version.
 
 ## Goal and audience
 

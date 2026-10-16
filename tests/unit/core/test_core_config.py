@@ -5,7 +5,7 @@ import json
 
 import pytest
 
-from njli import config, policy
+from profile_wrap import config, policy
 
 from core_helpers import load_answers_fixture
 from core_helpers import needs_tzdata
@@ -124,17 +124,17 @@ def test_load_merges_defaults_and_split_files(make_workspace):
 
 
 def test_load_errors(tmp_path):
-    with pytest.raises(config.ConfigError, match="njli init"):
+    with pytest.raises(config.ConfigError, match="profile-wrap init"):
         config.load(tmp_path)
     (tmp_path / "config").mkdir()
-    (tmp_path / "config" / "njli.json").write_text("{nope", encoding="utf-8")
+    (tmp_path / "config" / "profile-wrap.json").write_text("{nope", encoding="utf-8")
     with pytest.raises(config.ConfigError, match="not valid JSON"):
         config.load(tmp_path)
-    (tmp_path / "config" / "njli.json").write_text("[1]", encoding="utf-8")
+    (tmp_path / "config" / "profile-wrap.json").write_text("[1]", encoding="utf-8")
     with pytest.raises(config.ConfigError, match="JSON object"):
         config.load(tmp_path)
     assert not config.validate_workspace(tmp_path).ok
-    (tmp_path / "config" / "njli.json").write_text("{}", encoding="utf-8")
+    (tmp_path / "config" / "profile-wrap.json").write_text("{}", encoding="utf-8")
     (tmp_path / "config" / "posting.json").write_text("{bad", encoding="utf-8")
     with pytest.raises(config.ConfigError):
         config.load(tmp_path)
@@ -181,7 +181,7 @@ def test_ack_fields_cannot_be_set_directly(make_workspace):
     ws = make_workspace()
     for key in ("posting.api_scheduled_ack", "engagement.comments.api_ack", "ack.terms_read"):
         rep = config.set_value(ws, key, '{"date": "x", "sha256": "y"}')
-        assert any("only by 'njli config ack" in e for e in rep.errors)
+        assert any("only by 'profile-wrap config ack" in e for e in rep.errors)
 
 
 def test_ack_records_hash_everywhere(make_workspace, plugin_root, tmp_path):
@@ -258,7 +258,7 @@ def test_effective_modes_for_comments_reading_likes(make_workspace, plugin_root,
         {**c, "ack": {"terms_read": {"date": "d", "sha256": "0" * 64}, "comments_api": None,
                       "scraping_risk": None}}, ws, cdir, tmp_path / "none")
     assert status["terms_read"][0] == "stale"
-    from njli import limits
+    from profile_wrap import limits
     limits.pause(ws, "posting")
     assert "posting is paused" in config.effective_modes(c, ws, cdir, plugin_root)["notes"]
 
@@ -292,7 +292,7 @@ def test_deep_merge_does_not_alias():
 
 
 def test_licensed_fonts_answers_become_user_files_config():
-    from njli import init_wizard
+    from profile_wrap import init_wizard
 
     c = init_wizard.answers_to_config(load_answers_fixture("licensed_fonts.json"))
     assert c["brand"]["font_source"] == "user_files"

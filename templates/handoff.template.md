@@ -4,7 +4,7 @@
 
 ## current state
 
-- Workspace created by `njli init` on {{created_date}}. Nothing has been posted yet.
+- Workspace created by `profile-wrap init` on {{created_date}}. Nothing has been posted yet.
 
 ## files in flight
 
@@ -20,4 +20,4 @@
 
 ## next step
 
-- Run `njli doctor`, then add 10 to 15 facts with `njli facts add` and verify them in a terminal.
+- Run `profile-wrap doctor`, then add 10 to 15 facts with `profile-wrap facts add` and verify them in a terminal.

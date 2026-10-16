@@ -1,6 +1,6 @@
 # Trends prompt (weekly research for ideas)
 
-Template. `njli research trends` fills the `{{...}}` fields and sends this to one researcher worker. Fields:
+Template. `profile-wrap research trends` fills the `{{...}}` fields and sends this to one researcher worker. Fields:
 `{{week}}` (ISO week, e.g. 2026-W42), `{{niche}}`, `{{audience}}`, `{{pillars}}`, `{{languages}}`,
 `{{sources}}` (the feeds and sites in `config/trends.json`), `{{scan_summary}}` (what the deterministic scanner
 already found, with dates and URLs), `{{previous}}` (titles used in the last four weeks), `{{contact}}`,

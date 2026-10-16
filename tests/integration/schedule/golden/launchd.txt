@@ -1,27 +1,27 @@
-=== io.njli.demo.build_week.plist ===
+=== io.profile_wrap.demo.build_week.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.build_week</string>
+	<string>io.profile_wrap.demo.build_week</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -50,30 +50,30 @@
 	<string>@WS@</string>
 </dict>
 </plist>
-=== io.njli.demo.post_due.plist ===
+=== io.profile_wrap.demo.post_due.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.post_due</string>
+	<string>io.profile_wrap.demo.post_due</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -95,30 +95,30 @@
 	<string>@WS@</string>
 </dict>
 </plist>
-=== io.njli.demo.token_check.plist ===
+=== io.profile_wrap.demo.token_check.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.token_check</string>
+	<string>io.profile_wrap.demo.token_check</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -145,30 +145,30 @@
 	<string>@WS@</string>
 </dict>
 </plist>
-=== io.njli.demo.profile_review.plist ===
+=== io.profile_wrap.demo.profile_review.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.profile_review</string>
+	<string>io.profile_wrap.demo.profile_review</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -195,30 +195,30 @@
 	<string>@WS@</string>
 </dict>
 </plist>
-=== io.njli.demo.connect_weekly.plist ===
+=== io.profile_wrap.demo.connect_weekly.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.connect_weekly</string>
+	<string>io.profile_wrap.demo.connect_weekly</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -247,25 +247,25 @@
 	<string>@WS@</string>
 </dict>
 </plist>
-=== io.njli.demo.board.plist ===
+=== io.profile_wrap.demo.board.plist ===
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
 	<key>EnvironmentVariables</key>
 	<dict>
-		<key>NJLI_CLAUDE_BIN</key>
-		<string>@HOME@/.local/bin/claude</string>
-		<key>NJLI_FFMPEG</key>
-		<string>/opt/homebrew/bin/ffmpeg</string>
-		<key>NJLI_FFPROBE</key>
-		<string>/opt/homebrew/bin/ffprobe</string>
-		<key>NJLI_NODE</key>
-		<string>/opt/homebrew/bin/node</string>
-		<key>NJLI_NPX</key>
-		<string>/opt/homebrew/bin/npx</string>
 		<key>PATH</key>
 		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PROFILE_WRAP_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>PROFILE_WRAP_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>PROFILE_WRAP_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>PROFILE_WRAP_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>PROFILE_WRAP_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
 		<key>PYTHONUTF8</key>
 		<string>1</string>
 	</dict>
@@ -275,7 +275,7 @@
 		<false/>
 	</dict>
 	<key>Label</key>
-	<string>io.njli.demo.board</string>
+	<string>io.profile_wrap.demo.board</string>
 	<key>ProcessType</key>
 	<string>Background</string>
 	<key>ProgramArguments</key>
@@ -298,15 +298,15 @@
 </dict>
 </plist>
 === commands ===
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.build_week.plist
-launchctl bootout gui/501/io.njli.demo.build_week
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.post_due.plist
-launchctl bootout gui/501/io.njli.demo.post_due
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.token_check.plist
-launchctl bootout gui/501/io.njli.demo.token_check
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.profile_review.plist
-launchctl bootout gui/501/io.njli.demo.profile_review
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.connect_weekly.plist
-launchctl bootout gui/501/io.njli.demo.connect_weekly
-launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.board.plist
-launchctl bootout gui/501/io.njli.demo.board
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.build_week.plist
+launchctl bootout gui/501/io.profile_wrap.demo.build_week
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.post_due.plist
+launchctl bootout gui/501/io.profile_wrap.demo.post_due
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.token_check.plist
+launchctl bootout gui/501/io.profile_wrap.demo.token_check
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.profile_review.plist
+launchctl bootout gui/501/io.profile_wrap.demo.profile_review
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.connect_weekly.plist
+launchctl bootout gui/501/io.profile_wrap.demo.connect_weekly
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.profile_wrap.demo.board.plist
+launchctl bootout gui/501/io.profile_wrap.demo.board

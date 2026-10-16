@@ -681,8 +681,8 @@ wheels = [
 ]
 
 [[package]]
-name = "nj-linkedin"
-version = "0.1.0"
+name = "profile-wrap"
+version = "0.1.1"
 source = { editable = "." }
 dependencies = [
     { name = "tzdata", marker = "sys_platform == 'win32'" },

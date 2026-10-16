@@ -11,8 +11,8 @@ import time
 import pytest
 from conftest import GIF, PDF, PNG, ROOT, gate_fail, gate_pass
 
-from njli import ledger, limits
-from njli.linkedin import api, post, versions
+from profile_wrap import ledger, limits
+from profile_wrap.linkedin import api, post, versions
 
 
 def run(env, slug="d1", **kw):
@@ -130,7 +130,7 @@ def test_rejected_post_holds_the_draft(env):
 def test_nothing_reachable_is_failed_not_needs_check(env, monkeypatch):
     import urllib.error
 
-    from njli.http import HttpError
+    from profile_wrap.http import HttpError
 
     env.draft("a")
 
@@ -150,8 +150,8 @@ def test_crash_between_post_and_ledger_completion_recovers_without_repost(env):
     script = textwrap.dedent(f"""
         import os, sys
         sys.path.insert(0, {str(ROOT)!r})
-        from njli import config, ledger
-        from njli.linkedin import post
+        from profile_wrap import config, ledger
+        from profile_wrap.linkedin import post
         real = ledger.update
         def boom(*a, **k):
             os._exit(9)                       # the process dies right after the POST succeeded
@@ -224,7 +224,7 @@ def test_bearer_token_is_sent_only_to_allowlisted_endpoints(env):
             assert req["token"] == "Bearer tok-secret-1"
             assert req["path"] in ("/v2/userinfo", "/rest/posts", "/rest/images", "/rest/documents")
             assert req["headers"]["linkedin-version"]
-            assert req["headers"]["user-agent"].startswith("nj-linkedin/")
+            assert req["headers"]["user-agent"].startswith("profile-wrap/")
 
 
 def test_sunset_version_is_refused_before_any_request(env):

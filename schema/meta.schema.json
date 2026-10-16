@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/meta.schema.json",
+  "$id": "https://example.invalid/profile-wrap/meta.schema.json",
   "title": "Draft metadata (drafts/<slug>/meta.json)",
   "type": "object",
   "properties": {

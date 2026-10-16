@@ -8,8 +8,8 @@ import time
 import pytest
 from gate_helpers import make_draft, write_config
 
-from njli.gate import run_gate
-from njli.gate.render import derived_fonts, run_tool
+from profile_wrap.gate import run_gate
+from profile_wrap.gate.render import derived_fonts, run_tool
 
 PDFFONTS_OK = """name                                 type              encoding         emb sub uni object ID
 ------------------------------------ ----------------- ---------------- --- --- --- ---------

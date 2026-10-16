@@ -1,7 +1,7 @@
 """Install, status and remove: recorded round trips for every backend, and the real one when asked.
 
 The recorded tests run everywhere with a fake command runner and a temporary HOME. The real round trip
-(``NJLI_REAL_SCHEDULER=1``, set in CI on each OS) installs into the machine's own scheduler under a
+(``PROFILE_WRAP_REAL_SCHEDULER=1``, set in CI on each OS) installs into the machine's own scheduler under a
 throw-away profile and removes it again in a ``finally``; it is skipped when the backend cannot operate.
 """
 from __future__ import annotations
@@ -16,9 +16,9 @@ from pathlib import Path
 import pytest
 
 from schedhelp import cfg_of
-from njli import cli
-from njli.schedule import backends as bk
-from njli.schedule import install as inst
+from profile_wrap import cli
+from profile_wrap.schedule import backends as bk
+from profile_wrap.schedule import install as inst
 
 ENABLED = {"build_week", "research_weekly", "token_check", "doctor_weekly", "profile_review", "board"}
 
@@ -122,12 +122,12 @@ def test_cron_round_trip_keeps_the_users_own_lines(mkws, tmp_path):
     rec = Recorder(crontab=mine)
     ctx = ctx_for(ws, tmp_path)
     res = inst.install(ws, cfg_of(ws), backend="cron", run=rec, ctx=ctx, local_tz="UTC")
-    assert res.ok and "# BEGIN njli:demo" in rec.crontab and rec.crontab.startswith(mine.rstrip("\n"))
-    assert rec.crontab.count("# BEGIN njli:demo") == 1
+    assert res.ok and "# BEGIN profile-wrap:demo" in rec.crontab and rec.crontab.startswith(mine.rstrip("\n"))
+    assert rec.crontab.count("# BEGIN profile-wrap:demo") == 1
     inst.install(ws, cfg_of(ws), backend="cron", run=rec, ctx=ctx, local_tz="UTC")
-    assert rec.crontab.count("# BEGIN njli:demo") == 1
+    assert rec.crontab.count("# BEGIN profile-wrap:demo") == 1
     inst.remove(ws, cfg_of(ws), run=rec)
-    assert rec.crontab == mine, "only the njli block was removed"
+    assert rec.crontab == mine, "only the profile-wrap block was removed"
     # a crontab that only held our block is removed entirely
     rec2 = Recorder()
     inst.install(ws, cfg_of(ws), backend="cron", run=rec2, ctx=ctx, local_tz="UTC")
@@ -163,7 +163,7 @@ def test_post_due_is_installed_only_for_api_scheduled_with_a_valid_acknowledgeme
 def test_the_installer_refuses_when_there_is_no_stable_runtime(mkws):
     ws = mkws()
     res = inst.install(ws, cfg_of(ws), backend="windows", run=Recorder(), local_tz="UTC")
-    assert not res.ok and "njli runtime install" in res.errors[0]
+    assert not res.ok and "profile-wrap runtime install" in res.errors[0]
 
 
 def test_the_machine_timezone_shifts_the_times_the_scheduler_gets(mkws):
@@ -208,7 +208,7 @@ def test_cli_install_dry_run_and_refusal_without_yes(mkws, tmp_path, capsys, mon
     monkeypatch.setattr(inst, "build_context", lambda *a, **k: ctx_for(ws, tmp_path))
     assert cli.main(["schedule", "install", "--dry-run", "--backend", "windows", "--workspace", str(ws)]) == 0
     out = capsys.readouterr().out
-    assert "schtasks /Create" in out and "njli-demo-build_week" in out
+    assert "schtasks /Create" in out and "profile-wrap-demo-build_week" in out
     monkeypatch.setattr(sys.stdin, "isatty", lambda: False, raising=False)
     assert cli.main(["schedule", "install", "--backend", "windows", "--workspace", str(ws)]) == 2
     assert "--yes" in capsys.readouterr().out
@@ -224,10 +224,10 @@ def test_cli_plan_list_next_status(mkws, capsys):
 
 # ------------------------------------------------------------------ the real thing
 
-REAL = os.environ.get("NJLI_REAL_SCHEDULER") == "1"
+REAL = os.environ.get("PROFILE_WRAP_REAL_SCHEDULER") == "1"
 
 
-@pytest.mark.skipif(not REAL, reason="set NJLI_REAL_SCHEDULER=1 to install into the machine's scheduler (CI does)")
+@pytest.mark.skipif(not REAL, reason="set PROFILE_WRAP_REAL_SCHEDULER=1 to install into the machine's scheduler (CI does)")
 def test_real_install_query_and_remove_round_trip(mkws, tmp_path):
     profile = "ci" + uuid.uuid4().hex[:8]
     ws = mkws(profile=profile)
@@ -247,15 +247,15 @@ def test_real_install_query_and_remove_round_trip(mkws, tmp_path):
         st = inst.status(ws, cfg)
         assert [r for r in st["rows"] if r["job"] == "doctor_weekly"][0]["registered"], "the OS knows the job"
         if backend == "windows":
-            q = subprocess.run(["schtasks", "/Query", "/TN", f"njli-{profile}-doctor_weekly"], capture_output=True)
+            q = subprocess.run(["schtasks", "/Query", "/TN", f"profile-wrap-{profile}-doctor_weekly"], capture_output=True)
             assert q.returncode == 0
     finally:
         rm = inst.remove(ws, cfg)
         if backend == "cron":
             out = subprocess.run(["crontab", "-l"], capture_output=True, text=True).stdout
-            assert f"njli:{profile}" not in out
+            assert f"profile-wrap:{profile}" not in out
         if backend == "windows":
-            q = subprocess.run(["schtasks", "/Query", "/TN", f"njli-{profile}-doctor_weekly"], capture_output=True)
+            q = subprocess.run(["schtasks", "/Query", "/TN", f"profile-wrap-{profile}-doctor_weekly"], capture_output=True)
             assert q.returncode != 0, "the task is gone"
         assert rm.ok, rm.errors
     assert entries(ws) == []

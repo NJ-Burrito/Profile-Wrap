@@ -11,9 +11,9 @@ import wsfix  # noqa: E402
 
 @pytest.fixture()
 def ws(tmp_path, monkeypatch):
-    monkeypatch.setenv("NJLI_CONFIG_DIR", str(tmp_path / "cfg"))
-    monkeypatch.setenv("NJLI_DATA_DIR", str(tmp_path / "data"))
-    monkeypatch.setenv("NJLI_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(tmp_path / "cfg"))
+    monkeypatch.setenv("PROFILE_WRAP_DATA_DIR", str(tmp_path / "data"))
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
     return wsfix.make_workspace(tmp_path)
 
 

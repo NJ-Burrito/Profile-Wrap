@@ -1,143 +1,143 @@
-=== njli-demo-build_week.service ===
+=== profile-wrap-demo-build_week.service ===
 [Unit]
-Description=njli demo: build_week
+Description=profile-wrap demo: build_week
 
 [Service]
 Type=oneshot
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run build_week --workspace @WS@ --no-jitter
 TimeoutStartSec=11100
-=== njli-demo-build_week.timer ===
+=== profile-wrap-demo-build_week.timer ===
 [Unit]
-Description=njli demo: build_week (THU 10:00)
+Description=profile-wrap demo: build_week (THU 10:00)
 
 [Timer]
 OnCalendar=Thu *-*-* 10:00:00
 Persistent=true
 RandomizedDelaySec=20min
-Unit=njli-demo-build_week.service
+Unit=profile-wrap-demo-build_week.service
 
 [Install]
 WantedBy=timers.target
-=== njli-demo-post_due.service ===
+=== profile-wrap-demo-post_due.service ===
 [Unit]
-Description=njli demo: post_due
+Description=profile-wrap demo: post_due
 
 [Service]
 Type=oneshot
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run post_due --workspace @WS@
 TimeoutStartSec=900
-=== njli-demo-post_due.timer ===
+=== profile-wrap-demo-post_due.timer ===
 [Unit]
-Description=njli demo: post_due (every 15 min)
+Description=profile-wrap demo: post_due (every 15 min)
 
 [Timer]
 OnBootSec=2min
 OnUnitActiveSec=15min
 Persistent=true
-Unit=njli-demo-post_due.service
+Unit=profile-wrap-demo-post_due.service
 
 [Install]
 WantedBy=timers.target
-=== njli-demo-token_check.service ===
+=== profile-wrap-demo-token_check.service ===
 [Unit]
-Description=njli demo: token_check
+Description=profile-wrap demo: token_check
 
 [Service]
 Type=oneshot
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run token_check --workspace @WS@
 TimeoutStartSec=420
-=== njli-demo-token_check.timer ===
+=== profile-wrap-demo-token_check.timer ===
 [Unit]
-Description=njli demo: token_check (daily 09:30)
+Description=profile-wrap demo: token_check (daily 09:30)
 
 [Timer]
 OnCalendar=*-*-* 09:30:00
 Persistent=true
-Unit=njli-demo-token_check.service
+Unit=profile-wrap-demo-token_check.service
 
 [Install]
 WantedBy=timers.target
-=== njli-demo-profile_review.service ===
+=== profile-wrap-demo-profile_review.service ===
 [Unit]
-Description=njli demo: profile_review
+Description=profile-wrap demo: profile_review
 
 [Service]
 Type=oneshot
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run profile_review --workspace @WS@
 TimeoutStartSec=600
-=== njli-demo-profile_review.timer ===
+=== profile-wrap-demo-profile_review.timer ===
 [Unit]
-Description=njli demo: profile_review (every 90 days (checked daily 09:00))
+Description=profile-wrap demo: profile_review (every 90 days (checked daily 09:00))
 
 [Timer]
 OnCalendar=*-*-* 09:00:00
 Persistent=true
-Unit=njli-demo-profile_review.service
+Unit=profile-wrap-demo-profile_review.service
 
 [Install]
 WantedBy=timers.target
-=== njli-demo-connect_weekly.service ===
+=== profile-wrap-demo-connect_weekly.service ===
 [Unit]
-Description=njli demo: connect_weekly
+Description=profile-wrap demo: connect_weekly
 
 [Service]
 Type=oneshot
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run connect_weekly --workspace @WS@
 TimeoutStartSec=2100
-=== njli-demo-connect_weekly.timer ===
+=== profile-wrap-demo-connect_weekly.timer ===
 [Unit]
-Description=njli demo: connect_weekly (SUN 10:00)
+Description=profile-wrap demo: connect_weekly (SUN 10:00)
 
 [Timer]
 OnCalendar=Sun *-*-* 10:00:00
 Persistent=true
-Unit=njli-demo-connect_weekly.service
+Unit=profile-wrap-demo-connect_weekly.service
 
 [Install]
 WantedBy=timers.target
-=== njli-demo-board.service ===
+=== profile-wrap-demo-board.service ===
 [Unit]
-Description=njli demo: board
+Description=profile-wrap demo: board
 After=network-online.target
 
 [Service]
@@ -145,11 +145,11 @@ Type=simple
 WorkingDirectory=@WS@
 Environment=PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin
 Environment=PYTHONUTF8=1
-Environment=NJLI_NODE=/opt/homebrew/bin/node
-Environment=NJLI_NPX=/opt/homebrew/bin/npx
-Environment=NJLI_FFMPEG=/opt/homebrew/bin/ffmpeg
-Environment=NJLI_FFPROBE=/opt/homebrew/bin/ffprobe
-Environment=NJLI_CLAUDE_BIN=@HOME@/.local/bin/claude
+Environment=PROFILE_WRAP_NODE=/opt/homebrew/bin/node
+Environment=PROFILE_WRAP_NPX=/opt/homebrew/bin/npx
+Environment=PROFILE_WRAP_FFMPEG=/opt/homebrew/bin/ffmpeg
+Environment=PROFILE_WRAP_FFPROBE=/opt/homebrew/bin/ffprobe
+Environment=PROFILE_WRAP_CLAUDE_BIN=@HOME@/.local/bin/claude
 ExecStart=/usr/bin/python3 @PYZ@ run board --workspace @WS@
 Restart=on-failure
 RestartSec=60
@@ -158,14 +158,14 @@ RestartSec=60
 WantedBy=default.target
 === commands ===
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-build_week.timer
+systemctl --user enable --now profile-wrap-demo-build_week.timer
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-post_due.timer
+systemctl --user enable --now profile-wrap-demo-post_due.timer
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-token_check.timer
+systemctl --user enable --now profile-wrap-demo-token_check.timer
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-profile_review.timer
+systemctl --user enable --now profile-wrap-demo-profile_review.timer
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-connect_weekly.timer
+systemctl --user enable --now profile-wrap-demo-connect_weekly.timer
 systemctl --user daemon-reload
-systemctl --user enable --now njli-demo-board.service
+systemctl --user enable --now profile-wrap-demo-board.service

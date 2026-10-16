@@ -2,7 +2,7 @@
   "schema_version": 1,
   "retrieved": "2026-10-10",
   "source": "https://learn.microsoft.com/en-us/linkedin/marketing/versioning and https://learn.microsoft.com/en-us/linkedin/marketing/integrations/migrations",
-  "note": "Dated table. A human re-verifies it before each release; 'njli api-versions --refresh' lists versions seen on the versioning page that this table does not know yet. 'sunset' is the last day a version works; null means no date was published when the table was written.",
+  "note": "Dated table. A human re-verifies it before each release; 'profile-wrap api-versions --refresh' lists versions seen on the versioning page that this table does not know yet. 'sunset' is the last day a version works; null means no date was published when the table was written.",
   "versions": [
     {"version": "202510", "sunset": "2026-10-15"},
     {"version": "202511", "sunset": "2026-11-16"},

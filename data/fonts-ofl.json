@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "note": "OFL fonts that 'njli fonts fetch' can install from fontsource npm packages into brand/fonts/ (git-ignored, never committed). Versions come from data/pins.json (npm) first, then 'version' here. Add a family by adding an entry; every file must be under the SIL Open Font License.",
+  "note": "OFL fonts that 'profile-wrap fonts fetch' can install from fontsource npm packages into brand/fonts/ (git-ignored, never committed). Versions come from data/pins.json (npm) first, then 'version' here. Add a family by adding an entry; every file must be under the SIL Open Font License.",
   "families": {
     "IBM Plex Sans": {
       "package": "@fontsource/ibm-plex-sans",

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import pytest
 
-from njli import sandbox as sb
+from profile_wrap import sandbox as sb
 
 
 @pytest.mark.parametrize("rel,allow,expected", [

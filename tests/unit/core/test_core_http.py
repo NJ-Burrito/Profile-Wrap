@@ -8,7 +8,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 import pytest
 
-from njli import http, policy
+from profile_wrap import http, policy
 
 
 class Recorder(BaseHTTPRequestHandler):
@@ -65,8 +65,8 @@ def server():
 
 @pytest.fixture()
 def test_mode(monkeypatch, server):
-    monkeypatch.setenv("NJLI_TEST", "1")
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", server)
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", server)
     return server
 
 
@@ -114,20 +114,20 @@ def test_loopback_only_in_test_or_demo(monkeypatch):
     with pytest.raises(http.HttpError, match="tests or demo"):
         http.check_url("http://127.0.0.1:9/x")
     assert http.check_url("http://127.0.0.1:9/x", http.HostPolicy(demo=True)) == "127.0.0.1"
-    monkeypatch.setenv("NJLI_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
     assert http.check_url("http://localhost:9/x") == "localhost"
     with pytest.raises(http.HttpError, match="only 127.0.0.1"):
         http.check_url("https://news.example/x", http.HostPolicy(demo=True, extra_hosts=["news.example"]))
 
 
 def test_override_is_ignored_outside_test_and_demo(monkeypatch, server):
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", server)
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", server)
     assert http.override_base(http.HostPolicy()) is None
     assert http.override_base(http.HostPolicy(demo=True)) == server
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", "https://evil.example")
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", "https://evil.example")
     assert http.override_base(http.HostPolicy(demo=True)) is None   # only loopback overrides
     # without test/demo the real host is the only target and the fake server never sees it
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", server)
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", server)
     assert http._rewrite(f"{API}/rest/posts", http.HostPolicy()) == f"{API}/rest/posts"
 
 
@@ -140,7 +140,7 @@ def test_request_sends_neutral_ua_version_and_token(test_mode):
     assert h["authorization"] == "Bearer TOKEN-123"
     assert h["linkedin-version"] == "202601"
     assert h["x-restli-protocol-version"] == "2.0.0"
-    assert h["user-agent"].startswith("nj-linkedin/") and "me@example.invalid" in h["user-agent"]
+    assert h["user-agent"].startswith("profile-wrap/") and "me@example.invalid" in h["user-agent"]
     assert json.loads(seen["body"]) == {"a": 1}
     assert h["content-type"] == "application/json"
     assert seen["path"] == "/rest/posts"
@@ -163,8 +163,8 @@ def test_token_never_goes_to_other_hosts(test_mode, monkeypatch):
     assert Recorder.seen == []
     assert http.token_allowed("api.linkedin.com") and http.token_allowed("www.linkedin.com")
     assert not http.token_allowed("media.licdn.com") and not http.token_allowed("evil.example")
-    assert http.token_allowed("127.0.0.1")                        # NJLI_TEST=1 is set here
-    monkeypatch.delenv("NJLI_TEST")
+    assert http.token_allowed("127.0.0.1")                        # PROFILE_WRAP_TEST=1 is set here
+    monkeypatch.delenv("PROFILE_WRAP_TEST")
     assert not http.token_allowed("127.0.0.1")                    # loopback only in test or demo
     assert http.token_allowed("127.0.0.1", http.HostPolicy(demo=True))
 
@@ -209,8 +209,8 @@ def test_connection_refused_is_a_network_error_not_maybe_sent(monkeypatch):
     sock.bind(("127.0.0.1", 0))
     port = sock.getsockname()[1]
     sock.close()
-    monkeypatch.setenv("NJLI_TEST", "1")
-    monkeypatch.setenv("NJLI_LINKEDIN_BASE", f"http://127.0.0.1:{port}")
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_LINKEDIN_BASE", f"http://127.0.0.1:{port}")
     with pytest.raises(http.HttpError) as exc:
         http.request("GET", f"{API}/v2/userinfo", linkedin_version="202601", timeout=10)
     assert exc.value.kind == "network" and not exc.value.maybe_sent
@@ -233,5 +233,5 @@ def test_reachable(server):
 def test_response_helpers():
     r = http.Response(200, {}, b'\xef\xbb\xbf{"a": 1}')
     assert r.json() == {"a": 1} and r.text().endswith("}")
-    assert http.user_agent() == f"nj-linkedin/{http.__version__}"
+    assert http.user_agent() == f"profile-wrap/{http.__version__}"
     assert policy.LINKEDIN_API_HOST in http.policy.LINKEDIN_TOKEN_HOSTS

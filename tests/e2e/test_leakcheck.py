@@ -12,7 +12,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import leakcheck as L
+from profile_wrap import leakcheck as L
 
 # Terms and secrets are assembled at run time so this file never contains them whole.
 TERM = "Fern" + "hill Cycles"
@@ -49,7 +49,7 @@ def rules(findings) -> set[str]:
 
 CLEAN = {
     "README.md": "Maya Rivera is fictional. Mail maya@example.com or hi@example.invalid.\nhttps://www.linkedin.com/in/maya-rivera-demo and urn:li:person:DEMO000000.\n",
-    "njli/a.py": "x = 1\nprint('hello')\n# see /home/<name>/ and ~/projects\n",
+    "profile_wrap/a.py": "x = 1\nprint('hello')\n# see /home/<name>/ and ~/projects\n",
     "docs/FONTS.md": "Licensed families are listed here: " + "Thman" + "yah.\n",
 }
 
@@ -74,8 +74,8 @@ def test_clean_tree_passes(tmp_path):
         ("font", {"assets/f.woff2": b"wOF2\x00\x01"}, "font-binary"),
         ("font-ttf", {"f.ttf": b"\x00\x01\x00\x00"}, "font-binary"),
         ("photo", {"img/me.jpg": b"\xff\xd8\xff\xe1\x00\x10Exif\x00\x00II*\x00"}, "photo"),
-        ("pyc", {"njli/__pycache__/a.cpython-312.pyc": b"\x00\x00"}, "pyc"),
-        ("zipapp", {"njli.pyz": b"#!/usr/bin/env python3\nPK"}, "zipapp-committed"),
+        ("pyc", {"profile_wrap/__pycache__/a.cpython-312.pyc": b"\x00\x00"}, "pyc"),
+        ("zipapp", {"profile-wrap.pyz": b"#!/usr/bin/env python3\nPK"}, "zipapp-committed"),
         ("env-file", {".env": "A=1\n"}, "secret-file"),
         ("token-json", {"cfg/token.json": "{}"}, "secret-file"),
         ("font-name", {"a.md": "set the font to " + "Thman" + "yah Sans\n"}, "font-name"),
@@ -184,8 +184,8 @@ def _zip(members: dict[str, bytes | str], shebang: bytes = b"") -> bytes:
 def test_dist_scans_wheel_sdist_zipapp(tmp_path, denylist):
     out = tmp_path / "dist"
     out.mkdir()
-    (out / "pkg-0.1-py3-none-any.whl").write_bytes(_zip({"njli/ok.py": "x=1\n", "njli/leak.py": f"t='{GH}'\n"}))
-    (out / "njli.pyz").write_bytes(_zip({"__main__.py": f"# {TERM}\n", "f/a.woff2": b"wOF2"}, shebang=b"#!/usr/bin/env python3\n"))
+    (out / "pkg-0.1-py3-none-any.whl").write_bytes(_zip({"profile_wrap/ok.py": "x=1\n", "profile_wrap/leak.py": f"t='{GH}'\n"}))
+    (out / "profile-wrap.pyz").write_bytes(_zip({"__main__.py": f"# {TERM}\n", "f/a.woff2": b"wOF2"}, shebang=b"#!/usr/bin/env python3\n"))
     tgz = io.BytesIO()
     with tarfile.open(fileobj=tgz, mode="w:gz") as tf:
         data = f"mail {MAIL}\n".encode()
@@ -196,8 +196,8 @@ def test_dist_scans_wheel_sdist_zipapp(tmp_path, denylist):
     found = L.scan_dist([out], denylist=denylist)
     got = {(f.rule, f.path.split("!")[0]) for f in found}
     assert ("token-github", "pkg-0.1-py3-none-any.whl") in got
-    assert ("private-term", "njli.pyz") in got
-    assert ("font-binary", "njli.pyz") in got
+    assert ("private-term", "profile-wrap.pyz") in got
+    assert ("font-binary", "profile-wrap.pyz") in got
     assert ("email", "pkg-0.1.tar.gz") in got
     assert not any(f.rule == "zipapp-committed" for f in found)  # a zipapp is a legitimate dist artefact
 
@@ -222,7 +222,7 @@ def run_cli(*args, env=None, cwd=None):
     e = {**os.environ, "PYTHONUTF8": "1"}
     e.pop(L.ENV_DENYLIST, None)
     e.update(env or {})
-    return subprocess.run([sys.executable, "-m", "njli.leakcheck", *args], capture_output=True, text=True, env=e, cwd=cwd or Path(__file__).resolve().parents[2], encoding="utf-8")
+    return subprocess.run([sys.executable, "-m", "profile_wrap.leakcheck", *args], capture_output=True, text=True, env=e, cwd=cwd or Path(__file__).resolve().parents[2], encoding="utf-8")
 
 
 def test_cli_exit_codes_tree_and_dist(tmp_path, denylist):

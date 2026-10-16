@@ -1,5 +1,5 @@
-# nj-linkedin workspace: private data stays out of git.
-# This file is managed by the plugin ("njli upgrade" replaces it only if you have not edited it).
+# Profile-Wrap workspace: private data stays out of git.
+# This file is managed by the plugin ("profile-wrap upgrade" replaces it only if you have not edited it).
 
 # Data about other people, and your own history of what was posted.
 /published/

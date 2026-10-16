@@ -3,13 +3,13 @@ requires = ["hatchling>=1.21"]
 build-backend = "hatchling.build"
 
 [project]
-name = "nj-linkedin"
-version = "0.1.0"
+name = "profile_wrap"
+version = "0.1.1"
 description = "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code (official API only)."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "nj-linkedin contributors" }]
+authors = [{ name = "profile-wrap contributors" }]
 keywords = ["linkedin", "claude-code", "content", "automation", "official-api", "arabic", "bilingual"]
 classifiers = [
   "Development Status :: 3 - Alpha",
@@ -33,27 +33,28 @@ tz = ["tzdata"]
 media = ["pillow", "numpy", "scipy"]
 xlsx = ["openpyxl"]
 sig = ["fonttools", "scikit-image"]
-dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata"]
+dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow", "tomli; python_version < '3.11'"]
 
 [project.urls]
-Homepage = "https://github.com/NJ-Burrito/nj-linkedin"
-Changelog = "https://github.com/NJ-Burrito/nj-linkedin/blob/main/CHANGELOG.md"
-Issues = "https://github.com/NJ-Burrito/nj-linkedin/issues"
+Homepage = "https://github.com/NJ-Burrito/profile-wrap"
+Changelog = "https://github.com/NJ-Burrito/profile-wrap/blob/main/CHANGELOG.md"
+Issues = "https://github.com/NJ-Burrito/profile-wrap/issues"
 
 [project.scripts]
-njli = "njli.cli:main"
+profile-wrap = "profile_wrap.cli:main"
+pw = "profile_wrap.cli:main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["njli"]
+packages = ["profile_wrap"]
 
 [tool.hatch.build.targets.wheel.force-include]
-"data" = "njli/_data/data"
-"schema" = "njli/_data/schema"
-"templates" = "njli/_data/templates"
-"brand-kit" = "njli/_data/brand-kit"
-"examples" = "njli/_data/examples"
-"prompts" = "njli/_data/prompts"
-"agents" = "njli/_data/agents"
+"data" = "profile_wrap/_data/data"
+"schema" = "profile_wrap/_data/schema"
+"templates" = "profile_wrap/_data/templates"
+"brand-kit" = "profile_wrap/_data/brand-kit"
+"examples" = "profile_wrap/_data/examples"
+"prompts" = "profile_wrap/_data/prompts"
+"agents" = "profile_wrap/_data/agents"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -64,7 +65,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["njli"]
+source = ["profile_wrap"]
 branch = true
 
 [tool.coverage.report]

@@ -1,16 +1,16 @@
 {
-  "name": "nj-linkedin",
-  "owner": { "name": "nj-linkedin contributors" },
+  "name": "profile-wrap",
+  "owner": { "name": "profile-wrap contributors" },
   "metadata": {
-    "description": "nj-linkedin: plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms.",
-    "version": "0.1.0"
+    "description": "Profile-Wrap: plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms.",
+    "version": "0.1.1"
   },
   "plugins": [
     {
-      "name": "nj-linkedin",
+      "name": "profile-wrap",
       "source": "./",
       "description": "Fact-gated LinkedIn posts with Arabic and English first-class. Drafts, gates, review board and posting through your own official API app.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "license": "MIT",
       "keywords": ["linkedin", "content", "official-api", "arabic", "bilingual"]
     }

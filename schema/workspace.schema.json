@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/workspace.schema.json",
+  "$id": "https://example.invalid/profile-wrap/workspace.schema.json",
   "title": "Workspace state (.njl/workspace.json)",
   "type": "object",
   "properties": {

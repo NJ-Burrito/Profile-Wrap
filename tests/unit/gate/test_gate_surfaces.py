@@ -6,7 +6,7 @@ import json
 import pytest
 from gate_helpers import make_draft, write_config
 
-from njli.gate import run_gate
+from profile_wrap.gate import run_gate
 
 SLIDES = """<!doctype html><html><head><title>t</title><style>.x{width:1080px}</style>
 <script>var n = 4242;</script></head>

@@ -5,26 +5,26 @@ Thanks for helping. Small, tested changes are easiest to review.
 ## Set up
 
 ```bash
-git clone https://github.com/NJ-Burrito/nj-linkedin
-cd nj-linkedin
+git clone https://github.com/NJ-Burrito/profile-wrap
+cd profile-wrap
 uv sync                                  # or: python -m venv .venv && pip install -e ".[dev]"
-uv run --with tzdata python -m njli demo run     # the whole pipeline, offline
+uv run --with tzdata python -m profile_wrap demo run     # the whole pipeline, offline
 ```
 
 ## Before you open a pull request
 
 ```bash
 uv run --with pytest --with tzdata python -m pytest -q
-python -m njli.compliance lint --root .
-python -m njli.leakcheck scan --tree .
+python -m profile_wrap.compliance lint --root .
+python -m profile_wrap.leakcheck scan --tree .
 ```
 
-CI runs the same on Windows, macOS and Linux, plus the README quickstart (`njli init --demo --yes`
-and `njli demo run`). All three must pass.
+CI runs the same on Windows, macOS and Linux, plus the README quickstart (`profile-wrap init --demo --yes`
+and `profile-wrap demo run`). All three must pass.
 
 ## Rules that are not negotiable
 
-- **Official API only.** The only code that talks to LinkedIn lives in `njli/linkedin/`. No login, cookies,
+- **Official API only.** The only code that talks to LinkedIn lives in `profile_wrap/linkedin/`. No login, cookies,
   browser automation against linkedin.com, message reading or invitation sending. `compliance lint` enforces it.
 - **Limits are ceilings.** Config can lower a cap, never raise it. A new action needs a cap, a pause check and
   an acknowledgement.
@@ -40,8 +40,8 @@ and `njli demo run`). All three must pass.
 
 | Path | What |
 |---|---|
-| `njli/` | The package; each area has a `cli_ext.py` with `register(subparsers)` |
-| `njli/demo/` | Fake LinkedIn, fake `claude`, `demo run` |
+| `profile_wrap/` | The package; each area has a `cli_ext.py` with `register(subparsers)` |
+| `profile_wrap/demo/` | Fake LinkedIn, fake `claude`, `demo run` |
 | `examples/demo-persona/` | The fictional workspace data; regenerate the sample GIF with `python examples/make_demo_gif.py` |
 | `schema/`, `data/`, `templates/` | JSON schemas, caps and pins, workspace templates |
 | `skills/`, `commands/`, `agents/`, `prompts/` | The Claude Code plugin |

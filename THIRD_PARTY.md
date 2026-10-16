@@ -15,16 +15,16 @@ Regenerated at each release by `tools/export_public.py` (maintainer step). Nothi
 | openpyxl | `[xlsx]` | MIT | analytics workbook import |
 | tzdata | `[tz]` | Apache-2.0 | time zone data on Windows |
 | Pillow | `[media]` | HPND | GIF checks |
-| HyperFrames | `njli assets fetch` | per upstream | pinned in the workspace `package.json` |
-| Playwright | `njli assets fetch` | Apache-2.0 | renders local `file://` pages only |
-| lucide-static | `njli assets fetch` | ISC | vector icons |
-| gsap | `njli assets fetch` | per upstream (standard licence) | read the upstream licence before commercial use |
+| HyperFrames | `profile-wrap assets fetch` | per upstream | pinned in the workspace `package.json` |
+| Playwright | `profile-wrap assets fetch` | Apache-2.0 | renders local `file://` pages only |
+| lucide-static | `profile-wrap assets fetch` | ISC | vector icons |
+| gsap | `profile-wrap assets fetch` | per upstream (standard licence) | read the upstream licence before commercial use |
 
 ## System tools (never bundled)
 
-ffmpeg (LGPL/GPL, depending on build), Node.js (MIT), poppler (GPL-2.0-or-later, optional). `njli doctor` prints install lines.
+ffmpeg (LGPL/GPL, depending on build), Node.js (MIT), poppler (GPL-2.0-or-later, optional). `profile-wrap doctor` prints install lines.
 
-## Optional upstream skills (`njli deps`)
+## Optional upstream skills (`profile-wrap deps`)
 
 Cloned at pinned commits into the user's `~/.claude/skills`, never into this repository. The installer copies each upstream LICENSE next to the skill.
 

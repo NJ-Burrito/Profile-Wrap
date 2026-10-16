@@ -44,7 +44,7 @@
       "Convert the audience-local slice to the poster's timezone for each region, on the same date.",
       "With several regions, take the part they share if it is at least 60 minutes wide; otherwise use the first region listed and say so, so list the audience that matters most first.",
       "If the slice crosses midnight in the poster's timezone, shift it to end at 23:59 and warn: the user decides.",
-      "Apply it with `njli plan recipe --apply`, which sets posting.window and locale.audience_regions together and validates them."
+      "Apply it with `profile-wrap plan recipe --apply`, which sets posting.window and locale.audience_regions together and validates them."
     ],
     "max_width_minutes": 209
   },

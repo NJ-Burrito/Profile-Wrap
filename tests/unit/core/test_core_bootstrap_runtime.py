@@ -9,8 +9,8 @@ from pathlib import Path
 
 import pytest
 
-from njli import __version__
-from njli.bootstrap import find_python, runtime
+from profile_wrap import __version__
+from profile_wrap.bootstrap import find_python, runtime
 
 REPO = Path(__file__).resolve().parents[3]
 BIN = REPO / "bin"
@@ -35,14 +35,14 @@ def test_current_python_has_no_message():
 
 
 def test_find_prefers_override_and_skips_old(monkeypatch):
-    monkeypatch.setenv("NJLI_PYTHON", sys.executable)
+    monkeypatch.setenv("PROFILE_WRAP_PYTHON", sys.executable)
     cmd, ver = find_python.find()
     assert cmd == [sys.executable] and ver[:2] == sys.version_info[:2]
-    monkeypatch.setenv("NJLI_PYTHON", "definitely-not-a-python")
+    monkeypatch.setenv("PROFILE_WRAP_PYTHON", "definitely-not-a-python")
     cmd, ver = find_python.find()
     assert cmd is None or find_python.probe(cmd)[:2] >= (3, 10)
 
-    monkeypatch.delenv("NJLI_PYTHON")
+    monkeypatch.delenv("PROFILE_WRAP_PYTHON")
     monkeypatch.setattr(find_python, "probe", lambda c: (3, 9, 1))
     assert find_python.find() == (None, (3, 9, 1))
     monkeypatch.setattr(find_python, "probe", lambda c: None)
@@ -70,7 +70,7 @@ def test_probe_handles_missing_and_broken_interpreters(tmp_path):
 def test_python_files_that_must_parse_on_39_have_no_new_syntax():
     import ast
 
-    for rel in ("njli/__init__.py", "njli/bootstrap/find_python.py", "bin/njli.py"):
+    for rel in ("profile_wrap/__init__.py", "profile_wrap/bootstrap/find_python.py", "bin/profile-wrap.py"):
         tree = ast.parse((REPO / rel).read_text(encoding="utf-8"), feature_version=(3, 9))
         assert tree
 
@@ -79,42 +79,42 @@ def test_python_files_that_must_parse_on_39_have_no_new_syntax():
 
 def run_shim(args, env_extra=None, cwd=None):
     env = dict(os.environ)
-    env.update({"PYTHONUTF8": "1", "NJLI_PYTHON": sys.executable})
+    env.update({"PYTHONUTF8": "1", "PROFILE_WRAP_PYTHON": sys.executable})
     env.update(env_extra or {})
-    return subprocess.run([sys.executable, str(BIN / "njli.py"), *args], capture_output=True,
+    return subprocess.run([sys.executable, str(BIN / "profile-wrap.py"), *args], capture_output=True,
                           text=True, env=env, cwd=cwd, timeout=60)
 
 
 def test_python_shim_runs_the_cli():
     result = run_shim(["--version"])
-    assert result.returncode == 0 and result.stdout.strip() == f"njli {__version__}"
+    assert result.returncode == 0 and result.stdout.strip() == f"profile-wrap {__version__}"
 
 
 def test_python_shim_on_fake_39_prints_one_message_and_exits_1():
-    result = run_shim(["--version"], {"NJLI_TEST": "1", "NJLI_FAKE_PYVER": "3.9.18"})
+    result = run_shim(["--version"], {"PROFILE_WRAP_TEST": "1", "PROFILE_WRAP_FAKE_PYVER": "3.9.18"})
     assert result.returncode == 1 and result.stdout == ""
-    assert result.stderr.count("njli needs Python 3.10") == 1
+    assert result.stderr.count("profile-wrap needs Python 3.10") == 1
     assert result.stderr.count("Fix:") == 1
 
 
 def test_fake_version_hook_is_ignored_outside_test_mode():
-    result = run_shim(["--version"], {"NJLI_FAKE_PYVER": "3.9.18"})
+    result = run_shim(["--version"], {"PROFILE_WRAP_FAKE_PYVER": "3.9.18"})
     assert result.returncode == 0
 
 
 def test_module_entry_runs():
     env = dict(os.environ, PYTHONUTF8="1", PYTHONPATH=str(REPO))
-    result = subprocess.run([sys.executable, "-m", "njli", "--version"], capture_output=True,
+    result = subprocess.run([sys.executable, "-m", "profile_wrap", "--version"], capture_output=True,
                             text=True, env=env, cwd=str(REPO), timeout=60)
-    assert result.returncode == 0 and "njli" in result.stdout
+    assert result.returncode == 0 and "profile-wrap" in result.stdout
 
 
 @pytest.mark.skipif(shutil.which("sh") is None, reason="needs a POSIX shell")
 def test_sh_shim_runs_with_override():
-    result = subprocess.run([shutil.which("sh"), str(BIN / "njli"), "--version"],
+    result = subprocess.run([shutil.which("sh"), str(BIN / "profile-wrap"), "--version"],
                             capture_output=True, text=True, timeout=60,
-                            env=dict(os.environ, NJLI_PYTHON=sys.executable, PYTHONUTF8="1"))
-    assert result.returncode == 0 and f"njli {__version__}" in result.stdout
+                            env=dict(os.environ, PROFILE_WRAP_PYTHON=sys.executable, PYTHONUTF8="1"))
+    assert result.returncode == 0 and f"profile-wrap {__version__}" in result.stdout
 
 
 @pytest.mark.skipif(sys.platform == "win32" or shutil.which("sh") is None,
@@ -129,7 +129,7 @@ def test_sh_shim_with_only_python_39_prints_the_fix(tmp_path):
         found = shutil.which(tool)
         if found:
             (fakebin / tool).symlink_to(found)
-    result = subprocess.run([shutil.which("sh"), str(BIN / "njli"), "--version"],
+    result = subprocess.run([shutil.which("sh"), str(BIN / "profile-wrap"), "--version"],
                             capture_output=True, text=True, timeout=60,
                             env={"PATH": str(fakebin), "HOME": str(tmp_path)})
     assert result.returncode == 1
@@ -138,22 +138,22 @@ def test_sh_shim_with_only_python_39_prints_the_fix(tmp_path):
 
 @pytest.mark.skipif(sys.platform != "win32", reason="Windows launcher")
 def test_cmd_shim_runs_and_reports_no_python(tmp_path):
-    result = subprocess.run(["cmd", "/c", str(BIN / "njli.cmd"), "--version"],
+    result = subprocess.run(["cmd", "/c", str(BIN / "profile-wrap.cmd"), "--version"],
                             capture_output=True, text=True, timeout=60,
-                            env=dict(os.environ, NJLI_PYTHON=sys.executable, PYTHONUTF8="1"))
-    assert result.returncode == 0 and f"njli {__version__}" in result.stdout
+                            env=dict(os.environ, PROFILE_WRAP_PYTHON=sys.executable, PYTHONUTF8="1"))
+    assert result.returncode == 0 and f"profile-wrap {__version__}" in result.stdout
     system_root = os.environ["SystemRoot"]
     env = {"SystemRoot": system_root, "PATH": os.path.join(system_root, "System32")}
-    result = subprocess.run(["cmd", "/c", str(BIN / "njli.cmd"), "--version"],
+    result = subprocess.run(["cmd", "/c", str(BIN / "profile-wrap.cmd"), "--version"],
                             capture_output=True, text=True, timeout=60, env=env)
     assert result.returncode == 1
     assert "winget" in result.stderr and result.stderr.count("Fix:") == 1
 
 
 def test_cmd_shim_is_crlf_and_sh_shim_is_lf():
-    assert b"\r\n" in (BIN / "njli.cmd").read_bytes()
-    assert b"\r\n" not in (BIN / "njli").read_bytes()
-    assert (BIN / "njli").read_bytes().startswith(b"#!/bin/sh")
+    assert b"\r\n" in (BIN / "profile-wrap.cmd").read_bytes()
+    assert b"\r\n" not in (BIN / "profile-wrap").read_bytes()
+    assert (BIN / "profile-wrap").read_bytes().startswith(b"#!/bin/sh")
 
 
 # --------------------------------------------------------------------- runtime
@@ -173,7 +173,7 @@ def test_install_makes_current_that_a_fake_scheduler_can_run(data, tmp_path):
     info = runtime.install(data=data)
     current = data / "runtime" / "current"
     assert info["version"] == __version__ and current.exists()
-    assert (current / "__main__.py").is_file() and (current / "njli" / "cli.py").is_file()
+    assert (current / "__main__.py").is_file() and (current / "profile_wrap" / "cli.py").is_file()
     assert (current / "schema" / "config.schema.json").is_file()
     assert (current / "RUNTIME.json").is_file()
     assert not list(current.rglob("__pycache__"))
@@ -182,10 +182,10 @@ def test_install_makes_current_that_a_fake_scheduler_can_run(data, tmp_path):
     cmd = runtime.entry_command(data)
     assert cmd[1] == str(current)
     env = bare_env()
-    env["NJLI_DATA_DIR"] = str(data)
+    env["PROFILE_WRAP_DATA_DIR"] = str(data)
     result = subprocess.run([*cmd, "--version"], capture_output=True, text=True, cwd=str(tmp_path),
                             env=env, timeout=60)
-    assert result.returncode == 0 and result.stdout.strip() == f"njli {__version__}"
+    assert result.returncode == 0 and result.stdout.strip() == f"profile-wrap {__version__}"
     # it also runs a real command, reading templates and schemas from its own copy
     result = subprocess.run([*cmd, "handoff", "check", str(REPO / "templates" / "handoff.template.md"),
                              "--json"], capture_output=True, text=True, cwd=str(tmp_path), env=env,
@@ -198,7 +198,7 @@ def test_runtime_copy_does_not_depend_on_the_source_tree(data, tmp_path):
     runtime.install(data=data)
     current = data / "runtime" / "current"
     env = bare_env()
-    env.update(NJLI_DATA_DIR=str(data), NJLI_CONFIG_DIR=str(tmp_path / "c"), PYTHONUTF8="1")
+    env.update(PROFILE_WRAP_DATA_DIR=str(data), PROFILE_WRAP_CONFIG_DIR=str(tmp_path / "c"), PYTHONUTF8="1")
     result = subprocess.run([sys.executable, str(current), "config", "--help"],
                             capture_output=True, text=True, cwd=str(tmp_path), env=env, timeout=60)
     assert result.returncode == 0, result.stderr
@@ -216,18 +216,18 @@ def test_status_and_drift(data):
 
 def test_drift_when_the_code_changes_and_sync_repairs_it(data, tmp_path):
     root = tmp_path / "srcroot"
-    shutil.copytree(REPO / "njli", root / "njli", ignore=shutil.ignore_patterns("__pycache__"))
+    shutil.copytree(REPO / "profile_wrap", root / "profile_wrap", ignore=shutil.ignore_patterns("__pycache__"))
     shutil.copytree(REPO / "data", root / "data")
     runtime.install(plugin_root=root, data=data)
     assert runtime.status(root, data)["drift"] is False
     assert runtime.sync(root, data)["action"] == "unchanged"
-    (root / "njli" / "limits.py").write_text(
-        (root / "njli" / "limits.py").read_text(encoding="utf-8") + "\n# patched\n", encoding="utf-8")
+    (root / "profile_wrap" / "limits.py").write_text(
+        (root / "profile_wrap" / "limits.py").read_text(encoding="utf-8") + "\n# patched\n", encoding="utf-8")
     st = runtime.status(root, data)
     assert st["drift"] is True and "code changed" in st["reason"]
     assert runtime.sync(root, data)["action"] == "installed"
     assert runtime.status(root, data)["drift"] is False
-    assert "# patched" in (data / "runtime" / "current" / "njli" / "limits.py").read_text(
+    assert "# patched" in (data / "runtime" / "current" / "profile_wrap" / "limits.py").read_text(
         encoding="utf-8")
 
 
@@ -264,11 +264,11 @@ def test_old_versions_are_pruned(data):
 
 
 def test_pyz_is_copied_and_preferred(data, tmp_path):
-    pyz = tmp_path / "njli.pyz"
+    pyz = tmp_path / "profile-wrap.pyz"
     pyz.write_bytes(b"PK-not-really")
     runtime.install(data=data, pyz=pyz)
-    assert (data / "runtime" / "current" / "njli.pyz").is_file()
-    assert runtime.entry_command(data)[1].endswith("njli.pyz")
+    assert (data / "runtime" / "current" / "profile-wrap.pyz").is_file()
+    assert runtime.entry_command(data)[1].endswith("profile-wrap.pyz")
 
 
 def test_point_current_replaces_an_existing_link_or_dir(data):

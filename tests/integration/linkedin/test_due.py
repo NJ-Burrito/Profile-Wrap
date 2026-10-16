@@ -1,4 +1,4 @@
-"""``njli due`` through the real CLI entry and the library: scheduling rules and concurrency."""
+"""``profile-wrap due`` through the real CLI entry and the library: scheduling rules and concurrency."""
 from __future__ import annotations
 
 import datetime as dt
@@ -9,14 +9,14 @@ import sys
 
 from conftest import ROOT, gate_pass
 
-from njli import limits
-from njli.linkedin import due
+from profile_wrap import limits
+from profile_wrap.linkedin import due
 
 
 def cli(env, *args, check_env=None):
     e = dict(os.environ)
     e.update(check_env or {})
-    return subprocess.run([sys.executable, "-m", "njli", *args, "--workspace", str(env.ws)],
+    return subprocess.run([sys.executable, "-m", "profile_wrap", *args, "--workspace", str(env.ws)],
                           capture_output=True, text=True, timeout=120, cwd=str(ROOT), env=e)
 
 
@@ -112,7 +112,7 @@ def test_paused_due_exits_four(env):
 def test_two_concurrent_due_runs_produce_one_post(env):
     env.scheduled()
     env.draft("a")
-    procs = [subprocess.Popen([sys.executable, "-m", "njli", "due", "--workspace", str(env.ws), "--json"],
+    procs = [subprocess.Popen([sys.executable, "-m", "profile_wrap", "due", "--workspace", str(env.ws), "--json"],
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
                               cwd=str(ROOT), env=dict(os.environ)) for _ in range(2)]
     outs = [p.communicate(timeout=120) for p in procs]
@@ -145,7 +145,7 @@ def test_missing_token_gives_one_actionable_line(env):
         f.unlink()
     env.draft("a")
     result = cli(env, "post", "a", "--now")
-    assert result.returncode == 1 and "njli auth" in result.stderr
+    assert result.returncode == 1 and "profile-wrap auth" in result.stderr
     assert "Traceback" not in result.stderr
 
 

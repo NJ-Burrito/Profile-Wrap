@@ -3,8 +3,8 @@ from __future__ import annotations
 
 import pytest
 
-from njli.facts.numspec import NumSpec, parse_number_cell
-from njli.gate import numbers as nums
+from profile_wrap.facts.numspec import NumSpec, parse_number_cell
+from profile_wrap.gate import numbers as nums
 
 
 def claims(text, min_bare=10):

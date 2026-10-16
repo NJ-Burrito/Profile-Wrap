@@ -10,9 +10,9 @@ from gate_helpers import FIX, make_draft
 
 @pytest.fixture(autouse=True)
 def _clean_env(monkeypatch):
-    monkeypatch.delenv("NJLI_WORKER", raising=False)
-    monkeypatch.delenv("NJLI_WORKSPACE", raising=False)
-    monkeypatch.delenv("NJLI_DATA_ROOT", raising=False)
+    monkeypatch.delenv("PROFILE_WRAP_WORKER", raising=False)
+    monkeypatch.delenv("PROFILE_WRAP_WORKSPACE", raising=False)
+    monkeypatch.delenv("PROFILE_WRAP_DATA_ROOT", raising=False)
 
 
 @pytest.fixture()
@@ -23,7 +23,7 @@ def ws(tmp_path) -> Path:
     (root / "research").mkdir()
     (root / "notes").mkdir()
     (root / "drafts").mkdir()
-    shutil.copy(FIX / "config.json", root / "config" / "njli.json")
+    shutil.copy(FIX / "config.json", root / "config" / "profile-wrap.json")
     shutil.copy(FIX / "facts.md", root / "research" / "facts.md")
     shutil.copy(FIX / "stats.md", root / "research" / "stats.md")
     for n in ("review-time", "audit", "clinics", "pilot"):

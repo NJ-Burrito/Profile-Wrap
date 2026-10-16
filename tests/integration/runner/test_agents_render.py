@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from njli import agents_render as ar
-from njli import cli, config
-from njli import claude_runner as cr
+from profile_wrap import agents_render as ar
+from profile_wrap import cli, config
+from profile_wrap import claude_runner as cr
 
 ROOT = Path(__file__).resolve().parents[3]
 STANDING = "Never run a shell command.\n"
@@ -179,7 +179,7 @@ def test_the_standing_rules_cover_the_required_points():
 
 
 def test_command_line(tmp_path, capsys, monkeypatch):
-    monkeypatch.setenv("NJLI_CONFIG_DIR", str(tmp_path / "cfg"))
+    monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(tmp_path / "cfg"))
     ws = tmp_path / "ws"
     ws.mkdir()
     assert cli.main(["agents", "list"]) == 0
@@ -192,7 +192,7 @@ def test_command_line(tmp_path, capsys, monkeypatch):
 
 
 def test_scaffold_calls_render_all(tmp_path):
-    """njli.scaffold looks for render_all(workspace) or render(workspace, cfg) on this module."""
+    """profile_wrap.scaffold looks for render_all(workspace) or render(workspace, cfg) on this module."""
     ws = tmp_path / "ws"
     ws.mkdir()
     ar.render_all(ws)

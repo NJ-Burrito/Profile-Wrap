@@ -1,6 +1,6 @@
 """``spread_time`` property tests (design-spec section 14).
 
-The full sweep of 10,000 slugs x 365 days is behind NJLI_FULL_PROPERTY=1 (it takes minutes); the
+The full sweep of 10,000 slugs x 365 days is behind PROFILE_WRAP_FULL_PROPERTY=1 (it takes minutes); the
 default run does the same checks on smaller samples.
 """
 from __future__ import annotations
@@ -12,12 +12,12 @@ import string
 
 import pytest
 
-from njli.plan import spread
-from njli.plan.spread import fmt_hhmm, parse_hhmm, spread_detail, spread_time
+from profile_wrap.plan import spread
+from profile_wrap.plan.spread import fmt_hhmm, parse_hhmm, spread_detail, spread_time
 
 WINDOW = ("09:00", "12:29")
 GAP_MIN = 20 * 60 + spread.LAG_MINUTES
-FULL = os.environ.get("NJLI_FULL_PROPERTY") == "1"
+FULL = os.environ.get("PROFILE_WRAP_FULL_PROPERTY") == "1"
 
 
 def slugs(n: int, seed: int = 7):
@@ -74,7 +74,7 @@ def test_a_year_of_daily_posts_never_repeats_a_minute_within_14_days_and_keeps_t
                 assert gap >= GAP_MIN, f"gap {gap} min is under {GAP_MIN} on {d}"
 
 
-@pytest.mark.skipif(not FULL, reason="set NJLI_FULL_PROPERTY=1 for the full 10,000 x 365 sweep")
+@pytest.mark.skipif(not FULL, reason="set PROFILE_WRAP_FULL_PROPERTY=1 for the full 10,000 x 365 sweep")
 def test_full_sweep_10000_slugs_x_365_days():
     lo, hi = parse_hhmm(WINDOW[0]), parse_hhmm(WINDOW[1])
     base = dt.date(2026, 1, 1)

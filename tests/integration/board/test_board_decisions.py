@@ -115,9 +115,9 @@ def test_allow_warns_about_the_slot(board, ws):
 
 
 def test_council_pass_is_required_when_configured(start, ws):
-    cfg = json.loads((ws / "config" / "njli.json").read_text())
+    cfg = json.loads((ws / "config" / "profile-wrap.json").read_text())
     cfg["gate"] = {"require_council_pass": True}
-    (ws / "config" / "njli.json").write_text(json.dumps(cfg))
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(cfg))
     srv, c = start()
     d = make_draft(ws, "c1")
     assert c.decide("c1", "allow")[1]["error"] == "council_missing"
@@ -131,7 +131,7 @@ def test_council_pass_is_required_when_configured(start, ws):
 def test_a_worker_environment_can_never_allow(board, ws, monkeypatch):
     srv, c = board
     d = make_draft(ws, "w1")
-    monkeypatch.setenv("NJLI_WORKER", "1")
+    monkeypatch.setenv("PROFILE_WRAP_WORKER", "1")
     code, body = c.decide("w1", "allow")
     assert code == 403 and body["error"] == "worker_forbidden" and meta_of(d)["status"] == "draft"
 
@@ -213,23 +213,23 @@ def test_hostile_worker_edits_outside_the_allowlist_are_reverted_and_logged(star
         (spec.workspace / "research" / "facts.md").write_text("| F99 | invented | 99 |", encoding="utf-8")
         (spec.workspace / "scripts" / "evil.py").write_text("print(1)", encoding="utf-8")
         (spec.workspace / "drafts" / "other" / "caption.txt").write_text("hijacked", encoding="utf-8")
-        (spec.workspace / "config" / "njli.json").unlink()
+        (spec.workspace / "config" / "profile-wrap.json").unlink()
         (spec.workspace / "videos" / "i3" / "index.html").write_text("<p>video v2</p>", encoding="utf-8")
 
     srv, c = start(runner=FakeRunner(edit))
     d = make_draft(ws, "i3", fmt="gif", extra={"video_project": "videos/i3"})
-    cfg_before = (ws / "config" / "njli.json").read_bytes()
+    cfg_before = (ws / "config" / "profile-wrap.json").read_bytes()
     assert c.decide("i3", "improve", "change the video")[0] == 200
     assert srv.app.worker.drain(60)
     assert (ws / "research" / "facts.md").read_text(encoding="utf-8") == facts_before
     assert not (ws / "scripts" / "evil.py").exists()
     assert (other / "caption.txt").read_text() == other_caption
-    assert (ws / "config" / "njli.json").read_bytes() == cfg_before
+    assert (ws / "config" / "profile-wrap.json").read_bytes() == cfg_before
     assert (ws / "videos" / "i3" / "index.html").read_text() == "<p>video v2</p>", "the video project is allowed"
     last = history(d)[-1]
     assert last["action"] == "revision"
     restored = " ".join(last["restored"])
-    assert "facts.md" in restored and "evil.py" in restored and "caption.txt" in restored and "njli.json" in restored
+    assert "facts.md" in restored and "evil.py" in restored and "caption.txt" in restored and "profile-wrap.json" in restored
 
 
 def test_a_worker_may_not_edit_a_video_project_outside_videos(start, ws):

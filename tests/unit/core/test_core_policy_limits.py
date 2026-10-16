@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import limits, policy
+from profile_wrap import limits, policy
 
 REPO = Path(__file__).resolve().parents[3]
 
@@ -29,7 +29,7 @@ def test_schema_ceilings_match_policy():
 
 
 def _cfg(**posting):
-    from njli import config
+    from profile_wrap import config
 
     cfg = config.defaults("UTC")
     cfg["posting"].update(posting)
@@ -44,7 +44,7 @@ def _cfg(**posting):
     ("engagement.connect.note_max", 201, "ceiling"),
 ])
 def test_check_limits_rejects_values_beyond_limit(path, value, fragment):
-    from njli import config
+    from profile_wrap import config
 
     cfg = config.defaults("UTC")
     node = cfg

@@ -8,9 +8,9 @@ labels: bug
 
 **What you expected**
 
-**Steps** (the smallest set; `njli demo run` output helps if it fails)
+**Steps** (the smallest set; `profile-wrap demo run` output helps if it fails)
 
 **Environment**
-- `njli --version`:
+- `profile-wrap --version`:
 - OS and Python version:
-- `njli doctor` output (remove anything private):
+- `profile-wrap doctor` output (remove anything private):

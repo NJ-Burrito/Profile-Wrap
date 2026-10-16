@@ -32,12 +32,12 @@ def test_profile_tab_empty_state_works_and_explains_how_to_start(board, ws):
 
 
 def _i18n(lang):
-    import njli.board.server as s
+    import profile_wrap.board.server as s
     return str(s.I18N_DIR / f"{lang}.json")
 
 
 def _js():
-    import njli.board.server as s
+    import profile_wrap.board.server as s
     return str(s.APP_DIR / "board.js")
 
 
@@ -182,7 +182,7 @@ def test_settings_tab_reports_modes_acks_doctor_pause_and_the_token(board, ws):
 
 
 def test_settings_shows_an_expired_token_banner_source(start, ws, tmp_path):
-    from njli import paths
+    from profile_wrap import paths
     cfg_dir = paths.config_dir("default")
     cfg_dir.mkdir(parents=True)
     (cfg_dir / "token.json").write_text(json.dumps({"access_token": "SECRET-TOKEN-VALUE", "expires_at": 1000}), encoding="utf-8")

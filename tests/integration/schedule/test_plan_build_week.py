@@ -1,4 +1,4 @@
-"""``njli build-week``: dry run spends no model, builds stay drafts, failures are contained."""
+"""``profile-wrap build-week``: dry run spends no model, builds stay drafts, failures are contained."""
 from __future__ import annotations
 
 import datetime as dt
@@ -9,10 +9,10 @@ from pathlib import Path
 import pytest
 
 from schedhelp import cfg_of
-from njli import claude_runner as cr
-from njli import cli
-from njli.plan import build_week as bw
-from njli.plan import calendar as cal
+from profile_wrap import claude_runner as cr
+from profile_wrap import cli
+from profile_wrap.plan import build_week as bw
+from profile_wrap.plan import calendar as cal
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "runner"))
 import wsfix  # noqa: E402
@@ -250,7 +250,7 @@ def test_a_review_with_blockers_is_recorded_not_hidden(mkws):
 def test_a_second_build_cannot_start_while_one_runs(mkws):
     ws = mkws()
     seed(ws, ent(9))
-    from njli.plan.locking import guarded
+    from profile_wrap.plan.locking import guarded
     with guarded(ws, "build-week", stale_after=3600, wait=0):
         with pytest.raises(bw.BuildError):
             run_build(ws, cfg_of(ws), Spy(ws), Steps())

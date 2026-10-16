@@ -7,7 +7,7 @@ import sys
 
 import pytest
 
-from njli import atomic, fsutil, notify, paths, tzutil
+from profile_wrap import atomic, fsutil, notify, paths, tzutil
 from core_helpers import needs_tzdata
 
 
@@ -129,8 +129,8 @@ def test_dirs_follow_env_overrides(tmp_path):
 @pytest.mark.parametrize("platform,expected", [
     ("win32", "windows"), ("darwin", "macos"), ("linux", "linux")])
 def test_os_name_and_roots(monkeypatch, tmp_path, platform, expected):
-    monkeypatch.delenv("NJLI_CONFIG_DIR")
-    monkeypatch.delenv("NJLI_DATA_DIR")
+    monkeypatch.delenv("PROFILE_WRAP_CONFIG_DIR")
+    monkeypatch.delenv("PROFILE_WRAP_DATA_DIR")
     monkeypatch.setattr(sys, "platform", platform)
     monkeypatch.setenv("APPDATA", str(tmp_path / "appdata"))
     monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "xdg"))
@@ -138,19 +138,19 @@ def test_os_name_and_roots(monkeypatch, tmp_path, platform, expected):
     assert paths.os_name() == expected
     root = {"windows": tmp_path / "appdata", "macos": tmp_path / "h" / "Library" /
             "Application Support", "linux": tmp_path / "xdg"}[expected]
-    assert paths.config_dir("p") == root / "nj-linkedin" / "p"
-    assert paths.data_dir() == root / "nj-linkedin"
+    assert paths.config_dir("p") == root / "profile-wrap" / "p"
+    assert paths.data_dir() == root / "profile-wrap"
 
 
 def test_default_roots_without_env(monkeypatch, tmp_path):
-    monkeypatch.delenv("NJLI_CONFIG_DIR")
+    monkeypatch.delenv("PROFILE_WRAP_CONFIG_DIR")
     monkeypatch.setattr(paths, "home", lambda: tmp_path / "h")
     monkeypatch.delenv("APPDATA", raising=False)
     monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
     monkeypatch.setattr(sys, "platform", "win32")
-    assert paths.config_dir("p") == tmp_path / "h" / "AppData" / "Roaming" / "nj-linkedin" / "p"
+    assert paths.config_dir("p") == tmp_path / "h" / "AppData" / "Roaming" / "profile-wrap" / "p"
     monkeypatch.setattr(sys, "platform", "linux")
-    assert paths.config_dir("p") == tmp_path / "h" / ".config" / "nj-linkedin" / "p"
+    assert paths.config_dir("p") == tmp_path / "h" / ".config" / "profile-wrap" / "p"
     assert paths.legacy_config_dir() == tmp_path / "h" / ".config" / "linkedin"
 
 
@@ -164,14 +164,14 @@ def test_workspace_cannot_be_inside_the_plugin(tmp_path):
 
 
 def test_plugin_root_resolution(monkeypatch, tmp_path):
-    assert (paths.plugin_root() / "njli").is_dir()
+    assert (paths.plugin_root() / "profile_wrap").is_dir()
     fake = tmp_path / "fakeplugin"
-    (fake / "njli").mkdir(parents=True)
-    monkeypatch.setenv("NJLI_PLUGIN_ROOT", str(fake))
+    (fake / "profile_wrap").mkdir(parents=True)
+    monkeypatch.setenv("PROFILE_WRAP_PLUGIN_ROOT", str(fake))
     assert paths.plugin_root() == fake
     assert paths.resource("schema", "x.json") == fake / "schema" / "x.json"
-    monkeypatch.setenv("NJLI_PLUGIN_ROOT", str(tmp_path / "nonexistent"))
-    assert (paths.plugin_root() / "njli").is_dir()    # falls back to the source tree
+    monkeypatch.setenv("PROFILE_WRAP_PLUGIN_ROOT", str(tmp_path / "nonexistent"))
+    assert (paths.plugin_root() / "profile_wrap").is_dir()    # falls back to the source tree
 
 
 def test_find_workspace(tmp_path, monkeypatch):
@@ -182,7 +182,7 @@ def test_find_workspace(tmp_path, monkeypatch):
     deep.mkdir(parents=True)
     assert paths.find_workspace(deep) == ws
     assert paths.find_workspace(tmp_path) is None
-    monkeypatch.setenv("NJLI_WORKSPACE", str(tmp_path / "elsewhere"))
+    monkeypatch.setenv("PROFILE_WRAP_WORKSPACE", str(tmp_path / "elsewhere"))
     assert paths.find_workspace(deep) == tmp_path / "elsewhere"
 
 

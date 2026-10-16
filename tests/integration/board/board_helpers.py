@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Any, Dict, Optional, Tuple
 
-from njli.board.worker import JobResult
+from profile_wrap.board.worker import JobResult
 
 REPO = Path(__file__).resolve().parents[3]
 FIX = REPO / "tests" / "fixtures" / "captions"
@@ -22,13 +22,13 @@ def make_ws(root: Path, **cfg_sections: Any) -> Path:
     (ws / "research").mkdir()
     (ws / "notes").mkdir()
     (ws / "drafts").mkdir()
-    shutil.copy(FIX / "config.json", ws / "config" / "njli.json")
+    shutil.copy(FIX / "config.json", ws / "config" / "profile-wrap.json")
     shutil.copy(FIX / "facts.md", ws / "research" / "facts.md")
     shutil.copy(FIX / "stats.md", ws / "research" / "stats.md")
     for n in ("review-time", "audit", "clinics", "pilot"):
         (ws / "notes" / f"{n}.md").write_text("evidence\n", encoding="utf-8")
     if cfg_sections:
-        path = ws / "config" / "njli.json"
+        path = ws / "config" / "profile-wrap.json"
         cfg = json.loads(path.read_text(encoding="utf-8"))
         for key, val in cfg_sections.items():
             if isinstance(val, dict) and isinstance(cfg.get(key), dict):

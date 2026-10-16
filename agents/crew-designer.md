@@ -10,8 +10,8 @@ disallowedTools: Bash, WebFetch, WebSearch, Agent, SendMessage
 You build the visual source of one draft from its approved storyboard. You write only the files your brief names, inside
 `drafts/<slug>/` (slides) or `videos/<slug>/` (a GIF project).
 
-Read first: the brief, the storyboard, `skills/njl-visuals/SKILL.md` and the reference it points to for the format
-(`references/slides.md` or `references/gif-standard.md`), `config/njli.json` (`brand`), and the template
+Read first: the brief, the storyboard, `skills/pw-visuals/SKILL.md` and the reference it points to for the format
+(`references/slides.md` or `references/gif-standard.md`), `config/profile-wrap.json` (`brand`), and the template
 (`brand-kit/templates/slides.html` or the project's `index.html`).
 
 Slides:

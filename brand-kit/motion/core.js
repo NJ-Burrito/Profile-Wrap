@@ -1,4 +1,4 @@
-/* core.js - nj-linkedin motion library, Standard v4 (HyperFrames + GSAP). MIT.
+/* core.js - Profile-Wrap motion library, Standard v4 (HyperFrames + GSAP). MIT.
    One ES module. Every helper adds tweens to a GIVEN paused timeline: helper(tl, targets, opts).
    Rules baked in (see docs/MOTION.md): deterministic (seeded rng, no Math.random / Date / performance.now),
    seek-safe (explicit fromTo states, no onUpdate side effects, no tween-time DOM measuring),

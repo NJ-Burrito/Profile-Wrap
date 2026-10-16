@@ -1,6 +1,6 @@
 # Profile-fix prompt (rewrite one profile section as a diff)
 
-Template. `njli profile` fills the `{{...}}` fields and sends this to one worker per section the user asked to
+Template. `profile-wrap profile` fills the `{{...}}` fields and sends this to one worker per section the user asked to
 improve. Fields: `{{section}}` (headline, about, experience entry, featured, banner text), `{{current_text}}`,
 `{{char_limit}}`, `{{score_notes}}` (what the rubric found), `{{goal}}`, `{{lang}}`, `{{voice_file}}`,
 `{{facts_file}}`, `{{out_path}}`.

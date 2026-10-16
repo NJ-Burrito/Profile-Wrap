@@ -1,4 +1,4 @@
-"""The real entry points (python -m njli board / review), the UI strings, and the doc."""
+"""The real entry points (python -m profile_wrap board / review), the UI strings, and the doc."""
 from __future__ import annotations
 
 import json
@@ -10,13 +10,13 @@ import time
 
 from board_helpers import REPO, make_draft, meta_of
 
-BOARD = REPO / "njli" / "board"
+BOARD = REPO / "profile_wrap" / "board"
 
 
 def run(*argv, ws, env_extra=None, timeout=120):
     import os
     env = {**os.environ, "PYTHONUTF8": "1", "PYTHONPATH": str(REPO), **(env_extra or {})}
-    return subprocess.run([sys.executable, "-m", "njli", *argv, "--workspace", str(ws)], capture_output=True, text=True,
+    return subprocess.run([sys.executable, "-m", "profile_wrap", *argv, "--workspace", str(ws)], capture_output=True, text=True,
                           env=env, timeout=timeout, cwd=str(REPO))
 
 
@@ -46,18 +46,18 @@ def test_review_list_allow_reject_through_the_real_cli(ws):
 
 def test_the_cli_refuses_allow_for_a_worker_and_improve_without_a_worker(ws):
     make_draft(ws, "w1")
-    r = run("review", "allow", "w1", "--yes", ws=ws, env_extra={"NJLI_WORKER": "1"})
+    r = run("review", "allow", "w1", "--yes", ws=ws, env_extra={"PROFILE_WRAP_WORKER": "1"})
     assert r.returncode == 1 and "worker" in r.stderr.lower() and meta_of(ws / "drafts" / "w1")["status"] == "draft"
     r = run("review", "improve", "w1", "--note", "shorter", ws=ws)
     assert r.returncode == 1 and meta_of(ws / "drafts" / "w1")["status"] == "draft"
 
 
-def test_njli_board_starts_answers_health_and_stops(ws):
+def test_profile_wrap_board_starts_answers_health_and_stops(ws):
     import http.client
     import os
     port = free_port()
-    env = {**os.environ, "PYTHONUTF8": "1", "PYTHONPATH": str(REPO), "NJLI_TEST": "1"}
-    proc = subprocess.Popen([sys.executable, "-m", "njli", "board", "--port", str(port), "--workspace", str(ws)],
+    env = {**os.environ, "PYTHONUTF8": "1", "PYTHONPATH": str(REPO), "PROFILE_WRAP_TEST": "1"}
+    proc = subprocess.Popen([sys.executable, "-m", "profile_wrap", "board", "--port", str(port), "--workspace", str(ws)],
                             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env, cwd=str(REPO))
     try:
         body = None
@@ -108,7 +108,7 @@ def test_en_and_ar_have_the_same_keys_and_no_empty_values():
 
 
 def test_every_string_the_app_asks_for_exists_in_both_languages():
-    from njli import policy
+    from profile_wrap import policy
     en = json.loads((BOARD / "i18n" / "en.json").read_text(encoding="utf-8"))
     used, js = _keys_used_by_the_app()
     missing = sorted(k for k in used if k not in en)

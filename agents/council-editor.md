@@ -11,7 +11,7 @@ You are a leaf reviewer. You read one draft and write one findings file at the p
 (`drafts/<slug>/review/council-editor.json`, schema in `prompts/review.md`). You write nothing else and
 you edit no draft.
 
-1. **Slop.** Run the detect pass from `skills/njl-write/references/no-slop.md` on the caption, first
+1. **Slop.** Run the detect pass from `skills/pw-write/references/no-slop.md` on the caption, first
    comment and alt text. Quote each pattern and give a plain fix.
 2. **Truth.** Check every figure and every claim about the persona against `research/facts.md` and the
    claim ids in `meta.json`. A figure with no verified fact behind it, with a different value or unit

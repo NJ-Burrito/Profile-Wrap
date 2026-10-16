@@ -11,10 +11,10 @@ from pathlib import Path
 import pytest
 from conftest import gate_pass
 
-from njli import config as config_mod
-from njli import policy
-from njli.http import HostPolicy, HttpError, request, token_allowed
-from njli.linkedin import api, auth, post, selftest, social_extra, versions
+from profile_wrap import config as config_mod
+from profile_wrap import policy
+from profile_wrap.http import HostPolicy, HttpError, request, token_allowed
+from profile_wrap.linkedin import api, auth, post, selftest, social_extra, versions
 
 TODAY = dt.date(2026, 10, 16)
 

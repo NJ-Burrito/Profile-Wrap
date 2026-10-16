@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/config.schema.json",
-  "title": "nj-linkedin workspace config (config/njli.json)",
-  "description": "Unknown keys fail. Ceilings (x-ceiling) and floors (x-floor) mirror njli/policy.py and are enforced with a message by njli/limits.py, never clamped.",
+  "$id": "https://example.invalid/profile-wrap/config.schema.json",
+  "title": "Profile-Wrap workspace config (config/profile-wrap.json)",
+  "description": "Unknown keys fail. Ceilings (x-ceiling) and floors (x-floor) mirror profile_wrap/policy.py and are enforced with a message by profile_wrap/limits.py, never clamped.",
   "definitions": {
     "ack": {
       "type": "object",

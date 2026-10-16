@@ -9,14 +9,14 @@ from pathlib import Path
 
 import pytest
 
-from njli import leakcheck as L
+from profile_wrap import leakcheck as L
 
 REPO = Path(__file__).resolve().parents[2]
 
 # The paths this package owns in milestone M1.
 OWN = [
-    "njli/leakcheck.py", "njli/compliance/__init__.py", "njli/compliance/__main__.py",
-    "njli/compliance/lint.py", "njli/compliance/rules.py", "LICENSE", "NOTICE.md",
+    "profile_wrap/leakcheck.py", "profile_wrap/compliance/__init__.py", "profile_wrap/compliance/__main__.py",
+    "profile_wrap/compliance/lint.py", "profile_wrap/compliance/rules.py", "LICENSE", "NOTICE.md",
     "THIRD_PARTY.md", "SECURITY.md", ".gitignore", ".gitattributes", "release/leak-allow.json",
     ".github/workflows/ci.yml", "tests/e2e/test_leakcheck.py", "tests/e2e/test_compliance.py",
     "tests/e2e/test_release_files.py",
@@ -30,7 +30,7 @@ def test_own_files_exist():
 def test_license_is_mit_with_contributors():
     text = (REPO / "LICENSE").read_text(encoding="utf-8")
     assert text.startswith("MIT License")
-    assert "Copyright (c) 2026 nj-linkedin contributors" in text
+    assert "Copyright (c) 2026 Profile-Wrap contributors" in text
 
 
 def test_notice_and_third_party_and_security_have_content():
@@ -53,8 +53,8 @@ def test_allow_file_parses_and_every_entry_has_reason():
 def test_ci_skeleton_runs_tests_compliance_and_leak_scan():
     ci = (REPO / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
     assert "pytest" in ci
-    assert "njli.compliance lint" in ci
-    assert "njli.leakcheck scan --tree" in ci
+    assert "profile_wrap.compliance lint" in ci
+    assert "profile_wrap.leakcheck scan --tree" in ci
     for osname in ("ubuntu-latest", "macos-latest", "windows-latest"):
         assert osname in ci
     assert '"3.10"' in ci and '"3.12"' in ci
@@ -106,6 +106,6 @@ def _write(tmp_path, data):
 def test_gitattributes_line_endings():
     lines = [ln.strip() for ln in (REPO / ".gitattributes").read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.startswith("#")]
     assert "* text=auto" in lines
-    assert "bin/njli text eol=lf" in lines
+    assert "bin/profile-wrap text eol=lf" in lines
     assert "*.cmd text eol=crlf" in lines
     assert "*.sh text eol=lf" in lines

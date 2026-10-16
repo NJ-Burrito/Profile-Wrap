@@ -1,6 +1,6 @@
 # Connect-judge prompt (score who is worth a connection invite)
 
-Template. `njli engage connect` fills the `{{...}}` fields and sends this to one worker per batch of
+Template. `profile-wrap engage connect` fills the `{{...}}` fields and sends this to one worker per batch of
 candidates. Fields: `{{persona_name}}`, `{{goal}}`, `{{niche}}`, `{{audience}}`, `{{voice_file}}`,
 `{{facts_file}}`, `{{min_score}}`, `{{note_max}}`, `{{slots}}`, `{{candidates}}` (the public posts and
 comments each person left), `{{out_path}}`.

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/connect.schema.json",
+  "$id": "https://example.invalid/profile-wrap/connect.schema.json",
   "title": "Connection shortlist (engage/connect.json)",
   "type": "object",
   "properties": {

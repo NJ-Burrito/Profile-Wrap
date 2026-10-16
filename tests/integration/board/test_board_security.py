@@ -8,14 +8,14 @@ import socket
 import pytest
 from board_helpers import PNG, make_draft
 
-from njli.board import security
-from njli.board.server import BoardServer, PortInUse
+from profile_wrap.board import security
+from profile_wrap.board.server import BoardServer, PortInUse
 
 
 def test_health_works_without_a_token_and_names_the_board(board):
     srv, c = board
     code, body = c.get_json("/api/health")
-    assert code == 200 and body["ok"] is True and body["board"] == "nj-linkedin"
+    assert code == 200 and body["ok"] is True and body["board"] == "profile-wrap"
     assert body["api"] == 1 and "paused" in body
 
 
@@ -78,8 +78,8 @@ TRAVERSAL = [
     "/media/drafts/s1/meta.json",
     "/media/drafts/..%2fdrafts%2fs1/card.png",
     "/media/drafts/s1/%2e%2e",
-    "/media/drafts/s1/../../config/njli.json",
-    "/media/drafts/%2e%2e/%2e%2e/config/njli.json",
+    "/media/drafts/s1/../../config/profile-wrap.json",
+    "/media/drafts/%2e%2e/%2e%2e/config/profile-wrap.json",
     "/media/drafts/s1/%2e%2e%2f%2e%2e%2fmeta.json",
     "/media/drafts/s1/..%5c..%5cmeta.json",
     "/media/drafts/s1/%252e%252e/meta.json",
@@ -88,17 +88,17 @@ TRAVERSAL = [
     "/media/drafts/s1/card.png/../../meta.json",
     "/media/research/s1/card.png",
     "/media/drafts/s1/card.txt",
-    "/fonts/..%2fconfig%2fnjli.json",
-    "/fonts/../config/njli.json",
-    "/fonts/%2e%2e/config/njli.json",
+    "/fonts/..%2fconfig%2fprofile-wrap.json",
+    "/fonts/../config/profile-wrap.json",
+    "/fonts/%2e%2e/config/profile-wrap.json",
     "/research/facts.md",
-    "/config/njli.json",
+    "/config/profile-wrap.json",
     "/profile/steps.json",
     "/.git/config",
     "/review/decisions.jsonl",
     "/engage/pending.json",
-    "/app/../config/njli.json",
-    "/i18n/../../config/njli.json",
+    "/app/../config/profile-wrap.json",
+    "/i18n/../../config/profile-wrap.json",
     "/media/drafts/s1/c:%5cwindows%5cwin.ini",
     "/media/drafts/s1/card.png%00.txt",
 ]
@@ -147,17 +147,17 @@ def test_published_media_is_served_and_a_symlink_out_of_the_folder_is_refused(bo
 def test_avatar_only_from_inside_the_workspace(start, ws):
     (ws / "brand" / "identity").mkdir(parents=True)
     (ws / "brand" / "identity" / "me.png").write_bytes(PNG)
-    cfg = json.loads((ws / "config" / "njli.json").read_text())
+    cfg = json.loads((ws / "config" / "profile-wrap.json").read_text())
     cfg["brand"] = {"identity": {"enabled": True, "name": "x", "role": "y", "photo": "brand/identity/me.png", "signature": "none"}}
-    (ws / "config" / "njli.json").write_text(json.dumps(cfg))
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(cfg))
     srv, c = start()
     assert c.get("/avatar")[0] == 200
     cfg["brand"]["identity"]["photo"] = "../outside.png"
-    (ws / "config" / "njli.json").write_text(json.dumps(cfg))
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(cfg))
     (ws.parent / "outside.png").write_bytes(PNG)
     assert c.get("/avatar")[0] == 404
-    cfg["brand"]["identity"]["photo"] = "config/njli.json"
-    (ws / "config" / "njli.json").write_text(json.dumps(cfg))
+    cfg["brand"]["identity"]["photo"] = "config/profile-wrap.json"
+    (ws / "config" / "profile-wrap.json").write_text(json.dumps(cfg))
     assert c.get("/avatar")[0] == 404
 
 
@@ -211,7 +211,7 @@ def test_corrupt_json_gives_a_degraded_200_not_a_dropped_connection(board, ws):
     (ws / "profile" / "steps.json").write_text("}", encoding="utf-8")
     (ws / "published").mkdir()
     (ws / "published" / "ledger.jsonl").write_text('{"slug": "x"}\nnot json\n', encoding="utf-8")
-    (ws / "config" / "njli.json").write_text("{", encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text("{", encoding="utf-8")
     code, state = c.get_json("/api/state")
     assert code == 200 and state["degraded"] is True and state["total"] == 2
     assert {p["slug"]: p["degraded"] for p in state["posts"]} == {"ok1": True, "bad1": True}

@@ -5,8 +5,8 @@ from pathlib import Path
 
 import pytest
 
-from njli import config, policy, scaffold, upgrade
-from njli.migrations import runner
+from profile_wrap import config, policy, scaffold, upgrade
+from profile_wrap.migrations import runner
 
 from core_helpers import load_answers_fixture
 
@@ -14,7 +14,7 @@ from core_helpers import load_answers_fixture
 @pytest.fixture()
 def v1(tmp_path, plugin_root):
     """A workspace scaffolded from the v1 templates (the plugin_root copy), plus that root."""
-    from njli import init_wizard
+    from profile_wrap import init_wizard
 
     summary = init_wizard.init_workspace(tmp_path / "ws", load_answers_fixture("en.json"),
                                          plugin_root=plugin_root, git=False)
@@ -225,11 +225,11 @@ def test_pending_migrations_are_reported(v1):
     meta_path.write_text(json.dumps(meta), encoding="utf-8")
     result = upgrade.apply(ws, root)
     assert result.pending_migrations >= 1
-    assert "njli migrate" in upgrade.render_summary(result)
+    assert "profile-wrap migrate" in upgrade.render_summary(result)
 
 
 def test_not_a_workspace(tmp_path, plugin_root):
-    with pytest.raises(scaffold.ScaffoldError, match="not an nj-linkedin workspace"):
+    with pytest.raises(scaffold.ScaffoldError, match="not an Profile-Wrap workspace"):
         upgrade.check(tmp_path, plugin_root)
 
 
@@ -254,7 +254,7 @@ def write_migration(folder: Path, name: str, body: str) -> None:
 POLICY_MIGRATION = '''
 DESCRIPTION = "lower the comment cap to 2"
 TOUCHES_POLICY = True
-FILES = ["config/njli.json"]
+FILES = ["config/profile-wrap.json"]
 
 def plan(ctx):
     cfg = ctx.config_raw()
@@ -300,7 +300,7 @@ def test_shipped_migration_is_idempotent_and_dry_runnable(v1):
     first = runner.run(ws)
     assert first.applied == ["0001_style_preset"] and first.exit_code == 0
     assert config.load_raw(ws)["persona"]["style_preset"] == "plain"
-    assert first.backup and (Path(first.backup) / "config" / "njli.json").is_file()
+    assert first.backup and (Path(first.backup) / "config" / "profile-wrap.json").is_file()
     second = runner.run(ws)
     assert second.applied == [] and second.noop == [] and second.backup is None
     # forgetting the bookkeeping does not double-apply: plan() sees nothing to do

@@ -5,9 +5,9 @@ import json
 
 from gate_helpers import make_draft, write_config
 
-from njli.gate import run_gate
-from njli.gate.cli_ext import register as register_gate
-from njli.gate.runner import format_lines
+from profile_wrap.gate import run_gate
+from profile_wrap.gate.cli_ext import register as register_gate
+from profile_wrap.gate.runner import format_lines
 
 
 def test_missing_facts_file_is_a_readable_fail(ws):
@@ -74,10 +74,10 @@ def test_missing_argument_and_missing_folder(ws, capsys):
 
 def test_missing_and_invalid_config(ws):
     make_draft(ws, "d1", "Plain sentence.\n")
-    (ws / "config" / "njli.json").unlink()
+    (ws / "config" / "profile-wrap.json").unlink()
     res = run_gate("d1", ws)
     assert any("config" in w for w in res["warnings"]) and res["summary"] == "PASS"
-    (ws / "config" / "njli.json").write_text("{broken", encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text("{broken", encoding="utf-8")
     res = run_gate("d1", ws)
     assert res["summary"] == "FAIL" and any(f.startswith("config:") for f in res["fails"])
 
@@ -127,23 +127,23 @@ def test_format_lines_and_cli_output(ws, capsys):
     assert args.func(args) == 1
 
 
-def test_real_entry_point_njli_gate_and_facts(ws):
-    """ENTRY_SMOKE: the product's own `python -m njli` loads both extensions and returns the right exit codes."""
+def test_real_entry_point_profile_wrap_gate_and_facts(ws):
+    """ENTRY_SMOKE: the product's own `python -m profile_wrap` loads both extensions and returns the right exit codes."""
     import os
     import subprocess
     import sys
 
     from gate_helpers import ROOT
-    if not (ROOT / "njli" / "cli.py").is_file():
+    if not (ROOT / "profile_wrap" / "cli.py").is_file():
         import pytest
         pytest.skip("core CLI (WP1) not present")
     make_draft(ws, "d1", "I found 7 bugs last week.\n")
     make_draft(ws, "ok", "Plain sentence.\n")
     env = {**os.environ, "PYTHONUTF8": "1", "PYTHONPATH": str(ROOT)}
-    env.pop("NJLI_WORKER", None)
+    env.pop("PROFILE_WRAP_WORKER", None)
 
     def run(*argv):
-        return subprocess.run([sys.executable, "-m", "njli", *argv, "--workspace", str(ws)], capture_output=True,
+        return subprocess.run([sys.executable, "-m", "profile_wrap", *argv, "--workspace", str(ws)], capture_output=True,
                               text=True, env=env, stdin=subprocess.DEVNULL, check=False)
     bad = run("gate", "d1")
     assert bad.returncode == 1 and "'7 bugs'" in bad.stdout

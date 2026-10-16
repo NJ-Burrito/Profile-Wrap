@@ -12,7 +12,7 @@ FIX = ROOT / "tests" / "fixtures" / "captions"
 
 
 def write_config(ws: Path, **sections) -> None:
-    path = ws / "config" / "njli.json"
+    path = ws / "config" / "profile-wrap.json"
     cfg = json.loads(path.read_text(encoding="utf-8"))
     for key, val in sections.items():
         if isinstance(val, dict) and isinstance(cfg.get(key), dict):

@@ -8,41 +8,41 @@ from pathlib import Path
 import pytest
 from conftest import ROOT
 
-from njli import ledger
+from profile_wrap import ledger
 import importlib
 
-lint_mod = importlib.import_module("njli.compliance.lint")
+lint_mod = importlib.import_module("profile_wrap.compliance.lint")
 
 
 def test_compliance_lint_passes_on_the_linkedin_package_and_skill():
     found = [v for v in lint_mod.lint(ROOT)
-             if v.path.startswith(("njli/linkedin/", "njli/ledger.py", "njli/demo/fake_linkedin.py",
-                                   "skills/njl-ship/"))]
+             if v.path.startswith(("profile_wrap/linkedin/", "profile_wrap/ledger.py", "profile_wrap/demo/fake_linkedin.py",
+                                   "skills/pw-ship/"))]
     assert found == [], [v.render() for v in found]
 
 
 def test_only_the_extra_names_the_social_actions_route():
-    hits = [p.relative_to(ROOT).as_posix() for p in (ROOT / "njli" / "linkedin").glob("*.py")
+    hits = [p.relative_to(ROOT).as_posix() for p in (ROOT / "profile_wrap" / "linkedin").glob("*.py")
             if "socialActions" in p.read_text(encoding="utf-8")]
-    assert hits == ["njli/linkedin/social_extra.py"]
+    assert hits == ["profile_wrap/linkedin/social_extra.py"]
 
 
 def test_the_package_reaches_only_allowlisted_endpoints():
     seen = set()
-    for p in (ROOT / "njli" / "linkedin").glob("*.py"):
+    for p in (ROOT / "profile_wrap" / "linkedin").glob("*.py"):
         seen.update(re.findall(r"(?<!oauth)/(?:v2|rest)/[A-Za-z][A-Za-z0-9/_-]*", p.read_text(encoding="utf-8")))
     allowed = ("/v2/userinfo", "/rest/posts", "/rest/images", "/rest/documents", "/v2/socialActions")
     assert seen and all(s.startswith(allowed) for s in seen), seen
 
 
 def test_owned_files_have_no_personal_data():
-    owned = [*(ROOT / "njli" / "linkedin").glob("*.py"), ROOT / "njli" / "ledger.py",
-             ROOT / "njli" / "demo" / "fake_linkedin.py", ROOT / "data" / "linkedin-versions.json",
-             *(ROOT / "skills" / "njl-ship").rglob("*.md"), *(ROOT / "commands").glob("post.md"),
+    owned = [*(ROOT / "profile_wrap" / "linkedin").glob("*.py"), ROOT / "profile_wrap" / "ledger.py",
+             ROOT / "profile_wrap" / "demo" / "fake_linkedin.py", ROOT / "data" / "linkedin-versions.json",
+             *(ROOT / "skills" / "pw-ship").rglob("*.md"), *(ROOT / "commands").glob("post.md"),
              *(ROOT / "commands").glob("board.md"), ROOT / "docs" / "TERMS-AND-RISK.md",
              ROOT / "docs" / "linkedin-app-setup.md",
              *(ROOT / "docs" / "references").glob("*.md")]
-    # Private names are checked by `njli leaks scan` with the owner's salted denylist, never listed here.
+    # Private names are checked by `profile-wrap leaks scan` with the owner's salted denylist, never listed here.
     banned = ["O" + r":\\", "C" + r":\\Users",r"\b\+?\d{3}[ -]?\d{7,9}\b", r"[\w.]+@[\w-]+\.(?:com|net|org|io)\b",
               r"AQ[A-Za-z0-9_-]{60,}", r"\b[A-Za-z0-9]{32,}\b"]
     for path in owned:

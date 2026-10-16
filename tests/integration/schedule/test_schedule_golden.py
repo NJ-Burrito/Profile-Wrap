@@ -1,7 +1,7 @@
 """Golden files for every backend, rendered on every OS (the renderers are pure).
 
 Real machine paths never appear in a golden file: the test builds paths at run time and replaces them with
-tokens (@HOME@, @WS@, @PY@, @PYZ@ ...) before comparing. Regenerate with NJLI_UPDATE_GOLDEN=1 and read the diff.
+tokens (@HOME@, @WS@, @PY@, @PYZ@ ...) before comparing. Regenerate with PROFILE_WRAP_UPDATE_GOLDEN=1 and read the diff.
 """
 from __future__ import annotations
 
@@ -11,19 +11,19 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 
-from njli.schedule import backends as bk
-from njli.schedule.jobs import Job, jobs_from_config, rule_for
+from profile_wrap.schedule import backends as bk
+from profile_wrap.schedule.jobs import Job, jobs_from_config, rule_for
 from schedhelp import cfg_of
 
 GOLDEN = Path(__file__).resolve().parent / "golden"
-UPDATE = os.environ.get("NJLI_UPDATE_GOLDEN") == "1"
+UPDATE = os.environ.get("PROFILE_WRAP_UPDATE_GOLDEN") == "1"
 
 
 def posix_ctx(**kw) -> tuple[bk.Context, dict]:
     home = "/home/" + "demo-user"
     tok = {home: "@HOME@"}
-    ws = f"{home}/nj-linkedin/demo"
-    pyz = f"{home}/.local/share/nj-linkedin/runtime/current/njli.pyz"
+    ws = f"{home}/profile-wrap/demo"
+    pyz = f"{home}/.local/share/profile-wrap/runtime/current/profile-wrap.pyz"
     py = "/usr/bin/python3"
     tools = {"node": "/opt/homebrew/bin/node", "npx": "/opt/homebrew/bin/npx", "ffmpeg": "/opt/homebrew/bin/ffmpeg",
              "ffprobe": "/opt/homebrew/bin/ffprobe", "claude": f"{home}/.local/bin/claude"}
@@ -38,10 +38,10 @@ def posix_ctx(**kw) -> tuple[bk.Context, dict]:
 def windows_ctx() -> tuple[bk.Context, dict]:
     drive = "D" + ":"
     home = drive + "\\Users\\demo-user"
-    ws = drive + "\\njli demo\\nj-linkedin\\demo"          # a space in the path on purpose
+    ws = drive + "\\profile-wrap demo\\Profile-Wrap\\demo"          # a space in the path on purpose
     py = drive + "\\Python312\\python.exe"
     pyw = drive + "\\Python312\\pythonw.exe"
-    pyz = home + "\\AppData\\Local\\nj-linkedin\\runtime\\current\\njli.pyz"
+    pyz = home + "\\AppData\\Local\\Profile-Wrap\\runtime\\current\\profile-wrap.pyz"
     ctx = bk.Context(profile="demo", workspace=ws, entry=[py, pyz], pythonw=pyw, home=home,
                      path_env="", tools={})
     return ctx, {ws: "@WS@", pyz: "@PYZ@", pyw: "@PYW@", py: "@PY@", home: "@HOME@"}
@@ -56,7 +56,7 @@ def golden_jobs() -> list[Job]:
         "connect_weekly": {"when": "SUN 10:00", "wake": True},
         "board": {"at_login": True},
     }
-    import njli.schedule.jobs as J
+    import profile_wrap.schedule.jobs as J
     # post_due is only wanted for api_scheduled with an acknowledgement; the renderer does not care
     out = []
     for name, spec in specs.items():
@@ -82,7 +82,7 @@ def check(name: str, text: str) -> None:
     if UPDATE:
         GOLDEN.mkdir(exist_ok=True)
         path.write_text(text, encoding="utf-8", newline="\n")
-    assert path.is_file(), f"golden file {name} is missing; run with NJLI_UPDATE_GOLDEN=1"
+    assert path.is_file(), f"golden file {name} is missing; run with PROFILE_WRAP_UPDATE_GOLDEN=1"
     assert text == path.read_text(encoding="utf-8").replace("\r\n", "\n"), f"{name} differs from its golden file"
 
 
@@ -119,7 +119,7 @@ def test_windows_xml_is_well_formed_and_has_the_required_settings():
         assert cmd.endswith("pythonw.exe"), "pythonw when present: no console window"
         args = root.find("t:Actions/t:Exec/t:Arguments", ns).text
         assert f"run {job.name} --workspace" in args and args.endswith('"'), "the workspace path has a space, so it is quoted"
-        assert root.find("t:RegistrationInfo/t:URI", ns).text == f"\\njli-demo-{job.name}"
+        assert root.find("t:RegistrationInfo/t:URI", ns).text == f"\\profile-wrap-demo-{job.name}"
 
 
 def test_windows_falls_back_to_python_exe_without_pythonw():
@@ -174,7 +174,7 @@ def test_cron_block_is_marked_wrapped_in_flock_and_replaced_not_duplicated():
     ctx, _ = posix_ctx()
     jobs = golden_jobs()
     block = bk.render_cron_block(ctx, jobs)
-    assert block.startswith("# BEGIN njli:demo\n") and block.rstrip().endswith("# END njli:demo")
+    assert block.startswith("# BEGIN profile-wrap:demo\n") and block.rstrip().endswith("# END profile-wrap:demo")
     lines = [ln for ln in block.splitlines() if ln and not ln.startswith("#")]
     assert len(lines) == len(jobs)
     assert all("flock -n" in ln for ln in lines)
@@ -217,10 +217,10 @@ def test_launchd_plist_captures_resolved_tool_paths_and_path():
         d = plistlib.loads(bk.render_plist(ctx, job).text.encode("utf-8"))
         env = d["EnvironmentVariables"]
         assert env["PATH"] == ctx.path_env, "the user's PATH is captured, not launchd's minimal one"
-        assert env["NJLI_NODE"].endswith("/node") and env["NJLI_NPX"].endswith("/npx")
-        assert env["NJLI_FFMPEG"].endswith("/ffmpeg") and env["NJLI_FFPROBE"].endswith("/ffprobe")
-        assert env["NJLI_CLAUDE_BIN"].endswith("/claude") and env["PYTHONUTF8"] == "1"
-        assert d["Label"] == f"io.njli.demo.{job.name}"
+        assert env["PROFILE_WRAP_NODE"].endswith("/node") and env["PROFILE_WRAP_NPX"].endswith("/npx")
+        assert env["PROFILE_WRAP_FFMPEG"].endswith("/ffmpeg") and env["PROFILE_WRAP_FFPROBE"].endswith("/ffprobe")
+        assert env["PROFILE_WRAP_CLAUDE_BIN"].endswith("/claude") and env["PYTHONUTF8"] == "1"
+        assert d["Label"] == f"io.profile_wrap.demo.{job.name}"
         assert d["ProgramArguments"][-4:-1] == ["run", job.name, "--workspace"]
     board = plistlib.loads(bk.render_plist(ctx, golden_jobs()[-1]).text.encode("utf-8"))
     assert board["RunAtLoad"] is True and board["KeepAlive"] == {"SuccessfulExit": False}
@@ -233,7 +233,7 @@ def test_a_tool_that_is_not_installed_is_simply_not_captured():
     ctx, _ = posix_ctx()
     ctx.tools = {"node": ctx.tools["node"]}
     env = plistlib.loads(bk.render_plist(ctx, golden_jobs()[0]).text.encode("utf-8"))["EnvironmentVariables"]
-    assert "NJLI_NODE" in env and "NJLI_CLAUDE_BIN" not in env
+    assert "PROFILE_WRAP_NODE" in env and "PROFILE_WRAP_CLAUDE_BIN" not in env
 
 
 # ------------------------------------------------------------------ shared
@@ -249,9 +249,9 @@ def test_every_command_calls_the_stable_runtime_with_an_absolute_workspace_and_n
 
 
 def test_task_names_are_profile_scoped():
-    assert golden_jobs()[0].task_name("work") == "njli-work-build_week"
+    assert golden_jobs()[0].task_name("work") == "profile-wrap-work-build_week"
     ctx, _ = posix_ctx()
-    assert bk.launchd_label("work", "board") == "io.njli.work.board"
+    assert bk.launchd_label("work", "board") == "io.profile_wrap.work.board"
 
 
 def test_job_table_from_the_default_config(mkws):

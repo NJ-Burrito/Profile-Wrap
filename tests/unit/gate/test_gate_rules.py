@@ -6,10 +6,10 @@ import json
 import pytest
 from gate_helpers import make_draft, write_config
 
-from njli.gate import check_text, rules
-from njli.gate.arabic import check_arabic, is_arabic_lang
-from njli.gate.config import deep_merge, find_data_file, load_config, read_json, resolve_workspace
-from njli.gate.textnorm import fold, html_text, is_arabic, normalise_digits, strip_invisible
+from profile_wrap.gate import check_text, rules
+from profile_wrap.gate.arabic import check_arabic, is_arabic_lang
+from profile_wrap.gate.config import deep_merge, find_data_file, load_config, read_json, resolve_workspace
+from profile_wrap.gate.textnorm import fold, html_text, is_arabic, normalise_digits, strip_invisible
 
 
 def banned():
@@ -128,7 +128,7 @@ def test_arabic_language_detection_and_hygiene_helpers():
 
 def test_config_helpers(tmp_path, monkeypatch):
     assert deep_merge({"a": {"b": 1, "c": 2}}, {"a": {"b": 9}, "d": 1}) == {"a": {"b": 9, "c": 2}, "d": 1}
-    monkeypatch.setenv("NJLI_WORKSPACE", str(tmp_path))
+    monkeypatch.setenv("PROFILE_WRAP_WORKSPACE", str(tmp_path))
     assert resolve_workspace() == tmp_path.resolve()
     assert resolve_workspace(tmp_path / "x") == (tmp_path / "x").resolve()
     p = tmp_path / "j.json"
@@ -137,13 +137,13 @@ def test_config_helpers(tmp_path, monkeypatch):
     assert read_json(tmp_path / "none.json")[0] is None
     p.write_text("[", encoding="utf-8")
     assert "not valid" in read_json(p)[1]
-    monkeypatch.setenv("NJLI_DATA_ROOT", str(tmp_path))
+    monkeypatch.setenv("PROFILE_WRAP_DATA_ROOT", str(tmp_path))
     (tmp_path / "data").mkdir()
     (tmp_path / "data" / "x.json").write_text("{}", encoding="utf-8")
     assert find_data_file("data/x.json") == tmp_path / "data" / "x.json"
     assert find_data_file("data/none.json") is None
     (tmp_path / "config").mkdir()
-    (tmp_path / "config" / "njli.json").write_text("[1]", encoding="utf-8")
+    (tmp_path / "config" / "profile-wrap.json").write_text("[1]", encoding="utf-8")
     cfg, problems = load_config(tmp_path)
     assert problems and cfg["gate"]["hashtags_max"] == 3
 

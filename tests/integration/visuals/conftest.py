@@ -1,4 +1,4 @@
-"""Fixtures for the visuals tests. The real-stack tests need Node, ffmpeg, a browser, Playwright (NJLI_NODE_DIR or a
+"""Fixtures for the visuals tests. The real-stack tests need Node, ffmpeg, a browser, Playwright (PROFILE_WRAP_NODE_DIR or a
 workspace install) and network for the first fetch; each skips with its reason when something is missing."""
 from __future__ import annotations
 
@@ -16,11 +16,11 @@ REPO = Path(__file__).resolve().parents[3]
 
 @pytest.fixture(autouse=True)
 def isolated_env(tmp_path, monkeypatch):
-    for name in ("NJLI_WORKSPACE", "NJLI_BROWSER", "NJLI_TEST", "NJLI_WORKER"):
+    for name in ("PROFILE_WRAP_WORKSPACE", "PROFILE_WRAP_BROWSER", "PROFILE_WRAP_TEST", "PROFILE_WRAP_WORKER"):
         monkeypatch.delenv(name, raising=False)
-    monkeypatch.setenv("NJLI_CONFIG_DIR", str(tmp_path / "cfgdir"))
-    monkeypatch.setenv("NJLI_DATA_DIR", str(tmp_path / "datadir"))
-    monkeypatch.setenv("NJLI_HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(tmp_path / "cfgdir"))
+    monkeypatch.setenv("PROFILE_WRAP_DATA_DIR", str(tmp_path / "datadir"))
+    monkeypatch.setenv("PROFILE_WRAP_HOME", str(tmp_path / "home"))
     monkeypatch.setenv("PYTHONUTF8", "1")
 
 
@@ -32,12 +32,12 @@ def new_workspace(root: Path) -> Path:
     ws = root / "ws"
     for d in ("config", "drafts", "videos", "work", "brand/fonts", "brand/vendor", "data/logs"):
         (ws / d).mkdir(parents=True, exist_ok=True)
-    (ws / "config" / "njli.json").write_text("{}", encoding="utf-8")
+    (ws / "config" / "profile-wrap.json").write_text("{}", encoding="utf-8")
     return ws
 
 
 def load_cfg(ws: Path) -> dict:
-    from njli import config
+    from profile_wrap import config
     return config.load(ws)
 
 
@@ -56,7 +56,7 @@ def ofl_dir(toolcache) -> Path:
     """The pinned OFL fonts, fetched once per session (skips without Node and network)."""
     if not have("npm"):
         pytest.skip("npm not installed: cannot fetch the OFL fonts")
-    from njli.visuals import fonts
+    from profile_wrap.visuals import fonts
     ws = new_workspace(toolcache / "fontsws")
     try:
         fonts.fetch(ws, load_cfg(ws))
@@ -69,7 +69,7 @@ def ofl_dir(toolcache) -> Path:
 def gsap_js(toolcache) -> Path:
     if not have("npm"):
         pytest.skip("npm not installed: cannot fetch GSAP")
-    from njli.visuals.assets import npm_pin
+    from profile_wrap.visuals.assets import npm_pin
     dest = toolcache / "gsap"
     dest.mkdir(exist_ok=True)
     r = subprocess.run([shutil.which("npm"), "pack", f"gsap@{npm_pin('gsap')}", "--silent", "--pack-destination",
@@ -86,10 +86,10 @@ def gsap_js(toolcache) -> Path:
 
 @pytest.fixture()
 def stack_ws(ws, ofl_dir, gsap_js) -> Path:
-    """A workspace with the OFL fonts and GSAP in place (what 'njli fonts fetch' and 'assets fetch' produce)."""
+    """A workspace with the OFL fonts and GSAP in place (what 'profile-wrap fonts fetch' and 'assets fetch' produce)."""
     for f in ofl_dir.iterdir():
         shutil.copyfile(f, ws / "brand" / "fonts" / f.name)
-    from njli.visuals.assets import npm_pin
+    from profile_wrap.visuals.assets import npm_pin
     vend = ws / "brand" / "vendor" / f"gsap@{npm_pin('gsap')}"
     vend.mkdir(parents=True)
     shutil.copyfile(gsap_js, vend / "gsap.min.js")
@@ -97,7 +97,7 @@ def stack_ws(ws, ofl_dir, gsap_js) -> Path:
 
 
 def need_static_stack():
-    from njli.visuals import assets, browser
+    from profile_wrap.visuals import assets, browser
     if not have("node"):
         pytest.skip("node not installed")
     if browser.discover(use_npx=False) is None and not have("npx"):
@@ -106,9 +106,9 @@ def need_static_stack():
 
 
 def need_playwright(ws: Path):
-    from njli.visuals import assets
+    from profile_wrap.visuals import assets
     if assets.node_dir(ws) is None:
-        pytest.skip("playwright not installed: run 'njli assets fetch' or set NJLI_NODE_DIR to a folder whose "
+        pytest.skip("playwright not installed: run 'profile-wrap assets fetch' or set PROFILE_WRAP_NODE_DIR to a folder whose "
                     "node_modules has playwright")
 
 

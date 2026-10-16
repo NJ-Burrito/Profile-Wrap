@@ -7,7 +7,7 @@ import shutil
 import pytest
 from gate_helpers import FIX, make_draft
 
-from njli.gate import run_gate
+from profile_wrap.gate import run_gate
 
 CASES = json.loads((FIX / "cases.json").read_text(encoding="utf-8"))
 

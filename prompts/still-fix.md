@@ -1,6 +1,6 @@
 # Still-frame fix prompt (GIF motion: remove dead frames without changing the story)
 
-Template. `njli visuals metrics` reports how much of a GIF is still. When the share is above the limit the
+Template. `profile-wrap visuals metrics` reports how much of a GIF is still. When the share is above the limit the
 orchestrator sends this once. The worker edits the composition; the orchestrator re-renders and re-measures
 after it exits.
 

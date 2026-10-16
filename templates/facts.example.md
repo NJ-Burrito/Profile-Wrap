@@ -6,10 +6,10 @@ against the cited, verified facts: same value, same unit.
 
 How to use it:
 
-1. Add a row with `njli facts add --claim "..." --numbers "30 minutes" --source notes/where-it-came-from.md`.
+1. Add a row with `profile-wrap facts add --claim "..." --numbers "30 minutes" --source notes/where-it-came-from.md`.
    New rows are `draft`.
-2. Open a terminal and run `njli facts verify F01 --evidence <file or URL>`. Only you can do this; an
-   agent cannot (`NJLI_WORKER=1` refuses, and so does a missing terminal).
+2. Open a terminal and run `profile-wrap facts verify F01 --evidence <file or URL>`. Only you can do this; an
+   agent cannot (`PROFILE_WRAP_WORKER=1` refuses, and so does a missing terminal).
 3. Cite the id in a draft: `"claims": ["F01"]`.
 
 Columns:
@@ -20,7 +20,7 @@ Columns:
 - `supersedes`: the id this row replaces. Mark the old row `superseded`.
 - `demo`: `yes` for fictional rows like these. A demo fact never passes the gate in a live workspace.
 
-Delete these example rows when you start your own register (`njli init` does this for you).
+Delete these example rows when you start your own register (`profile-wrap init` does this for you).
 
 | id | claim | numbers | source | status | verified_by | verified_at | evidence | usage | supersedes | demo | added |
 |---|---|---|---|---|---|---|---|---|---|---|---|

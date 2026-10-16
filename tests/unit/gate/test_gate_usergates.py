@@ -3,8 +3,8 @@ from __future__ import annotations
 
 from gate_helpers import make_draft
 
-from njli.gate import run_gate
-from njli.gate.usergates import list_user_gates
+from profile_wrap.gate import run_gate
+from profile_wrap.gate.usergates import list_user_gates
 
 
 def hook(ws, name, body):

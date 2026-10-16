@@ -1,6 +1,6 @@
 # Reply prompt (draft answers to comments on your own posts)
 
-Template. `njli engage replies` fills the `{{...}}` fields and sends this to one worker per post. Fields:
+Template. `profile-wrap engage replies` fills the `{{...}}` fields and sends this to one worker per post. Fields:
 `{{slug}}`, `{{post_text}}`, `{{comments}}` (the comments on the post, with ids and authors), `{{lang}}`,
 `{{voice_file}}`, `{{facts_file}}`, `{{max_chars}}`, `{{reply_budget}}` (how many replies today's cap still
 allows), `{{out_path}}`.

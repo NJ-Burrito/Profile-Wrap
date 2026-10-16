@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/pending.schema.json",
+  "$id": "https://example.invalid/profile-wrap/pending.schema.json",
   "title": "Comment and reply drafts waiting for a human (engage/pending.json)",
   "type": "object",
   "properties": {

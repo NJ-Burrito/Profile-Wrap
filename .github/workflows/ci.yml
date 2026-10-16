@@ -31,9 +31,9 @@ jobs:
       - name: Tests
         run: python -m pytest -q
       - name: Compliance lint
-        run: python -m njli.compliance lint --root .
+        run: python -m profile_wrap.compliance lint --root .
       - name: Leak scan (tree)
-        run: python -m njli.leakcheck scan --tree .
+        run: python -m profile_wrap.leakcheck scan --tree .
 
   quickstart:
     name: README quickstart (${{ matrix.os }})
@@ -51,15 +51,15 @@ jobs:
         run: python -m pip install .
       - name: Quickstart, step 1 and 2 (no Node, no ffmpeg, no model, no network)
         run: |
-          njli init --demo --yes
-          njli demo run
+          profile-wrap init --demo --yes
+          profile-wrap demo run
 
   leaks:
     name: leak scan with the private denylist
     runs-on: ubuntu-latest
     env:
       # A repository secret holding the salted-hash JSON (hashes only, never the terms).
-      LEAK_DENYLIST_JSON: ${{ secrets.NJLI_LEAK_DENYLIST_JSON }}
+      LEAK_DENYLIST_JSON: ${{ secrets.PROFILE_WRAP_LEAK_DENYLIST_JSON }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -69,7 +69,7 @@ jobs:
         if: env.LEAK_DENYLIST_JSON != ''
         run: |
           printf '%s' "$LEAK_DENYLIST_JSON" > "$RUNNER_TEMP/denylist.json"
-          echo "NJLI_LEAK_DENYLIST=$RUNNER_TEMP/denylist.json" >> "$GITHUB_ENV"
+          echo "PROFILE_WRAP_LEAK_DENYLIST=$RUNNER_TEMP/denylist.json" >> "$GITHUB_ENV"
       - name: Leak scan (tree)
-        run: python -m njli.leakcheck scan --tree .
+        run: python -m profile_wrap.leakcheck scan --tree .
       # --dist runs in the release workflow once wheel, sdist and zipapp are built (milestone M5).

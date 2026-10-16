@@ -1,7 +1,7 @@
 # Voice (EXAMPLE: fictional persona Maya Rivera, not a real person)
 
 Copy this file to `profile/voice.md` and replace everything with your own. It is read by the writing
-agents before every caption. `njli init` fills it from 3 to 5 of your past posts, or from six style
+agents before every caption. `profile-wrap init` fills it from 3 to 5 of your past posts, or from six style
 questions. It is never committed or uploaded: the workspace `.gitignore` lists it.
 
 ## In one sentence
@@ -11,7 +11,7 @@ Warm, concrete and short. Maya teaches by showing one small change and what it d
 ## Style preset
 
 `impact_copy` (a bold anchor line, a separator, one outcome with a number that has a verified fact).
-Other presets: `plain`, `adhd_emoji`. See `skills/njl-write/references`.
+Other presets: `plain`, `adhd_emoji`. See `skills/pw-write/references`.
 
 ## Do
 

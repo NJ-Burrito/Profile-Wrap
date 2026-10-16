@@ -1,4 +1,4 @@
-"""The commands through ``njli.cli.main`` in this process (so coverage sees them), plus edge cases."""
+"""The commands through ``profile_wrap.cli.main`` in this process (so coverage sees them), plus edge cases."""
 from __future__ import annotations
 
 import datetime
@@ -10,8 +10,8 @@ import urllib.request
 import pytest
 from conftest import GIF, PNG, gate_pass
 
-from njli import cli, limits
-from njli.linkedin import api, auth, due, post, selftest, social_extra, versions
+from profile_wrap import cli, limits
+from profile_wrap.linkedin import api, auth, due, post, selftest, social_extra, versions
 
 
 def main(env, *args):
@@ -123,7 +123,7 @@ def test_prompt_client_stores_secrets_in_the_config_dir(env):
 
 def test_token_errors_are_actionable(env):
     (env.cfg_dir / auth.TOKEN_FILE).write_text("{bad", encoding="utf-8")
-    with pytest.raises(auth.AuthError, match="njli auth"):
+    with pytest.raises(auth.AuthError, match="profile-wrap auth"):
         auth.load_token(env.cfg_dir)
     (env.cfg_dir / auth.TOKEN_FILE).write_text('{"access_token": "x"}', encoding="utf-8")
     with pytest.raises(auth.AuthError, match="incomplete"):

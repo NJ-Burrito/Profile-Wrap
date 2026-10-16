@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/nj-linkedin/steps.schema.json",
+  "$id": "https://example.invalid/profile-wrap/steps.schema.json",
   "title": "Profile fix steps (profile/steps.json)",
   "type": "object",
   "properties": {

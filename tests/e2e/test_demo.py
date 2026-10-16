@@ -19,25 +19,25 @@ FICTIONAL = "Fictional demo persona Maya Rivera"
 
 def _env(tmp: Path) -> dict:
     env = dict(os.environ)
-    env.update(PYTHONUTF8="1", NJLI_CONFIG_DIR=str(tmp / "cfg"), NJLI_DATA_DIR=str(tmp / "data"),
-               NJLI_HOME=str(tmp / "home"), PYTHONPATH=str(REPO))
-    for key in ("NJLI_WORKSPACE", "NJLI_LINKEDIN_BASE", "NJLI_CLAUDE_BIN"):
+    env.update(PYTHONUTF8="1", PROFILE_WRAP_CONFIG_DIR=str(tmp / "cfg"), PROFILE_WRAP_DATA_DIR=str(tmp / "data"),
+               PROFILE_WRAP_HOME=str(tmp / "home"), PYTHONPATH=str(REPO))
+    for key in ("PROFILE_WRAP_WORKSPACE", "PROFILE_WRAP_LINKEDIN_BASE", "PROFILE_WRAP_CLAUDE_BIN"):
         env.pop(key, None)
     return env
 
 
-def _njli(args: list, env: dict, timeout: float = 400.0) -> "subprocess.CompletedProcess[str]":
-    return subprocess.run([sys.executable, "-m", "njli"] + args, env=env, capture_output=True, text=True,
+def _profile_wrap(args: list, env: dict, timeout: float = 400.0) -> "subprocess.CompletedProcess[str]":
+    return subprocess.run([sys.executable, "-m", "profile_wrap"] + args, env=env, capture_output=True, text=True,
                           encoding="utf-8", errors="replace", timeout=timeout, cwd=str(REPO))
 
 
 def test_quickstart_init_demo_yes_then_demo_run_exits_zero(tmp_path):
     """The two README quickstart lines, on a clean temp dir, with the fake LinkedIn and fake claude."""
     env = _env(tmp_path)
-    init = _njli(["init", "--demo", "--yes", str(tmp_path / "first")], env)
+    init = _profile_wrap(["init", "--demo", "--yes", str(tmp_path / "first")], env)
     assert init.returncode == 0, init.stderr + init.stdout
     assert "demo data copied" in init.stdout
-    run = _njli(["demo", "run", "--dir", str(tmp_path)], env)
+    run = _profile_wrap(["demo", "run", "--dir", str(tmp_path)], env)
     assert run.returncode == 0, run.stdout + run.stderr
     lines = run.stdout.splitlines()
     assert not [ln for ln in lines if ln.startswith("FAIL")], run.stdout
@@ -48,17 +48,17 @@ def test_quickstart_init_demo_yes_then_demo_run_exits_zero(tmp_path):
         assert any(needle in ln for ln in steps), needle
     # the deliberate failure is a pass of the feature, and nothing was left behind in the temp dir
     assert any("a-chart-nobody-asked-for" in ln and ln.startswith("PASS") for ln in steps)
-    assert not list(tmp_path.glob("njli-demo-*")), "demo run must remove its temp folder"
+    assert not list(tmp_path.glob("profile-wrap-demo-*")), "demo run must remove its temp folder"
 
 
 def test_demo_up_and_down_start_and_stop_the_fake_server(tmp_path):
     env = _env(tmp_path)
-    up = _njli(["demo", "up"], env, timeout=60)
+    up = _profile_wrap(["demo", "up"], env, timeout=60)
     assert up.returncode == 0, up.stderr + up.stdout
     state = json.loads((tmp_path / "data" / "demo-server.json").read_text(encoding="utf-8"))
     assert state["base_url"].startswith("http://127.0.0.1:")
-    assert _njli(["demo", "up"], env, timeout=60).returncode != 0   # one server at a time
-    down = _njli(["demo", "down"], env, timeout=60)
+    assert _profile_wrap(["demo", "up"], env, timeout=60).returncode != 0   # one server at a time
+    down = _profile_wrap(["demo", "down"], env, timeout=60)
     assert down.returncode == 0
     assert not (tmp_path / "data" / "demo-server.json").exists()
     deadline = time.time() + 10
@@ -79,7 +79,7 @@ def _alive(pid: int) -> bool:
 
 
 def test_fake_claude_speaks_enough_of_the_cli():
-    fake = REPO / "njli" / "demo" / "fake_claude.py"
+    fake = REPO / "profile_wrap" / "demo" / "fake_claude.py"
     helped = subprocess.run([sys.executable, str(fake), "--help"], capture_output=True, text=True)
     for flag in ("--max-turns", "--allowedTools", "--disallowedTools", "--permission-mode", "--print"):
         assert flag in helped.stdout
@@ -172,25 +172,25 @@ def _code_commands(text: str):
     for block in re.findall(r"```(?:bash|sh|console|powershell)?\n(.*?)```", text, re.S):
         for line in block.splitlines():
             line = line.strip().lstrip("$ ").strip()
-            if line.startswith("njli "):
+            if line.startswith("profile-wrap "):
                 yield line
 
 
 @pytest.mark.parametrize("doc", ["README.md", "QUICKSTART.md", "UPDATING.md"])
-def test_every_njli_command_in_the_docs_exists(doc, tmp_path):
-    """README quickstart commands are real: each ``njli <command>`` must parse (its --help exits 0)."""
+def test_every_profile_wrap_command_in_the_docs_exists(doc, tmp_path):
+    """README quickstart commands are real: each ``profile-wrap <command>`` must parse (its --help exits 0)."""
     text = (REPO / doc).read_text(encoding="utf-8")
     commands = sorted({ln.split()[1] for ln in _code_commands(text)})
-    assert commands, f"{doc} shows no njli commands"
+    assert commands, f"{doc} shows no profile-wrap commands"
     env = _env(tmp_path)
     for name in commands:
-        proc = _njli([name, "-h"], env, timeout=60)
-        assert proc.returncode == 0, f"{doc}: `njli {name}` is not a command: {proc.stderr[:200]}"
+        proc = _profile_wrap([name, "-h"], env, timeout=60)
+        assert proc.returncode == 0, f"{doc}: `profile-wrap {name}` is not a command: {proc.stderr[:200]}"
 
 
 def test_readme_has_the_required_parts():
     text = (REPO / "README.md").read_text(encoding="utf-8")
-    for needle in ("docs/assets/hero.gif", "docs/assets/flow.svg", "njli init --demo --yes", "njli demo run",
+    for needle in ("docs/assets/hero.gif", "docs/assets/flow.svg", "profile-wrap init --demo --yes", "profile-wrap demo run",
                    "## What it does", "## Quickstart", "## FAQ", "## Roadmap", "## Licence", "MIT", "v0.2"):
         assert needle in text, needle
     for needle in ("official api", "no dms", "own developer app", "no invites"):
@@ -199,20 +199,23 @@ def test_readme_has_the_required_parts():
 
 
 def test_release_metadata_agrees_on_the_version():
-    import tomllib
+    try:
+        import tomllib
+    except ImportError:          # Python 3.10
+        import tomli as tomllib
     meta = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))
-    assert meta["project"]["version"] == "0.1.0" and meta["project"]["readme"] == "README.md"
+    assert meta["project"]["version"] == "0.1.1" and meta["project"]["readme"] == "README.md"
     include = meta["tool"]["hatch"]["build"]["targets"]["wheel"]["force-include"]
     assert "brand-kit" in include and "examples" in include
     plugin = json.loads((REPO / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
     market = json.loads((REPO / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-    assert plugin["version"] == "0.1.0" == market["plugins"][0]["version"]
-    assert plugin["name"] == "nj-linkedin" == market["plugins"][0]["name"]
-    assert "## [0.1.0]" in (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert plugin["version"] == "0.1.1" == market["plugins"][0]["version"]
+    assert plugin["name"] == "profile-wrap" == market["plugins"][0]["name"]
+    assert "## [0.1.1]" in (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
 def test_ci_runs_tests_leak_scan_and_lint_on_three_operating_systems():
     text = (REPO / ".github" / "workflows" / "ci.yml").read_text(encoding="utf-8")
-    for needle in ("ubuntu-latest", "macos-latest", "windows-latest", "njli.compliance lint",
-                   "njli.leakcheck scan --tree", "njli demo run", "njli init --demo --yes"):
+    for needle in ("ubuntu-latest", "macos-latest", "windows-latest", "profile_wrap.compliance lint",
+                   "profile_wrap.leakcheck scan --tree", "profile-wrap demo run", "profile-wrap init --demo --yes"):
         assert needle in text, needle

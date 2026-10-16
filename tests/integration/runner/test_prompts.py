@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import claude_runner as cr
+from profile_wrap import claude_runner as cr
 
 ROOT = Path(__file__).resolve().parents[3]
 PROMPTS = ROOT / "prompts"
@@ -64,15 +64,15 @@ def test_no_worker_prompt_asks_for_a_shell_or_a_sign_in(name):
 @pytest.mark.parametrize("name", MINE)
 def test_the_prompts_are_generic_no_names_paths_or_fonts(name):
     t = text(name)
-    # private names are checked by `njli leaks scan` with the owner's salted denylist, never listed here
+    # private names are checked by `profile-wrap leaks scan` with the owner's salted denylist, never listed here
     for bad in ("Ma" + "ya", "Thman" + "yah", "Cai" + "ro", "O" + ":" + "\\",
                 "C:" + "\\Us" + "ers", "/Us" + "ers/", "@gm" + "ail", "linkedin.com/" + "in/"):
         assert bad not in t, (name, bad)
 
 
 def test_build_and_fix_fill_completely_from_the_orchestrators_values(tmp_path):
-    from njli.plan import build_week as bw
-    from njli import config
+    from profile_wrap.plan import build_week as bw
+    from profile_wrap import config
     cfg = config.defaults("UTC")
     ws = tmp_path
     values = bw.prompt_values(ws, cfg, {"slug": "s", "format": "gif", "lang": "ar", "claims": ["F01"]}, "2026-11-03T10:07:00+00:00")

@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import schemalite as sl
+from profile_wrap import schemalite as sl
 
 REPO = Path(__file__).resolve().parents[3]
 

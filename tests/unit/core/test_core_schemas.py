@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pytest
 
-from njli import config, schemalite
+from profile_wrap import config, schemalite
 
 REPO = Path(__file__).resolve().parents[3]
 FIX = Path(__file__).parent / "fixtures" / "answers"

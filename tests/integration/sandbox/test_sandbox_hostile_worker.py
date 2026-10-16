@@ -10,7 +10,7 @@ import pytest
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "runner"))
 import wsfix  # noqa: E402
 
-from njli import claude_runner as cr  # noqa: E402
+from profile_wrap import claude_runner as cr  # noqa: E402
 
 ALLOW = ["drafts/d1/**"]
 EXPECT = ["drafts/d1/caption.txt", "drafts/d1/meta.json"]
@@ -96,7 +96,7 @@ def test_a_secret_shaped_string_in_a_written_file_fails_the_job(ws, cfg):
 
 
 def test_secret_shaped_stderr_is_redacted_in_the_result(ws, cfg, tmp_path):
-    from njli.sandbox import scan_secrets
+    from profile_wrap.sandbox import scan_secrets
     token = "AQV" + "x9" * 60
     assert scan_secrets(token)
     assert "[REDACTED]" in cr.redact("log line " + token)
@@ -113,7 +113,7 @@ def test_a_symlink_in_the_allowlist_is_removed(ws, cfg):
 
 
 def test_a_changed_file_too_large_to_copy_aside_is_unrestorable(ws, cfg, monkeypatch):
-    from njli import sandbox
+    from profile_wrap import sandbox
     big = ws / "brand" / "big.bin"
     big.parent.mkdir(parents=True, exist_ok=True)
     big.write_bytes(b"0" * 4096)
@@ -138,7 +138,7 @@ def test_the_environment_is_scrubbed_and_the_prompt_is_not_in_argv(ws, cfg, monk
     env = {k.upper() for k in rep["env"]}
     assert "LINKEDIN_CLIENT_SECRET" not in env and "GITHUB_TOKEN" not in env
     assert "ANTHROPIC_API_KEY" not in env
-    assert "PYTHONUTF8" in env and "NJLI_WORKER" in env
+    assert "PYTHONUTF8" in env and "PROFILE_WRAP_WORKER" in env
     joined = " ".join(rep["argv"])
     assert "ROOT:" not in joined and "FAKE:" not in joined, "the prompt travels on stdin"
     assert Path(rep["cwd"]).resolve() == (ws / "work" / "sandbox" / "hostile").resolve()

@@ -6,9 +6,9 @@ import json
 
 import pytest
 
-from njli import cli, config, limits
-from njli.plan import timing
-from njli.plan.spread import parse_hhmm
+from profile_wrap import cli, config, limits
+from profile_wrap.plan import timing
+from profile_wrap.plan.spread import parse_hhmm
 
 DAY = dt.date(2026, 11, 3)
 
@@ -26,7 +26,7 @@ def test_the_recipe_data_is_complete_and_dated():
 
 
 def test_every_region_timezone_loads():
-    from njli import tzutil
+    from profile_wrap import tzutil
     for region in timing.load_recipe()["regions"]:
         assert tzutil.is_valid_timezone(region["tz"]), region
 
@@ -72,7 +72,7 @@ def test_the_command_prints_the_commands_to_apply_it(mkws, capsys):
     ws = mkws(locale__timezone="Europe/Lisbon")
     assert cli.main(["plan", "recipe", "--audience", "gulf", "--workspace", str(ws), "--json"]) == 0
     out = json.loads(capsys.readouterr().out)
-    assert any(c.startswith("njli config set posting.window '{") for c in out["commands"])
+    assert any(c.startswith("profile-wrap config set posting.window '{") for c in out["commands"])
     assert out["per_region"]["gulf"] and out["regions"] == ["gulf"]
     assert cli.main(["plan", "recipe", "--list", "--workspace", str(ws)]) == 0
     assert "Asia/Dubai" in capsys.readouterr().out

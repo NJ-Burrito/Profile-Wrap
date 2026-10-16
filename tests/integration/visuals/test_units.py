@@ -15,7 +15,7 @@ from pathlib import Path
 import pytest
 
 from conftest import REPO, load_cfg, new_workspace
-from njli.visuals import VisualsError, browser, fonts, gif, icons, metrics, motion_upgrade, proc, signature_trace
+from profile_wrap.visuals import VisualsError, browser, fonts, gif, icons, metrics, motion_upgrade, proc, signature_trace
 
 
 # ------------------------------------------------------------------ fonts
@@ -79,10 +79,10 @@ def test_discovery_order(tmp_path):
     for p in (a, b, c):
         p.write_text("x")
     cfg = {"render": {"chrome_path": str(a)}}
-    env = {"NJLI_BROWSER": str(b), "HYPERFRAMES_BROWSER_PATH": str(c)}
+    env = {"PROFILE_WRAP_BROWSER": str(b), "HYPERFRAMES_BROWSER_PATH": str(c)}
     assert browser.discover(cfg, env, use_npx=False).source == "config render.chrome_path"
-    assert browser.discover({}, env, use_npx=False).source == "NJLI_BROWSER"
-    del env["NJLI_BROWSER"]
+    assert browser.discover({}, env, use_npx=False).source == "PROFILE_WRAP_BROWSER"
+    del env["PROFILE_WRAP_BROWSER"]
     assert browser.discover({}, env, use_npx=False).source == "HYPERFRAMES_BROWSER_PATH"
     del env["HYPERFRAMES_BROWSER_PATH"]
     seen = []
@@ -397,7 +397,7 @@ def test_trace_png_with_the_sig_extra(tmp_path):
 # ------------------------------------------------------------------ the library files and the leak scan
 
 KIT = REPO / "brand-kit"
-# Private names are checked by `njli leaks scan` with the owner's salted denylist, never listed here.
+# Private names are checked by `profile-wrap leaks scan` with the owner's salted denylist, never listed here.
 _PRIVATE = []
 FONT_NAMES = ["thman" + "yah", "cai" + "ro"]
 BS = chr(92)
@@ -421,8 +421,8 @@ def test_brand_kit_has_no_font_photo_or_personal_string():
 
 
 def test_shipped_visual_sources_are_clean():
-    roots = [REPO / "njli" / "visuals", REPO / "data" / "fonts-ofl.json", REPO / "docs" / "MOTION.md",
-             REPO / "docs" / "FONTS.md", REPO / "skills" / "njl-visuals"]
+    roots = [REPO / "profile_wrap" / "visuals", REPO / "data" / "fonts-ofl.json", REPO / "docs" / "MOTION.md",
+             REPO / "docs" / "FONTS.md", REPO / "skills" / "pw-visuals"]
     files = []
     for r in roots:
         if r.is_file():
@@ -451,17 +451,17 @@ def test_objects_pack_is_rebuilt_from_the_svgs():
     if not node:
         pytest.skip("node not installed")
     data = KIT / "motion" / "objects.data.js"
-    before = data.read_bytes()
+    before = data.read_bytes().replace(b"\r\n", b"\n")
     r = subprocess.run([node, str(KIT / "objects" / "build.mjs")], capture_output=True, text=True, timeout=60)
     assert r.returncode == 0 and "49 objects" in r.stdout
-    assert data.read_bytes() == before                         # the committed pack equals the pack built from the .svg files
+    assert data.read_bytes().replace(b"\r\n", b"\n") == before                         # the committed pack equals the pack built from the .svg files
 
 
 # ------------------------------------------------------------------ CLI wiring (the real entry point)
 
 def _cli(*argv, cwd=REPO):
     env = dict(os.environ, PYTHONPATH=str(REPO), PYTHONUTF8="1")
-    return subprocess.run([sys.executable, "-m", "njli", *argv], capture_output=True, text=True, env=env,
+    return subprocess.run([sys.executable, "-m", "profile_wrap", *argv], capture_output=True, text=True, env=env,
                           cwd=str(cwd), timeout=60)
 
 

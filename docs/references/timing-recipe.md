@@ -1,6 +1,6 @@
 # Timing recipe
 
-How `njli plan recipe` turns "where my audience is" into a posting window, and how far to trust it.
+How `profile-wrap plan recipe` turns "where my audience is" into a posting window, and how far to trust it.
 The data is in `data/timing-recipe.json`; this page is the reading guide.
 
 Not advice about how to win. These are studies of other people's accounts. Your own numbers, once you have
@@ -20,7 +20,7 @@ for you.
 
 ## The recipe
 
-1. Take `locale.audience_regions`. `njli plan recipe --list` shows the region ids and their timezones.
+1. Take `locale.audience_regions`. `profile-wrap plan recipe --list` shows the region ids and their timezones.
 2. Take a slice of the audience's afternoon: **15:30 to 18:59 audience-local**. It is 3 hours 29 minutes wide,
    inside the Buffer peak and around its best slots, and narrow enough that two consecutive daily posts stay
    at least 20 hours apart whatever minute each gets.
@@ -28,7 +28,7 @@ for you.
 4. With several regions, use the part they share when it is at least 60 minutes wide. Otherwise the recipe
    uses the first region you listed and tells you, so list the audience that matters most first.
 5. If the slice crosses midnight in your timezone, it is moved to stay inside one day and the tool warns you.
-6. Apply it with `njli plan recipe --audience <ids> --apply`, which sets `posting.window` (both ends at once,
+6. Apply it with `profile-wrap plan recipe --audience <ids> --apply`, which sets `posting.window` (both ends at once,
    because the width rule is checked on the pair) and `locale.audience_regions`. The config validator checks
    the width.
 

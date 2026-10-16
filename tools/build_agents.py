@@ -6,7 +6,7 @@
     python tools/build_agents.py --table                 print the tier / effort / tools table (for docs/MODEL-TIERS.md)
     python tools/build_agents.py --single --out dist/x   render with models.mode = single
 
-It uses the same code as `njli agents render`, so what CI checks is what users get. The standard
+It uses the same code as `profile-wrap agents render`, so what CI checks is what users get. The standard
 library is enough; run it from the repository root.
 """
 from __future__ import annotations
@@ -19,7 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from njli import agents_render, config  # noqa: E402
+from profile_wrap import agents_render, config  # noqa: E402
 
 
 def main(argv=None) -> int:

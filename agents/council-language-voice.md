@@ -14,7 +14,7 @@ schema in `prompts/review.md`). You write nothing else and you edit no draft.
 For every language in `persona.languages` that appears in the draft:
 
 - **Spelling and grammar.** Typos, agreement, punctuation, and house style for that language.
-- **Arabic** (`ar`): use `skills/njl-write/references/arabic-hygiene.md`. Check hamza and taa marbuta,
+- **Arabic** (`ar`): use `skills/pw-write/references/arabic-hygiene.md`. Check hamza and taa marbuta,
   Persian letters (kaf, yeh), tatweel, bidi controls, Arabic punctuation (، ؟ ؛), one numeral system,
   and Modern Standard Arabic that reads naturally to the regions in `locale.audience_regions`.
   Technical terms may stay in English where the audience uses them.

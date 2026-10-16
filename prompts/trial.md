@@ -1,6 +1,6 @@
 # Trial prompt (motion round: one variant of a GIF direction)
 
-Template. The motion round (devil, trials, council, promote) is a mode of `njl-visuals`. For each trial the
+Template. The motion round (devil, trials, council, promote) is a mode of `pw-visuals`. For each trial the
 orchestrator fills the `{{...}}` fields and sends this to one writer worker. Trials run in their own folders and
 never touch the shared motion library, so several can run at once. The user approves the winner by eye before
 any rollout.

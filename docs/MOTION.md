@@ -1,7 +1,7 @@
 # Motion standard v4
 
 The rules every animated post follows. The library is `brand-kit/motion/` (copied into your workspace as `brand/motion/`
-and into each video project as `videos/<slug>/motion/`). The numbers below are enforced by `njli visuals metrics` and by the
+and into each video project as `videos/<slug>/motion/`). The numbers below are enforced by `profile-wrap visuals metrics` and by the
 composition's own probe, not by taste.
 
 ## What a GIF post is
@@ -36,7 +36,7 @@ empirical default, not a LinkedIn guarantee). One paused GSAP timeline, rendered
    `shot-plan.json`, computed from the colours as written).
 7. **One flash per loop**, never red, at most `gate.gif.flash_max_per_s` (default 3) a second.
 8. **Arabic.** Word-level masks only, never letter-by-letter. Letter-spacing 0, line-height 1.4, extra mask headroom. Strikes and
-   whips run right to left and the split mirrors. Code stays left to right. See `skills/njl-visuals/references/arabic-rtl.md`.
+   whips run right to left and the split mirrors. Code stays left to right. See `skills/pw-visuals/references/arabic-rtl.md`.
 9. **Cast rule.** Real objects from the kit (`brand-kit/objects/core`, 37 objects; `maker`, 12 more), never a flat swatch or
    coloured square for a real thing. No emoji glyphs on frames; Lucide icons for small UI symbols. Objects take the post's
    palette through `--obj-*` variables and the light through `M.objects.follow`.
@@ -58,10 +58,10 @@ empirical default, not a LinkedIn guarantee). One paused GSAP timeline, rendered
 
 ## Wiring
 
-`njli new-gif <slug>` copies `brand-kit/templates/gif-project` into `videos/<slug>/` and syncs `core.js`, `identity.js`,
+`profile-wrap new-gif <slug>` copies `brand-kit/templates/gif-project` into `videos/<slug>/` and syncs `core.js`, `identity.js`,
 `motion.css`, `objects.data.js`, a generated `brand.js` and `assets/fonts.css`, and GSAP into `vendor/`. The page loads GSAP as a
 classic script, then `import * as M from "./motion/core.js"`. Lint wants a literal `window.__timelines["<id>"] = tl` after
-`M.loop.register(...)`. The template's probe writes `window.__probe` into a `data-probe` attribute; `njli render` reads it before
+`M.loop.register(...)`. The template's probe writes `window.__probe` into a `data-probe` attribute; `profile-wrap render` reads it before
 the slow render and stops on any problem.
 
 ## Library layout
@@ -70,7 +70,7 @@ the slow render and stops on any problem.
 - `identity.js`: the opt-in identity card and signature beat. It reads `window.__brand.identity` and has no defaults.
 - `motion.css`: layer and structure classes; fonts through `--brand-*` variables.
 - `motion.legacy.js`: camera, depth, ambient, bokeh. Optional, off by default.
-- `VERSION`: `njli motion status` lists projects whose library differs; `njli motion upgrade --queued-only` re-renders them.
+- `VERSION`: `profile-wrap motion status` lists projects whose library differs; `profile-wrap motion upgrade --queued-only` re-renders them.
 
 ## Counters
 

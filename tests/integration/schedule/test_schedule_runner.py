@@ -1,4 +1,4 @@
-"""``njli run <job>``: pause, locks, jitter, hard timeout with tree kill, logs, dry run, tool checks, daemon."""
+"""``profile-wrap run <job>``: pause, locks, jitter, hard timeout with tree kill, logs, dry run, tool checks, daemon."""
 from __future__ import annotations
 
 import datetime as dt
@@ -13,10 +13,10 @@ from pathlib import Path
 import pytest
 
 from schedhelp import cfg_of
-from njli import limits
-from njli.plan.locking import guarded
-from njli.schedule import proctree, runner
-from njli.schedule.jobs import JOB_TABLE
+from profile_wrap import limits
+from profile_wrap.plan.locking import guarded
+from profile_wrap.schedule import proctree, runner
+from profile_wrap.schedule.jobs import JOB_TABLE
 
 PY = sys.executable
 
@@ -140,13 +140,13 @@ def test_the_child_gets_a_scrubbed_environment(mkws, monkeypatch):
     ws = mkws()
     for name in ("LINKEDIN_CLIENT_SECRET", "GITHUB_TOKEN", "AWS_SECRET_ACCESS_KEY", "SOME_SHELL_TOKEN"):
         monkeypatch.setenv(name, "must-not-leak")
-    monkeypatch.setenv("NJLI_TEST", "1")
+    monkeypatch.setenv("PROFILE_WRAP_TEST", "1")
     marker = ws / "work" / "env.json"
     out = go(ws, argv_override=[PY, "-c", f"import os, json; open({str(marker)!r}, 'w').write(json.dumps(sorted(os.environ)))"])
     assert out.ok
     env = {k.upper() for k in json.loads(marker.read_text(encoding="utf-8"))}
     assert not env & {"LINKEDIN_CLIENT_SECRET", "GITHUB_TOKEN", "AWS_SECRET_ACCESS_KEY", "SOME_SHELL_TOKEN"}
-    assert "PYTHONUTF8" in env and "NJLI_TEST" in env and "PATH" in env
+    assert "PYTHONUTF8" in env and "PROFILE_WRAP_TEST" in env and "PATH" in env
 
 
 def test_a_missing_tool_is_a_message_not_a_traceback(mkws, monkeypatch, tmp_path):
@@ -154,7 +154,7 @@ def test_a_missing_tool_is_a_message_not_a_traceback(mkws, monkeypatch, tmp_path
     sent = []
     monkeypatch.setattr(runner, "notify", lambda *a, **k: sent.append(a))
     monkeypatch.setenv("PATH", str(tmp_path))
-    monkeypatch.delenv("NJLI_CLAUDE_BIN", raising=False)
+    monkeypatch.delenv("PROFILE_WRAP_CLAUDE_BIN", raising=False)
     monkeypatch.setattr(runner.claude_runner.paths, "home", lambda: tmp_path / "nohome")
     out = runner.run_job(ws, cfg_of(ws), "build_week", run=lambda *a, **k: pytest.fail("ran without claude"))
     assert out.exit == 1 and out.status == "tool_missing" and "tool missing: claude" in out.message
@@ -186,15 +186,15 @@ def test_build_week_dry_run_passes_dry_run_down_and_spends_no_tokens(mkws):
 
 
 def test_dry_run_of_the_real_build_week_command_end_to_end(mkws, tmp_path, monkeypatch):
-    """A real child process: `njli run build_week --dry-run` -> `njli build-week --dry-run`; no worker, no model."""
+    """A real child process: `profile-wrap run build_week --dry-run` -> `profile-wrap build-week --dry-run`; no worker, no model."""
     ws = mkws()
     spy = tmp_path / "claude-spy.txt"
     shim = tmp_path / "claude_shim.py"
     shim.write_text(f"open({str(spy)!r}, 'a').write('called')\n", encoding="utf-8")
-    monkeypatch.setenv("NJLI_CLAUDE_BIN", str(shim))
+    monkeypatch.setenv("PROFILE_WRAP_CLAUDE_BIN", str(shim))
     out = runner.run_job(ws, cfg_of(ws), "build_week", dry_run=True, notify_user=False,
                          run=lambda cmd, **kw: proctree.run_tree(cmd, timeout=120, cwd=kw.get("cwd"),
-                                                                 env={**runner.child_env(cfg_of(ws)), "NJLI_CONFIG_DIR": os.environ["NJLI_CONFIG_DIR"]}))
+                                                                 env={**runner.child_env(cfg_of(ws)), "PROFILE_WRAP_CONFIG_DIR": os.environ["PROFILE_WRAP_CONFIG_DIR"]}))
     assert out.ok, out.message
     assert not spy.exists(), "no claude process was started"
 
@@ -237,16 +237,16 @@ def test_logs_rotate_by_size(mkws):
 
 
 def test_a_prompt_less_cli_entry_smoke_of_the_real_command(mkws, tmp_path):
-    """ENTRY_SMOKE: the real `python -m njli run ...` path, as the scheduler calls it."""
+    """ENTRY_SMOKE: the real `python -m profile_wrap run ...` path, as the scheduler calls it."""
     ws = mkws()
     env = {**os.environ, "PYTHONUTF8": "1"}
     root = str(Path(__file__).resolve().parents[3])
     env["PYTHONPATH"] = root
-    r = subprocess.run([PY, "-m", "njli", "run", "doctor_weekly", "--dry-run", "--workspace", str(ws)],
+    r = subprocess.run([PY, "-m", "profile_wrap", "run", "doctor_weekly", "--dry-run", "--workspace", str(ws)],
                        capture_output=True, text=True, env=env, timeout=120, encoding="utf-8")
     assert r.returncode == 0, r.stderr
     assert "dry_run" in r.stdout
-    r = subprocess.run([PY, "-m", "njli", "run", "nope", "--workspace", str(ws)], capture_output=True, text=True,
+    r = subprocess.run([PY, "-m", "profile_wrap", "run", "nope", "--workspace", str(ws)], capture_output=True, text=True,
                        env=env, timeout=120, encoding="utf-8")
     assert r.returncode == 2
 
@@ -271,7 +271,7 @@ def test_the_daemon_fires_jobs_by_the_same_rules(mkws):
     fired = runner.daemon(ws, cfg, tick_s=600, now=lambda: state["t"], sleep=sleep, run=fake, max_ticks=8, out=out.append)
     assert fired == ["board", "token_check"]
     assert dict(ran)["board"] == "09:00" and dict(ran)["token_check"] in ("09:30", "09:40")
-    assert any("njli daemon" in ln for ln in out)
+    assert any("profile-wrap daemon" in ln for ln in out)
 
 
 def test_the_daemon_runs_interval_jobs_repeatedly(mkws):

@@ -1,6 +1,6 @@
 # Build prompt (writer worker)
 
-Template. `njli build-week` fills the `{{...}}` fields and sends this to one writer worker on stdin. The
+Template. `profile-wrap build-week` fills the `{{...}}` fields and sends this to one writer worker on stdin. The
 worker has Read, Glob, Grep and Write and no shell: it writes the draft files, and the orchestrator renders
 and runs the gate after it exits. Edit this file in your workspace's `prompts/` to change how drafts are
 written; upgrades merge your edit with the shipped version.
@@ -20,12 +20,12 @@ report.
 
 ## Read first (only these)
 
-- `{{voice_file}}`: the persona's voice. `{{story_bank}}` if it exists. `config/njli.json` for persona,
+- `{{voice_file}}`: the persona's voice. `{{story_bank}}` if it exists. `config/profile-wrap.json` for persona,
   pillars and audience.
 - `{{facts_file}}`: the facts register, read-only. A number in this post comes only from a **verified** row.
   Claims for this entry: {{claims}}.
-- `skills/njl-write/references/caption-rules.md` and the style preset file for `{{style_preset}}`
-  (`skills/njl-write/references/`: `impact-copy.md`, `adhd-style-preset.md`, or the plain rules in
+- `skills/pw-write/references/caption-rules.md` and the style preset file for `{{style_preset}}`
+  (`skills/pw-write/references/`: `impact-copy.md`, `adhd-style-preset.md`, or the plain rules in
   `caption-rules.md`).
 - For `slides` or `gif`: `config/brand.json` and the brand folder it points to. For `gif` also
   `brand/motion/MOTION.md` and the project folder `{{project_dir}}/`, which the orchestrator has already

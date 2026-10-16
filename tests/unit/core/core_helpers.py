@@ -10,7 +10,7 @@ from typing import Optional
 
 import pytest
 
-from njli import tzutil
+from profile_wrap import tzutil
 
 REPO = Path(__file__).resolve().parents[3]
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -27,9 +27,9 @@ def load_answers_fixture(name: str) -> dict:
 
 
 def run_cli(*argv: str, cwd: Optional[Path] = None, env: Optional[dict] = None):
-    """Run ``python -m njli`` for real and return the CompletedProcess."""
+    """Run ``python -m profile_wrap`` for real and return the CompletedProcess."""
     full_env = dict(os.environ)
     full_env.update(env or {})
     full_env["PYTHONPATH"] = str(REPO) + os.pathsep + full_env.get("PYTHONPATH", "")
-    return subprocess.run([sys.executable, "-m", "njli", *argv], capture_output=True, text=True,
+    return subprocess.run([sys.executable, "-m", "profile_wrap", *argv], capture_output=True, text=True,
                           cwd=str(cwd or REPO), env=full_env, timeout=120)

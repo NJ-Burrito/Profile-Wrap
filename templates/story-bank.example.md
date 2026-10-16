@@ -2,7 +2,7 @@
 
 Copy this file to `profile/story-bank.md`. It is the raw material a post is made of: real roles,
 turning points and mistakes. A draft with nothing concrete to draw on is a sign the bank is thin.
-Interview yourself with the `njl-research` skill ("interview me") to fill it. Every figure you put here
+Interview yourself with the `pw-research` skill ("interview me") to fill it. Every figure you put here
 still has to become a verified fact before a post may use it.
 
 The file stays private: the workspace `.gitignore` lists it.

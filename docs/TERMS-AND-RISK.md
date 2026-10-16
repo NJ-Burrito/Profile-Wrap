@@ -37,12 +37,12 @@ No sign-in handling, no browser against linkedin.com, no message reading, no inv
 
 ## How acknowledgements work
 
-- `njli config ack <action>` asks you to type a fixed sentence. It stores the date and the sha256 of this page and `compliance.md`.
-- If an update changes either page, the hash no longer matches. The action goes back to draft or notify, and `njli doctor` and the board say so, until you accept the new text.
+- `profile-wrap config ack <action>` asks you to type a fixed sentence. It stores the date and the sha256 of this page and `compliance.md`.
+- If an update changes either page, the hash no longer matches. The action goes back to draft or notify, and `profile-wrap doctor` and the board say so, until you accept the new text.
 - Upgrades never silently weaken a safety setting.
 
 ## If something goes wrong
 
-- Run `njli pause --all` to stop every job and API call. Run `njli schedule remove` to remove the scheduled jobs.
-- A post marked `needs_check` may or may not be live. Open LinkedIn, look, then confirm with `njli post <slug> --resolve --posted` or `--not-posted`. The package never reposts on its own.
+- Run `profile-wrap pause --all` to stop every job and API call. Run `profile-wrap schedule remove` to remove the scheduled jobs.
+- A post marked `needs_check` may or may not be live. Open LinkedIn, look, then confirm with `profile-wrap post <slug> --resolve --posted` or `--not-posted`. The package never reposts on its own.
 - To stop using the API entirely, remove the app's token from the config directory and delete the app in LinkedIn's developer portal.

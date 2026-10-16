@@ -1,5 +1,8 @@
 # Line endings: launchers are fixed so they run on every OS
 * text=auto
-bin/njli text eol=lf
+bin/profile-wrap text eol=lf
 *.cmd text eol=crlf
 *.sh text eol=lf
+brand-kit/**/*.js text eol=lf
+brand-kit/**/*.svg text eol=lf
+*.js text eol=lf

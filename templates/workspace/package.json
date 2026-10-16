@@ -1,8 +1,8 @@
 {
-  "name": "nj-linkedin-workspace-{{profile_id}}",
+  "name": "profile-wrap-workspace-{{profile_id}}",
   "private": true,
   "type": "module",
-  "description": "Pinned renderers for this nj-linkedin workspace. Installed by 'njli assets fetch'.",
+  "description": "Pinned renderers for this Profile-Wrap workspace. Installed by 'profile-wrap assets fetch'.",
   "engines": { "node": ">={{pin.node_min}}" },
   "dependencies": {
     "gsap": "{{pin.gsap}}",

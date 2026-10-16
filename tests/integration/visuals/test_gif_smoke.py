@@ -20,7 +20,7 @@ def _draft(ws, slug):
 
 def test_template_renders_to_a_gate_clean_gif(stack_ws):
     need_gif_stack()
-    from njli.visuals import gif, metrics
+    from profile_wrap.visuals import gif, metrics
     ws, cfg = stack_ws, load_cfg(stack_ws)
     draft = _draft(ws, "smoke")
     gif.new_gif("smoke", ws, cfg, title="Smoke")
@@ -48,11 +48,11 @@ def test_template_renders_to_a_gate_clean_gif(stack_ws):
 
 def test_missing_font_fails_before_any_render(ws):
     """Negative test: no fonts installed means the render stops with a clear error, never a fallback face."""
-    from njli.visuals import fonts, gif
+    from profile_wrap.visuals import fonts, gif
     cfg = load_cfg(ws)
     plan = fonts.resolve(cfg, ws)
     assert not plan.ok
-    with pytest.raises(fonts.FontError, match="njli fonts fetch"):
+    with pytest.raises(fonts.FontError, match="profile-wrap fonts fetch"):
         fonts.require(plan)
     _draft(ws, "nofont")
     gif.new_gif("nofont", ws, cfg)

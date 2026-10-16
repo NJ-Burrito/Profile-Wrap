@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="pw-token" content="__TOKEN__">
+<title>__TITLE__ - Profile-Wrap</title>
+<link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/gui.css">
+</head>
+<body data-screen="__SCREEN__">
+<a class="skip" href="#main">Skip to content</a>
+<div class="shell">
+  <header class="side">
+    <div class="brand"><img src="/assets/mark.svg" alt="" width="28" height="28"><span>Profile-Wrap</span></div>
+    <nav aria-label="Screens" id="nav">
+      <a href="/?t=__TOKEN__" data-nav="home"><span class="kbd" aria-hidden="true">1</span>Home</a>
+      <a href="/board?t=__TOKEN__" data-nav="board"><span class="kbd" aria-hidden="true">2</span>Board</a>
+      <a href="/providers?t=__TOKEN__" data-nav="providers"><span class="kbd" aria-hidden="true">3</span>Providers</a>
+      <a href="/build?t=__TOKEN__" data-nav="build"><span class="kbd" aria-hidden="true">4</span>Build</a>
+      <a href="/settings?t=__TOKEN__" data-nav="settings"><span class="kbd" aria-hidden="true">5</span>Settings</a>
+    </nav>
+    <div class="side-foot">
+      <button type="button" id="theme" class="ghost" aria-label="Switch between light and dark">Theme</button>
+      <p class="muted small">Version __VERSION__<br>Independent, not affiliated with LinkedIn.</p>
+    </div>
+  </header>
+  <main id="main" tabindex="-1">
+    <h1 id="title">__TITLE__</h1>
+    <div id="view" aria-live="polite" aria-busy="true"><p class="muted">Loading</p></div>
+    <p id="status" class="status" role="status" aria-live="polite"></p>
+  </main>
+</div>
+<noscript><p class="noscript">This app needs JavaScript, which runs only from this local server.</p></noscript>
+<script src="/assets/gui.js" defer></script>
+</body>
+</html>

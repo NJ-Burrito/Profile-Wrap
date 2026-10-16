@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "profile-wrap-codex",
+  "version": "0.2.0",
+  "description": "Fact-gated, compliance-first content pipeline for LinkedIn, for Codex: setup, plan the week, write with gates, visuals, ship with Allow. Independent, not affiliated with LinkedIn.",
+  "author": { "name": "profile-wrap contributors" },
+  "homepage": "https://github.com/NJ-Burrito/profile-wrap",
+  "repository": "https://github.com/NJ-Burrito/profile-wrap",
+  "license": "MIT",
+  "keywords": ["content", "official-api", "arabic", "bilingual", "fact-gate", "agent-skills"],
+  "skills": "./skills",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Profile-Wrap",
+        "shortDescription": "Plan, write, gate and ship your posts with a human Allow click",
+        "longDescription": "Five skills that drive the profile-wrap command line: set up a workspace, plan the week, write drafts that pass the fact and style gates, build visuals, and ship through the official API only after you press Allow. Independent, not affiliated with LinkedIn.",
+        "developerName": "profile-wrap contributors",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://github.com/NJ-Burrito/profile-wrap"
+      }
+    }
+  }
+}

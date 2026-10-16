@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "profile-wrap-mcp"
+version = "0.2.0"
+description = "MCP server (stdio) for Profile-Wrap: workspace status, drafts, gate, facts, review state, and posting of board-Allowed drafts only. Not affiliated with LinkedIn."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "profile-wrap contributors" }]
+keywords = ["mcp", "model-context-protocol", "profile-wrap", "content", "official-api", "bilingual"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+]
+dependencies = [
+  "profile_wrap>=0.2.0,<0.3",
+  "mcp>=2.3,<3",
+]
+
+[project.urls]
+Homepage = "https://github.com/NJ-Burrito/profile-wrap"
+Documentation = "https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/MCP.md"
+Issues = "https://github.com/NJ-Burrito/profile-wrap/issues"
+
+[project.scripts]
+profile-wrap-mcp = "profile_wrap_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["profile_wrap_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

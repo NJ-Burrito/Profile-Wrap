@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: |
           for f in dist-release/*; do python release/desktop/selftest_artifact.py "$f"; done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: desktop-${{ matrix.label }}
           path: dist-release/*
@@ -86,7 +86,7 @@ jobs:
         run: python -m build --outdir dist/profile-wrap .
       - name: Build profile-wrap-mcp
         run: python -m build --outdir dist/profile-wrap-mcp mcp
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: python-dist
           path: dist/
@@ -114,7 +114,7 @@ jobs:
         uses: actions/attest-build-provenance@v2
         with:
           subject-path: "release-files/*"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: release-files
           path: release-files/*

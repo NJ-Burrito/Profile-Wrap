@@ -41,7 +41,7 @@ Needs: a PyPI account and the repo `NJ-Burrito/profile-wrap` public. Files: `.gi
    | Owner | `NJ-Burrito` | `NJ-Burrito` |
    | Repository | `profile-wrap` | `profile-wrap` |
    | Workflow filename | `release.yml` | `release.yml` |
-   | Environment | `pypi` | `pypi` |
+   | Environment | `pypi` | `pypi-mcp` |
 
 3. On GitHub: Settings > Environments > New environment `pypi` (optionally require your approval as reviewer).
 

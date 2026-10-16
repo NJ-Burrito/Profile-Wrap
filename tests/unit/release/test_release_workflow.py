@@ -51,10 +51,15 @@ def test_pypi_trusted_publishing():
     block = _job_block("publish-pypi")
     assert re.search(r"^    environment: pypi$", block, re.M)
     assert re.search(r"permissions:\n      id-token: write", block)
-    assert block.count("pypa/gh-action-pypi-publish@") == 2
-    assert "packages-dir: dist/profile-wrap\n" in block and "packages-dir: dist/profile-wrap-mcp" in block
+    assert block.count("pypa/gh-action-pypi-publish@") == 1
+    assert "packages-dir: dist/profile-wrap\n" in block
     assert "password" not in block and "secrets." not in block, "trusted publishing needs no token"
     assert "startsWith(github.ref, 'refs/tags/v')" in block
+    # PyPI allows one project per (repository, workflow, environment): the MCP package has its own environment.
+    mcp = _job_block("publish-pypi-mcp")
+    assert re.search(r"^    environment: pypi-mcp$", mcp, re.M)
+    assert re.search(r"permissions:\n      id-token: write", mcp)
+    assert "packages-dir: dist/profile-wrap-mcp" in mcp and "secrets." not in mcp
 
 
 def test_python_dist_builds_both_packages():

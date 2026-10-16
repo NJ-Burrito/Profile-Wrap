@@ -1,112 +1,69 @@
 # Quickstart
 
-Five minutes from nothing to a working demo, then about an hour to your first real draft.
-Python 3.10 or newer is the only requirement for steps 1 and 2.
+⏱️ About 5 minutes. No coding.
 
-## 1. Install
+## 1️⃣ Download
 
-```bash
-uv tool install profile-wrap          # or: pipx install profile-wrap, or: python -m pip install profile-wrap
-profile-wrap --version
-```
+Go to the [Releases page](https://github.com/NJ-Burrito/profile-wrap/releases/latest).
 
-As a Claude Code plugin instead: `/plugin marketplace add NJ-Burrito/profile-wrap`, then
-`/plugin install profile-wrap@profile-wrap`, then say "set up LinkedIn".
+Scroll to **Assets**. Pick the file for your computer:
 
-On Windows, `tzdata` is installed with the package. If `profile-wrap doctor` says it cannot load a time zone,
-run `uv pip install tzdata`.
+🪟 Windows: the file ending in `windows-x64.zip`
 
-## 2. Run the demo
+🍎 Mac with an Apple chip (M1 or newer): `macos-arm64.zip`
 
-```bash
-profile-wrap init --demo --yes
-profile-wrap demo run
-```
+💻 Mac with an Intel chip: `macos-x64.zip`
 
-What you should see: a list of `PASS` lines (init, doctor, facts lint, three gates, the sample GIF,
-board health, Allow, a post to the fake LinkedIn, `due`, the fake `claude`, the scheduler preview, the
-leak scan) and a last line like `17 of 17 steps passed`. The exit code is 0.
+🐧 Linux: `linux-x64.tar.gz`
 
-Nothing leaves your machine. The "LinkedIn" is a small server on 127.0.0.1, the "model" is a script,
-and the config and data folders are temporary. The persona, Maya Rivera, is fictional.
+Not sure which Mac? Apple menu, then **About This Mac**. It says "Apple M..." or "Intel".
 
-Want to look around? `profile-wrap init --demo --yes` printed the workspace path. Then:
+You will see: the file lands in your Downloads folder.
 
-```bash
-profile-wrap review list --workspace <that path>
-profile-wrap board --workspace <that path> --open
-```
+## 2️⃣ Open
 
-## 3. Check your machine
+Unzip the file. Double-click **Profile-Wrap**.
 
-```bash
-profile-wrap doctor
-```
+Your computer may show a warning. That is normal. The app is new and not on the big app stores yet.
 
-Every WARN says what it stops and gives the install line for your OS. You do not need all of them:
+🪟 **Windows says "Windows protected your PC"?**
+Click **More info**. Then click **Run anyway**.
 
-| You want | You need |
-|---|---|
-| Drafting by hand, the gate, the board | Python 3.10+ |
-| AI drafting and review | the `claude` CLI |
-| Slides and GIFs | Node 22+, Chrome or Chromium, and ffmpeg for GIFs |
+🍎 **Mac says it "cannot be opened"?**
+Right-click the app. Click **Open**. Click **Open** again.
 
-## 4. Set up your own workspace
+Full pictures-in-words: [docs/INSTALL-DESKTOP.md](docs/INSTALL-DESKTOP.md)
 
-In Claude Code, run `/profile-wrap:setup`. From a terminal:
+You will see: a window with a small practice account called Maya Rivera. She is made up. Nothing here touches your real LinkedIn yet.
 
-```bash
-profile-wrap init --express
-```
+## 3️⃣ Look around
 
-You answer seven questions (who you are, languages, timezone, goal, cadence). Everything else gets a
-conservative default: 3 posts a week, 3 comment drafts a day, notes under 200 characters.
+Click through the board. Each card is a post waiting for you.
 
-## 5. Add facts, plan, draft
+You will see: a button called **Allow** on every post.
 
-```bash
-profile-wrap facts add --claim "Cut the weekly review to 30 minutes" --numbers "30 minutes" --source notes/review.md
-profile-wrap facts verify F01 --evidence notes/review.md       # you, in a terminal; an agent cannot
-profile-wrap calendar fill --weeks 1
-profile-wrap build-week --dry-run
-profile-wrap gate <slug>
-```
+Tap **Allow** on one. In practice mode it "posts" to a pretend LinkedIn on your own computer. Nobody sees it.
 
-Every number in a caption must cite a verified fact with the same value and unit. That is the rule
-that stops invented results.
+## 4️⃣ Make it yours
 
-## 6. Review, allow, post
+The app asks a few easy questions: who you are, what languages you write in, how often you want to post.
 
-```bash
-profile-wrap board --open                    # or: profile-wrap review list
-profile-wrap review allow <slug>             # you decide
-profile-wrap post <slug> --dry               # preview, sends nothing
-profile-wrap post <slug> --now               # sends; needs your LinkedIn app (next step)
-```
+Then it asks you to check a few facts about you. This is how it avoids making things up. If a number is not on your list, it will not appear in a post.
 
-## 7. Connect your LinkedIn app (only for posting)
+## 5️⃣ Connect LinkedIn (only when you are ready to post)
 
-Follow [docs/linkedin-app-setup.md](docs/linkedin-app-setup.md): create a free developer app, add the
-"Share on LinkedIn" product, then:
+You make a free LinkedIn developer app. That is how LinkedIn lets people use its official posting door. The app guides you through it.
 
-```bash
-profile-wrap auth
-profile-wrap selftest
-```
+Easy guide: [docs/linkedin-app-setup.md](docs/linkedin-app-setup.md)
 
-`selftest` is read-only. It never posts.
+Never shares your password. Never needed.
 
-## 8. Automate (optional)
+## 🛑 Want to stop everything?
 
-```bash
-profile-wrap schedule install --dry-run      # shows the exact files and commands for your OS
-profile-wrap pause --all                     # the kill switch, any time
-```
+Open **Settings** in the app and press the big pause button. Nothing posts until you press it again.
 
-Unattended posting needs `posting.mode: api_scheduled` and a typed acknowledgement. Read
-[docs/TERMS-AND-RISK.md](docs/TERMS-AND-RISK.md) first.
+## 🆘 Stuck?
 
-## If something fails
+Open an [issue](https://github.com/NJ-Burrito/profile-wrap/issues) and say what you saw on the screen.
 
-`profile-wrap doctor`, then [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md). Paste the failing line of
-`profile-wrap demo run` into an issue; it has no private data.
+Developers: [docs/FOR-DEVELOPERS.md](docs/FOR-DEVELOPERS.md)

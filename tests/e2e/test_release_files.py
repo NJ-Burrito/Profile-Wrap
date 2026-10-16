@@ -105,7 +105,9 @@ def _write(tmp_path, data):
 
 def test_gitattributes_line_endings():
     lines = [ln.strip() for ln in (REPO / ".gitattributes").read_text(encoding="utf-8").splitlines() if ln.strip() and not ln.startswith("#")]
-    assert "* text=auto" in lines
     assert "bin/profile-wrap text eol=lf" in lines
-    assert "*.cmd text eol=crlf" in lines
-    assert "*.sh text eol=lf" in lines
+    assert "bin/*.cmd text eol=crlf" in lines
+    # Anthropic's plugin directory refuses a repo whose .gitattributes touches the plugin folder.
+    for ln in lines:
+        pattern = ln.split()[0]
+        assert not pattern.startswith(("*", "**", "plugins")), f"rule {ln!r} could match plugins/**"

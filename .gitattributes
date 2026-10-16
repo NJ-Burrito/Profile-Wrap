@@ -1,8 +1,8 @@
-# Line endings: launchers are fixed so they run on every OS
-* text=auto
+# Line endings, narrowed on purpose: no rule may match plugins/** (Anthropic's plugin directory rejects
+# a repository whose .gitattributes sets the text attribute on anything its validator reads).
 bin/profile-wrap text eol=lf
-*.cmd text eol=crlf
-*.sh text eol=lf
+bin/*.cmd text eol=crlf
 brand-kit/**/*.js text eol=lf
 brand-kit/**/*.svg text eol=lf
-*.js text eol=lf
+gui_assets/**/*.js text eol=lf
+profile_wrap/board/app/*.js text eol=lf

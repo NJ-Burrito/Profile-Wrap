@@ -203,15 +203,16 @@ def test_release_metadata_agrees_on_the_version():
         import tomllib
     except ImportError:          # Python 3.10
         import tomli as tomllib
+    from profile_wrap import __version__ as version
     meta = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))
-    assert meta["project"]["version"] == "0.1.1" and meta["project"]["readme"] == "README.md"
+    assert meta["project"]["version"] == version and meta["project"]["readme"] == "README.md"
     include = meta["tool"]["hatch"]["build"]["targets"]["wheel"]["force-include"]
     assert "brand-kit" in include and "examples" in include
     plugin = json.loads((REPO / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
     market = json.loads((REPO / ".claude-plugin" / "marketplace.json").read_text(encoding="utf-8"))
-    assert plugin["version"] == "0.1.1" == market["plugins"][0]["version"]
+    assert plugin["version"] == version == market["plugins"][0]["version"]
     assert plugin["name"] == "profile-wrap" == market["plugins"][0]["name"]
-    assert "## [0.1.1]" in (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert f"## [{version}]" in (REPO / "CHANGELOG.md").read_text(encoding="utf-8")
 
 
 def test_ci_runs_tests_leak_scan_and_lint_on_three_operating_systems():

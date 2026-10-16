@@ -1,0 +1,165 @@
+name: release
+# Tag v* builds everything and publishes. workflow_dispatch is a dry run: it builds and tests,
+# and skips PyPI, attestation upload to a release, and the GitHub Release.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version label for the dry run (e.g. 0.2.0-rc1)"
+        required: false
+        default: "0.0.0-dryrun"
+
+permissions:
+  contents: read
+
+env:
+  PYTHONUTF8: "1"
+
+jobs:
+  version:
+    name: resolve version
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.v.outputs.version }}
+      is_tag: ${{ steps.v.outputs.is_tag }}
+    steps:
+      - id: v
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+            echo "is_tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
+            echo "is_tag=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  desktop:
+    name: desktop build (${{ matrix.label }})
+    needs: version
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { label: windows-x64, os: windows-latest }
+          - { label: macos-arm64, os: macos-latest }
+          - { label: macos-x64, os: macos-26-intel }
+          - { label: linux-x64, os: ubuntu-latest }
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Linux web view libraries
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgirepository1.0-dev libcairo2-dev pkg-config python3-dev \
+            gir1.2-gtk-3.0 gir1.2-webkit2-4.1
+      - name: Install build tools
+        run: python -m pip install --upgrade pip && python -m pip install . pyinstaller pywebview keyring
+      - name: Build the app, run --selftest on it, pack it
+        run: python release/desktop/build.py --version "${{ needs.version.outputs.version }}" --out dist-release
+      - name: Smoke test the packed artifact (--selftest from a fresh unpack)
+        shell: bash
+        run: |
+          for f in dist-release/*; do python release/desktop/selftest_artifact.py "$f"; done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-${{ matrix.label }}
+          path: dist-release/*
+          if-no-files-found: error
+
+  python-dist:
+    name: python packages (sdist and wheel)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install --upgrade pip build
+      - name: Build profile-wrap
+        run: python -m build --outdir dist/profile-wrap .
+      - name: Build profile-wrap-mcp
+        run: python -m build --outdir dist/profile-wrap-mcp mcp
+      - uses: actions/upload-artifact@v4
+        with:
+          name: python-dist
+          path: dist/
+          if-no-files-found: error
+
+  checksums:
+    name: SHA256SUMS and provenance attestation
+    needs: [desktop, python-dist]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: collected
+      - name: Gather release files and write SHA256SUMS
+        run: |
+          mkdir release-files
+          find collected -type f \( -name '*.zip' -o -name '*.tar.gz' -o -name '*.whl' \) -exec cp {} release-files/ \;
+          cd release-files && sha256sum * > SHA256SUMS && cat SHA256SUMS
+      - name: Attest build provenance
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "release-files/*"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-files
+          path: release-files/*
+          if-no-files-found: error
+
+  publish-pypi:
+    name: publish to PyPI (trusted publishing)
+    needs: [desktop, python-dist]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: python-dist
+          path: dist
+      - name: Publish profile-wrap
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/profile-wrap
+      - name: Publish profile-wrap-mcp
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          packages-dir: dist/profile-wrap-mcp
+
+  github-release:
+    name: GitHub Release
+    needs: [checksums, publish-pypi, version]
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-files
+          path: release-files
+      - name: Notes from the CHANGELOG section
+        run: python release/desktop/changelog_section.py "${{ needs.version.outputs.version }}" CHANGELOG.md > notes.md
+      - name: Create the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release-files/* \
+            --title "Profile-Wrap ${GITHUB_REF_NAME#v}" --notes-file notes.md --verify-tag

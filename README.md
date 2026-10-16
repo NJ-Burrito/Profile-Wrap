@@ -32,6 +32,17 @@ It is a Claude Code plugin and a plain command line (`profile-wrap`). The Python
 library. Without Claude, without Node and without a LinkedIn app it still runs the demo, the gates
 and the board.
 
+## Pick how you use it
+
+| You are | Use | Start here |
+|---|---|---|
+| 🖥️ Anyone, no terminal | the desktop app (Windows, macOS, Linux) | download from [Releases](https://github.com/NJ-Burrito/profile-wrap/releases), then [docs/INSTALL-DESKTOP.md](docs/INSTALL-DESKTOP.md) |
+| 🔑 Any AI provider | Anthropic, OpenAI, OpenRouter, Gemini, Ollama or your own Claude Code | the app's Providers screen, or [docs/PROVIDERS.md](docs/PROVIDERS.md) |
+| 🧩 Claude Code user | the plugin | `/plugin marketplace add NJ-Burrito/profile-wrap` |
+| 🧩 Codex user | the Codex plugin and skills | [docs/CODEX.md](docs/CODEX.md) |
+| 🔌 Any MCP client | `profile-wrap-mcp` | [docs/MCP.md](docs/MCP.md) |
+| ⌨️ Terminal | the `profile-wrap` command | the quickstart below |
+
 ## Quickstart (5 minutes)
 
 You need Python 3.10 or newer. Nothing else.

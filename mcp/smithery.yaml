@@ -1,0 +1,15 @@
+# Smithery metadata for profile-wrap-mcp (stdio). Independent tool, not affiliated with LinkedIn.
+startCommand:
+  type: stdio
+  configSchema:
+    type: object
+    properties:
+      workspace:
+        type: string
+        description: Absolute path of the Profile-Wrap workspace folder.
+    required: []
+  commandFunction: |-
+    (config) => ({
+      command: "uvx",
+      args: ["profile-wrap-mcp"].concat(config.workspace ? ["--workspace", config.workspace] : [])
+    })

@@ -3,6 +3,22 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.2.0] - 2026-10-16
+
+### Added
+
+- Desktop app: `profile-wrap gui` opens a local window (Home, Board, Providers, Build, Settings), light and dark,
+  keyboard navigation. Downloadable builds for Windows, macOS and Linux on every GitHub Release (unsigned for now;
+  see `docs/INSTALL-DESKTOP.md`).
+- Any AI provider: Anthropic, OpenAI, OpenRouter, Google Gemini, local Ollama, or your own Claude Code. Keys are
+  stored in the operating system keychain and only ever sent to the provider you chose (`docs/PROVIDERS.md`).
+- `profile-wrap-mcp`: a separate MCP server with 8 tools; it posts only drafts you already Allowed on the board
+  (`docs/MCP.md`).
+- Claude Code plugin in `plugins/profile-wrap/` and an OpenAI Codex plugin with portable Agent Skills
+  (`docs/CODEX.md`).
+- Release pipeline: PyPI trusted publishing for `profile-wrap` and `profile-wrap-mcp`, SHA256SUMS and build
+  provenance; listing kits and privacy policy (`docs/DISTRIBUTION.md`, `docs/PRIVACY.md`).
+
 ## [0.1.1] - 2026-10-16
 
 ### Changed

@@ -1,0 +1,15 @@
+{
+  "name": "profile-wrap",
+  "version": "0.2.0",
+  "description": "Plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms. Fact-gated drafts, Arabic and English first-class, a review board, official API only. Independent, not affiliated with LinkedIn.",
+  "author": { "name": "Profile-Wrap contributors", "url": "https://github.com/NJ-Burrito" },
+  "homepage": "https://github.com/NJ-Burrito/profile-wrap",
+  "repository": "https://github.com/NJ-Burrito/profile-wrap",
+  "license": "MIT",
+  "keywords": ["linkedin", "content", "official-api", "arabic", "bilingual", "fact-gate", "posts"],
+  "documentationUrl": "https://github.com/NJ-Burrito/profile-wrap/blob/main/README.md",
+  "supportUrl": "https://github.com/NJ-Burrito/profile-wrap/issues",
+  "privacyPolicyUrl": "https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/NJ-Burrito/profile-wrap/blob/main/LICENSE",
+  "icon": "https://raw.githubusercontent.com/NJ-Burrito/profile-wrap/main/plugins/profile-wrap/assets/icon.svg"
+}

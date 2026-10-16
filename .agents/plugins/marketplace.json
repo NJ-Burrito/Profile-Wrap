@@ -1,0 +1,12 @@
+{
+  "name": "profile-wrap",
+  "interface": { "displayName": "Profile-Wrap" },
+  "plugins": [
+    {
+      "name": "profile-wrap-codex",
+      "source": { "source": "local", "path": "./plugins/profile-wrap-codex" },
+      "policy": { "installation": "AVAILABLE", "authentication": "ON_INSTALL" },
+      "category": "Productivity"
+    }
+  ]
+}

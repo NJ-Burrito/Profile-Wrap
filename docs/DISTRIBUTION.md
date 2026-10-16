@@ -17,9 +17,9 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 | Directory | Needs first | Who | Status | Date | Link |
 |---|---|---|---|---|---|
-| PyPI `profile-wrap` | pending publisher, tag `v0.2.0` | The maintainer (once) then CI | todo | 2026-10-16 | |
-| PyPI `profile-wrap-mcp` | PyPI `profile-wrap` live | The maintainer (once) then CI | todo | 2026-10-16 | |
-| Official MCP Registry | PyPI `profile-wrap-mcp` live | The maintainer (login) | todo | 2026-10-16 | |
+| PyPI `profile-wrap` | pending publisher, tag `v0.2.1` | The maintainer (once) then CI | done | 2026-10-16 | https://pypi.org/project/profile-wrap/ |
+| PyPI `profile-wrap-mcp` | PyPI `profile-wrap` live | The maintainer (once) then CI | done | 2026-10-16 | https://pypi.org/project/profile-wrap-mcp/ |
+| Official MCP Registry | PyPI `profile-wrap-mcp` live | The maintainer (login) | done | 2026-10-16 | io.github.NJ-Burrito/profile-wrap-mcp 0.2.1 |
 | mcp.so | public repo | The maintainer | todo | 2026-10-16 | |
 | Glama | `glama.json` on `main` | The maintainer (claim) | ready | 2026-10-16 | |
 | Smithery | MCPB bundle | Lead builds, the maintainer publishes | todo | 2026-10-16 | |

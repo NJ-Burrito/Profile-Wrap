@@ -3,14 +3,14 @@
   "owner": { "name": "Profile-Wrap contributors", "url": "https://github.com/NJ-Burrito" },
   "metadata": {
     "description": "Profile-Wrap: plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms.",
-    "version": "0.2.0"
+    "version": "0.2.1"
   },
   "plugins": [
     {
       "name": "profile-wrap",
       "source": "./plugins/profile-wrap",
       "description": "Fact-gated LinkedIn posts with Arabic and English first-class. Drafts, gates, review board and posting through your own official API app.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "license": "MIT",
       "category": "productivity",
       "keywords": ["linkedin", "content", "official-api", "arabic", "bilingual"]

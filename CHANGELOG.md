@@ -3,6 +3,13 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.2.1] - 2026-10-16
+
+### Fixed
+
+- Release pipeline: the MCP package publishes to PyPI from its own environment (`pypi-mcp`), because PyPI allows one
+  trusted publisher per repository, workflow and environment. The GitHub Release no longer waits on PyPI.
+
 ## [0.2.0] - 2026-10-16
 
 ### Added

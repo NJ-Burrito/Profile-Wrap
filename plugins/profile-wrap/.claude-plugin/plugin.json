@@ -1,6 +1,6 @@
 {
   "name": "profile-wrap",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms. Fact-gated drafts, Arabic and English first-class, a review board, official API only. Independent, not affiliated with LinkedIn.",
   "author": { "name": "Profile-Wrap contributors", "url": "https://github.com/NJ-Burrito" },
   "homepage": "https://github.com/NJ-Burrito/profile-wrap",

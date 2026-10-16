@@ -11,7 +11,7 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 1. Release v0.2.0 (tag, GitHub Release, CI green). 2. PyPI `profile-wrap`. 3. PyPI `profile-wrap-mcp` (needs 2).
 4. Official MCP Registry (needs 3). 5. mcp.so, Glama, Smithery (need the public repo; Smithery also needs the bundle).
-6. Anthropic plugin directory (needs 3, because the plugin starts `uvx profile-wrap-mcp==0.2.0`).
+6. Anthropic plugin directory (needs 3, because the plugin starts `uvx profile-wrap-mcp==0.2.1`).
 
 ## Status
 
@@ -48,7 +48,7 @@ Needs: a PyPI account and the repo `NJ-Burrito/profile-wrap` public. Files: `.gi
 **Lead/CI**: the PyPI job in `release.yml` has `permissions: id-token: write`, `environment: pypi`, builds both wheels and
 sdists and uploads with `pypa/gh-action-pypi-publish`; upload `profile-wrap` first, then `profile-wrap-mcp`.
 Commands to check before tagging: `uv build` and `uv build mcp`, then `uvx twine check dist/*`.
-Release: `git tag v0.2.0 && git push origin v0.2.0` (Lead only). Check after: `uvx profile-wrap-mcp==0.2.0 --help`.
+Release: `git tag v0.2.0 && git push origin v0.2.0` (Lead only). Check after: `uvx profile-wrap-mcp==0.2.1 --help`.
 
 ## 2. Official MCP Registry
 

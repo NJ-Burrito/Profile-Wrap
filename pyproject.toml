@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "profile_wrap"
-version = "0.2.0"
+version = "0.2.1"
 description = "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code (official API only)."
 readme = "README.md"
 requires-python = ">=3.10"

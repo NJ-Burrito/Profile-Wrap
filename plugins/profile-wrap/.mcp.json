@@ -2,7 +2,7 @@
   "mcpServers": {
     "profile-wrap": {
       "command": "uvx",
-      "args": ["profile-wrap-mcp==0.2.0"]
+      "args": ["profile-wrap-mcp==0.2.1"]
     }
   }
 }

@@ -121,7 +121,9 @@ def test_two_concurrent_due_runs_produce_one_post(env):
     states = [r["state"] for r in env.ledger_rows()]
     assert states.count("posted") == 1 and "needs_check" not in states
     results = [json.loads(o[0])["status"] for o in outs]
-    assert sorted(results) == ["posted", "refused"], results
+    # The loser either hits the posting lock ("refused") or, when it starts after the winner finished
+    # (slow runners, e.g. macOS CI), finds nothing due ("skipped"). Both are safe; one post is the invariant.
+    assert sorted(results) in (["posted", "refused"], ["posted", "skipped"]), results
 
 
 def test_status_and_post_dry_run_through_the_cli(env):

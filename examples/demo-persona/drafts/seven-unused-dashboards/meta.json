@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "slug": "seven-unused-dashboards",
+  "title": "Seven dashboards, no readers",
+  "lang": "en",
+  "format": "text",
+  "pillar": "P2",
+  "status": "revising",
+  "claims": [
+    "F02"
+  ],
+  "fictional": true,
+  "revision_note": "Shorten the third line."
+}

@@ -1,0 +1,324 @@
+{
+  "schema_version": 1,
+  "note": "Hook structures, not templates to paste. Examples are fictional (persona Maya Rivera) and carry no figures; any number you add must come through meta.claims.",
+  "formulas": [
+    {
+      "id": "anaphora",
+      "name": "Anaphora",
+      "structure_en": "Repeat one opening phrase three times, then land the point.",
+      "structure_ar": "كرّر جملة افتتاحية ثلاث مرات ثم اذكر الخلاصة.",
+      "good_for": [
+        "authority",
+        "network"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "a topic with only one point"
+      ],
+      "example_en": "I stopped guessing. I stopped copying. I started measuring.",
+      "fictional": true
+    },
+    {
+      "id": "rip",
+      "name": "R.I.P. the old way",
+      "structure_en": "R.I.P. {old habit}. Here is what replaced it.",
+      "structure_ar": "وداعا لـ {عادة قديمة}. وهذا ما حلّ مكانها.",
+      "good_for": [
+        "authority",
+        "clients"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "sensitive topics",
+        "when the old way is the reader's employer"
+      ],
+      "example_en": "R.I.P. the monthly status report.",
+      "fictional": true
+    },
+    {
+      "id": "year_pivot",
+      "name": "Year pivot",
+      "structure_en": "In {year} I did X. In {year} I do Y. The gap is the lesson.",
+      "structure_ar": "في {سنة} كنت أفعل س. اليوم أفعل ص. الفرق هو الدرس.",
+      "good_for": [
+        "authority",
+        "hiring"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "when no real change happened"
+      ],
+      "example_en": "In 2019 I handed in reports. Now I hand in decisions.",
+      "fictional": true
+    },
+    {
+      "id": "time_anchor",
+      "name": "Time anchor",
+      "structure_en": "{When} I {did X}. Here is what happened next.",
+      "structure_ar": "{متى} فعلت س. وهذا ما جرى بعد ذلك.",
+      "good_for": [
+        "authority",
+        "network"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "stories you cannot source"
+      ],
+      "example_en": "On Monday I deleted a dashboard nobody opened.",
+      "fictional": true
+    },
+    {
+      "id": "curiosity_gap",
+      "name": "Curiosity gap",
+      "structure_en": "State the result, hold back the method until line three.",
+      "structure_ar": "اذكر النتيجة وأجّل الطريقة إلى السطر الثالث.",
+      "good_for": [
+        "authority",
+        "clients"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "when the payoff is weak; the reader feels cheated"
+      ],
+      "example_en": "One chart fixed the weekly argument.",
+      "fictional": true
+    },
+    {
+      "id": "contrarian",
+      "name": "Contrarian",
+      "structure_en": "Common belief X is wrong for {audience}. Here is the evidence.",
+      "structure_ar": "الاعتقاد الشائع س خاطئ لـ {الجمهور}. وهذه الأدلة.",
+      "good_for": [
+        "authority"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "no evidence to show",
+        "attacking a named person"
+      ],
+      "example_en": "More data rarely settles the argument.",
+      "fictional": true
+    },
+    {
+      "id": "false_binary",
+      "name": "False binary",
+      "structure_en": "Skip the A-or-B debate; the order you do them in matters more.",
+      "structure_ar": "تجاوز جدال أ أو ب؛ ترتيب التنفيذ أهم.",
+      "good_for": [
+        "authority"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "when the two options really are exclusive"
+      ],
+      "example_en": "Skip the tool debate. The order of the questions matters more.",
+      "fictional": true
+    },
+    {
+      "id": "emotional_cold_open",
+      "name": "Emotional cold open",
+      "structure_en": "Open on the moment, one sentence, no context.",
+      "structure_ar": "ابدأ باللحظة نفسها في جملة واحدة بلا تمهيد.",
+      "good_for": [
+        "network",
+        "authority"
+      ],
+      "engagement": "likes",
+      "never_for": [
+        "private or third-party grief"
+      ],
+      "example_en": "The room went quiet when the chart loaded.",
+      "fictional": true
+    },
+    {
+      "id": "named_gratitude",
+      "name": "Named gratitude",
+      "structure_en": "Thank a real person for one specific thing they did.",
+      "structure_ar": "اشكر شخصا حقيقيا على شيء محدد فعله.",
+      "good_for": [
+        "network"
+      ],
+      "engagement": "likes",
+      "never_for": [
+        "without the person's consent",
+        "private_terms people"
+      ],
+      "example_en": "Thanks to a teammate who read my draft twice.",
+      "fictional": true
+    },
+    {
+      "id": "numbered_list",
+      "name": "Numbered list",
+      "structure_en": "{N} things about {topic}, one line each.",
+      "structure_ar": "{عدد} أشياء عن {الموضوع} في سطر لكل منها.",
+      "good_for": [
+        "authority",
+        "clients"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "lists padded to reach a round number"
+      ],
+      "example_en": "Five checks before I send a report.",
+      "fictional": true
+    },
+    {
+      "id": "before_after",
+      "name": "Before and after",
+      "structure_en": "Before: X. After: Y. The change: Z.",
+      "structure_ar": "قبل: س. بعد: ص. ما تغيّر: ع.",
+      "good_for": [
+        "clients",
+        "authority"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "no verified result behind it"
+      ],
+      "example_en": "Before: ten tabs of figures. After: one page.",
+      "fictional": true
+    },
+    {
+      "id": "mistake_confession",
+      "name": "Mistake confession",
+      "structure_en": "I got X wrong. Here is what it cost and what I do now.",
+      "structure_ar": "أخطأت في س. وهذه كلفته وما أفعله الآن.",
+      "good_for": [
+        "authority",
+        "network"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "mistakes that expose a client"
+      ],
+      "example_en": "I shipped a chart with the axis cut off.",
+      "fictional": true
+    },
+    {
+      "id": "behind_the_scenes",
+      "name": "Behind the scenes",
+      "structure_en": "Show the unglamorous middle of a piece of work.",
+      "structure_ar": "أظهر الجزء غير اللامع من منتصف العمل.",
+      "good_for": [
+        "authority",
+        "clients"
+      ],
+      "engagement": "likes",
+      "never_for": [
+        "confidential projects"
+      ],
+      "example_en": "What a messy spreadsheet looks like before it becomes a chart.",
+      "fictional": true
+    },
+    {
+      "id": "question_stakes",
+      "name": "Question with stakes",
+      "structure_en": "Ask one concrete question and say why the answer matters.",
+      "structure_ar": "اطرح سؤالا محددا واشرح لماذا تهمّ الإجابة.",
+      "good_for": [
+        "network"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "vague engagement bait such as 'thoughts?'"
+      ],
+      "example_en": "Which report did your team stop reading, and why?",
+      "fictional": true
+    },
+    {
+      "id": "myth_fact",
+      "name": "Myth and fact",
+      "structure_en": "Myth: X. Fact: Y, with the source.",
+      "structure_ar": "خرافة: س. حقيقة: ص، مع المصدر.",
+      "good_for": [
+        "authority"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "a fact you cannot source"
+      ],
+      "example_en": "Myth: a dashboard is a decision. Fact: a dashboard is a question.",
+      "fictional": true
+    },
+    {
+      "id": "one_line_lesson",
+      "name": "One-line lesson",
+      "structure_en": "Lead with the lesson, then the short story that earned it.",
+      "structure_ar": "ابدأ بالدرس ثم القصة القصيرة التي أنتجته.",
+      "good_for": [
+        "authority",
+        "network"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "lessons that do not follow from the story"
+      ],
+      "example_en": "Write the decision first, then the analysis.",
+      "fictional": true
+    },
+    {
+      "id": "reframe_quote",
+      "name": "Reframe a quote",
+      "structure_en": "Quote a familiar line and change one word.",
+      "structure_ar": "اقتبس عبارة مألوفة وغيّر كلمة واحدة.",
+      "good_for": [
+        "authority"
+      ],
+      "engagement": "reposts",
+      "never_for": [
+        "misattributed quotes"
+      ],
+      "example_en": "Done is better than perfect; reviewed is better than done.",
+      "fictional": true
+    },
+    {
+      "id": "mini_case",
+      "name": "Mini case",
+      "structure_en": "Problem, move, result in four short lines.",
+      "structure_ar": "مشكلة، خطوة، نتيجة في أربعة أسطر قصيرة.",
+      "good_for": [
+        "clients",
+        "authority",
+        "hiring"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "results not in the facts register"
+      ],
+      "example_en": "A clinic could not see its no-show pattern. I plotted it. They moved the reminder.",
+      "fictional": true
+    },
+    {
+      "id": "checklist_promise",
+      "name": "Checklist promise",
+      "structure_en": "Promise a checklist in the hook and deliver it in full.",
+      "structure_ar": "عِد بقائمة تحقق في الافتتاحية وسلّمها كاملة.",
+      "good_for": [
+        "clients",
+        "authority"
+      ],
+      "engagement": "saves",
+      "never_for": [
+        "when the list is thin"
+      ],
+      "example_en": "A checklist I run before I share any chart.",
+      "fictional": true
+    },
+    {
+      "id": "availability_note",
+      "name": "Availability note",
+      "structure_en": "Say what you do, for whom, and when you have room.",
+      "structure_ar": "اذكر ما تفعله ولمن ومتى يتوفر لديك وقت.",
+      "good_for": [
+        "clients",
+        "hiring"
+      ],
+      "engagement": "comments",
+      "never_for": [
+        "goal job_seeking (use job-seeking wording only when the goal allows it)"
+      ],
+      "example_en": "I help small non-profits read their own data. I have room for one project in spring.",
+      "fictional": true
+    }
+  ]
+}

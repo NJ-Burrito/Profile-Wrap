@@ -1,0 +1,54 @@
+<!-- sensor: ultrasonic distance sensor (HC-SR04 type) on a small cardboard stand. Colour: obj-base (board), obj-kraft (stand). Parts: eye x2 (transducers), sheen. Faces the viewer; sound leaves toward +x in the scene. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 112 130" width="112" height="130" data-object="sensor" style="overflow:visible">
+<style>
+svg[data-object="sensor"]{--obj-hi:color-mix(in srgb,var(--obj-base,#1f5fbf) 68%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#1f5fbf) 62%,#000);--obj-khi:color-mix(in srgb,var(--obj-kraft,#c99a62) 72%,#fff);--obj-klo:color-mix(in srgb,var(--obj-kraft,#c99a62) 62%,#000)}
+svg[data-object="sensor"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="sensor"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*4px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#1f5fbf)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="kraft" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-khi)"/><stop offset=".55" style="stop-color:var(--obj-kraft,#c99a62)"/><stop offset="1" style="stop-color:var(--obj-klo)"/></linearGradient>
+<linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7f9fc"/><stop offset=".5" stop-color="#b9c0cc"/><stop offset="1" stop-color="#6c7482"/></linearGradient>
+<radialGradient id="mesh" cx=".42" cy=".38" r=".75"><stop offset="0" stop-color="#4a5262"/><stop offset=".6" stop-color="#1c212b"/><stop offset="1" stop-color="#090b10"/></radialGradient>
+<linearGradient id="gold" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d6a1c"/><stop offset=".5" stop-color="#f4d680"/><stop offset="1" stop-color="#8d6a1c"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<pattern id="grid" width="3" height="3" patternUnits="userSpaceOnUse"><path d="M0 0 H3 M0 0 V3" stroke="#6b7384" stroke-width=".5" opacity=".6"/></pattern>
+<clipPath id="board"><rect x="0" y="0" width="112" height="70" rx="5"/></clipPath>
+<filter id="blur" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="56" cy="127" rx="42" ry="5" fill="#000" filter="url(#blur)"/>
+<rect x="46" y="80" width="20" height="40" fill="url(#kraft)"/>
+<rect x="46" y="80" width="20" height="40" fill="none" stroke="#000" stroke-opacity=".25" stroke-width="1.2"/>
+<rect x="24" y="116" width="64" height="10" rx="3" fill="url(#kraft)" stroke="#000" stroke-opacity=".28" stroke-width="1.2"/>
+<rect x="24" y="116" width="64" height="3" rx="1.5" fill="#fff" opacity=".28"/>
+<rect x="32" y="68" width="48" height="9" rx="1.5" fill="#15181f"/>
+<rect x="36" y="70" width="5" height="22" rx="1" fill="url(#gold)"/>
+<rect x="46" y="70" width="5" height="22" rx="1" fill="url(#gold)"/>
+<rect x="56" y="70" width="5" height="22" rx="1" fill="url(#gold)"/>
+<rect x="66" y="70" width="5" height="22" rx="1" fill="url(#gold)"/>
+<rect x="1.5" y="3" width="112" height="70" rx="5" fill="#000" opacity=".25"/>
+<rect x="0" y="0" width="112" height="70" rx="5" fill="url(#pcb)"/>
+<rect x="4" y="4" width="104" height="62" rx="3" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>
+<rect x="44" y="24" width="24" height="9" rx="1.5" fill="#15181f"/>
+<rect x="46" y="48" width="20" height="9" rx="4.5" fill="url(#rim)" stroke="#000" stroke-opacity=".3" stroke-width=".8"/>
+<circle cx="6.5" cy="6.5" r="2.4" fill="#0b1630"/><circle cx="105.5" cy="6.5" r="2.4" fill="#0b1630"/>
+<g data-part="eye" data-pivot="30 35">
+<circle cx="30" cy="36" r="24" fill="#000" opacity=".35"/>
+<circle cx="30" cy="35" r="24" fill="url(#rim)" stroke="#2a303b" stroke-width="1.4"/>
+<circle cx="30" cy="35" r="19" fill="#262c37"/>
+<circle cx="30" cy="35" r="16.5" fill="url(#mesh)"/>
+<circle cx="30" cy="35" r="16.5" fill="url(#grid)"/>
+<path d="M18 28 A15 15 0 0 1 36 20" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+</g>
+<g data-part="eye" data-pivot="82 35">
+<circle cx="82" cy="36" r="24" fill="#000" opacity=".35"/>
+<circle cx="82" cy="35" r="24" fill="url(#rim)" stroke="#2a303b" stroke-width="1.4"/>
+<circle cx="82" cy="35" r="19" fill="#262c37"/>
+<circle cx="82" cy="35" r="16.5" fill="url(#mesh)"/>
+<circle cx="82" cy="35" r="16.5" fill="url(#grid)"/>
+<path d="M70 28 A15 15 0 0 1 88 20" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2" stroke-linecap="round"/>
+</g>
+<g clip-path="url(#board)"><g class="hl"><ellipse cx="30" cy="8" rx="46" ry="14" fill="url(#hlg)" opacity=".5"/></g><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="26" height="72" fill="url(#sheeng)"/></g></g>
+<rect x="0" y="0" width="112" height="70" rx="5" fill="none" stroke="#050b1a" stroke-opacity=".65" stroke-width="1.6"/>
+</svg>

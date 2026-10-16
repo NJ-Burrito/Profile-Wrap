@@ -1,0 +1,45 @@
+# nj-linkedin workspace: private data stays out of git.
+# This file is managed by the plugin ("njli upgrade" replaces it only if you have not edited it).
+
+# Data about other people, and your own history of what was posted.
+/published/
+/engage/
+/metrics/
+/review/decisions.jsonl
+
+# Personal source material.
+/profile/exports/
+/profile/voice.md
+/profile/story-bank.md
+/brand/identity/*.jpg
+/brand/identity/*.jpeg
+/brand/identity/*.png
+/brand/identity/*.webp
+
+# Fonts are licensed files: never commit or upload them. Libraries are fetched at setup.
+/brand/fonts/
+/brand/vendor/
+*.woff
+*.woff2
+*.ttf
+*.otf
+*.eot
+
+# Secrets live in the config dir, never here. These patterns are a second line of defence.
+.env
+*.env
+token.json
+ack.json
+
+# Runtime state.
+/data/
+/work/
+/.njl/backup/
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Render leftovers.
+*.tmp.gif
+pal256.png

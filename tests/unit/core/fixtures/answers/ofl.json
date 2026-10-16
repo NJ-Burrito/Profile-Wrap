@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "where": {
+    "profile_id": "ofl"
+  },
+  "who": {
+    "name": "Robin Sample",
+    "languages": [
+      "en"
+    ],
+    "timezone": "Europe/Lisbon",
+    "goal": "network"
+  },
+  "brand": {
+    "font_source": "google_ofl",
+    "palette_mode": "fixed",
+    "identity": {
+      "enabled": true,
+      "name": "Robin Sample",
+      "signature": "typed"
+    }
+  },
+  "options": {
+    "git_commit": false
+  }
+}

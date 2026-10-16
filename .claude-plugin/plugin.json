@@ -1,0 +1,10 @@
+{
+  "name": "nj-linkedin",
+  "version": "0.1.0",
+  "description": "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code. Official API only, your own developer app, a human click for every invite.",
+  "author": { "name": "nj-linkedin contributors" },
+  "homepage": "https://github.com/NJ-Burrito/nj-linkedin",
+  "repository": "https://github.com/NJ-Burrito/nj-linkedin",
+  "license": "MIT",
+  "keywords": ["linkedin", "content", "official-api", "arabic", "bilingual", "fact-gate"]
+}

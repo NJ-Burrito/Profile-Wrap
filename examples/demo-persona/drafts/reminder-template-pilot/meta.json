@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "slug": "reminder-template-pilot",
+  "title": "A reminder template, tried by clinics",
+  "lang": "en",
+  "format": "text",
+  "pillar": "P2",
+  "status": "missed",
+  "claims": [
+    "F03"
+  ],
+  "fictional": true,
+  "scheduled_at": "2026-01-12T10:11:00+00:00"
+}

@@ -1,0 +1,36 @@
+<!-- volleyball: leather ball with three curved colour bands. Colour: obj-base (leather), obj-accent (bands). Parts: turn (roll), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" data-object="volleyball" style="overflow:visible">
+<style>
+svg[data-object="volleyball"]{--obj-hi:color-mix(in srgb,var(--obj-base,#f3ecdf) 70%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#f3ecdf) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#f3ecdf) 30%,#000);--obj-band:var(--obj-accent,#46d5ff)}
+svg[data-object="volleyball"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="volleyball"] .hl{transform:translate(calc(var(--light-x,-.6)*9px),calc(var(--light-y,-.6)*9px));opacity:calc(.7*var(--light-i,1))}
+</style>
+<defs>
+<clipPath id="clip"><circle cx="100" cy="92" r="80"/></clipPath>
+<radialGradient id="ball" cx=".38" cy=".32" r=".8"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".55" style="stop-color:var(--obj-base,#f3ecdf)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></radialGradient>
+<radialGradient id="shade" cx=".4" cy=".34" r=".72"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".42"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="104" cy="182" rx="62" ry="7" fill="#000" filter="url(#blur)"/>
+<circle cx="100" cy="92" r="80" fill="url(#ball)"/>
+<g clip-path="url(#clip)">
+<g data-part="turn" data-pivot="100 92">
+<path d="M8 66 Q64 70 118 6" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="30"/>
+<path d="M8 66 Q64 70 118 6" fill="none" style="stroke:var(--obj-band)" stroke-width="26"/>
+<path d="M8 60 Q64 64 114 2" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="3"/>
+<path d="M196 56 Q132 82 88 188" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="30"/>
+<path d="M196 56 Q132 82 88 188" fill="none" style="stroke:var(--obj-band)" stroke-width="26"/>
+<path d="M190 56 Q126 82 82 188" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="3"/>
+<path d="M-4 162 Q60 112 200 150" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="30"/>
+<path d="M-4 162 Q60 112 200 150" fill="none" style="stroke:var(--obj-band)" stroke-width="26"/>
+<path d="M-4 156 Q60 106 200 144" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="3"/>
+<path d="M44 14 Q60 74 8 120 M170 20 Q132 70 196 114 M60 188 Q96 138 150 188" fill="none" stroke="var(--obj-deep)" stroke-opacity=".38" stroke-width="2.4"/>
+</g>
+<circle cx="100" cy="92" r="80" fill="url(#shade)"/>
+<g class="hl"><ellipse cx="68" cy="52" rx="34" ry="20" fill="url(#hlg)" opacity=".7" transform="rotate(-28 68 52)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="30" height="190" fill="url(#sheeng)"/></g>
+</g>
+<circle cx="100" cy="92" r="80" fill="none" stroke="var(--obj-deep)" stroke-opacity=".6" stroke-width="2"/>
+</svg>

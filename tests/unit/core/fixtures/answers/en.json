@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "where": {
+    "profile_id": "en-only"
+  },
+  "who": {
+    "name": "Jordan Sample",
+    "handle": "jordan-sample-demo",
+    "role": "Support engineer",
+    "niche": "Support tooling",
+    "audience": "Support leads",
+    "languages": [
+      "en"
+    ],
+    "timezone": "America/New_York",
+    "goal": "authority"
+  },
+  "privacy": {
+    "private_terms": [
+      "Sample Corp"
+    ]
+  },
+  "facts": [
+    {
+      "claim": "Closed 40 tickets in a week",
+      "number": "40 tickets",
+      "source": "my own queue export"
+    }
+  ],
+  "voice": {
+    "style_preset": "plain",
+    "samples": [
+      "A short past post."
+    ]
+  },
+  "cadence": {
+    "per_week": 3
+  },
+  "options": {
+    "git_commit": false
+  }
+}

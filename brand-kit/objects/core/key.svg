@@ -1,0 +1,21 @@
+<!-- key: a brass key (a secret that must not go in a prompt). Colour: obj-base (brass). Parts: swing (whole key, pivot at the bow), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 100" width="180" height="100" data-object="key" style="overflow:visible">
+<style>
+svg[data-object="key"]{--obj-hi:color-mix(in srgb,var(--obj-base,#f5c320) 50%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#f5c320) 55%,#000)}
+svg[data-object="key"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="key"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*4px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="br" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#f5c320)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path fill-rule="evenodd" d="M36 14 A30 30 0 1 0 36 74 A30 30 0 1 0 36 14 Z M36 34 A10 10 0 1 1 36 54 A10 10 0 1 1 36 34 Z M62 38 H168 Q174 38 174 44 V50 Q174 56 168 56 H150 V70 Q150 74 146 74 H138 Q134 74 134 70 V56 H122 V66 Q122 70 118 70 H112 Q108 70 108 66 V56 H62 Z"/></clipPath>
+<filter id="blur" x="-20%" y="-80%" width="140%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="96" cy="92" rx="76" ry="5" fill="#000" filter="url(#blur)"/>
+<g data-part="swing" data-pivot="36 44">
+<path fill-rule="evenodd" d="M36 14 A30 30 0 1 0 36 74 A30 30 0 1 0 36 14 Z M36 34 A10 10 0 1 1 36 54 A10 10 0 1 1 36 34 Z M62 38 H168 Q174 38 174 44 V50 Q174 56 168 56 H150 V70 Q150 74 146 74 H138 Q134 74 134 70 V56 H122 V66 Q122 70 118 70 H112 Q108 70 108 66 V56 H62 Z" fill="url(#br)" stroke="#000" stroke-opacity=".55" stroke-width="1.6" stroke-linejoin="round"/>
+<circle cx="36" cy="44" r="19" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="2.4"/>
+<g clip-path="url(#clip)"><g class="hl"><rect x="10" y="14" width="164" height="9" rx="4" fill="#fff" opacity=".4"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-30" y="0" width="22" height="100" fill="url(#sheeng)"/></g></g>
+</g>
+</svg>

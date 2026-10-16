@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "id": "us",
+  "label": "United States (federal holidays, fixed dates)",
+  "recurring": [
+    {
+      "month_day": "01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "month_day": "12-25",
+      "name": "Christmas Day"
+    },
+    {
+      "month_day": "07-04",
+      "name": "Independence Day"
+    },
+    {
+      "month_day": "11-11",
+      "name": "Veterans Day"
+    }
+  ],
+  "ranges": [
+    {
+      "from": "2026-11-26",
+      "to": "2026-11-27",
+      "name": "Thanksgiving 2026"
+    },
+    {
+      "from": "2027-11-25",
+      "to": "2027-11-26",
+      "name": "Thanksgiving 2027"
+    },
+    {
+      "from": "2028-11-23",
+      "to": "2028-11-24",
+      "name": "Thanksgiving 2028"
+    }
+  ],
+  "window_shifts": []
+}

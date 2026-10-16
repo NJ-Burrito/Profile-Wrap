@@ -1,0 +1,38 @@
+<!-- crate: quarantine crate with a hinged lid, hazard tape and a hanging tag. Colour: obj-base (crate), obj-tape (tape), obj-ink (tape stripes). Parts: lid (pivot at the hinge), tag (swings), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 140" width="150" height="140" data-object="crate" style="overflow:visible">
+<style>
+svg[data-object="crate"]{--obj-hi:color-mix(in srgb,var(--obj-base,#8a93a8) 62%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#8a93a8) 60%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#8a93a8) 26%,#000)}
+svg[data-object="crate"] .sh{transform:translate(calc(var(--light-x,-.6)*-10px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="crate"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*4px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="body" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#8a93a8)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<pattern id="haz" width="22" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="22" height="22" style="fill:var(--obj-tape,#ffc247)"/><rect width="11" height="22" style="fill:var(--obj-ink,#16130c)"/></pattern>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><rect x="14" y="50" width="122" height="72" rx="6"/></clipPath>
+<filter id="blur" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="78" cy="128" rx="62" ry="7" fill="#000" filter="url(#blur)"/>
+<rect x="14" y="50" width="122" height="72" rx="6" style="fill:var(--obj-deep)"/>
+<rect x="14" y="50" width="122" height="72" rx="6" fill="url(#body)"/>
+<g clip-path="url(#clip)">
+<ellipse cx="75" cy="53" rx="56" ry="5" fill="#000" opacity=".55"/>
+<path d="M14 72 H136 M14 98 H136" stroke="#000" stroke-opacity=".28" stroke-width="2"/><path d="M14 74 H136 M14 100 H136" stroke="#fff" stroke-opacity=".16" stroke-width="1.2"/>
+<rect x="14" y="80" width="122" height="16" fill="url(#haz)"/>
+<path d="M14 80 H136 M14 96 H136" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/>
+<g class="hl"><rect x="18" y="52" width="10" height="68" fill="#fff" opacity=".3"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="40" width="26" height="90" fill="url(#sheeng)"/></g></g>
+<rect x="14" y="50" width="122" height="72" rx="6" fill="none" stroke="#000" stroke-opacity=".55" stroke-width="1.4"/>
+<g data-part="tag" data-pivot="120 84">
+<path d="M120 84 C124 94 122 98 124 104" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="1.6"/>
+<g transform="rotate(8 125 118)"><rect x="112" y="102" width="26" height="32" rx="4" fill="#f4f1e6" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/>
+<circle cx="125" cy="108" r="2.6" fill="#000" opacity=".5"/>
+<path d="M118 118 H132 M118 124 H130" stroke="#000" stroke-opacity=".35" stroke-width="2.2" stroke-linecap="round"/></g>
+</g>
+<g data-part="lid" data-pivot="16 50">
+<rect x="10" y="30" width="130" height="22" rx="5" fill="#000" opacity=".3" transform="translate(1.5 3)"/>
+<rect x="10" y="30" width="130" height="22" rx="5" fill="url(#body)" stroke="#000" stroke-opacity=".55" stroke-width="1.4"/>
+<rect x="14" y="33" width="122" height="4" rx="2" fill="#fff" opacity=".4"/>
+<rect x="64" y="38" width="22" height="9" rx="3" style="fill:var(--obj-deep)" stroke="#000" stroke-opacity=".4" stroke-width="1"/>
+</g>
+</svg>

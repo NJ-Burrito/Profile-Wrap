@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "rows": [
+    {
+      "name": "Lina Haddad (fictional)",
+      "profile_url": "https://www.linkedin.com/in/lina-haddad-demo/",
+      "why": "Commented twice",
+      "action": "connect",
+      "score": 8,
+      "note": "Hi Lina, your point on short reports stuck with me. Would be glad to connect.",
+      "status": "waiting",
+      "fictional": true
+    }
+  ]
+}

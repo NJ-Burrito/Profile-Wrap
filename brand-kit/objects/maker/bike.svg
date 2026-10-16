@@ -1,0 +1,50 @@
+<!-- bike: side view, heading left. Colours: obj-base (frame), obj-tire. Parts: wheelF, wheelB (spin about their hubs), crank (pedals), body (bounce/lean), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 140" width="220" height="140" data-object="bike" style="overflow:visible">
+<style>
+svg[data-object="bike"]{--obj-hi:color-mix(in srgb,var(--obj-base,#ff4f93) 62%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#ff4f93) 60%,#000)}
+svg[data-object="bike"] .sh{transform:translate(calc(var(--light-x,-.6)*-6px),0);opacity:calc(.3 + .22*var(--light-i,1))}
+svg[data-object="bike"] .hl{transform:translate(calc(var(--light-x,-.6)*4px),calc(var(--light-y,-.6)*2px));opacity:calc(.85*var(--light-i,1))}
+svg[data-object="bike"] .fr{fill:none;stroke:var(--obj-base,#ff4f93);stroke-width:7;stroke-linecap:round;stroke-linejoin:round}
+svg[data-object="bike"] .fo{fill:none;stroke:var(--obj-lo);stroke-width:10.5;stroke-linecap:round;stroke-linejoin:round}
+svg[data-object="bike"] .fh{fill:none;stroke:var(--obj-hi);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;opacity:.85}
+</style>
+<defs>
+<radialGradient id="hub" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset="1" stop-color="#9aa2ad"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M68 48 L134 50 L112 96 Z M40 56 H80 V70 H40 Z M120 30 H156 V46 H120 Z"/></clipPath>
+<filter id="blur" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<ellipse class="sh" cx="110" cy="136" rx="92" ry="5" fill="#000" filter="url(#blur)"/>
+<g data-part="wheelF" data-pivot="46 94">
+<circle cx="46" cy="94" r="37" fill="none" style="stroke:var(--obj-tire,#0c1114)" stroke-width="7"/>
+<circle cx="46" cy="94" r="33" fill="none" stroke="#c9d0d8" stroke-width="2"/>
+<g stroke="#c9d0d8" stroke-width="1.6" stroke-linecap="round"><path d="M46 62 V126 M14 94 H78 M23.4 71.4 L68.6 116.6 M68.6 71.4 L23.4 116.6"/></g>
+<circle cx="46" cy="61" r="3.2" style="fill:var(--obj-base,#ff4f93)"/>
+</g>
+<g data-part="wheelB" data-pivot="174 94">
+<circle cx="174" cy="94" r="37" fill="none" style="stroke:var(--obj-tire,#0c1114)" stroke-width="7"/>
+<circle cx="174" cy="94" r="33" fill="none" stroke="#c9d0d8" stroke-width="2"/>
+<g stroke="#c9d0d8" stroke-width="1.6" stroke-linecap="round"><path d="M174 62 V126 M142 94 H206 M151.4 71.4 L196.6 116.6 M196.6 71.4 L151.4 116.6"/></g>
+<circle cx="174" cy="61" r="3.2" style="fill:var(--obj-base,#ff4f93)"/>
+</g>
+<g data-part="body" data-pivot="110 100">
+<path class="fo" d="M46 94 L68 48 L134 50 L112 96 L174 94 L134 50 M68 48 L112 96 M134 50 L136 38"/>
+<path class="fo" d="M68 48 L62 36 L46 34"/>
+<path class="fr" d="M46 94 L68 48 L134 50 L112 96 L174 94 L134 50 M68 48 L112 96 M134 50 L136 38"/>
+<path class="fh" d="M70 46 L131 47.6"/>
+<path class="fr" d="M68 48 L62 36 L46 34"/>
+<path d="M30 30 Q46 22 62 31" fill="none" stroke="#10151a" stroke-width="6" stroke-linecap="round"/>
+<path d="M122 34 Q140 28 156 36 Q146 44 128 42 Z" fill="#10151a" stroke="#000" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M126 34 Q140 31 150 35" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.6" stroke-linecap="round"/>
+<g data-part="crank" data-pivot="112 96">
+<path d="M112 96 L96 118" stroke="#10151a" stroke-width="5" stroke-linecap="round"/>
+<path d="M112 96 L128 74" stroke="#10151a" stroke-width="5" stroke-linecap="round"/>
+<rect x="86" y="116" width="20" height="6" rx="3" fill="#10151a"/>
+<rect x="120" y="70" width="20" height="6" rx="3" fill="#10151a"/>
+<circle cx="112" cy="96" r="9" fill="url(#hub)" stroke="#10151a" stroke-width="1.4"/>
+</g>
+<circle cx="46" cy="94" r="5.5" fill="url(#hub)" stroke="#10151a" stroke-width="1.2"/>
+<circle cx="174" cy="94" r="5.5" fill="url(#hub)" stroke="#10151a" stroke-width="1.2"/>
+</g>
+<g clip-path="url(#clip)"><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="22" height="140" fill="url(#sheeng)"/></g></g>
+</svg>

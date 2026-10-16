@@ -1,0 +1,31 @@
+<!-- database: stacked data disks with a sparkle (data and AI). Colours: obj-base (disks), obj-accent (sparkle). Parts: spark, sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" data-object="database" style="overflow:visible">
+<style>
+svg[data-object="database"]{--obj-hi:color-mix(in srgb,var(--obj-base,#8fe3ff) 55%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#8fe3ff) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#8fe3ff) 30%,#000)}
+svg[data-object="database"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .18*var(--light-i,1))}
+svg[data-object="database"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*6px));opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="side" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--obj-lo)"/><stop offset=".3" style="stop-color:var(--obj-hi)"/><stop offset=".62" style="stop-color:var(--obj-base,#8fe3ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<radialGradient id="topg" cx=".38" cy=".3" r=".9"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-hi) 60%,#fff)"/><stop offset=".7" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-base,#8fe3ff)"/></radialGradient>
+<radialGradient id="sg" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#fff"/><stop offset=".5" style="stop-color:var(--obj-accent,#ff8a4c)"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--obj-accent,#ff8a4c) 55%,#000)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M18 30 V90 A42 14 0 0 0 102 90 V30 A42 14 0 0 0 18 30 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="60" cy="108" rx="44" ry="7" fill="#000" filter="url(#blur)"/>
+<path d="M18 30 V90 A42 14 0 0 0 102 90 V30 Z" fill="url(#side)" stroke="var(--obj-deep)" stroke-width="2.4" stroke-linejoin="round"/>
+<path d="M18 50 A42 14 0 0 0 102 50" fill="none" stroke="var(--obj-deep)" stroke-width="2.2"/>
+<path d="M18 70 A42 14 0 0 0 102 70" fill="none" stroke="var(--obj-deep)" stroke-width="2.2"/>
+<path d="M18 52 A42 14 0 0 0 102 52" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.2"/>
+<path d="M18 72 A42 14 0 0 0 102 72" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.2"/>
+<g fill="var(--obj-deep)" fill-opacity=".6"><circle cx="34" cy="44" r="2.6"/><circle cx="34" cy="64" r="2.6"/><circle cx="34" cy="84" r="2.6"/></g>
+<ellipse cx="60" cy="30" rx="42" ry="14" fill="url(#topg)" stroke="var(--obj-deep)" stroke-width="2.4"/>
+<ellipse cx="60" cy="30" rx="30" ry="9" fill="none" stroke="var(--obj-deep)" stroke-opacity=".35" stroke-width="1.6"/>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="40" cy="40" rx="12" ry="40" fill="url(#hlg)" opacity=".5"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="30" height="120" fill="url(#sheeng)"/></g></g>
+<g data-part="spark" data-pivot="96 22">
+<path d="M96 4 C97.6 15 100 18 110 20 C100 22 97.6 25 96 38 C94.4 25 92 22 82 20 C92 18 94.4 15 96 4 Z" transform="translate(0 2)" fill="url(#sg)" stroke="#4a2410" stroke-opacity=".7" stroke-width="1.6" stroke-linejoin="round"/>
+</g>
+</svg>

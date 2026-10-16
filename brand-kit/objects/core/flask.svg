@@ -1,0 +1,37 @@
+<!-- flask: glass Erlenmeyer flask with liquid and bubbles. Colour: obj-base (liquid). Parts: liquid (slosh), bubble (3), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 200" width="120" height="200" data-object="flask" style="overflow:visible">
+<style>
+svg[data-object="flask"]{--obj-hi:color-mix(in srgb,var(--obj-base,#2fc3e6) 60%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#2fc3e6) 60%,#000)}
+svg[data-object="flask"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="flask"] .hl{transform:translate(calc(var(--light-x,-.6)*3px),0);opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<path id="glass" d="M46 18 H74 V66 L108 156 Q114 174 94 174 H26 Q6 174 12 156 L46 66 Z"/>
+<clipPath id="clip"><use href="#glass"/></clipPath>
+<linearGradient id="liq" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".35" style="stop-color:var(--obj-base,#2fc3e6)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="gl" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".05"/><stop offset="1" stop-color="#fff" stop-opacity=".16"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="64" cy="178" rx="48" ry="6" fill="#000" filter="url(#blur)"/>
+<use href="#glass" fill="#fff" fill-opacity=".1"/>
+<g clip-path="url(#clip)">
+<g data-part="liquid" data-pivot="60 172">
+<path d="M-20 122 Q-4 115 12 122 T44 122 T76 122 T108 122 T140 122 V200 H-20 Z" fill="url(#liq)"/>
+<path d="M-20 122 Q-4 115 12 122 T44 122 T76 122 T108 122 T140 122" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2"/>
+<ellipse cx="60" cy="121" rx="32" ry="3" fill="#fff" opacity=".18"/>
+</g>
+<circle data-part="bubble" cx="48" cy="150" r="4.5" fill="#fff" fill-opacity=".25" stroke="#fff" stroke-opacity=".85" stroke-width="1.4"/>
+<circle data-part="bubble" cx="70" cy="158" r="3.2" fill="#fff" fill-opacity=".25" stroke="#fff" stroke-opacity=".85" stroke-width="1.4"/>
+<circle data-part="bubble" cx="60" cy="140" r="2.4" fill="#fff" fill-opacity=".25" stroke="#fff" stroke-opacity=".85" stroke-width="1.4"/>
+<rect width="120" height="200" fill="url(#gl)"/>
+<path d="M12 156 Q8 172 26 174 H94 Q112 172 108 156 L104 150 Q100 166 90 166 H30 Q20 166 16 150 Z" fill="#000" opacity=".16"/>
+<g class="hl"><path d="M44 72 L20 148" stroke="#fff" stroke-width="3.6" stroke-linecap="round" fill="none" opacity=".8"/><path d="M50 26 V58" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".8"/></g>
+<path d="M76 70 L100 142" stroke="#fff" stroke-opacity=".3" stroke-width="2" stroke-linecap="round" fill="none"/>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="26" height="200" fill="url(#sheeng)"/></g>
+</g>
+<use href="#glass" fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="2" stroke-linejoin="round"/>
+<use href="#glass" fill="none" stroke="var(--obj-lo)" stroke-opacity=".55" stroke-width=".8" stroke-linejoin="round"/>
+<rect x="41" y="12" width="38" height="9" rx="4" fill="#fff" fill-opacity=".35" stroke="#fff" stroke-opacity=".85" stroke-width="1.6"/>
+<path d="M82 100 h8 M90 118 h8 M97 136 h8" stroke="#fff" stroke-opacity=".7" stroke-width="1.6" stroke-linecap="round"/>
+</svg>

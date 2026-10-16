@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/connect.schema.json",
+  "title": "Connection shortlist (engage/connect.json)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profile_url": {
+            "type": "string",
+            "pattern": "^https://www\\.linkedin\\.com/"
+          },
+          "why": {
+            "type": "string"
+          },
+          "action": {
+            "enum": [
+              "connect",
+              "follow"
+            ]
+          },
+          "score": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "status": {
+            "enum": [
+              "waiting",
+              "sent",
+              "skipped",
+              "passed"
+            ]
+          },
+          "post_url": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "passed_until": {
+            "type": "string",
+            "format": "date"
+          },
+          "fictional": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "profile_url",
+          "status"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "rows"
+  ]
+}

@@ -1,0 +1,31 @@
+<!-- agent: friendly robot head (the AI agent). Colour: obj-base (shell), obj-accent (eyes, antenna light). Parts: eye (2, blink), antenna (twitch), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 176" width="160" height="176" data-object="agent" style="overflow:visible">
+<style>
+svg[data-object="agent"]{--obj-hi:color-mix(in srgb,var(--obj-base,#2340e0) 50%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#2340e0) 60%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#2340e0) 20%,#000)}
+svg[data-object="agent"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="agent"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*5px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="hd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".45" style="stop-color:var(--obj-base,#2340e0)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="vz" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-deep) 70%,#000)"/><stop offset="1" style="stop-color:var(--obj-deep)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><rect x="20" y="30" width="120" height="100" rx="30"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="82" cy="170" rx="50" ry="6" fill="#000" filter="url(#blur)"/>
+<rect x="64" y="128" width="32" height="14" rx="3" style="fill:var(--obj-deep)"/>
+<rect x="38" y="138" width="84" height="28" rx="12" fill="url(#hd)" stroke="#000" stroke-opacity=".5" stroke-width="1.4"/>
+<rect x="64" y="148" width="32" height="8" rx="4" fill="#000" opacity=".28"/>
+<g data-part="antenna" data-pivot="80 30"><rect x="77.5" y="8" width="5" height="24" rx="2.5" style="fill:var(--obj-deep)"/><circle cx="80" cy="9" r="7.5" style="fill:var(--obj-accent,#f5c320)" stroke="#000" stroke-opacity=".45" stroke-width="1.3"/><circle cx="77.6" cy="6.6" r="2.4" fill="#fff" opacity=".8"/></g>
+<rect x="8" y="64" width="16" height="34" rx="6" style="fill:var(--obj-lo)" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/>
+<rect x="136" y="64" width="16" height="34" rx="6" style="fill:var(--obj-lo)" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/>
+<rect x="20" y="30" width="120" height="100" rx="30" fill="url(#hd)"/>
+<rect x="33" y="47" width="94" height="60" rx="24" fill="url(#vz)" stroke="#000" stroke-opacity=".6" stroke-width="1.4"/>
+<g style="fill:var(--obj-accent,#f5c320)"><ellipse data-part="eye" data-pivot="60 77" cx="60" cy="77" rx="9.5" ry="12"/><ellipse data-part="eye" data-pivot="100 77" cx="100" cy="77" rx="9.5" ry="12"/></g>
+<g fill="#fff" opacity=".85"><circle cx="57" cy="72" r="3"/><circle cx="97" cy="72" r="3"/></g>
+<path d="M66 118 H94" stroke="#000" stroke-opacity=".3" stroke-width="3" stroke-linecap="round"/><path d="M72 123 H88" stroke="#000" stroke-opacity=".22" stroke-width="3" stroke-linecap="round"/>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="52" cy="40" rx="38" ry="12" fill="url(#hlg)" opacity=".6" transform="rotate(-8 52 40)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="28" height="140" fill="url(#sheeng)"/></g></g>
+<rect x="20" y="30" width="120" height="100" rx="30" fill="none" stroke="#000" stroke-opacity=".55" stroke-width="1.6"/>
+</svg>

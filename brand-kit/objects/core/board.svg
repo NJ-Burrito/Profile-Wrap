@@ -1,0 +1,51 @@
+<!-- board: Arduino-style microcontroller board, top view. Colour: obj-base (PCB), obj-accent (status LED). Parts: led (glow), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 112" width="160" height="112" data-object="board" style="overflow:visible">
+<style>
+svg[data-object="board"]{--obj-hi:color-mix(in srgb,var(--obj-base,#0f8f8a) 70%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#0f8f8a) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#0f8f8a) 30%,#000)}
+svg[data-object="board"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(5px + var(--light-y,-.6)*-2px));opacity:calc(.3 + .18*var(--light-i,1))}
+svg[data-object="board"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*5px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="pcb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#0f8f8a)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6fa"/><stop offset=".5" stop-color="#b4bac6"/><stop offset="1" stop-color="#7b8190"/></linearGradient>
+<linearGradient id="blk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a3d46"/><stop offset="1" stop-color="#101216"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<radialGradient id="ledg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".3" style="stop-color:var(--obj-accent,#ffd25e)"/><stop offset="1" style="stop-color:var(--obj-accent,#ffd25e)" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><rect x="8" y="10" width="144" height="92" rx="9"/></clipPath>
+<filter id="blur" x="-20%" y="-30%" width="140%" height="180%"><feGaussianBlur stdDeviation="3.4"/></filter>
+</defs>
+<rect class="sh" x="12" y="20" width="144" height="90" rx="10" fill="#000" filter="url(#blur)"/>
+<rect x="8" y="12" width="144" height="92" rx="9" style="fill:var(--obj-deep)"/>
+<rect x="8" y="10" width="144" height="92" rx="9" fill="url(#pcb)"/>
+<g clip-path="url(#clip)">
+<path d="M20 36 H44 M20 44 H40 M92 80 H128 M98 74 H134 M60 88 H84" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="1.4" stroke-linecap="round"/>
+<g class="hl"><ellipse cx="50" cy="26" rx="62" ry="26" fill="url(#hlg)" opacity=".5"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-60" y="0" width="30" height="112" fill="url(#sheeng)"/></g>
+</g>
+<rect x="8" y="10" width="144" height="92" rx="9" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.4"/>
+<rect x="8" y="10" width="144" height="92" rx="9" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<!-- USB-B port and DC jack -->
+<rect x="4" y="30" width="30" height="26" rx="2" fill="url(#metal)" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<rect x="8" y="35" width="20" height="16" rx="1.5" fill="#0c0e12"/>
+<rect x="4" y="66" width="26" height="28" rx="3" fill="url(#blk)" stroke="#000" stroke-opacity=".6" stroke-width="1"/>
+<rect x="9" y="73" width="14" height="14" rx="2" fill="#050608"/>
+<!-- main chip -->
+<rect x="62" y="40" width="46" height="22" rx="2.5" fill="url(#blk)" stroke="#000" stroke-width="1"/>
+<g stroke="#9aa1ad" stroke-width="1.4"><path d="M66 38 V40 M72 38 V40 M78 38 V40 M84 38 V40 M90 38 V40 M96 38 V40 M102 38 V40 M66 62 V64 M72 62 V64 M78 62 V64 M84 62 V64 M90 62 V64 M96 62 V64 M102 62 V64"/></g>
+<circle cx="67" cy="45" r="1.6" fill="#fff" fill-opacity=".4"/>
+<path d="M72 54 H100" stroke="#fff" stroke-opacity=".25" stroke-width="1.4" stroke-linecap="round"/>
+<!-- crystal, reset, LEDs -->
+<rect x="40" y="46" width="14" height="8" rx="3.5" fill="url(#metal)" stroke="#000" stroke-opacity=".5" stroke-width=".8"/>
+<circle cx="46" cy="76" r="6" fill="#d9362e" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<circle cx="44.2" cy="74.2" r="2" fill="#fff" fill-opacity=".6"/>
+<g data-part="led"><circle cx="120" cy="70" r="10" fill="url(#ledg)" opacity=".8"/><rect x="116" y="67" width="8" height="6" rx="1.4" style="fill:var(--obj-accent,#ffd25e)"/><rect x="117" y="67.6" width="3" height="2" rx=".8" fill="#fff" fill-opacity=".8"/></g>
+<rect x="132" y="68" width="8" height="5" rx="1.2" fill="#2f3a3a"/>
+<!-- pin headers -->
+<rect x="40" y="14" width="102" height="9" rx="1.5" fill="url(#blk)" stroke="#000" stroke-width=".8"/>
+<rect x="40" y="90" width="102" height="9" rx="1.5" fill="url(#blk)" stroke="#000" stroke-width=".8"/>
+<g fill="#d8b24e"><circle cx="46" cy="18.5" r="1.7"/><circle cx="56" cy="18.5" r="1.7"/><circle cx="66" cy="18.5" r="1.7"/><circle cx="76" cy="18.5" r="1.7"/><circle cx="86" cy="18.5" r="1.7"/><circle cx="96" cy="18.5" r="1.7"/><circle cx="106" cy="18.5" r="1.7"/><circle cx="116" cy="18.5" r="1.7"/><circle cx="126" cy="18.5" r="1.7"/><circle cx="136" cy="18.5" r="1.7"/>
+<circle cx="46" cy="94.5" r="1.7"/><circle cx="56" cy="94.5" r="1.7"/><circle cx="66" cy="94.5" r="1.7"/><circle cx="76" cy="94.5" r="1.7"/><circle cx="86" cy="94.5" r="1.7"/><circle cx="96" cy="94.5" r="1.7"/><circle cx="106" cy="94.5" r="1.7"/><circle cx="116" cy="94.5" r="1.7"/><circle cx="126" cy="94.5" r="1.7"/><circle cx="136" cy="94.5" r="1.7"/></g>
+<circle cx="18" cy="20" r="3.4" fill="#06141a" stroke="#fff" stroke-opacity=".35" stroke-width=".8"/>
+<circle cx="146" cy="82" r="3.4" fill="#06141a" stroke="#fff" stroke-opacity=".35" stroke-width=".8"/>
+</svg>

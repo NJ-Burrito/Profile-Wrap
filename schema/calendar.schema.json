@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/calendar.schema.json",
+  "title": "Content calendar (strategy/calendar.json)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "slug": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]*$"
+          },
+          "lang": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+          },
+          "format": {
+            "enum": [
+              "text",
+              "slides",
+              "gif",
+              "image",
+              "document",
+              "multi_image"
+            ]
+          },
+          "pillar": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "angle": {
+            "type": "string"
+          },
+          "hook": {
+            "type": "string"
+          },
+          "claims": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "built",
+              "posted",
+              "skipped",
+              "blocked"
+            ]
+          },
+          "time": {
+            "type": "string",
+            "format": "hhmm"
+          },
+          "time_reason": {
+            "type": "string"
+          },
+          "series": {
+            "type": "string"
+          },
+          "pair": {
+            "type": "string"
+          },
+          "fictional": {
+            "type": "boolean"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "date",
+          "slug",
+          "lang",
+          "format",
+          "status"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "entries"
+  ]
+}

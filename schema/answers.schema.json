@@ -1,0 +1,421 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/answers.schema.json",
+  "title": "njli init --answers file (one object per onboarding step)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "where": {
+      "type": "object",
+      "properties": {
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"
+        }
+      },
+      "additionalProperties": false
+    },
+    "who": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "handle": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "niche": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "audience_regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+          },
+          "minItems": 1
+        },
+        "primary_language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+        },
+        "timezone": {
+          "type": "string"
+        },
+        "goal": {
+          "enum": [
+            "authority",
+            "clients",
+            "job_seeking",
+            "hiring",
+            "network"
+          ]
+        },
+        "pillars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string"
+              },
+              "share": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "languages",
+        "goal"
+      ]
+    },
+    "privacy": {
+      "type": "object",
+      "properties": {
+        "private_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "never_say": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensitive_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "claim": {
+            "type": "string",
+            "minLength": 1
+          },
+          "number": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "claim",
+          "source"
+        ]
+      }
+    },
+    "voice": {
+      "type": "object",
+      "properties": {
+        "style_preset": {
+          "enum": [
+            "plain",
+            "impact_copy",
+            "adhd_emoji"
+          ]
+        },
+        "samples": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "answers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "font_source": {
+          "enum": [
+            "google_ofl",
+            "system",
+            "user_files"
+          ]
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "display": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family"
+              ]
+            },
+            "arabic": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family"
+              ]
+            },
+            "licence_note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "palette_mode": {
+          "enum": [
+            "per_post",
+            "fixed"
+          ]
+        },
+        "identity": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "photo": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "signature": {
+              "enum": [
+                "none",
+                "typed",
+                "svg"
+              ]
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "cadence": {
+      "type": "object",
+      "properties": {
+        "per_week": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 7
+        },
+        "weekdays": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          },
+          "minItems": 1
+        },
+        "window": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "string",
+              "format": "hhmm"
+            },
+            "end": {
+              "type": "string",
+              "format": "hhmm"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "end"
+          ]
+        },
+        "min_gap_hours": {
+          "type": "number"
+        },
+        "comment_daily_cap": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10
+        },
+        "connect_weekly_slots": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 5
+        },
+        "holidays_region": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "models": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "tiered",
+            "single"
+          ]
+        },
+        "auth": {
+          "enum": [
+            "login",
+            "api_key"
+          ]
+        },
+        "api_key_env": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "consent": {
+      "type": "object",
+      "properties": {
+        "terms_read": {
+          "type": "string"
+        },
+        "api_scheduled": {
+          "type": "string"
+        },
+        "comments_api": {
+          "type": "string"
+        },
+        "apify": {
+          "type": "string"
+        },
+        "likes": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "options": {
+      "type": "object",
+      "properties": {
+        "demo": {
+          "type": "boolean"
+        },
+        "git_commit": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "who"
+  ]
+}

@@ -1,0 +1,24 @@
+<!-- tag: a ref tag on a string (the per-snapshot reference). Colour: obj-base (tag), obj-ink (hole). Parts: swing (tag and string, pivot at the hole), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 180" width="120" height="180" data-object="tag" style="overflow:visible">
+<style>
+svg[data-object="tag"]{--obj-hi:color-mix(in srgb,var(--obj-base,#2340e0) 52%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#2340e0) 62%,#000)}
+svg[data-object="tag"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="tag"] .hl{transform:translate(calc(var(--light-x,-.6)*6px),calc(var(--light-y,-.6)*5px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#2340e0)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M60 40 L96 62 V164 H24 V62 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="64" cy="174" rx="40" ry="5" fill="#000" filter="url(#blur)"/>
+<g data-part="swing" data-pivot="60 58">
+<path d="M60 58 C60 30 34 24 34 6" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="3.4" stroke-linecap="round"/><path d="M60 58 C60 30 34 24 34 6" fill="none" stroke="#e8e2d0" stroke-width="2" stroke-linecap="round"/>
+<path d="M60 40 L96 62 V164 H24 V62 Z" fill="url(#tg)" stroke="#000" stroke-opacity=".55" stroke-width="1.6" stroke-linejoin="round"/>
+<circle cx="60" cy="62" r="7.5" style="fill:var(--obj-ink,#14161d)" stroke="#fff" stroke-opacity=".6" stroke-width="2"/>
+<text x="60" y="118" text-anchor="middle" style="font-family:var(--mo-sans,sans-serif)" font-weight="700" font-size="34" fill="#fff">ref</text>
+<path d="M38 138 H82" stroke="#fff" stroke-opacity=".55" stroke-width="4" stroke-linecap="round"/><path d="M38 150 H66" stroke="#fff" stroke-opacity=".35" stroke-width="4" stroke-linecap="round"/>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="46" cy="76" rx="26" ry="11" fill="#fff" opacity=".4" transform="rotate(-20 46 76)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="30" width="24" height="140" fill="url(#sheeng)"/></g></g>
+</g>
+</svg>

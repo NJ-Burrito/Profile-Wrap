@@ -1,0 +1,39 @@
+<!-- camera: compact camera with a big lens, flash, shutter button and a status LED, plus focus brackets that flash. Colour: obj-base (body), obj-accent (lens glow, LED, brackets). Parts: lens, focus, shutter, led, sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" data-object="camera" style="overflow:visible">
+<style>
+svg[data-object="camera"]{--obj-hi:color-mix(in srgb,var(--obj-base,#2b3a3d) 70%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#2b3a3d) 70%,#000)}
+svg[data-object="camera"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="camera"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*5px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="body" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="chrome" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f4f6f6"/><stop offset=".55" stop-color="#b9c2c1"/><stop offset="1" stop-color="#8a9594"/></linearGradient>
+<radialGradient id="ring" cx=".38" cy=".3" r=".9"><stop offset="0" stop-color="#6b7776"/><stop offset=".6" stop-color="#1c2323"/><stop offset="1" stop-color="#0a0e0e"/></radialGradient>
+<radialGradient id="glass" cx=".4" cy=".35" r=".8"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffc22e) 30%,#27506a)"/><stop offset=".55" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffc22e) 10%,#0d1d2b)"/><stop offset="1" stop-color="#050a10"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="flashg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffc22e) 50%,#fff)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="bodyclip"><rect x="18" y="56" width="164" height="104" rx="20"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="100" cy="174" rx="78" ry="8" fill="#000" filter="url(#blur)"/>
+<rect x="74" y="40" width="52" height="22" rx="7" fill="url(#chrome)" stroke="#000" stroke-opacity=".4"/><rect x="82" y="45" width="36" height="9" rx="3" fill="#0a0e0e" opacity=".55"/>
+<g data-part="shutter"><rect x="36" y="42" width="30" height="12" rx="5" fill="url(#chrome)" stroke="#000" stroke-opacity=".4"/><rect x="40" y="43" width="22" height="3" rx="1.5" fill="#fff" opacity=".7"/></g>
+<rect x="18" y="56" width="164" height="104" rx="20" fill="url(#body)"/>
+<g clip-path="url(#bodyclip)">
+<rect x="18" y="56" width="164" height="30" fill="url(#chrome)"/><path d="M18 86 H182" stroke="#000" stroke-opacity=".5" stroke-width="1.5"/><path d="M18 87.5 H182" stroke="#fff" stroke-opacity=".3"/>
+<path d="M18 128 Q100 140 182 128 V160 H18 Z" fill="#000" opacity=".16"/>
+<g class="hl"><ellipse cx="60" cy="68" rx="46" ry="9" fill="#fff" opacity=".5"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-60" y="50" width="34" height="116" fill="url(#sheeng)"/></g>
+</g>
+<rect x="18.8" y="56.8" width="162.4" height="102.4" rx="19.4" fill="none" stroke="#fff" stroke-opacity=".28" stroke-width="1.4"/><rect x="18" y="56" width="164" height="104" rx="20" fill="none" stroke="#000" stroke-opacity=".55"/>
+<rect x="142" y="62" width="30" height="16" rx="4" fill="url(#flashg)" stroke="#000" stroke-opacity=".5"/><rect x="146" y="64" width="22" height="4" rx="2" fill="#fff" opacity=".8"/>
+<circle data-part="led" cx="32" cy="72" r="4.2" style="fill:var(--obj-accent,#ffc22e)" stroke="#000" stroke-opacity=".5"/>
+<circle cx="100" cy="116" r="47" fill="#000" opacity=".4" transform="translate(1.5 3)" filter="url(#blur)"/>
+<circle cx="100" cy="116" r="46" fill="url(#ring)" stroke="#000" stroke-opacity=".7" stroke-width="1.5"/>
+<circle cx="100" cy="116" r="41" fill="none" stroke="url(#chrome)" stroke-width="3.2"/>
+<g data-part="lens" data-pivot="100 116"><circle cx="100" cy="116" r="35" fill="url(#glass)" stroke="#000" stroke-opacity=".8" stroke-width="1.6"/>
+<circle cx="100" cy="116" r="22" fill="#02060a" opacity=".85"/><circle cx="100" cy="116" r="22" fill="none" style="stroke:color-mix(in srgb,var(--obj-accent,#ffc22e) 55%,#0d1d2b)" stroke-width="2.4"/><circle cx="100" cy="116" r="9" style="fill:color-mix(in srgb,var(--obj-accent,#ffc22e) 25%,#0d1d2b)"/>
+<ellipse cx="86" cy="101" rx="13" ry="7" fill="url(#hlg)" opacity=".85" transform="rotate(-32 86 101)"/><circle cx="114" cy="132" r="3.2" fill="#fff" opacity=".55"/></g>
+<g data-part="focus" opacity="0" style="stroke:var(--obj-accent,#ffc22e)" fill="none" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M44 84 V70 H58"/><path d="M142 70 H156 V84"/><path d="M156 148 V162 H142"/><path d="M58 162 H44 V148"/></g>
+</svg>

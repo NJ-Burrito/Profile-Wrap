@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "retrieved": "2026-10-16",
+  "purpose": "Turn the audience's local reading hours into a posting window in the poster's own timezone. Read docs/references/timing-recipe.md for the caveats before you rely on it.",
+  "evidence": [
+    {
+      "id": "buffer-2026-09",
+      "grade": "A",
+      "publisher": "Buffer",
+      "sample": "4.8 million posts",
+      "published": "2026-09-09",
+      "url": "https://buffer.com/library/best-time-to-post-on-linkedin/",
+      "times_are": "each poster's own local time",
+      "peak_local": ["15:00", "20:00"],
+      "best_slots": ["wed 16:00", "fri 15:00", "fri 16:00"],
+      "best_days": ["wed", "thu", "fri"],
+      "weak_days": ["mon", "tue"],
+      "weak_hours_local": ["06:00", "11:00"],
+      "frequency": "most accounts start to see results at 2 to 5 posts a week; consistency beats bursts"
+    },
+    {
+      "id": "sprout-secondary",
+      "grade": "B",
+      "publisher": "Sprout Social, as summarised by third parties",
+      "sample": "reported as about 2 billion engagements; the summaries disagree on the profile count",
+      "url": "https://socialk.it/en/best-time-to-post/linkedin",
+      "note": "original report not fetched; use only as a second opinion",
+      "windows": ["tue 11:00-17:00", "wed 11:00-16:00", "thu 13:00-17:00"]
+    },
+    {
+      "id": "hootsuite-secondary",
+      "grade": "C",
+      "publisher": "Hootsuite, via secondary blogs",
+      "sample": "1 million posts or more, as reported",
+      "note": "original not found; older and earlier in the day than the 2026 Buffer data",
+      "windows": ["tue 08:00-09:00", "wed 08:00-09:00"]
+    }
+  ],
+  "method": {
+    "audience_hours_local": {"start": "15:30", "end": "18:59"},
+    "rationale": "A 3 hour 29 minute slice inside the Buffer peak (15:00 to 20:00 audience-local), centred on its best slots (15:00 to 16:00). The width stays under posting.min_gap_hours so consecutive days remain at least 20 hours apart.",
+    "steps": [
+      "Take the audience regions from locale.audience_regions.",
+      "Convert the audience-local slice to the poster's timezone for each region, on the same date.",
+      "With several regions, take the part they share if it is at least 60 minutes wide; otherwise use the first region listed and say so, so list the audience that matters most first.",
+      "If the slice crosses midnight in the poster's timezone, shift it to end at 23:59 and warn: the user decides.",
+      "Apply it with `njli plan recipe --apply`, which sets posting.window and locale.audience_regions together and validates them."
+    ],
+    "max_width_minutes": 209
+  },
+  "regions": [
+    {"id": "us-east", "label": "US East", "tz": "America/New_York"},
+    {"id": "us-west", "label": "US West", "tz": "America/Los_Angeles"},
+    {"id": "uk", "label": "United Kingdom and Ireland", "tz": "Europe/London"},
+    {"id": "europe-west", "label": "Western and Central Europe", "tz": "Europe/Berlin"},
+    {"id": "gulf", "label": "Gulf (UAE, Oman)", "tz": "Asia/Dubai"},
+    {"id": "saudi", "label": "Saudi Arabia, Kuwait, Qatar, Bahrain", "tz": "Asia/Riyadh"},
+    {"id": "levant", "label": "Levant (Jordan, Lebanon, Palestine, Syria)", "tz": "Asia/Amman"},
+    {"id": "egypt", "label": "Egypt", "tz": "Africa/Cairo"},
+    {"id": "morocco", "label": "Morocco", "tz": "Africa/Casablanca"},
+    {"id": "india", "label": "India", "tz": "Asia/Kolkata"},
+    {"id": "singapore", "label": "Singapore and Malaysia", "tz": "Asia/Singapore"},
+    {"id": "australia-east", "label": "Australia East", "tz": "Australia/Sydney"}
+  ],
+  "not_known": [
+    "Whether these hours hold for a small account: the datasets are dominated by accounts with large audiences.",
+    "Arabic-language audiences: none of the sources splits results by language.",
+    "How the feed treats a post that is scheduled by the API rather than posted by hand: nobody has published this."
+  ]
+}

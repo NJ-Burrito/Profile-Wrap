@@ -1,0 +1,33 @@
+<!-- target: archery target with a dart in the bullseye. Colour: obj-base (rings), obj-accent (bullseye, fletching). Parts: dart (thuds in), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" data-object="target" style="overflow:visible">
+<style>
+svg[data-object="target"]{--obj-hi:color-mix(in srgb,var(--obj-base,#6ea2ff) 60%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#6ea2ff) 60%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#6ea2ff) 26%,#000)}
+svg[data-object="target"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="target"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*5px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<radialGradient id="ring" cx=".4" cy=".35" r=".8"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".6" style="stop-color:var(--obj-base,#6ea2ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><circle cx="60" cy="62" r="52"/></clipPath>
+<filter id="blur" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="64" cy="116" rx="46" ry="6" fill="#000" filter="url(#blur)"/>
+<circle cx="60" cy="62" r="52" style="fill:var(--obj-deep)"/>
+<circle cx="60" cy="62" r="50" fill="url(#ring)"/>
+<circle cx="60" cy="62" r="38" fill="#f4f6fb"/>
+<circle cx="60" cy="62" r="26" fill="url(#ring)"/>
+<circle cx="60" cy="62" r="14" fill="#f4f6fb"/>
+<circle cx="60" cy="62" r="7" style="fill:var(--obj-accent,#ff7a5c)"/>
+<circle cx="60" cy="62" r="50" fill="none" stroke="#000" stroke-opacity=".45" stroke-width="1.4"/>
+<g fill="none" stroke="#000" stroke-opacity=".18" stroke-width="1.2"><circle cx="60" cy="62" r="38"/><circle cx="60" cy="62" r="26"/><circle cx="60" cy="62" r="14"/></g>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="42" cy="38" rx="26" ry="13" fill="url(#hlg)" opacity=".5" transform="rotate(-30 42 38)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="26" height="124" fill="url(#sheeng)"/></g></g>
+<g data-part="dart" data-pivot="60 62">
+<path d="M60 62 L96 22" stroke="#000" stroke-opacity=".3" stroke-width="5" stroke-linecap="round" transform="translate(2 3)"/>
+<path d="M60 62 L96 22" stroke="#2a2f3b" stroke-width="3.6" stroke-linecap="round"/>
+<path d="M60 62 L78 42" stroke="#fff" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round"/>
+<path d="M88 30 L104 24 L98 38 Z" style="fill:var(--obj-accent,#ff7a5c)" stroke="#000" stroke-opacity=".4" stroke-width="1"/>
+<path d="M92 26 L98 12 L106 22 Z" style="fill:var(--obj-accent,#ff7a5c)" stroke="#000" stroke-opacity=".4" stroke-width="1"/>
+</g>
+</svg>

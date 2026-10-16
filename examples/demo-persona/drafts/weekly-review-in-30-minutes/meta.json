@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "slug": "weekly-review-in-30-minutes",
+  "title": "A 30 minute weekly review",
+  "lang": "en",
+  "format": "text",
+  "pillar": "P2",
+  "status": "draft",
+  "claims": [
+    "F01"
+  ],
+  "fictional": true
+}

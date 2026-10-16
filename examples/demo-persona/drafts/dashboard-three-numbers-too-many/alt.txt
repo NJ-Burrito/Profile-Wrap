@@ -1,0 +1,1 @@
+A bar chart where three of the six bars fade out, leaving three that matter.

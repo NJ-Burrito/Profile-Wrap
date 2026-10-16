@@ -1,0 +1,26 @@
+<!-- bin: a trash can with a hinged lid (the Delete button's real-world twin). Colour: obj-base (body), obj-deep derived. Parts: lid (pivot at the hinge), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130 170" width="130" height="170" data-object="bin" style="overflow:visible">
+<style>
+svg[data-object="bin"]{--obj-hi:color-mix(in srgb,var(--obj-base,#cf2414) 52%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#cf2414) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#cf2414) 22%,#000)}
+svg[data-object="bin"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="bin"] .hl{transform:translate(calc(var(--light-x,-.6)*7px),calc(var(--light-y,-.6)*4px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="bd" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--obj-lo)"/><stop offset=".3" style="stop-color:var(--obj-hi)"/><stop offset=".55" style="stop-color:var(--obj-base,#cf2414)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="ld" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-base,#cf2414)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M24 58 H106 L96 152 Q95 160 87 160 H43 Q35 160 34 152 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="68" cy="164" rx="46" ry="5.5" fill="#000" filter="url(#blur)"/>
+<ellipse cx="65" cy="58" rx="41" ry="7" style="fill:var(--obj-deep)"/>
+<path d="M24 58 H106 L96 152 Q95 160 87 160 H43 Q35 160 34 152 Z" fill="url(#bd)" stroke="#000" stroke-opacity=".55" stroke-width="1.6" stroke-linejoin="round"/>
+<g stroke="#000" stroke-opacity=".28" stroke-width="3.2" stroke-linecap="round"><path d="M48 72 L50 148"/><path d="M65 72 V148"/><path d="M82 72 L80 148"/></g>
+<g clip-path="url(#clip)"><g class="hl"><rect x="30" y="60" width="14" height="96" rx="6" fill="#fff" opacity=".4"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-30" y="40" width="24" height="130" fill="url(#sheeng)"/></g></g>
+<g data-part="lid" data-pivot="22 56">
+<rect x="50" y="30" width="32" height="14" rx="6" style="fill:var(--obj-lo)" stroke="#000" stroke-opacity=".55" stroke-width="1.4"/>
+<rect x="18" y="42" width="94" height="16" rx="7" fill="url(#ld)" stroke="#000" stroke-opacity=".55" stroke-width="1.6"/>
+<rect x="24" y="45" width="82" height="4" rx="2" fill="#fff" opacity=".45"/>
+</g>
+</svg>

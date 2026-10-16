@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "where": {
+    "profile_id": "en-ar"
+  },
+  "who": {
+    "name": "Layla Sample",
+    "handle": "layla-sample-demo",
+    "role": "QA lead",
+    "niche": "Test automation",
+    "audience": "QA teams",
+    "audience_regions": [
+      "Gulf",
+      "Levant"
+    ],
+    "languages": [
+      "en",
+      "ar"
+    ],
+    "primary_language": "ar",
+    "timezone": "Asia/Amman",
+    "goal": "clients",
+    "pillars": [
+      {
+        "id": "P1",
+        "name": "Teach",
+        "share": 0.5
+      },
+      {
+        "id": "P2",
+        "name": "Proof",
+        "share": 0.5
+      }
+    ]
+  },
+  "voice": {
+    "style_preset": "adhd_emoji"
+  },
+  "cadence": {
+    "per_week": 5,
+    "window": {
+      "start": "15:00",
+      "end": "18:29"
+    },
+    "min_gap_hours": 20
+  },
+  "options": {
+    "git_commit": false
+  }
+}

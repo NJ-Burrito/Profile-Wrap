@@ -1,0 +1,3 @@
+Plain​ sentence with a hidden character.
+
+Done.

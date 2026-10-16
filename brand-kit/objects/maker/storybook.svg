@@ -1,0 +1,40 @@
+<!-- storybook: open book, a picture on the left page, a branching path on the right, a ribbon bookmark. Colour: obj-base (cover), obj-accent (sun, ribbon, branch node), obj-ink (path). Parts: fork (path), node (x3), ribbon (swing), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" data-object="storybook" style="overflow:visible">
+<style>
+svg[data-object="storybook"]{--obj-hi:color-mix(in srgb,var(--obj-base,#ff6b8b) 65%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#ff6b8b) 62%,#000)}
+svg[data-object="storybook"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="storybook"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*3px));opacity:calc(.6*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="cover" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="pgL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffdf6"/><stop offset=".85" stop-color="#ece6d4"/><stop offset="1" stop-color="#cfc8b2"/></linearGradient>
+<linearGradient id="pgR" x1="1" y1="0" x2="0" y2="0"><stop offset="0" stop-color="#fffdf6"/><stop offset=".85" stop-color="#ece6d4"/><stop offset="1" stop-color="#cfc8b2"/></linearGradient>
+<linearGradient id="acc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffc22e) 65%,#fff)"/><stop offset="1" style="stop-color:var(--obj-accent,#ffc22e)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="pages"><path d="M20 70 Q60 56 100 72 Q140 56 180 70 V152 Q140 138 100 154 Q60 138 20 152 Z"/></clipPath>
+<clipPath id="leftpg"><path d="M20 70 Q60 56 100 72 V154 Q60 138 20 152 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="100" cy="172" rx="82" ry="8" fill="#000" filter="url(#blur)"/>
+<path d="M10 76 Q60 60 100 76 Q140 60 190 76 V158 Q140 144 100 160 Q60 144 10 158 Z" fill="url(#cover)" stroke="#000" stroke-opacity=".5" stroke-width="1.4"/>
+<path d="M14 158 Q60 146 100 162 Q140 146 186 158" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.4"/>
+<path d="M18 150 Q60 138 100 154 Q140 138 182 150 V156 Q140 142 100 158 Q60 142 18 156 Z" fill="#fffdf6" stroke="#000" stroke-opacity=".25" stroke-width="1"/>
+<path d="M20 70 Q60 56 100 72 V154 Q60 138 20 152 Z" fill="url(#pgL)" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/>
+<path d="M180 70 Q140 56 100 72 V154 Q140 138 180 152 Z" fill="url(#pgR)" stroke="#000" stroke-opacity=".3" stroke-width="1.2"/>
+<g clip-path="url(#leftpg)">
+<circle cx="52" cy="92" r="11" fill="url(#acc)" stroke="#000" stroke-opacity=".3"/><ellipse cx="48" cy="88" rx="4" ry="3" fill="#fff" opacity=".6"/>
+<path d="M20 134 Q44 108 70 126 Q86 112 100 124 V160 H20 Z" style="fill:var(--obj-hi)" stroke="#000" stroke-opacity=".3"/>
+<path d="M20 142 Q50 124 100 136 V160 H20 Z" style="fill:var(--obj-lo)" opacity=".7"/>
+<rect x="30" y="145" width="44" height="5" rx="2.5" fill="#000" opacity=".2"/>
+<g class="hl"><ellipse cx="46" cy="76" rx="30" ry="7" fill="#fff" opacity=".6"/></g>
+</g>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path data-part="fork" d="M140 142 V116 M140 116 Q140 100 122 92 M140 116 Q140 100 158 92" stroke-width="5" style="stroke:var(--obj-ink,#1c1a14)" pathLength="1" stroke-dasharray="1 1"/>
+</g>
+<circle data-part="node" data-pivot="140 142" cx="140" cy="142" r="6.5" fill="#fff" stroke="#000" stroke-opacity=".7" stroke-width="2.4"/>
+<circle data-part="node" data-pivot="122 92" cx="122" cy="92" r="8" fill="url(#acc)" stroke="#000" stroke-opacity=".7" stroke-width="2.4"/>
+<circle data-part="node" data-pivot="158 92" cx="158" cy="92" r="8" fill="#fff" stroke="#000" stroke-opacity=".7" stroke-width="2.4"/>
+<g data-part="ribbon" data-pivot="108 154"><path d="M102 154 V178 L108 172 L114 178 V154 Z" style="fill:var(--obj-accent,#ffc22e)" stroke="#000" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"/><path d="M105 154 V174" stroke="#fff" stroke-opacity=".5" stroke-width="1.4"/></g>
+<path d="M100 72 V154" stroke="#000" stroke-opacity=".35" stroke-width="2"/>
+<g clip-path="url(#pages)"><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="50" width="30" height="120" fill="url(#sheeng)"/></g></g>
+</svg>

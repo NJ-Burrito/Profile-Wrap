@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "template_version": "1",
+  "dirs": [
+    ".njl",
+    ".njl/backup",
+    ".njl/conflicts",
+    "config",
+    "profile",
+    "profile/exports",
+    "profile/banner",
+    "research",
+    "research/sources",
+    "research/trends",
+    "strategy",
+    "strategy/weekly",
+    "strategy/series",
+    "prompts",
+    ".claude/agents",
+    "drafts",
+    "videos",
+    "brand",
+    "brand/fonts",
+    "brand/vendor",
+    "brand/motion",
+    "brand/objects",
+    "brand/icons",
+    "brand/identity",
+    "brand/banner",
+    "published",
+    "engage",
+    "engage/inbox",
+    "engage/reports",
+    "metrics",
+    "metrics/exports",
+    "hooks",
+    "data",
+    "data/logs",
+    "data/locks",
+    "data/schedule",
+    "work",
+    "work/sandbox",
+    "review"
+  ],
+  "gitkeep": [
+    "drafts",
+    "videos",
+    "hooks",
+    "research/sources",
+    "research/trends",
+    "strategy/weekly",
+    "strategy/series",
+    "profile/banner",
+    "brand/identity",
+    "brand/banner",
+    ".claude/agents"
+  ],
+  "files": [
+    {
+      "dest": ".gitignore",
+      "src": "workspace/gitignore",
+      "class": "managed"
+    },
+    {
+      "dest": ".gitattributes",
+      "src": "workspace/gitattributes",
+      "class": "managed"
+    },
+    {
+      "dest": "CLAUDE.md",
+      "src": "CLAUDE.template.md",
+      "class": "managed",
+      "render": "vars",
+      "block": "structural"
+    },
+    {
+      "dest": "package.json",
+      "src": "workspace/package.json",
+      "class": "seeded",
+      "render": "vars"
+    },
+    {
+      "dest": "handoff.md",
+      "src": "handoff.template.md",
+      "class": "seeded",
+      "render": "vars",
+      "once": true
+    },
+    {
+      "dest": "research/facts.md",
+      "src": "facts.example.md",
+      "class": "seeded",
+      "optional": true,
+      "once": true
+    },
+    {
+      "dest": "profile/voice.md",
+      "src": "voice.example.md",
+      "class": "seeded",
+      "optional": true,
+      "once": true
+    },
+    {
+      "dest": "profile/story-bank.md",
+      "src": "story-bank.example.md",
+      "class": "seeded",
+      "optional": true,
+      "once": true
+    },
+    {
+      "dest": "strategy/content-strategy.md",
+      "src": "strategy.template.md",
+      "class": "seeded",
+      "optional": true
+    },
+    {
+      "dest": "prompts",
+      "src": "prompts",
+      "from": "plugin",
+      "class": "seeded",
+      "optional": true
+    },
+    {
+      "dest": "brand/motion",
+      "src": "brand-kit/motion",
+      "from": "plugin",
+      "class": "managed",
+      "optional": true
+    },
+    {
+      "dest": "brand/objects",
+      "src": "brand-kit/objects",
+      "from": "plugin",
+      "class": "managed",
+      "optional": true
+    },
+    {
+      "dest": "brand/icons",
+      "src": "brand-kit/icons",
+      "from": "plugin",
+      "class": "managed",
+      "optional": true
+    },
+    {
+      "dest": "brand/banner/banner.html",
+      "src": "brand-kit/templates/banner.html",
+      "from": "plugin",
+      "class": "seeded",
+      "optional": true
+    }
+  ],
+  "user_globs": [
+    "config/**",
+    "profile/**",
+    "research/**",
+    "strategy/calendar.json",
+    "strategy/weekly/**",
+    "strategy/series/**",
+    "drafts/**",
+    "videos/**",
+    "published/**",
+    "engage/**",
+    "metrics/**",
+    "review/**",
+    "hooks/**",
+    "data/**",
+    "work/**",
+    "brand/identity/**",
+    "brand/fonts/**",
+    "brand/vendor/**"
+  ]
+}

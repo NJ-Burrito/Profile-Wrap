@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "where": {
+    "profile_id": "fonts"
+  },
+  "who": {
+    "name": "Casey Sample",
+    "languages": [
+      "en",
+      "ar"
+    ],
+    "timezone": "Asia/Dubai",
+    "goal": "hiring"
+  },
+  "brand": {
+    "font_source": "user_files",
+    "fonts": {
+      "display": {
+        "family": "Licensed Display",
+        "files": [
+          "~/fonts/LicensedDisplay-Bold.otf"
+        ]
+      },
+      "text": {
+        "family": "Licensed Text",
+        "files": [
+          "~/fonts/LicensedText-Regular.otf"
+        ]
+      },
+      "arabic": {
+        "family": "Licensed Arabic",
+        "files": [
+          "~/fonts/LicensedArabic-Regular.otf"
+        ]
+      },
+      "licence_note": "Licensed to me; used in images only."
+    }
+  },
+  "options": {
+    "git_commit": false
+  }
+}

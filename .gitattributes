@@ -1,0 +1,5 @@
+# Line endings: launchers are fixed so they run on every OS
+* text=auto
+bin/njli text eol=lf
+*.cmd text eol=crlf
+*.sh text eol=lf

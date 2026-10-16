@@ -1,0 +1,9 @@
+We cut our weekly review to 30 minutes.
+
+It ran long because nobody knew its one question.
+
+Now every review starts with a single line: what changed since last week?
+
+If nothing changed, we stop early. That is allowed.
+
+What is the one question your weekly meeting must answer?

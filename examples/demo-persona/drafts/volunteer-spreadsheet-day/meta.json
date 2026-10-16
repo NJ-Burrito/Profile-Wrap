@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "slug": "volunteer-spreadsheet-day",
+  "title": "A spreadsheet day with volunteers",
+  "lang": "en",
+  "format": "text",
+  "pillar": "P2",
+  "status": "needs_check",
+  "claims": [
+    "F07"
+  ],
+  "fictional": true,
+  "scheduled_at": "2026-01-14T10:23:00+00:00"
+}

@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "international",
+  "label": "International (New Year, Christmas)",
+  "recurring": [
+    {
+      "month_day": "01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "month_day": "12-25",
+      "name": "Christmas Day"
+    }
+  ],
+  "ranges": [],
+  "window_shifts": []
+}

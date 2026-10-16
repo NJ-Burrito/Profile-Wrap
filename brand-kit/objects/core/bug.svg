@@ -1,0 +1,32 @@
+<!-- bug: glossy beetle, top view. Colour: obj-base (shell), obj-accent (spots). Parts: ant (antennae, 2), legs, sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="160" height="160" data-object="bug" style="overflow:visible">
+<style>
+svg[data-object="bug"]{--obj-hi:color-mix(in srgb,var(--obj-base,#d8432f) 62%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#d8432f) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#d8432f) 30%,#000)}
+svg[data-object="bug"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="bug"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*6px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="shell" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".45" style="stop-color:var(--obj-base,#d8432f)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><ellipse cx="80" cy="98" rx="38" ry="50"/><ellipse cx="80" cy="60" rx="28" ry="15"/><ellipse cx="80" cy="40" rx="19" ry="15"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="84" cy="150" rx="50" ry="7" fill="#000" filter="url(#blur)"/>
+<g data-part="legs" data-pivot="80 100">
+<path d="M52 74 L28 62 L16 74 M44 96 L16 98 L8 116 M50 118 L26 134 L22 148 M108 74 L132 62 L144 74 M116 96 L144 98 L152 116 M110 118 L134 134 L138 148" fill="none" stroke="var(--obj-deep)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M52 74 L28 62 L16 74 M44 96 L16 98 L8 116 M50 118 L26 134 L22 148 M108 74 L132 62 L144 74 M116 96 L144 98 L152 116 M110 118 L134 134 L138 148" fill="none" stroke="var(--obj-lo)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<path data-part="ant" data-pivot="70 34" d="M70 34 Q60 14 44 12" fill="none" stroke="var(--obj-deep)" stroke-width="3.2" stroke-linecap="round"/>
+<path data-part="ant" data-pivot="90 34" d="M90 34 Q100 14 116 12" fill="none" stroke="var(--obj-deep)" stroke-width="3.2" stroke-linecap="round"/>
+<ellipse cx="80" cy="98" rx="38" ry="50" fill="url(#shell)" stroke="var(--obj-deep)" stroke-width="2.4"/>
+<ellipse cx="80" cy="60" rx="28" ry="15" fill="url(#shell)" stroke="var(--obj-deep)" stroke-width="2.2"/>
+<ellipse cx="80" cy="40" rx="19" ry="15" fill="url(#shell)" stroke="var(--obj-deep)" stroke-width="2.2"/>
+<path d="M80 52 V147" stroke="var(--obj-deep)" stroke-width="2" stroke-opacity=".8"/>
+<path d="M82 54 V145" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>
+<g fill="var(--obj-accent,#ffd23a)" stroke="var(--obj-deep)" stroke-width="1.2" stroke-opacity=".6"><circle cx="62" cy="92" r="6.5"/><circle cx="98" cy="92" r="6.5"/><circle cx="64" cy="121" r="5.5"/><circle cx="96" cy="121" r="5.5"/><circle cx="70" cy="140" r="3.6"/><circle cx="90" cy="140" r="3.6"/></g>
+<g fill="#fff"><circle cx="70" cy="38" r="4.4"/><circle cx="90" cy="38" r="4.4"/></g>
+<g fill="var(--obj-deep)"><circle cx="70.8" cy="38.6" r="2.2"/><circle cx="90.8" cy="38.6" r="2.2"/></g>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="62" cy="76" rx="22" ry="34" fill="url(#hlg)" opacity=".55" transform="rotate(14 62 76)"/><ellipse cx="72" cy="35" rx="10" ry="5" fill="url(#hlg)" opacity=".6"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-30" y="0" width="30" height="160" fill="url(#sheeng)"/></g></g>
+</svg>

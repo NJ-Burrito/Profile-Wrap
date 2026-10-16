@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "where": {
+    "profile_id": "jobs"
+  },
+  "who": {
+    "name": "Sam Sample",
+    "languages": [
+      "en"
+    ],
+    "timezone": "Europe/London",
+    "goal": "job_seeking",
+    "role": "Data analyst",
+    "niche": "Analytics"
+  },
+  "voice": {
+    "style_preset": "impact_copy"
+  },
+  "options": {
+    "git_commit": false
+  }
+}

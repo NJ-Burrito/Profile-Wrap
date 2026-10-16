@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/workspace.schema.json",
+  "title": "Workspace state (.njl/workspace.json)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "template_version": {
+      "type": "string"
+    },
+    "plugin_version": {
+      "type": "string"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "files": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "class": {
+            "enum": [
+              "managed",
+              "seeded"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "template_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "class",
+          "sha256"
+        ]
+      }
+    },
+    "created_schedule": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "applied_migrations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conflicts": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "template_version",
+    "plugin_version",
+    "profile_id",
+    "files"
+  ]
+}

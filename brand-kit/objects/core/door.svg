@@ -1,0 +1,31 @@
+<!-- door: hinged cardboard door, hinge on the left edge. Colour: obj-base (kraft), obj-brass. Parts: sheen. Rotate the host about its left edge. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 132" width="100" height="132" data-object="door" style="overflow:visible">
+<style>
+svg[data-object="door"]{--obj-hi:color-mix(in srgb,var(--obj-base,#c99a62) 66%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#c99a62) 66%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#c99a62) 36%,#000)}
+svg[data-object="door"] .hl{transform:translate(calc(var(--light-x,-.6)*6px),calc(var(--light-y,-.6)*5px));opacity:calc(.75*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="panel" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".55" style="stop-color:var(--obj-base,#c99a62)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="inset" x1="1" y1="1" x2="0" y2="0"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<radialGradient id="brass" cx=".34" cy=".3" r=".8"><stop offset="0" stop-color="#fff6d6"/><stop offset=".45" style="stop-color:var(--obj-brass,#e6b84a)"/><stop offset="1" stop-color="#6e4a10"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<pattern id="flute" width="100" height="5" patternUnits="userSpaceOnUse"><rect width="100" height="1.4" y="3" fill="#000" opacity=".07"/></pattern>
+<clipPath id="shape"><rect x="0" y="0" width="100" height="132"/></clipPath>
+</defs>
+<rect x="0" y="0" width="100" height="132" fill="url(#panel)"/>
+<rect x="0" y="0" width="100" height="132" fill="url(#flute)"/>
+<rect x="12" y="14" width="76" height="44" rx="3" fill="url(#inset)"/>
+<rect x="12" y="14" width="76" height="44" rx="3" fill="none" style="stroke:var(--obj-deep)" stroke-opacity=".55" stroke-width="1.6"/>
+<rect x="12" y="70" width="76" height="50" rx="3" fill="url(#inset)"/>
+<rect x="12" y="70" width="76" height="50" rx="3" fill="none" style="stroke:var(--obj-deep)" stroke-opacity=".55" stroke-width="1.6"/>
+<path d="M13 57 V15 H87" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.2"/>
+<path d="M13 119 V71 H87" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.2"/>
+<g clip-path="url(#shape)"><g class="hl"><ellipse cx="30" cy="30" rx="44" ry="34" fill="url(#hlg)" opacity=".4"/></g><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-70" y="0" width="34" height="132" fill="url(#sheeng)"/></g></g>
+<rect x="0" y="16" width="9" height="20" rx="2" fill="url(#brass)" stroke="#4a3208" stroke-width="1"/>
+<rect x="0" y="94" width="9" height="20" rx="2" fill="url(#brass)" stroke="#4a3208" stroke-width="1"/>
+<circle cx="83" cy="66" r="7" fill="#000" opacity=".3" transform="translate(1.5 2.5)"/>
+<circle cx="83" cy="66" r="7" fill="url(#brass)" stroke="#4a3208" stroke-width="1"/>
+<circle cx="80.8" cy="63.8" r="2" fill="#fff" opacity=".8"/>
+<rect x="0" y="0" width="100" height="132" fill="none" style="stroke:var(--obj-deep)" stroke-opacity=".7" stroke-width="2"/>
+</svg>

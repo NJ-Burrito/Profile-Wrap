@@ -1,0 +1,45 @@
+<!-- palette: painter board with a thumb hole, five paint dabs and a brush. Colour: obj-base (board), obj-c1..obj-c5 (paints). Parts: brush (wobble), dab x5 (pop), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 200" width="220" height="200" data-object="palette" style="overflow:visible">
+<style>
+svg[data-object="palette"]{--obj-hi:color-mix(in srgb,var(--obj-base,#f3ecdf) 66%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#f3ecdf) 64%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#f3ecdf) 30%,#000)}
+svg[data-object="palette"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="palette"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*7px));opacity:calc(.55*var(--light-i,1))}
+</style>
+<defs>
+<path id="sil" d="M110 20 C170 14 216 52 208 100 C202 138 162 138 152 156 C142 176 112 184 82 176 C36 164 8 128 12 84 C16 46 56 24 110 20 Z"/>
+<clipPath id="clip"><use href="#sil"/></clipPath>
+<linearGradient id="body" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#f3ecdf)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#e9c68d"/><stop offset=".5" stop-color="#b9824a"/><stop offset="1" stop-color="#6d4424"/></linearGradient>
+<linearGradient id="fer" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff"/><stop offset=".5" stop-color="#cfd6e0"/><stop offset="1" stop-color="#77808f"/></linearGradient>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="112" cy="186" rx="84" ry="7" fill="#000" filter="url(#blur)"/>
+<use href="#sil" transform="translate(0 4)" fill="var(--obj-deep)"/>
+<use href="#sil" fill="url(#body)"/>
+<g clip-path="url(#clip)">
+<path d="M12 120 C30 156 60 178 100 184 L40 190 Z" fill="#000" opacity=".12"/>
+<g class="hl"><ellipse cx="70" cy="48" rx="56" ry="20" fill="url(#hlg)" transform="rotate(-14 70 48)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-50" y="0" width="30" height="200" fill="url(#sheeng)"/></g>
+</g>
+<use href="#sil" fill="none" stroke="var(--obj-deep)" stroke-opacity=".6" stroke-width="2"/>
+<ellipse cx="62" cy="132" rx="14" ry="10" fill="var(--obj-deep)" fill-opacity=".85"/>
+<ellipse cx="62" cy="130" rx="14" ry="9.4" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.4"/>
+<g data-part="dab" data-pivot="58 68"><ellipse cx="58" cy="70" rx="17" ry="13" fill="#000" fill-opacity=".22"/><ellipse cx="58" cy="67" rx="17" ry="13" style="fill:var(--obj-c1,#ff6f91)"/><ellipse cx="52" cy="62" rx="7" ry="4" fill="#fff" fill-opacity=".55"/></g>
+<g data-part="dab" data-pivot="104 48"><ellipse cx="104" cy="51" rx="16" ry="12" fill="#000" fill-opacity=".22"/><ellipse cx="104" cy="48" rx="16" ry="12" style="fill:var(--obj-c2,#ffd23f)"/><ellipse cx="99" cy="43" rx="6" ry="3.6" fill="#fff" fill-opacity=".55"/></g>
+<g data-part="dab" data-pivot="152 62"><ellipse cx="152" cy="65" rx="16" ry="12.4" fill="#000" fill-opacity=".22"/><ellipse cx="152" cy="62" rx="16" ry="12.4" style="fill:var(--obj-c3,#46d5ff)"/><ellipse cx="146" cy="57" rx="6" ry="3.6" fill="#fff" fill-opacity=".55"/></g>
+<g data-part="dab" data-pivot="178 100"><ellipse cx="178" cy="103" rx="14" ry="11" fill="#000" fill-opacity=".22"/><ellipse cx="178" cy="100" rx="14" ry="11" style="fill:var(--obj-c4,#8de07a)"/><ellipse cx="173" cy="95" rx="5.4" ry="3.2" fill="#fff" fill-opacity=".55"/></g>
+<g data-part="dab" data-pivot="108 100"><ellipse cx="108" cy="103" rx="15" ry="11.6" fill="#000" fill-opacity=".22"/><ellipse cx="108" cy="100" rx="15" ry="11.6" style="fill:var(--obj-c5,#b48cff)"/><ellipse cx="103" cy="95" rx="5.6" ry="3.4" fill="#fff" fill-opacity=".55"/></g>
+<g data-part="brush" data-pivot="96 160">
+<g transform="rotate(62 96 160)">
+<rect x="92" y="78" width="9" height="86" rx="4.5" fill="url(#wood)"/>
+<rect x="92" y="150" width="9" height="40" rx="4.5" fill="url(#wood)"/>
+<rect x="91" y="62" width="11" height="22" rx="2" fill="url(#fer)"/>
+<rect x="91" y="68" width="11" height="3" fill="#000" fill-opacity=".18"/>
+<path d="M92 62 C90 46 96 34 96.5 30 C97 34 103 46 101 62 Z" style="fill:var(--obj-c1,#ff6f91)"/>
+<path d="M94 58 C93 48 96 40 96.5 36" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.6" stroke-linecap="round"/>
+<rect x="93.6" y="82" width="2.2" height="70" rx="1.1" fill="#fff" fill-opacity=".35"/>
+</g>
+</g>
+</svg>

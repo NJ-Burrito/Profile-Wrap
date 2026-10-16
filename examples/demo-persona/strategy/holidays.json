@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "id": "demo",
+  "label": "Demo holidays (fictional list)",
+  "recurring": [
+    {
+      "month_day": "12-25",
+      "name": "Christmas Day"
+    }
+  ],
+  "ranges": []
+}

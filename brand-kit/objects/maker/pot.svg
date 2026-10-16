@@ -1,0 +1,49 @@
+<!-- pot: rotary potentiometer knob on a dark scale plate, front view. Colours: obj-base (knob cap), obj-accent (pointer). Parts: knob (rotates about the centre), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" data-object="pot" style="overflow:visible">
+<style>
+svg[data-object="pot"]{--obj-hi:color-mix(in srgb,var(--obj-base,#ffd23f) 62%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#ffd23f) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#ffd23f) 34%,#000)}
+svg[data-object="pot"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(10px + var(--light-y,-.6)*-3px));opacity:calc(.32 + .2*var(--light-i,1))}
+svg[data-object="pot"] .hl{transform:translate(calc(var(--light-x,-.6)*10px),calc(var(--light-y,-.6)*10px));opacity:calc(.9*var(--light-i,1))}
+</style>
+<defs>
+<radialGradient id="plate" cx=".4" cy=".32" r=".9"><stop offset="0" stop-color="#46535c"/><stop offset=".6" stop-color="#232c33"/><stop offset="1" stop-color="#11161a"/></radialGradient>
+<radialGradient id="skirt" cx=".38" cy=".3" r=".9"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".55" style="stop-color:var(--obj-base,#ffd23f)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></radialGradient>
+<radialGradient id="top" cx=".36" cy=".3" r=".85"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-hi) 70%,#fff)"/><stop offset=".6" style="stop-color:var(--obj-base,#ffd23f)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="capclip"><circle cx="120" cy="120" r="76"/></clipPath>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/></filter>
+</defs>
+<circle class="sh" cx="120" cy="124" r="112" fill="#000" filter="url(#blur)"/>
+<circle cx="120" cy="120" r="114" fill="url(#plate)"/>
+<circle cx="120" cy="120" r="113" fill="none" stroke="#fff" stroke-opacity=".2" stroke-width="2"/>
+<circle cx="120" cy="120" r="104" fill="none" stroke="#000" stroke-opacity=".4" stroke-width="2"/>
+<g stroke="#e9eef2" stroke-opacity=".8" stroke-width="4" stroke-linecap="round">
+<line x1="120" y1="14" x2="120" y2="32" transform="rotate(-135 120 120)"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(-108 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(-81 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(-54 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(-27 120 120)" stroke-width="3"/>
+<line x1="120" y1="14" x2="120" y2="32" transform="rotate(0 120 120)"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(27 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(54 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(81 120 120)" stroke-width="3"/>
+<line x1="120" y1="20" x2="120" y2="32" transform="rotate(108 120 120)" stroke-width="3"/>
+<line x1="120" y1="14" x2="120" y2="32" transform="rotate(135 120 120)"/>
+</g>
+<circle cx="120" cy="124" r="78" fill="#000" opacity=".35" filter="url(#blur)"/>
+<g data-part="knob" data-pivot="120 120">
+<circle cx="120" cy="120" r="78" fill="url(#skirt)"/>
+<circle cx="120" cy="120" r="75" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="7" stroke-dasharray="2.4 4.6"/>
+<circle cx="120" cy="120" r="66" fill="url(#top)"/>
+<circle cx="120" cy="120" r="66" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="2"/>
+<circle cx="120" cy="120" r="50" fill="none" stroke="#000" stroke-opacity=".12" stroke-width="2"/>
+<circle cx="120" cy="120" r="36" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.6"/>
+<rect x="113" y="62" width="14" height="46" rx="7" fill="#000" opacity=".25" transform="translate(1.5 2.5)"/>
+<rect x="113" y="62" width="14" height="46" rx="7" style="fill:var(--obj-accent,#16130f)"/>
+<rect x="116" y="65" width="4" height="36" rx="2" fill="#fff" opacity=".35"/>
+<circle cx="120" cy="120" r="5" fill="#000" opacity=".3"/>
+</g>
+<g clip-path="url(#capclip)"><g class="hl"><ellipse cx="96" cy="88" rx="38" ry="24" fill="url(#hlg)" opacity=".7"/></g><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-30" y="30" width="26" height="170" fill="url(#sheeng)"/></g></g>
+<circle cx="120" cy="120" r="78" fill="none" stroke="#000" stroke-opacity=".45" stroke-width="1.6"/>
+</svg>

@@ -1,0 +1,114 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/ledger.schema.json",
+  "title": "One row of published/ledger.jsonl",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "state": {
+      "enum": [
+        "pending",
+        "posted",
+        "needs_check",
+        "confirmed",
+        "failed"
+      ]
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 1
+    },
+    "started_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "posted_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "urn": {
+      "type": "string",
+      "pattern": "^urn:li:(share|ugcPost|activity):[A-Za-z0-9_]+$"
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https://www\\.linkedin\\.com/"
+    },
+    "format": {
+      "type": "string"
+    },
+    "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+    },
+    "pillar": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "first_comment": {
+      "type": "string"
+    },
+    "first_comment_state": {
+      "enum": [
+        "none",
+        "posted",
+        "failed"
+      ]
+    },
+    "automation": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "copy",
+            "api_click",
+            "api_scheduled"
+          ]
+        },
+        "by": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": true,
+      "required": [
+        "mode"
+      ]
+    },
+    "error": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "slug",
+    "state",
+    "idempotency_key"
+  ],
+  "if": {
+    "properties": {
+      "state": {
+        "const": "posted"
+      }
+    },
+    "required": [
+      "state"
+    ]
+  },
+  "then": {
+    "required": [
+      "urn",
+      "url",
+      "posted_at",
+      "automation"
+    ]
+  }
+}

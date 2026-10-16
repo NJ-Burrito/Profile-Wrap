@@ -1,0 +1,33 @@
+<!-- rerun: round bevelled push button with a circular arrow. Colour: obj-base (face), obj-ink (arrow). Parts: face (press), arrow (spins), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 132" width="120" height="132" data-object="rerun" style="overflow:visible">
+<style>
+svg[data-object="rerun"]{--obj-hi:color-mix(in srgb,var(--obj-base,#6ea2ff) 66%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#6ea2ff) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#6ea2ff) 28%,#000)}
+svg[data-object="rerun"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="rerun"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*5px));opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="face" x1=".2" y1="0" x2=".8" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#6ea2ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="lip" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-lo)"/><stop offset="1" style="stop-color:var(--obj-deep)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><circle cx="60" cy="54" r="44"/></clipPath>
+<filter id="blur" x="-30%" y="-60%" width="160%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="64" cy="118" rx="50" ry="8" fill="#000" filter="url(#blur)"/>
+<circle cx="60" cy="66" r="48" fill="url(#lip)"/>
+<circle cx="60" cy="66" r="48" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1.4"/>
+<g data-part="face">
+<circle cx="60" cy="54" r="46" style="fill:var(--obj-deep)"/>
+<circle cx="60" cy="54" r="44" fill="url(#face)"/>
+<circle cx="60" cy="54" r="36" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="2"/>
+<circle cx="60" cy="55.5" r="36" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="1.2"/>
+<g data-part="arrow" data-pivot="60 54">
+<path d="M60 32 A22 22 0 1 1 40.95 43" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="8" stroke-linecap="round" transform="translate(0 2)"/>
+<path d="M60 32 A22 22 0 1 1 40.95 43" fill="none" style="stroke:var(--obj-ink,#fff)" stroke-width="7" stroke-linecap="round"/>
+<polygon points="48.7,47.5 33.2,38.5 47.5,31.7" style="fill:var(--obj-ink,#fff)" stroke-linejoin="round"/>
+</g>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="48" cy="30" rx="30" ry="15" fill="url(#hlg)" opacity=".6"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="26" height="120" fill="url(#sheeng)"/></g></g>
+<circle cx="60" cy="54" r="44" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.4"/>
+</g>
+</svg>

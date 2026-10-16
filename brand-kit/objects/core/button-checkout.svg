@@ -1,0 +1,29 @@
+<!-- button-checkout: beveled 864x112 call-to-action. Face colour: obj-face (tween it for state). Icon/ink: obj-ink. Parts: face (press), sheen.
+     The label is an HTML overlay in the composition (the brand sans), with about 92px left padding so icon plus label sit centred. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 864 112" width="864" height="112" data-object="button-checkout" style="overflow:visible">
+<style>
+svg[data-object="button-checkout"]{--obj-lip:color-mix(in srgb,var(--obj-face,#ff6a3d) 52%,#000)}
+svg[data-object="button-checkout"] .sh{transform:translate(calc(var(--light-x,-.6)*-10px),calc(var(--light-y,-.6)*-3px));opacity:calc(.3 + .2*var(--light-i,1))}
+svg[data-object="button-checkout"] .hl{transform:translate(calc(var(--light-x,-.6)*26px),0);opacity:calc(.9*var(--light-i,1))}
+</style>
+<defs>
+<clipPath id="clip"><rect width="864" height="104" rx="20"/></clipPath>
+<linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".3"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".2"/></linearGradient>
+<linearGradient id="edge" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".7"/><stop offset=".4" stop-color="#fff" stop-opacity="0"/><stop offset=".7" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient>
+<linearGradient id="gloss" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".05"/><stop offset=".5" stop-color="#fff" stop-opacity=".26"/><stop offset="1" stop-color="#fff" stop-opacity=".05"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<filter id="blur" x="-10%" y="-60%" width="120%" height="240%"><feGaussianBlur stdDeviation="9"/></filter>
+</defs>
+<rect class="sh" x="14" y="26" width="836" height="92" rx="24" fill="#000" filter="url(#blur)"/>
+<rect y="8" width="864" height="104" rx="20" fill="var(--obj-lip)"/>
+<g data-part="face">
+<rect width="864" height="104" rx="20" fill="var(--obj-face,#ff6a3d)"/>
+<rect width="864" height="104" rx="20" fill="url(#shade)"/>
+<g clip-path="url(#clip)">
+<g class="hl"><path d="M0 0 H864 V40 Q432 62 0 40 Z" fill="url(#gloss)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-20)" x="-160" y="0" width="90" height="104" fill="url(#sheeng)"/></g>
+</g>
+<rect x="1.5" y="1.5" width="861" height="101" rx="18.5" fill="none" stroke="url(#edge)" stroke-width="3"/>
+<g transform="translate(248 29) scale(1.95)" fill="none" stroke="var(--obj-ink,#1b1710)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m2.05 2.05 1.099-.028a1 1 0 0 1 1.008.815l2.69 14.347A1 1 0 0 0 7.83 18H18"/><path d="M4.563 5h16.435a1 1 0 0 1 .981 1.204l-1.026 6.226A2 2 0 0 1 18.962 14H6.25"/><circle cx="18" cy="20" r="2"/><circle cx="8" cy="20" r="2"/></g>
+</g>
+</svg>

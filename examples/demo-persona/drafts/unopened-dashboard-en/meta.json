@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "slug": "unopened-dashboard-en",
+  "title": "The dashboard nobody opened",
+  "lang": "en",
+  "format": "text",
+  "pillar": "P1",
+  "status": "draft",
+  "claims": [],
+  "fictional": true,
+  "pair": "unopened-dashboard"
+}

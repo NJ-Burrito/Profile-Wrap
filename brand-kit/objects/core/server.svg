@@ -1,0 +1,24 @@
+<!-- server: three-unit rack with vents and status lights. Colour: obj-base (chassis), obj-accent (lights). Parts: led (6, blink), unit (3), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 132 120" width="132" height="120" data-object="server" style="overflow:visible">
+<style>
+svg[data-object="server"]{--obj-hi:color-mix(in srgb,var(--obj-base,#6ea2ff) 56%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#6ea2ff) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#6ea2ff) 24%,#000)}
+svg[data-object="server"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="server"] .hl{transform:translate(calc(var(--light-x,-.6)*8px),calc(var(--light-y,-.6)*4px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="unit" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#6ea2ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><rect x="8" y="8" width="116" height="98" rx="8"/></clipPath>
+<filter id="blur" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<rect class="sh" x="14" y="22" width="112" height="98" rx="8" fill="#000" filter="url(#blur)"/>
+<rect x="8" y="8" width="116" height="98" rx="8" style="fill:var(--obj-deep)"/>
+<g data-part="unit"><rect x="14" y="14" width="104" height="26" rx="4" fill="url(#unit)" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/><path d="M62 21 H108 M62 27 H108 M62 33 H108" stroke="#000" stroke-opacity=".3" stroke-width="2.4" stroke-linecap="round"/></g>
+<g data-part="unit"><rect x="14" y="44" width="104" height="26" rx="4" fill="url(#unit)" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/><path d="M62 51 H108 M62 57 H108 M62 63 H108" stroke="#000" stroke-opacity=".3" stroke-width="2.4" stroke-linecap="round"/></g>
+<g data-part="unit"><rect x="14" y="74" width="104" height="26" rx="4" fill="url(#unit)" stroke="#000" stroke-opacity=".5" stroke-width="1.2"/><path d="M62 81 H108 M62 87 H108 M62 93 H108" stroke="#000" stroke-opacity=".3" stroke-width="2.4" stroke-linecap="round"/></g>
+<g style="fill:var(--obj-accent,#ffc247)"><circle data-part="led" cx="26" cy="27" r="3.6"/><circle data-part="led" cx="40" cy="27" r="3.6" opacity=".45"/><circle data-part="led" cx="26" cy="57" r="3.6" opacity=".45"/><circle data-part="led" cx="40" cy="57" r="3.6"/><circle data-part="led" cx="26" cy="87" r="3.6"/><circle data-part="led" cx="40" cy="87" r="3.6" opacity=".45"/></g>
+<g clip-path="url(#clip)"><g class="hl"><rect x="14" y="14" width="104" height="5" rx="2" fill="#fff" opacity=".4"/><rect x="14" y="44" width="104" height="5" rx="2" fill="#fff" opacity=".3"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="26" height="120" fill="url(#sheeng)"/></g></g>
+<rect x="8" y="8" width="116" height="98" rx="8" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="1.4"/>
+<rect x="30" y="106" width="12" height="6" rx="2" style="fill:var(--obj-deep)"/><rect x="90" y="106" width="12" height="6" rx="2" style="fill:var(--obj-deep)"/>
+</svg>

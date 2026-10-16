@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "date": "2026-11-02",
+      "slug": "unopened-dashboard-en",
+      "lang": "en",
+      "format": "text",
+      "pillar": "P1",
+      "title": "The dashboard nobody opened",
+      "claims": [],
+      "status": "planned",
+      "fictional": true,
+      "pair": "unopened-dashboard"
+    },
+    {
+      "date": "2026-11-02",
+      "slug": "unopened-dashboard-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P1",
+      "title": "اللوحة التي لم يفتحها أحد",
+      "claims": [],
+      "status": "planned",
+      "fictional": true,
+      "pair": "unopened-dashboard"
+    },
+    {
+      "date": "2026-11-04",
+      "slug": "weekly-review-in-30-minutes",
+      "lang": "en",
+      "format": "text",
+      "pillar": "P2",
+      "title": "A 30 minute weekly review",
+      "claims": [
+        "F01"
+      ],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-09",
+      "slug": "seven-unused-dashboards",
+      "lang": "en",
+      "format": "text",
+      "pillar": "P2",
+      "title": "Seven dashboards, no readers",
+      "claims": [
+        "F02"
+      ],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-11",
+      "slug": "reminder-template-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P2",
+      "title": "قالب التذكير",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-12",
+      "slug": "one-question-meeting-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P1",
+      "title": "سؤال واحد لكل اجتماع",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-16",
+      "slug": "dashboard-three-numbers-too-many",
+      "lang": "en",
+      "format": "gif",
+      "pillar": "P1",
+      "title": "Your dashboard has three numbers too many",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-19",
+      "slug": "form-fields-en",
+      "lang": "en",
+      "format": "text",
+      "pillar": "P2",
+      "title": "The empty form fields",
+      "claims": [],
+      "status": "planned",
+      "fictional": true,
+      "pair": "form-fields"
+    },
+    {
+      "date": "2026-11-19",
+      "slug": "form-fields-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P2",
+      "title": "حقول النموذج الفارغة",
+      "claims": [],
+      "status": "planned",
+      "fictional": true,
+      "pair": "form-fields"
+    },
+    {
+      "date": "2026-11-23",
+      "slug": "donor-report-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P3",
+      "title": "تقرير المانحين الأقصر",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-25",
+      "slug": "five-checks-before-sharing-a-chart",
+      "lang": "en",
+      "format": "slides",
+      "pillar": "P1",
+      "title": "Five checks before sharing a chart",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-26",
+      "slug": "volunteer-day-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P2",
+      "title": "يوم الجداول مع المتطوعين",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-11-30",
+      "slug": "spring-availability",
+      "lang": "en",
+      "format": "text",
+      "pillar": "P3",
+      "title": "Room for one project in spring",
+      "claims": [
+        "F04"
+      ],
+      "status": "planned",
+      "fictional": true
+    },
+    {
+      "date": "2026-12-02",
+      "slug": "spring-availability-ar",
+      "lang": "ar",
+      "format": "text",
+      "pillar": "P3",
+      "title": "مكان لمشروع واحد في الربيع",
+      "claims": [],
+      "status": "planned",
+      "fictional": true
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "fictional": true,
+  "note": "Fictional demo persona Maya Rivera. Not a real person. Every file here is invented.",
+  "name": "Maya Rivera",
+  "handle": "maya-rivera-demo",
+  "role": "Independent data analyst for small non-profits",
+  "employer": "Lantern Data Co-op (fictional), Lisbon",
+  "languages": [
+    "en",
+    "ar"
+  ],
+  "goal": "authority",
+  "timezone": "Europe/Lisbon",
+  "pillars": [
+    {
+      "id": "P1",
+      "name": "Teach"
+    },
+    {
+      "id": "P2",
+      "name": "Proof of work"
+    },
+    {
+      "id": "P3",
+      "name": "Availability"
+    }
+  ],
+  "avatar": "synthetic monogram MR, no photo",
+  "signature": "Maya R. (typed)",
+  "demo": true
+}

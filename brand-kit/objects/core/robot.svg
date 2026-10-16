@@ -1,0 +1,41 @@
+<!-- robot: friendly AI helper, bust. Colour: obj-base (shell), obj-accent (eyes, antenna ball, chest light). Parts: eye (2), ant, sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 150" width="120" height="150" data-object="robot" style="overflow:visible">
+<style>
+svg[data-object="robot"]{--obj-hi:color-mix(in srgb,var(--obj-base,#e9e4ff) 55%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#e9e4ff) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#e9e4ff) 28%,#000)}
+svg[data-object="robot"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="robot"] .hl{transform:translate(calc(var(--light-x,-.6)*4px),calc(var(--light-y,-.6)*4px));opacity:calc(.7*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="shell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#e9e4ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="vis" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15112b"/><stop offset="1" stop-color="#05040f"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<radialGradient id="eyeg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff"/><stop offset=".35" style="stop-color:var(--obj-accent,#5ed0ff)"/><stop offset="1" style="stop-color:var(--obj-accent,#5ed0ff)" stop-opacity="0"/></radialGradient>
+<clipPath id="headclip"><rect x="20" y="34" width="80" height="62" rx="18"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="62" cy="144" rx="38" ry="5" fill="#000" filter="url(#blur)"/>
+<rect x="30" y="96" width="60" height="46" rx="14" fill="var(--obj-deep)"/>
+<rect x="30" y="94" width="60" height="46" rx="14" fill="url(#shell)"/>
+<rect x="30" y="94" width="60" height="46" rx="14" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.4"/>
+<rect x="44" y="104" width="32" height="22" rx="8" fill="var(--obj-deep)" fill-opacity=".55"/>
+<circle cx="60" cy="115" r="5.5" style="fill:var(--obj-accent,#5ed0ff)"/>
+<circle cx="58.4" cy="113.4" r="1.8" fill="#fff" fill-opacity=".85"/>
+<rect x="49" y="88" width="22" height="10" rx="3" fill="var(--obj-deep)"/>
+<rect x="11" y="52" width="12" height="26" rx="5" fill="url(#shell)" stroke="var(--obj-deep)" stroke-opacity=".7" stroke-width="1.2"/>
+<rect x="97" y="52" width="12" height="26" rx="5" fill="url(#shell)" stroke="var(--obj-deep)" stroke-opacity=".7" stroke-width="1.2"/>
+<g data-part="ant" data-pivot="60 36">
+<rect x="58.4" y="14" width="3.2" height="24" rx="1.6" fill="var(--obj-deep)"/>
+<circle cx="60" cy="11" r="7" style="fill:var(--obj-accent,#5ed0ff)"/>
+<circle cx="57.6" cy="8.6" r="2.4" fill="#fff" fill-opacity=".85"/>
+</g>
+<rect x="20" y="36" width="80" height="62" rx="18" fill="var(--obj-deep)"/>
+<rect x="20" y="34" width="80" height="62" rx="18" fill="url(#shell)"/>
+<g clip-path="url(#headclip)"><g class="hl"><ellipse cx="40" cy="44" rx="34" ry="18" fill="url(#hlg)" opacity=".55"/></g><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="30" width="26" height="70" fill="url(#sheeng)"/></g></g>
+<rect x="20" y="34" width="80" height="62" rx="18" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width="1.6"/>
+<rect x="30" y="46" width="60" height="38" rx="13" fill="url(#vis)"/>
+<rect x="30" y="46" width="60" height="38" rx="13" fill="none" stroke="var(--obj-deep)" stroke-width="2"/>
+<g data-part="eye" data-pivot="48 65"><circle cx="48" cy="65" r="13" fill="url(#eyeg)" opacity=".55"/><rect x="42" y="57" width="12" height="16" rx="6" style="fill:var(--obj-accent,#5ed0ff)"/><rect x="45" y="59" width="4" height="5" rx="2" fill="#fff" fill-opacity=".85"/></g>
+<g data-part="eye" data-pivot="72 65"><circle cx="72" cy="65" r="13" fill="url(#eyeg)" opacity=".55"/><rect x="66" y="57" width="12" height="16" rx="6" style="fill:var(--obj-accent,#5ed0ff)"/><rect x="69" y="59" width="4" height="5" rx="2" fill="#fff" fill-opacity=".85"/></g>
+<path d="M32 50 Q60 44 88 50" fill="none" stroke="#fff" stroke-opacity=".18" stroke-width="2" stroke-linecap="round"/>
+</svg>

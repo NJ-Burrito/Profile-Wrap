@@ -1,0 +1,28 @@
+<!-- cursor-hand: pointing-hand cursor (white glove). Hotspot (fingertip) at 26,4 in the 64x64 viewBox. Colour: obj-ink (outline), obj-cuff. Parts: wiggle. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" data-object="cursor-hand" style="overflow:visible">
+<style>
+svg[data-object="cursor-hand"]{--obj-cuffhi:color-mix(in srgb,var(--obj-cuff,#ff6a3d) 70%,#fff);--obj-cufflo:color-mix(in srgb,var(--obj-cuff,#ff6a3d) 62%,#000)}
+svg[data-object="cursor-hand"] .sh{transform:translate(calc(4px + var(--light-x,-.6)*-4px),calc(7px + var(--light-y,-.6)*-2px));opacity:calc(.28 + .16*var(--light-i,1))}
+svg[data-object="cursor-hand"] .hl{transform:translate(calc(var(--light-x,-.6)*1.4px),calc(var(--light-y,-.6)*1.4px));opacity:calc(.9*var(--light-i,1))}
+</style>
+<defs>
+<g id="shape"><rect x="21" y="4" width="11" height="36" rx="5.5"/><rect x="31" y="22" width="10" height="24" rx="5"/><rect x="40" y="25" width="9.5" height="22" rx="4.75"/><rect x="48.5" y="29" width="8.5" height="18" rx="4.25"/><rect x="21" y="30" width="36" height="26" rx="11"/><rect x="5" y="32" width="24" height="11" rx="5.5" transform="rotate(-28 17 38)"/></g>
+<linearGradient id="skin" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".6" stop-color="#eef0f5"/><stop offset="1" stop-color="#c9cedb"/></linearGradient>
+<linearGradient id="cuff" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--obj-cuffhi)"/><stop offset="1" style="stop-color:var(--obj-cufflo)"/></linearGradient>
+<clipPath id="clip"><use href="#shape"/></clipPath>
+<filter id="blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.6"/></filter>
+</defs>
+<use class="sh" href="#shape" fill="#000" filter="url(#blur)"/>
+<g data-part="wiggle" data-pivot="26 40">
+<use href="#shape" fill="none" stroke="var(--obj-ink,#0b1020)" stroke-width="5" stroke-linejoin="round"/>
+<use href="#shape" fill="url(#skin)"/>
+<g clip-path="url(#clip)">
+<path d="M31.5 24 V42 M40.5 27 V45 M49 31 V46" fill="none" stroke="#7d869c" stroke-opacity=".55" stroke-width="1.1" stroke-linecap="round"/>
+<path d="M21 44 Q39 52 57 44 V60 H21 Z" fill="#7d869c" opacity=".2"/>
+<path d="M22.3 34 Q24 38 28 40" fill="none" stroke="#7d869c" stroke-opacity=".5" stroke-width="1" stroke-linecap="round"/>
+<g class="hl"><path d="M24 8 V26 M33.5 26 V36 M42 29 V38 M8.5 38 L14 34" stroke="#fff" stroke-width="2.2" stroke-linecap="round" fill="none"/></g>
+</g>
+<rect x="23" y="53" width="32" height="9" rx="2.5" fill="url(#cuff)" stroke="var(--obj-ink,#0b1020)" stroke-width="2"/>
+<path d="M25.5 55.5 H52.5" stroke="#fff" stroke-opacity=".5" stroke-width="1" stroke-linecap="round"/>
+</g>
+</svg>

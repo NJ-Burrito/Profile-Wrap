@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "targets": [
+    {
+      "name": "Sam Okafor (fictional)",
+      "profile_url": "https://www.linkedin.com/in/sam-okafor-demo/",
+      "why": "Writes about non-profit reporting",
+      "lang": "en",
+      "region": "international",
+      "fictional": true
+    },
+    {
+      "name": "Lina Haddad (fictional)",
+      "profile_url": "https://www.linkedin.com/in/lina-haddad-demo/",
+      "why": "Arabic data teaching",
+      "lang": "ar",
+      "region": "levant",
+      "fictional": true
+    },
+    {
+      "name": "Jonas Berg (fictional)",
+      "profile_url": "https://www.linkedin.com/in/jonas-berg-demo/",
+      "why": "Volunteer coordination",
+      "lang": "en",
+      "region": "international",
+      "fictional": true
+    }
+  ]
+}

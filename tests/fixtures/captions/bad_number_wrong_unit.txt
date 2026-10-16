@@ -1,0 +1,3 @@
+I found 7 bugs last week.
+
+They were all in one report.

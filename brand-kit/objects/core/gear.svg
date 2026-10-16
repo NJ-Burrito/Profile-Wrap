@@ -1,0 +1,28 @@
+<!-- gear: steel cog with a hero-coloured hub (CI/CD). Colours: obj-base (steel), obj-accent (hub). Parts: cog (rotates about the centre), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" data-object="gear" style="overflow:visible">
+<style>
+svg[data-object="gear"]{--obj-hi:color-mix(in srgb,var(--obj-base,#c9d4cf) 55%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#c9d4cf) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#c9d4cf) 30%,#000)}
+svg[data-object="gear"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(7px + var(--light-y,-.6)*-2px));opacity:calc(.3 + .18*var(--light-i,1))}
+svg[data-object="gear"] .hl{transform:translate(calc(var(--light-x,-.6)*6px),calc(var(--light-y,-.6)*6px));opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="body" x1=".15" y1="0" x2=".85" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#c9d4cf)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<radialGradient id="hub" cx=".38" cy=".3" r=".9"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-accent,#ff8a4c) 60%,#fff)"/><stop offset=".6" style="stop-color:var(--obj-accent,#ff8a4c)"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--obj-accent,#ff8a4c) 60%,#000)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><circle cx="60" cy="60" r="51"/></clipPath>
+<filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="60" cy="112" rx="40" ry="6" fill="#000" filter="url(#blur)"/>
+<g data-part="cog" data-pivot="60 60">
+<path d="M53.9 21.5 L54.9 10.3 L65.1 10.3 L66.1 21.5 L82.9 28.4 L91.6 21.2 L98.8 28.4 L91.6 37.1 L98.5 53.9 L109.7 54.9 L109.7 65.1 L98.5 66.1 L91.6 82.9 L98.8 91.6 L91.6 98.8 L82.9 91.6 L66.1 98.5 L65.1 109.7 L54.9 109.7 L53.9 98.5 L37.1 91.6 L28.4 98.8 L21.2 91.6 L28.4 82.9 L21.5 66.1 L10.3 65.1 L10.3 54.9 L21.5 53.9 L28.4 37.1 L21.2 28.4 L28.4 21.2 L37.1 28.4 Z" fill="url(#body)" stroke="var(--obj-deep)" stroke-width="2.4" stroke-linejoin="round"/>
+<circle cx="60" cy="60" r="33" fill="none" stroke="var(--obj-deep)" stroke-opacity=".5" stroke-width="2"/>
+<circle cx="60" cy="60" r="31" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.2"/>
+<g fill="var(--obj-deep)" fill-opacity=".55"><circle cx="60" cy="34" r="3.4"/><circle cx="86" cy="60" r="3.4"/><circle cx="60" cy="86" r="3.4"/><circle cx="34" cy="60" r="3.4"/></g>
+<circle cx="60" cy="60" r="17" fill="url(#hub)" stroke="var(--obj-deep)" stroke-width="2"/>
+<circle cx="60" cy="60" r="7" fill="var(--obj-deep)"/>
+<circle cx="58.5" cy="58.5" r="2.2" fill="#fff" fill-opacity=".6"/>
+</g>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="42" cy="38" rx="26" ry="16" fill="url(#hlg)" opacity=".5" transform="rotate(-30 42 38)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="30" height="120" fill="url(#sheeng)"/></g></g>
+</svg>

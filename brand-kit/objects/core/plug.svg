@@ -1,0 +1,32 @@
+<!-- plug: two-prong plug with a ribbed grip and a cable (API connection). Colours: obj-base (body), obj-accent (cable). Parts: prongs (push in and out), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" data-object="plug" style="overflow:visible">
+<style>
+svg[data-object="plug"]{--obj-hi:color-mix(in srgb,var(--obj-base,#8fe3ff) 58%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#8fe3ff) 62%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#8fe3ff) 30%,#000)}
+svg[data-object="plug"] .sh{transform:translate(calc(var(--light-x,-.6)*-7px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .18*var(--light-i,1))}
+svg[data-object="plug"] .hl{transform:translate(calc(var(--light-x,-.6)*5px),calc(var(--light-y,-.6)*6px));opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="body" x1=".1" y1="0" x2=".9" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#8fe3ff)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="metal" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8d98a0"/><stop offset=".35" stop-color="#f1f4f6"/><stop offset=".7" stop-color="#b6bfc6"/><stop offset="1" stop-color="#6f7a82"/></linearGradient>
+<linearGradient id="cab" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-accent,#ff8a4c) 60%,#000)"/><stop offset=".4" style="stop-color:var(--obj-accent,#ff8a4c)"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--obj-accent,#ff8a4c) 55%,#000)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M30 44 H90 Q96 44 96 50 V74 Q96 84 86 84 H34 Q24 84 24 74 V50 Q24 44 30 44 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+</defs>
+<ellipse class="sh" cx="62" cy="114" rx="36" ry="5" fill="#000" filter="url(#blur)"/>
+<path d="M60 84 V96 C60 108 78 104 84 114" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="13" stroke-linecap="round"/>
+<path d="M60 84 V96 C60 108 78 104 84 114" fill="none" stroke="url(#cab)" stroke-width="10" stroke-linecap="round"/>
+<path d="M57 90 V96" stroke="#fff" stroke-opacity=".35" stroke-width="2" stroke-linecap="round"/>
+<g data-part="prongs">
+<rect x="38" y="6" width="12" height="38" rx="3" fill="url(#metal)" stroke="#3b444a" stroke-width="1.6"/>
+<rect x="70" y="6" width="12" height="38" rx="3" fill="url(#metal)" stroke="#3b444a" stroke-width="1.6"/>
+<rect x="40" y="8" width="3" height="30" rx="1.5" fill="#fff" fill-opacity=".6"/><rect x="72" y="8" width="3" height="30" rx="1.5" fill="#fff" fill-opacity=".6"/>
+</g>
+<path d="M30 44 H90 Q96 44 96 50 V74 Q96 84 86 84 H34 Q24 84 24 74 V50 Q24 44 30 44 Z" fill="url(#body)" stroke="var(--obj-deep)" stroke-width="2.4" stroke-linejoin="round"/>
+<g stroke="var(--obj-deep)" stroke-opacity=".5" stroke-width="2.4" stroke-linecap="round"><path d="M38 54 V74"/><path d="M48 54 V74"/><path d="M72 54 V74"/><path d="M82 54 V74"/></g>
+<g stroke="#fff" stroke-opacity=".28" stroke-width="1.2" stroke-linecap="round"><path d="M40 54 V74"/><path d="M50 54 V74"/><path d="M74 54 V74"/><path d="M84 54 V74"/></g>
+<rect x="56" y="64" width="8" height="8" rx="2" fill="var(--obj-accent,#ff8a4c)" stroke="var(--obj-deep)" stroke-width="1.2"/>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="44" cy="52" rx="26" ry="9" fill="url(#hlg)" opacity=".55"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="30" height="120" fill="url(#sheeng)"/></g></g>
+</svg>

@@ -1,0 +1,1516 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/config.schema.json",
+  "title": "nj-linkedin workspace config (config/njli.json)",
+  "description": "Unknown keys fail. Ceilings (x-ceiling) and floors (x-floor) mirror njli/policy.py and are enforced with a message by njli/limits.py, never clamped.",
+  "definitions": {
+    "ack": {
+      "type": "object",
+      "properties": {
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "date",
+        "sha256"
+      ]
+    },
+    "job": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "every_min": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "when": {
+          "type": "string"
+        },
+        "jitter_min": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "every_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "at_login": {
+          "type": "boolean"
+        },
+        "wake": {
+          "type": "boolean"
+        },
+        "run_if_within_hours": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "enabled"
+      ]
+    }
+  },
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "persona",
+    "locale",
+    "posting",
+    "linkedin",
+    "engagement",
+    "research",
+    "gate",
+    "brand",
+    "render",
+    "models",
+    "schedule",
+    "board",
+    "ack"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9_-]{0,39}$"
+    },
+    "persona": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "handle": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "niche": {
+          "type": "string"
+        },
+        "audience": {
+          "type": "string"
+        },
+        "goal": {
+          "enum": [
+            "authority",
+            "clients",
+            "job_seeking",
+            "hiring",
+            "network"
+          ]
+        },
+        "style_preset": {
+          "enum": [
+            "plain",
+            "impact_copy",
+            "adhd_emoji"
+          ]
+        },
+        "languages": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "primary_language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+        },
+        "pillars": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "name": {
+                "type": "string"
+              },
+              "share": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name",
+              "share"
+            ]
+          },
+          "minItems": 1
+        },
+        "voice_file": {
+          "type": "string"
+        },
+        "facts_file": {
+          "type": "string"
+        },
+        "story_bank": {
+          "type": "string"
+        },
+        "never_say": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "private_terms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sensitive_rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "ai_disclosure": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "none",
+                "footer",
+                "first_comment"
+              ]
+            },
+            "text": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "text"
+          ]
+        },
+        "demo": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "handle",
+        "role",
+        "niche",
+        "audience",
+        "goal",
+        "style_preset",
+        "languages",
+        "primary_language",
+        "pillars",
+        "voice_file",
+        "facts_file",
+        "story_bank",
+        "never_say",
+        "private_terms",
+        "sensitive_rules",
+        "ai_disclosure",
+        "demo"
+      ]
+    },
+    "locale": {
+      "type": "object",
+      "properties": {
+        "timezone": {
+          "type": "string",
+          "minLength": 1
+        },
+        "audience_regions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "weekend_days": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          },
+          "uniqueItems": true
+        },
+        "holidays_file": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "timezone",
+        "audience_regions",
+        "weekend_days",
+        "holidays_file"
+      ]
+    },
+    "posting": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "copy",
+            "api_click",
+            "api_scheduled"
+          ]
+        },
+        "api_scheduled_ack": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        },
+        "per_week": {
+          "type": "integer",
+          "minimum": 1,
+          "x-ceiling": 7
+        },
+        "weekdays": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "mon",
+              "tue",
+              "wed",
+              "thu",
+              "fri",
+              "sat",
+              "sun"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "window": {
+          "type": "object",
+          "properties": {
+            "start": {
+              "type": "string",
+              "format": "hhmm"
+            },
+            "end": {
+              "type": "string",
+              "format": "hhmm"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "start",
+            "end"
+          ]
+        },
+        "min_gap_hours": {
+          "type": "number",
+          "x-floor": 12
+        },
+        "missed_after_hours": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "time_spread": {
+          "type": "boolean"
+        },
+        "spread": {
+          "type": "object",
+          "properties": {
+            "avoid_round_minutes": {
+              "type": "boolean"
+            },
+            "no_repeat_days": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "avoid_round_minutes",
+            "no_repeat_days"
+          ]
+        },
+        "visibility": {
+          "enum": [
+            "PUBLIC",
+            "CONNECTIONS"
+          ]
+        },
+        "first_comment": {
+          "type": "boolean"
+        },
+        "formats_enabled": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "text",
+              "slides",
+              "gif",
+              "image",
+              "document",
+              "multi_image"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "api_scheduled_ack",
+        "per_week",
+        "weekdays",
+        "window",
+        "min_gap_hours",
+        "missed_after_hours",
+        "time_spread",
+        "spread",
+        "visibility",
+        "first_comment",
+        "formats_enabled"
+      ]
+    },
+    "linkedin": {
+      "type": "object",
+      "properties": {
+        "api_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "redirect_uri": {
+          "type": "string",
+          "pattern": "^http://(localhost|127\\.0\\.0\\.1)(:[0-9]+)?/"
+        },
+        "scopes": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "openid",
+              "profile",
+              "email",
+              "w_member_social"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "token_warn_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sunset_warn_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "api_version",
+        "redirect_uri",
+        "scopes",
+        "token_warn_days",
+        "sunset_warn_days",
+        "timeout_s"
+      ]
+    },
+    "engagement": {
+      "type": "object",
+      "properties": {
+        "comments": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "draft",
+                "api"
+              ]
+            },
+            "api_ack": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/ack"
+                }
+              ]
+            },
+            "daily_cap": {
+              "type": "integer",
+              "minimum": 0,
+              "x-ceiling": 10
+            },
+            "reply_reserve": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "gap_seconds": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": 0
+              },
+              "minItems": 2,
+              "maxItems": 2,
+              "x-floor": 60
+            },
+            "like": {
+              "type": "boolean"
+            },
+            "max_chars": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1250
+            },
+            "language": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "api_ack",
+            "daily_cap",
+            "reply_reserve",
+            "gap_seconds",
+            "like",
+            "max_chars",
+            "language"
+          ]
+        },
+        "replies": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "draft",
+                "api"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode"
+          ]
+        },
+        "reading": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "enum": [
+                "manual",
+                "export",
+                "apify"
+              ]
+            },
+            "apify_ack": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/ack"
+                }
+              ]
+            },
+            "apify": {
+              "type": "object",
+              "properties": {
+                "token_env": {
+                  "type": "string"
+                },
+                "max_calls_per_day": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "token_env",
+                "max_calls_per_day"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "apify_ack",
+            "apify"
+          ]
+        },
+        "connect": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "weekly_slots": {
+              "type": "integer",
+              "minimum": 0,
+              "x-ceiling": 5
+            },
+            "min_score": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "note_max": {
+              "type": "integer",
+              "minimum": 1,
+              "x-ceiling": 200
+            },
+            "pass_days": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "weekly_slots",
+            "min_score",
+            "note_max",
+            "pass_days"
+          ]
+        },
+        "targets_file": {
+          "type": "string"
+        },
+        "max_post_age_hours": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "inactive_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "quota": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "extras_waiting": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "retention_days": {
+          "type": "object",
+          "properties": {
+            "engage": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "connect": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "engage",
+            "connect"
+          ]
+        },
+        "strip_tracking_params": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "comments",
+        "replies",
+        "reading",
+        "connect",
+        "targets_file",
+        "max_post_age_hours",
+        "inactive_days",
+        "quota",
+        "extras_waiting",
+        "retention_days",
+        "strip_tracking_params"
+      ]
+    },
+    "research": {
+      "type": "object",
+      "properties": {
+        "trends_file": {
+          "type": "string"
+        },
+        "weekly": {
+          "type": "boolean"
+        },
+        "stats_expiry_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "contact": {
+          "type": "string"
+        },
+        "evidence_scale": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "X"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "trends_file",
+        "weekly",
+        "stats_expiry_days",
+        "contact",
+        "evidence_scale"
+      ]
+    },
+    "gate": {
+      "type": "object",
+      "properties": {
+        "caption_max": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hook_max": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hook_target": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "hashtags_max": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "links_in_body": {
+          "enum": [
+            "fail",
+            "warn"
+          ]
+        },
+        "em_dash": {
+          "enum": [
+            "fail",
+            "warn"
+          ]
+        },
+        "en_dash": {
+          "enum": [
+            "fail",
+            "warn",
+            "off"
+          ]
+        },
+        "banned_files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "extra_banned": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "numbers": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "claim_bound"
+              ]
+            },
+            "require_claims": {
+              "type": "boolean"
+            },
+            "min_bare_digit": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "scan": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "caption",
+                  "first_comment",
+                  "slides",
+                  "video",
+                  "alt"
+                ]
+              },
+              "uniqueItems": true
+            },
+            "number_words": {
+              "enum": [
+                "warn",
+                "fail",
+                "off"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "require_claims",
+            "min_bare_digit",
+            "scan",
+            "number_words"
+          ]
+        },
+        "overrides": {
+          "type": "object",
+          "properties": {
+            "allow": {
+              "type": "boolean"
+            },
+            "require_reason": {
+              "type": "boolean"
+            },
+            "max_per_post": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "allow",
+            "require_reason",
+            "max_per_post"
+          ]
+        },
+        "first_comment_gated": {
+          "type": "boolean"
+        },
+        "require_alt_text": {
+          "type": "boolean"
+        },
+        "require_council_pass": {
+          "type": "boolean"
+        },
+        "gif": {
+          "type": "object",
+          "properties": {
+            "max_frames": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "max_mb": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "max_still_pct": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "flash_max_per_s": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "max_frames",
+            "max_mb",
+            "max_still_pct",
+            "flash_max_per_s"
+          ]
+        },
+        "tools_missing": {
+          "enum": [
+            "skip_with_warning",
+            "fail"
+          ]
+        },
+        "required_font_substrings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "caption_max",
+        "hook_max",
+        "hook_target",
+        "hashtags_max",
+        "links_in_body",
+        "em_dash",
+        "en_dash",
+        "banned_files",
+        "extra_banned",
+        "numbers",
+        "overrides",
+        "first_comment_gated",
+        "require_alt_text",
+        "require_council_pass",
+        "gif",
+        "tools_missing",
+        "required_font_substrings"
+      ]
+    },
+    "brand": {
+      "type": "object",
+      "properties": {
+        "font_source": {
+          "enum": [
+            "google_ofl",
+            "system",
+            "user_files"
+          ]
+        },
+        "fonts": {
+          "type": "object",
+          "properties": {
+            "display": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family",
+                "files"
+              ]
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family",
+                "files"
+              ]
+            },
+            "arabic": {
+              "type": "object",
+              "properties": {
+                "family": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "files": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "family",
+                "files"
+              ]
+            },
+            "licence_note": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "display",
+            "text",
+            "arabic",
+            "licence_note"
+          ]
+        },
+        "banned_families": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "palette": {
+          "type": "object",
+          "properties": {
+            "mode": {
+              "enum": [
+                "per_post",
+                "fixed"
+              ]
+            },
+            "fixed": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "mode",
+            "fixed"
+          ]
+        },
+        "canvas": {
+          "type": "object",
+          "properties": {
+            "w": {
+              "type": "integer",
+              "minimum": 64
+            },
+            "h": {
+              "type": "integer",
+              "minimum": 64
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "w",
+            "h"
+          ]
+        },
+        "identity": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "name": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "photo": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "signature": {
+              "enum": [
+                "none",
+                "typed",
+                "svg"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "enabled",
+            "name",
+            "role",
+            "photo",
+            "signature"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "font_source",
+        "fonts",
+        "banned_families",
+        "palette",
+        "canvas",
+        "identity"
+      ]
+    },
+    "render": {
+      "type": "object",
+      "properties": {
+        "chrome_path": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "string"
+            }
+          ]
+        },
+        "timeout_s": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "gif": {
+          "type": "object",
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 64
+            },
+            "fps": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60
+            },
+            "colors": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 256
+            },
+            "dither": {
+              "enum": [
+                "none",
+                "bayer",
+                "sierra2",
+                "floyd_steinberg"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "width",
+            "fps",
+            "colors",
+            "dither"
+          ]
+        },
+        "static": {
+          "type": "object",
+          "properties": {
+            "scale": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 4
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "scale"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "chrome_path",
+        "timeout_s",
+        "gif",
+        "static"
+      ]
+    },
+    "models": {
+      "type": "object",
+      "properties": {
+        "mode": {
+          "enum": [
+            "tiered",
+            "single"
+          ]
+        },
+        "lead": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effort": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "alias",
+            "effort"
+          ]
+        },
+        "standard": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effort": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "alias",
+            "effort"
+          ]
+        },
+        "economy": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effort": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "alias",
+            "effort"
+          ]
+        },
+        "single": {
+          "type": "object",
+          "properties": {
+            "alias": {
+              "type": "string",
+              "minLength": 1
+            },
+            "effort": {
+              "enum": [
+                "low",
+                "medium",
+                "high"
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "alias",
+            "effort"
+          ]
+        },
+        "runner": {
+          "type": "object",
+          "properties": {
+            "bin": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "auth": {
+              "enum": [
+                "login",
+                "api_key"
+              ]
+            },
+            "api_key_env": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "string",
+                  "pattern": "^[A-Z_][A-Z0-9_]*$"
+                }
+              ]
+            },
+            "max_turns": {
+              "type": "object",
+              "properties": {
+                "build": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "review": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "comment": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "build",
+                "review",
+                "comment"
+              ]
+            },
+            "timeouts_s": {
+              "type": "object",
+              "properties": {
+                "build": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "fix": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "review": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "engage": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              },
+              "additionalProperties": false,
+              "required": [
+                "build",
+                "fix",
+                "review",
+                "engage"
+              ]
+            },
+            "env_allow": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "bin",
+            "auth",
+            "api_key_env",
+            "max_turns",
+            "timeouts_s",
+            "env_allow"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "lead",
+        "standard",
+        "economy",
+        "single",
+        "runner"
+      ]
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "backend": {
+          "enum": [
+            "auto",
+            "windows",
+            "launchd",
+            "systemd",
+            "cron",
+            "daemon"
+          ]
+        },
+        "log_rotate_mb": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "notify": {
+          "enum": [
+            "auto",
+            "log",
+            "off"
+          ]
+        },
+        "catchup": {
+          "enum": [
+            "missed_rule",
+            "run_if_within_hours"
+          ]
+        },
+        "jobs": {
+          "type": "object",
+          "properties": {
+            "post_due": {
+              "$ref": "#/definitions/job"
+            },
+            "build_week": {
+              "$ref": "#/definitions/job"
+            },
+            "research_weekly": {
+              "$ref": "#/definitions/job"
+            },
+            "token_check": {
+              "$ref": "#/definitions/job"
+            },
+            "doctor_weekly": {
+              "$ref": "#/definitions/job"
+            },
+            "profile_review": {
+              "$ref": "#/definitions/job"
+            },
+            "board": {
+              "$ref": "#/definitions/job"
+            },
+            "engage_prepare": {
+              "$ref": "#/definitions/job"
+            },
+            "replies_watch": {
+              "$ref": "#/definitions/job"
+            },
+            "connect_weekly": {
+              "$ref": "#/definitions/job"
+            },
+            "track_daily": {
+              "$ref": "#/definitions/job"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "post_due",
+            "build_week",
+            "research_weekly",
+            "token_check",
+            "doctor_weekly",
+            "profile_review",
+            "board",
+            "engage_prepare",
+            "replies_watch",
+            "connect_weekly",
+            "track_daily"
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "backend",
+        "log_rotate_mb",
+        "notify",
+        "catchup",
+        "jobs"
+      ]
+    },
+    "board": {
+      "type": "object",
+      "properties": {
+        "host": {
+          "enum": [
+            "127.0.0.1",
+            "localhost",
+            "::1"
+          ]
+        },
+        "port": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65535
+        },
+        "ui_language": {
+          "type": "string",
+          "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "host",
+        "port",
+        "ui_language"
+      ]
+    },
+    "ack": {
+      "type": "object",
+      "properties": {
+        "terms_read": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        },
+        "comments_api": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        },
+        "scraping_risk": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "terms_read",
+        "comments_api",
+        "scraping_risk"
+      ]
+    }
+  }
+}

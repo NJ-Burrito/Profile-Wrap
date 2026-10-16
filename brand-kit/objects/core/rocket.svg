@@ -1,0 +1,40 @@
+<!-- rocket: glossy toy rocket, upright, flame below (project development). Colour: obj-base (hull), obj-accent (nose cone and fins), obj-glow (flame). Parts: flame (pivot at the nozzle), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 150" width="90" height="150" data-object="rocket" style="overflow:visible">
+<style>
+svg[data-object="rocket"]{--obj-hi:color-mix(in srgb,var(--obj-base,#f3e9dc) 55%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#f3e9dc) 62%,#000);--obj-ahi:color-mix(in srgb,var(--obj-accent,#ffd25e) 65%,#fff);--obj-alo:color-mix(in srgb,var(--obj-accent,#ffd25e) 60%,#000)}
+svg[data-object="rocket"] .sh{transform:translate(calc(var(--light-x,-.6)*-6px),calc(var(--light-y,-.6)*-2px));opacity:calc(.28 + .14*var(--light-i,1))}
+svg[data-object="rocket"] .hl{transform:translate(calc(var(--light-x,-.6)*4px),calc(var(--light-y,-.6)*4px));opacity:calc(.75*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="hull" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--obj-lo)"/><stop offset=".3" style="stop-color:var(--obj-hi)"/><stop offset=".62" style="stop-color:var(--obj-base,#f3e9dc)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="acc" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-ahi)"/><stop offset=".55" style="stop-color:var(--obj-accent,#ffd25e)"/><stop offset="1" style="stop-color:var(--obj-alo)"/></linearGradient>
+<radialGradient id="glass" cx=".35" cy=".3" r=".9"><stop offset="0" stop-color="#e9ffff"/><stop offset=".35" style="stop-color:color-mix(in srgb,var(--obj-glow,#4fe3e1) 80%,#fff)"/><stop offset="1" style="stop-color:color-mix(in srgb,var(--obj-glow,#4fe3e1) 55%,#001a1c)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="fl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff"/><stop offset=".3" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffd25e) 70%,#fff)"/><stop offset=".7" style="stop-color:var(--obj-accent,#ffd25e)"/><stop offset="1" style="stop-color:var(--obj-accent,#ffd25e)" stop-opacity="0"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><path d="M45 6 C66 22 72 52 70 96 L20 96 C18 52 24 22 45 6 Z"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="3"/></filter>
+</defs>
+<ellipse class="sh" cx="46" cy="146" rx="26" ry="3.6" fill="#000" filter="url(#blur)"/>
+<g data-part="flame" data-pivot="45 104">
+<path d="M33 102 C33 122 41 132 45 142 C49 132 57 122 57 102 Z" fill="url(#fl)" opacity=".5"/>
+<path d="M37 102 C37 118 43 126 45 134 C47 126 53 118 53 102 Z" fill="url(#fl)"/>
+<path d="M41 102 C41 112 44 118 45 123 C46 118 49 112 49 102 Z" fill="#fff" fill-opacity=".9"/>
+</g>
+<path d="M22 66 C8 76 4 92 6 112 L22 100 Z" fill="url(#acc)" stroke="#000" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M68 66 C82 76 86 92 84 112 L68 100 Z" fill="url(#acc)" stroke="#000" stroke-opacity=".5" stroke-width="1.2" stroke-linejoin="round"/>
+<path d="M40 96 H50 V104 Q45 108 40 104 Z" fill="#2a2f3a" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<path d="M45 6 C66 22 72 52 70 96 L20 96 C18 52 24 22 45 6 Z" fill="url(#hull)"/>
+<g clip-path="url(#clip)">
+<path d="M26 34 H64 L68 46 H22 Z" fill="url(#acc)" opacity=".95"/>
+<path d="M18 80 H72 V88 H18 Z" fill="url(#acc)" opacity=".9"/>
+<g class="hl"><ellipse cx="34" cy="40" rx="14" ry="30" fill="url(#hlg)" opacity=".55"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="22" height="110" fill="url(#sheeng)"/></g>
+</g>
+<path d="M45 6 C66 22 72 52 70 96 L20 96 C18 52 24 22 45 6 Z" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.4"/>
+<path d="M45 6 C66 22 72 52 70 96 L20 96 C18 52 24 22 45 6 Z" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<circle cx="45" cy="64" r="12" fill="#1a1f2b" stroke="#000" stroke-opacity=".6" stroke-width="1"/>
+<circle cx="45" cy="64" r="10" fill="url(#glass)"/>
+<circle cx="45" cy="64" r="10" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="1.2"/>
+<ellipse cx="41" cy="60" rx="3.4" ry="2.2" fill="#fff" fill-opacity=".8" transform="rotate(-30 41 60)"/>
+</svg>

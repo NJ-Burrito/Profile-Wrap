@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "id": "north-africa",
+  "label": "North Africa (Ramadan evening window, Eid)",
+  "recurring": [
+    {
+      "month_day": "01-01",
+      "name": "New Year's Day"
+    },
+    {
+      "month_day": "12-25",
+      "name": "Christmas Day"
+    }
+  ],
+  "ranges": [
+    {
+      "from": "2026-03-20",
+      "to": "2026-03-22",
+      "name": "Eid al-Fitr 2026",
+      "approximate": true
+    },
+    {
+      "from": "2026-05-26",
+      "to": "2026-05-30",
+      "name": "Eid al-Adha 2026",
+      "approximate": true
+    },
+    {
+      "from": "2027-03-10",
+      "to": "2027-03-12",
+      "name": "Eid al-Fitr 2027",
+      "approximate": true
+    },
+    {
+      "from": "2027-05-16",
+      "to": "2027-05-19",
+      "name": "Eid al-Adha 2027",
+      "approximate": true
+    },
+    {
+      "from": "2028-02-26",
+      "to": "2028-02-28",
+      "name": "Eid al-Fitr 2028",
+      "approximate": true
+    },
+    {
+      "from": "2028-05-04",
+      "to": "2028-05-07",
+      "name": "Eid al-Adha 2028",
+      "approximate": true
+    }
+  ],
+  "window_shifts": [
+    {
+      "from": "2026-02-18",
+      "to": "2026-03-19",
+      "name": "Ramadan 2026 evenings",
+      "window": {
+        "start": "20:30",
+        "end": "23:59"
+      },
+      "approximate": true
+    },
+    {
+      "from": "2027-02-08",
+      "to": "2027-03-09",
+      "name": "Ramadan 2027 evenings",
+      "window": {
+        "start": "20:30",
+        "end": "23:59"
+      },
+      "approximate": true
+    },
+    {
+      "from": "2028-01-28",
+      "to": "2028-02-25",
+      "name": "Ramadan 2028 evenings",
+      "window": {
+        "start": "20:30",
+        "end": "23:59"
+      },
+      "approximate": true
+    }
+  ],
+  "note": "Dates marked approximate follow the astronomical calendar and can move by a day with moon sighting. Edit config/holidays.json when the date is announced."
+}

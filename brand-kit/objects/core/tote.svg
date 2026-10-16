@@ -1,0 +1,67 @@
+<!-- tote: canvas tote bag. Colour: obj-base (canvas), obj-accent (label motif). Parts: handle (swing), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" data-object="tote" style="overflow:visible">
+<style>
+svg[data-object="tote"]{--obj-hi:color-mix(in srgb,var(--obj-base,#b9a37c) 68%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#b9a37c) 66%,#000);--obj-deep:color-mix(in srgb,var(--obj-base,#b9a37c) 36%,#000);--obj-paper:color-mix(in srgb,#f2eee3 86%,var(--obj-base,#b9a37c))}
+svg[data-object="tote"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="tote"] .hl{transform:translate(calc(var(--light-x,-.6)*10px),calc(var(--light-y,-.6)*8px));opacity:calc(.5*var(--light-i,1))}
+</style>
+<defs>
+<path id="sil" d="M36 84 L164 84 L172 184 Q100 193 28 184 Z"/>
+<clipPath id="clip"><use href="#sil"/></clipPath>
+<linearGradient id="body" x1="0" y1="0" x2="1" y2="0"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".45" style="stop-color:var(--obj-base,#b9a37c)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="vg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".05"/><stop offset="1" stop-color="#000" stop-opacity=".34"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".65"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<pattern id="weave" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 .5H4M0 2.5H4" stroke="#fff" stroke-opacity=".14" stroke-width=".8"/><path d="M1 0V4M3 0V4" stroke="#000" stroke-opacity=".1" stroke-width=".8"/></pattern>
+<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.8"/></filter>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4.5"/></filter>
+</defs>
+<ellipse class="sh" cx="102" cy="186" rx="76" ry="7" fill="#000" filter="url(#blur)"/>
+<g data-part="handleback" data-pivot="100 90">
+<path d="M74 92 C74 62 126 62 126 92" fill="none" stroke="var(--obj-deep)" stroke-width="10" stroke-linecap="butt"/>
+<path d="M74 92 C74 62 126 62 126 92" fill="none" stroke="var(--obj-lo)" stroke-width="6.5" stroke-linecap="butt"/>
+</g>
+<use href="#sil" fill="url(#body)"/>
+<g clip-path="url(#clip)">
+<rect width="200" height="200" fill="url(#weave)"/>
+<path d="M36 84 L28 190 L44 190 L46 84 Z" fill="#000" opacity=".1"/>
+<path d="M164 84 L172 190 L158 190 L156 84 Z" fill="#000" opacity=".16"/>
+<path d="M52 108 C60 130 50 152 58 176 M146 112 C140 134 148 154 142 178 M100 100 C104 128 96 150 102 178" fill="none" stroke="var(--obj-deep)" stroke-opacity=".26" stroke-width="6" filter="url(#soft)"/>
+<path d="M60 108 C68 130 58 152 66 176 M108 100 C112 128 104 150 110 178" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="4" filter="url(#soft)"/>
+<rect y="100" width="200" height="100" fill="url(#vg)"/>
+<path d="M28 184 Q100 193 172 184 L172 200 L28 200 Z" fill="#000" opacity=".16"/>
+<path d="M30 176 Q100 185 170 176" fill="none" stroke="var(--obj-deep)" stroke-opacity=".45" stroke-width="1.4"/>
+<path d="M30 178.5 Q100 187.5 170 178.5" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width=".9" stroke-dasharray="3 2.6"/>
+<rect x="30" y="84" width="140" height="15" fill="var(--obj-lo)" opacity=".28"/>
+<path d="M36 99 H164" stroke="var(--obj-deep)" stroke-opacity=".5" stroke-width="1.2"/>
+<path d="M34.5 88 H165.5 M35.5 95 H164.5" fill="none" stroke="#fff" stroke-opacity=".5" stroke-width=".9" stroke-dasharray="3 2.6"/>
+<g>
+<rect x="64" y="124" width="72" height="44" rx="3" fill="#000" opacity=".25" transform="translate(1.2 2.6)" filter="url(#soft)"/>
+<rect x="64" y="124" width="72" height="44" rx="3" fill="var(--obj-paper)"/>
+<rect x="64" y="124" width="72" height="44" rx="3" fill="url(#weave)"/>
+<rect x="64" y="124" width="72" height="44" rx="3" fill="none" stroke="var(--obj-deep)" stroke-opacity=".5" stroke-width="1"/>
+<rect x="67.5" y="127.5" width="65" height="37" rx="1.5" fill="none" stroke="var(--obj-deep)" stroke-opacity=".55" stroke-width=".9" stroke-dasharray="3 2.4"/>
+<circle cx="100" cy="146" r="12.5" fill="none" stroke="var(--obj-accent,#c4552b)" stroke-width="2.6"/>
+<path d="M92.5 152 C92 140 102 136 108 137 C108.5 147 101 153 92.5 152 Z" fill="var(--obj-accent,#c4552b)"/>
+<path d="M93.5 151 L104.5 140" stroke="var(--obj-paper)" stroke-width="1.1" stroke-linecap="round"/>
+</g>
+<g class="hl"><ellipse cx="62" cy="108" rx="46" ry="34" fill="url(#hlg)"/></g>
+<g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-70" y="60" width="34" height="140" fill="url(#sheeng)"/></g>
+</g>
+<use href="#sil" fill="none" stroke="var(--obj-deep)" stroke-opacity=".6" stroke-width="1.6" stroke-linejoin="round"/>
+<g id="foot">
+<rect x="46" y="87" width="24" height="26" rx="2" fill="#000" opacity=".28" transform="translate(1 2.4)" filter="url(#soft)"/>
+<rect x="46" y="87" width="24" height="26" rx="2" fill="url(#body)"/>
+<rect x="46" y="87" width="24" height="26" rx="2" fill="url(#weave)"/>
+<rect x="46" y="87" width="24" height="26" rx="2" fill="none" stroke="var(--obj-deep)" stroke-opacity=".55" stroke-width="1.1"/>
+<path d="M49 90 H67 V110 H49 Z M49 90 L67 110 M67 90 L49 110" fill="none" stroke="#fff" stroke-opacity=".55" stroke-width=".9" stroke-dasharray="2.6 2.2"/>
+</g>
+<use href="#foot" x="84"/>
+<g data-part="handle" data-pivot="100 100">
+<path d="M58 100 C52 38 148 38 142 100" fill="none" stroke="#000" stroke-opacity=".22" stroke-width="11" transform="translate(1.5 3)" filter="url(#soft)"/>
+<path d="M58 100 C52 38 148 38 142 100" fill="none" stroke="var(--obj-deep)" stroke-width="10.5"/>
+<path d="M58 100 C52 38 148 38 142 100" fill="none" stroke="var(--obj-base,#b9a37c)" stroke-width="8.5"/>
+<path d="M56.6 100 C50.6 38 146.6 38 140.6 100" fill="none" stroke="var(--obj-hi)" stroke-opacity=".8" stroke-width="3" transform="translate(-1.3 -.5)"/>
+<path d="M58 100 C52 38 148 38 142 100" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width=".9" stroke-dasharray="3 2.6"/>
+</g>
+</svg>

@@ -1,0 +1,28 @@
+{
+  "persona": {
+    "name": "Maya Rivera",
+    "handle": "maya-rivera-demo",
+    "goal": "authority",
+    "languages": [
+      "en",
+      "ar"
+    ],
+    "primary_language": "en",
+    "pillars": [
+      {
+        "id": "P1",
+        "name": "teach",
+        "share": 0.4
+      }
+    ],
+    "facts_file": "research/facts.md",
+    "never_say": [
+      "synergy"
+    ],
+    "private_terms": [
+      "Lantern Data",
+      "Acme Clinic"
+    ],
+    "demo": false
+  }
+}

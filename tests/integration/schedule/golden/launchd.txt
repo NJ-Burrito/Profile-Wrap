@@ -1,0 +1,312 @@
+=== io.njli.demo.build_week.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.build_week</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>build_week</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/build_week.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/build_week.launchd.log</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>10</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+		<key>Weekday</key>
+		<integer>4</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== io.njli.demo.post_due.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.post_due</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>post_due</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/post_due.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/post_due.launchd.log</string>
+	<key>StartInterval</key>
+	<integer>900</integer>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== io.njli.demo.token_check.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.token_check</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>token_check</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/token_check.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/token_check.launchd.log</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>9</integer>
+		<key>Minute</key>
+		<integer>30</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== io.njli.demo.profile_review.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.profile_review</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>profile_review</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/profile_review.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/profile_review.launchd.log</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>9</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== io.njli.demo.connect_weekly.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.connect_weekly</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>connect_weekly</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/connect_weekly.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/connect_weekly.launchd.log</string>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>10</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+		<key>Weekday</key>
+		<integer>0</integer>
+	</dict>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== io.njli.demo.board.plist ===
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>NJLI_CLAUDE_BIN</key>
+		<string>@HOME@/.local/bin/claude</string>
+		<key>NJLI_FFMPEG</key>
+		<string>/opt/homebrew/bin/ffmpeg</string>
+		<key>NJLI_FFPROBE</key>
+		<string>/opt/homebrew/bin/ffprobe</string>
+		<key>NJLI_NODE</key>
+		<string>/opt/homebrew/bin/node</string>
+		<key>NJLI_NPX</key>
+		<string>/opt/homebrew/bin/npx</string>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string>
+		<key>PYTHONUTF8</key>
+		<string>1</string>
+	</dict>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+	<key>Label</key>
+	<string>io.njli.demo.board</string>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/bin/python3</string>
+		<string>@PYZ@</string>
+		<string>run</string>
+		<string>board</string>
+		<string>--workspace</string>
+		<string>@WS@</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardErrorPath</key>
+	<string>@WS@/data/logs/board.launchd.log</string>
+	<key>StandardOutPath</key>
+	<string>@WS@/data/logs/board.launchd.log</string>
+	<key>WorkingDirectory</key>
+	<string>@WS@</string>
+</dict>
+</plist>
+=== commands ===
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.build_week.plist
+launchctl bootout gui/501/io.njli.demo.build_week
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.post_due.plist
+launchctl bootout gui/501/io.njli.demo.post_due
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.token_check.plist
+launchctl bootout gui/501/io.njli.demo.token_check
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.profile_review.plist
+launchctl bootout gui/501/io.njli.demo.profile_review
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.connect_weekly.plist
+launchctl bootout gui/501/io.njli.demo.connect_weekly
+launchctl bootstrap gui/501 @HOME@/Library/LaunchAgents/io.njli.demo.board.plist
+launchctl bootout gui/501/io.njli.demo.board

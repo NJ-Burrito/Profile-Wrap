@@ -1,0 +1,52 @@
+# Fonts and photos never enter the repository
+*.woff
+*.woff2
+*.ttf
+*.otf
+*.eot
+*.jpg
+*.jpeg
+*.heic
+*.heif
+*.tif
+*.tiff
+brand/fonts/
+assets/fonts/
+photos/
+# The OFL demo fonts are the one exception: force-add them (git add -f) and pin their hash in release/leak-allow.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+.venv/
+venv/
+
+# Zipapps are built in release, never committed
+*.pyz
+
+# Secrets
+.env
+.env.*
+!.env.example
+token.json
+*.pem
+*.key
+*.p12
+secrets/
+leak-denylist*.json
+
+# Node
+node_modules/
+
+# Local state
+work/
+.DS_Store
+Thumbs.db

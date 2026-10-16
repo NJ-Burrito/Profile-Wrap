@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/facts.schema.json",
+  "title": "One row of the facts register (research/facts.md), as parsed",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^F[0-9]+$"
+    },
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "numbers": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string",
+      "minLength": 1
+    },
+    "added": {
+      "type": "string",
+      "format": "date"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "verified",
+        "do_not_use",
+        "superseded"
+      ]
+    },
+    "kind": {
+      "enum": [
+        "own",
+        "third_party"
+      ]
+    },
+    "grade": {
+      "enum": [
+        "A",
+        "B",
+        "C",
+        "X"
+      ]
+    },
+    "verified_by": {
+      "type": "string"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date"
+    },
+    "usage": {
+      "type": "string"
+    },
+    "supersedes": {
+      "type": "string"
+    },
+    "expires": {
+      "type": "string",
+      "format": "date"
+    },
+    "url": {
+      "type": "string"
+    },
+    "demo": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "claim",
+    "source",
+    "status"
+  ]
+}

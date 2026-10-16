@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/nj-linkedin/meta.schema.json",
+  "title": "Draft metadata (drafts/<slug>/meta.json)",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "lang": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]+)*$"
+    },
+    "format": {
+      "enum": [
+        "text",
+        "slides",
+        "gif",
+        "image",
+        "document",
+        "multi_image"
+      ]
+    },
+    "pillar": {
+      "type": "string"
+    },
+    "audience": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "draft",
+        "revising",
+        "hold",
+        "queued",
+        "missed",
+        "needs_check",
+        "posted",
+        "rejected",
+        "demo"
+      ]
+    },
+    "scheduled_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "alt": {
+      "type": "string"
+    },
+    "first_comment": {
+      "type": "string"
+    },
+    "video_project": {
+      "type": "string"
+    },
+    "source": {
+      "type": "string"
+    },
+    "fictional": {
+      "type": "boolean"
+    },
+    "pair": {
+      "type": "string"
+    },
+    "overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true,
+        "required": [
+          "rule",
+          "reason"
+        ]
+      }
+    }
+  },
+  "additionalProperties": true,
+  "required": [
+    "slug",
+    "title",
+    "lang",
+    "format",
+    "status",
+    "claims"
+  ]
+}

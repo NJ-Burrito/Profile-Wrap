@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en" dir="{{dir}}">
+<head>
+<meta charset="utf-8" />
+<title>Banner</title>
+<!-- 1584 x 396 profile banner. njli renders it at 1x and 2x into brand/banner/out/ (never into the plugin).
+     Variables ({{headline}}, {{subline}}, {{c_bg}}, {{c_ink}}, {{c_accent}}, {{dir}}) are filled by the renderer; only text you supply appears.
+     The safe zone is where the profile photo overlaps the banner on desktop. No text may sit inside it (a gate checks) and no text is below 28 px.
+     Layout is not verified against LinkedIn's current crop; check on a phone and a desktop before you upload. -->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  .banner { position: relative; width: 1584px; height: 396px; overflow: hidden; background: {{c_bg}}; color: {{c_ink}};
+            font-family: var(--brand-display, system-ui, sans-serif); }
+  .copy { position: absolute; top: 96px; left: 460px; right: 80px; display: flex; flex-direction: column; gap: 18px; }
+  [dir="rtl"] .copy { left: 80px; right: 460px; }
+  .headline { font-weight: 700; font-size: 72px; line-height: 1.12; letter-spacing: -.01em; }
+  [dir="rtl"] .headline { line-height: 1.4; letter-spacing: 0; }
+  .subline { font-family: var(--brand-text, system-ui, sans-serif); font-size: 36px; line-height: 1.3; opacity: .85; }
+  [dir="rtl"] .subline { line-height: 1.6; }
+  .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 12px; background: {{c_accent}}; }
+  /* debug overlay, shown only in the safe-zone preview */
+  .zone { display: none; position: absolute; left: 0; top: 120px; width: 420px; height: 276px; background: rgba(220, 38, 38, .25); outline: 4px dashed #dc2626; }
+  body.show-zone .zone { display: block; }
+  [dir="rtl"] .zone { left: auto; right: 0; }
+</style>
+</head>
+<body class="{{body_class}}">
+<div class="banner">
+  <div class="copy">
+    <div class="headline">{{headline}}</div>
+    <div class="subline">{{subline}}</div>
+  </div>
+  <div class="bar"></div>
+  <div class="zone"></div>
+</div>
+</body>
+</html>

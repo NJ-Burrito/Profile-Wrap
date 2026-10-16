@@ -1,0 +1,13 @@
+{
+  "name": "nj-linkedin-workspace-{{profile_id}}",
+  "private": true,
+  "type": "module",
+  "description": "Pinned renderers for this nj-linkedin workspace. Installed by 'njli assets fetch'.",
+  "engines": { "node": ">={{pin.node_min}}" },
+  "dependencies": {
+    "gsap": "{{pin.gsap}}",
+    "hyperframes": "{{pin.hyperframes}}",
+    "lucide-static": "{{pin.lucide-static}}",
+    "playwright": "{{pin.playwright}}"
+  }
+}

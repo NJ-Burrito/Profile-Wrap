@@ -1,0 +1,5 @@
+Your dashboard has three numbers too many.
+
+Keep the ones that change a decision.
+
+Which three would you remove today?

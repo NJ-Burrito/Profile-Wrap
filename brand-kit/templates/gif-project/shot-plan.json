@@ -1,0 +1,84 @@
+{
+  "slug": "{{slug}}",
+  "category": "webpage",
+  "duration_s": 10,
+  "fps": 25,
+  "total_frames": 250,
+  "canvas": {
+    "w": 1080,
+    "h": 1350,
+    "aspect": "4:5"
+  },
+  "style": "Standard v4 skeleton: poster frame 0, kinetic type with strike-through and re-entry, a split on one beat, locked camera, click iris, collapse match cut, identity sign-off (opt-in). Preset no-dim. Replace the copy, the palette and the cast for every post.",
+  "palette": [
+    "#E6EEF6",
+    "#BED0E4",
+    "#FBFDFF",
+    "#0E1A2B",
+    "#3F5068",
+    "#5B3DF5",
+    "#0F9B72",
+    "#D9FFF0"
+  ],
+  "contrast_pairs": [
+    [
+      "#0E1A2B",
+      "#E6EEF6",
+      7
+    ],
+    [
+      "#3F5068",
+      "#BED0E4",
+      4.5
+    ],
+    [
+      "#0E1A2B",
+      "#FBFDFF",
+      7
+    ],
+    [
+      "#0E1A2B",
+      "#0F9B72",
+      4.5
+    ],
+    [
+      "#E6EEF6",
+      "#5B3DF5",
+      4.5
+    ]
+  ],
+  "preset": "no-dim",
+  "hold": [
+    {
+      "at": 3.44,
+      "end": 3.84,
+      "frames": [
+        86,
+        96
+      ],
+      "why": "dead stop before the hit: nothing moves, the ticker and the beat bar stand still"
+    }
+  ],
+  "beats": [
+    0,
+    1.44,
+    1.92,
+    2.08,
+    3.44,
+    3.84,
+    4.08,
+    4.64,
+    5.36,
+    6.96,
+    7.64,
+    8.56,
+    8.9
+  ],
+  "hit_s": 4.08,
+  "identity": {
+    "where": "signoff",
+    "at": 7.64
+  },
+  "export": "mp4",
+  "export_note": "25 fps, 250 frames, 1080x1350; the GIF is made by 'njli render'."
+}

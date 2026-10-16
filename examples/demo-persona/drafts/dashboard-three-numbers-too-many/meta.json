@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "slug": "dashboard-three-numbers-too-many",
+  "title": "Your dashboard has three numbers too many",
+  "lang": "en",
+  "format": "gif",
+  "pillar": "P1",
+  "status": "demo",
+  "claims": [],
+  "fictional": true,
+  "assets": [
+    "sample.gif"
+  ],
+  "alt": "A bar chart where three of the six bars fade out, leaving three that matter.",
+  "video_project": "videos/dashboard-three-numbers-too-many"
+}

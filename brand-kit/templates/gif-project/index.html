@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1350" />
+    <title>{{title}}</title>
+    <script src="./vendor/gsap.min.js"></script>
+    <script src="./motion/brand.js"></script>
+    <link rel="stylesheet" href="./assets/fonts.css" />
+    <link rel="stylesheet" href="./motion/motion.css" />
+    <style>
+
+      /* Colour script (replace it for every post; shot-plan.json records it): a cool paper base, one idea colour (the hero), one action colour.
+         Light or mid-tone by default, no fixed theme. The same values go to M.color.script() below, which checks contrast. */
+      :root {
+        --c-base: #e6eef6;      /* drafting paper */
+        --c-ambient: #d3e0ee;
+        --c-surface: #bed0e4;   /* the tree sheet: a mid-tone blue */
+        --c-page: #fbfdff;      /* the human page: the whitest sheet */
+        --c-hero: #5b3df5;      /* violet: the idea (doesn't see -> reads) */
+        --c-accent: #0f9b72;    /* jade: what the action acts on */
+        --c-payoff: #d9fff0;
+        --c-ink: #0e1a2b;
+        --c-muted: #3f5068;
+        --sans: var(--brand-sans, system-ui, sans-serif);
+        --serif: var(--brand-display, system-ui, sans-serif);
+      }
+
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: 1080px; height: 1350px; overflow: hidden; background: var(--c-base); }
+      #stage { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--c-base); font-family: var(--sans); color: var(--c-ink); }
+
+      /* ---------- pane content masks (T2): each line rises out of its own clip box ---------- */
+      .mk { display: block; overflow: hidden; padding: 0.16em 0.06em 0.22em; margin: -0.16em -0.06em -0.22em; }
+      .w { display: block; white-space: nowrap; }
+      .ln { display: flex; gap: 0.28em; align-items: flex-start; }
+
+      /* ---------- the clock: a ticker that stands still in the dead stop, and the beat bar ---------- */
+      #tk { position: absolute; left: 0; top: 0; width: 1080px; height: 88px; overflow: hidden; z-index: 40; background: var(--c-base); border-bottom: 3px solid var(--c-ink); }
+      #tk-run { position: absolute; left: 0; top: 0; width: 3240px; height: 85px; display: flex; }
+      .unit { flex: none; width: 1080px; height: 85px; padding: 0 44px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 28px; letter-spacing: 0.16em; text-transform: uppercase; white-space: nowrap; }
+      .unit i { display: block; width: 14px; height: 14px; border-radius: 50%; background: var(--c-hero); flex: none; }
+      #beat { position: absolute; left: 0; top: 91px; width: 1080px; height: 5px; background: var(--c-hero); opacity: 0.12; z-index: 40; }
+
+      /* ---------- the poster: the whole hook, finished, on frame 0 ---------- */
+      #hook { position: absolute; left: 56px; top: 262px; z-index: 5; }
+      .s { font-family: var(--sans); font-weight: 700; font-size: 104px; line-height: 1.05; letter-spacing: -0.01em; color: var(--c-ink); }
+      .h { font-family: var(--serif); font-weight: 900; font-size: 230px; line-height: 0.92; letter-spacing: -0.025em; color: var(--c-ink); }
+      .h.hot { color: var(--c-hero); }
+      #lnA { margin-bottom: 10px; }
+      #lnD { margin-top: 20px; }
+      #kick { position: absolute; left: 60px; top: 1018px; z-index: 5; font-weight: 700; font-size: 30px; line-height: 38px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--c-muted); }
+
+      /* ---------- split panes (made by M.split.make): the page left, the tree right ---------- */
+      #pL { background: var(--c-page); }
+      #pR { background: var(--c-surface); }
+      .plabel { position: absolute; left: 28px; top: 26px; font-weight: 700; font-size: 28px; line-height: 36px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--c-muted); }
+      #pR .plabel { left: 36px; }
+
+      /* page (left, 429 wide) */
+      .pgi { position: absolute; }
+      #pg-head { left: 28px; top: 92px; font-family: var(--serif); font-weight: 700; font-size: 64px; line-height: 84px; }
+      .row { left: 24px; width: 381px; height: 236px; }
+      .row .box { position: absolute; inset: 0; border-radius: 22px; background: #fff; border: 2px solid color-mix(in srgb, var(--c-ink) 16%, transparent); }
+      .row .thumb { position: absolute; left: 14px; top: 43px; width: 150px; height: 150px; }
+      .row .thumb svg { position: absolute; left: 0; top: 0; width: 150px; height: 150px; }
+      .rname { position: absolute; left: 176px; top: 66px; font-family: var(--serif); font-weight: 700; font-size: 34px; line-height: 44px; white-space: nowrap; }
+      .rprice { position: absolute; left: 176px; top: 122px; font-weight: 700; font-size: 30px; line-height: 38px; white-space: nowrap; color: var(--c-muted); }
+      #r1 { top: 208px; }
+      #r2 { top: 468px; }
+      #tot { left: 28px; top: 740px; width: 373px; height: 80px; border-top: 3px solid var(--c-ink); }
+      #tot span { position: absolute; top: 14px; font-weight: 700; font-size: 32px; line-height: 44px; white-space: nowrap; }
+      #btn { left: 24px; top: 868px; width: 381px; height: 140px; --obj-face: var(--c-accent); --obj-ink: var(--c-ink); color: var(--c-ink); transform-origin: 50% 100%; }
+      #btn > svg { position: absolute; left: 0; top: 0; width: 381px; height: 140px; }
+      #btn .blabel { position: absolute; left: 0; top: 0; width: 381px; height: 130px; line-height: 130px; text-align: center; padding-left: 56px; font-weight: 700; font-size: 36px; color: var(--c-ink); }
+
+      /* tree (right, 645 wide): 34 px dark ink, nine lines, the last one is the target */
+      .tl { position: absolute; left: 36px; width: 600px; height: 88px; font-weight: 500; font-size: 34px; line-height: 88px; letter-spacing: 0; white-space: pre; color: var(--c-ink); }
+      .tl .ref { font-weight: 700; }
+      #hlbar { position: absolute; left: 0; top: 800px; width: 645px; height: 88px; background: var(--c-accent); }
+      #clk { position: absolute; left: 36px; top: 938px; height: 84px; padding: 0 32px; border-radius: 42px; background: var(--c-accent); color: var(--c-ink); font-weight: 700; font-size: 38px; line-height: 84px; white-space: nowrap; transform-origin: 0 50%; }
+
+      /* agent cursor and badge live above both panes, in stage coordinates */
+      #cursor-w { position: absolute; left: 0; top: 0; width: 1px; height: 1px; z-index: 20; }
+      #agent-cursor { position: absolute; left: -7px; top: -5px; width: 60px; height: 60px; transform-origin: 7px 5px; opacity: 0; }
+      #agent-cursor svg { display: block; width: 60px; height: 60px; }
+      #badge { position: absolute; left: 322px; top: 1006px; width: 80px; height: 80px; z-index: 12; opacity: 0; }
+
+      /* ---------- the hit: a violet slab irises out of the clicked button; the poster word returns huge, is struck, "reads" replaces it ---------- */
+      #slab { position: absolute; inset: 0; background: var(--c-hero); z-index: 30; clip-path: circle(0px at 215px 1046px); color: var(--c-base); }
+      #irisRim { position: absolute; inset: 0; z-index: 31; pointer-events: none; }
+      .g { position: absolute; left: 56px; font-family: var(--serif); font-weight: 900; color: var(--c-base); letter-spacing: -0.03em; line-height: 0.9; }
+      .gs { position: absolute; left: 60px; font-family: var(--sans); font-weight: 700; color: var(--c-base); line-height: 1; }
+      .g .mk { display: inline-block; }
+      #g1 { top: 270px; font-size: 230px; }
+      #g2 { top: 480px; font-size: 330px; }
+      #gIt { top: 300px; font-size: 130px; }
+      #gReads { top: 452px; font-size: 320px; }
+      #gThis { top: 770px; font-size: 130px; }
+
+      .mo-id, .mo-sig { border: 3px solid var(--c-ink); }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="{{slug}}" data-start="0" data-duration="10" data-fps="25" data-width="1080" data-height="1350">
+
+      <!-- the clock -->
+      <div id="tk"><div id="tk-run">
+        <div class="unit"><span>Screen reader</span><i></i><span>Tree</span><i></i><span>Name</span><i></i><span>Role</span><i></i></div>
+        <div class="unit"><span>Screen reader</span><i></i><span>Tree</span><i></i><span>Name</span><i></i><span>Role</span><i></i></div>
+        <div class="unit"><span>Screen reader</span><i></i><span>Tree</span><i></i><span>Name</span><i></i><span>Role</span><i></i></div>
+      </div></div>
+      <div id="beat"></div>
+
+      <!-- the poster hook: visible on frame 0 -->
+      <div id="hook">
+        <div id="lnA" class="ln s">Your screen reader</div>
+        <div class="ln h"><span class="mo-mk"><span class="mo-w" id="wDoesnt">doesn&#8217;t</span></span></div>
+        <div class="ln h hot"><span class="mo-mk"><span class="mo-w" id="wSee">see</span></span></div>
+        <div id="lnD" class="ln s">this page.</div>
+      </div>
+      <div id="kick"><span class="mo-mk"><span class="mo-w" id="wKick">Accessibility tree, simplified</span></span></div>
+
+      <!-- the hit: slab, rim, the huge words -->
+      <div id="slab">
+        <div class="g" id="g1"><span class="mk"><span class="w" id="gDoesnt">doesn&#8217;t</span></span></div>
+        <div class="g" id="g2"><span class="mk"><span class="w" id="gSee">see</span></span></div>
+        <div class="gs" id="gIt"><span class="mk"><span class="w" id="gItW">It</span></span></div>
+        <div class="g" id="gReads"><span class="mk"><span class="w" id="gReadsW">reads</span></span></div>
+        <div class="gs" id="gThis"><span class="mk"><span class="w" id="gThisW">this.</span></span></div>
+      </div>
+      <div id="irisRim"></div>
+      <div id="cursor-w"><div id="agent-cursor"></div></div>
+      <div id="badge"></div>
+    </div>
+
+    <script type="module">
+      import * as M from "./motion/core.js";
+      import { identity } from "./motion/identity.js";
+
+      const D = 10, FPS = 25;
+      const ID = "{{slug}}";
+      const F = (f) => f / FPS;
+      const $ = (s) => document.querySelector(s);
+      const $$ = (s) => Array.from(document.querySelectorAll(s));
+      const stage = $("#stage");
+      const tl = gsap.timeline({ paused: true });
+      const U = M.hand.claimer(FPS);
+
+      /* ---------- the arc: preset "no-dim" (no grade shift, the tension is a logged dead stop), hit at 4.08 s, identity at the sign-off ---------- */
+      const STOP0 = 86, STOP1 = 96, HIT = 102;                       // frames: dead stop f86-f96 (0.4 s), hit f102 = 4.08 s
+      const plan = M.story.preset("no-dim", { hookEnd: 1.2, buildEnd: F(STOP0), tensionEnd: F(STOP1), hit: F(HIT), payoffEnd: 5.6, identity: "signoff" });
+      window.__plan = { problems: plan.check(), holds: plan.holds, identity: plan.identity };
+
+      /* ---------- colour script (contrast checked) ---------- */
+      const P = M.color.use(M.color.script({
+        base: "#e6eef6", ambient: "#d3e0ee", hero: "#5b3df5", accent: "#0f9b72", payoff: "#d9fff0",
+        surface: "#bed0e4", page: "#fbfdff", ink: "#0e1a2b", muted: "#3f5068",
+        pairs: [["ink on surface", "ink", "surface", 7], ["muted on surface", "muted", "surface", 4.5], ["ink on page", "ink", "page", 7], ["muted on page", "muted", "page", 4.5],
+          ["ink on jade (button, bar, pill)", "ink", "accent", 4.5], ["base on violet (slab, done button)", "base", "hero", 4.5], ["violet on base (hook word, 230 px)", "hero", "base", 3],
+          ["ink on violet (strike bar, decorative)", "ink", "hero", 2.8]],
+      }));
+      P.apply(stage);
+      window.__palette = { failures: P.failures, report: P.report };
+
+      /* ---------- the split (page left, tree right) from the library ---------- */
+      const S = M.split.make(stage, { rtl: false, top: 108, height: 1060, ratio: 0.4, ids: { a: "pL", b: "pR", div: "div" } });
+      const mkLine = (cls, id, top, html) => `<div ${id ? `id="${id}"` : ""} class="${cls}" style="top:${top}px"><span class="mk" style="padding:0;margin:0;position:absolute;inset:0;"><span class="w">${html}</span></span></div>`;
+      const rowHtml = (id, top, name, price) => `<div id="${id}" class="pgi row" style="top:${top}px"><span class="mk" style="position:absolute;inset:0;padding:14px;margin:-14px;"><span class="w" style="position:absolute;inset:14px;display:block;"><i class="box"></i><div class="thumb"></div><div class="rname">${name}</div><div class="rprice">${price}</div></span></span></div>`;
+      S.a.innerHTML =
+        `<div class="plabel"><span class="mk"><span class="w" id="lblL">You see</span></span></div>` +
+        `<div id="pg-head" class="pgi"><span class="mk"><span class="w">Cart</span></span></div>` +
+        rowHtml("r1", 208, "Linen shirt", "$34.00") + rowHtml("r2", 468, "Canvas tote", "$22.00") +
+        `<div id="tot" class="pgi"><span class="mk" style="position:absolute;inset:0;"><span class="w" style="position:absolute;inset:0;display:block;"><span style="left:0">Total</span><span style="right:0">$56.00</span></span></span></div>` +
+        `<div id="btn" class="pgi"><span class="mk" style="position:absolute;inset:0;padding:0;margin:0;overflow:visible;"><span class="w" id="btnw" style="position:absolute;inset:0;display:block;"><span class="blabel">Checkout</span></span></span></div>`;
+      /* the tree is a simplified accessibility snapshot: - role "name" [attr], - text: value, - listitem: with nested children */
+      const TREE = [
+        `- heading "Cart" <span class="ref">[level=1]</span>`, `- listitem:`, `  - text: Linen shirt`, `  - text: $34.00`,
+        `- listitem:`, `  - text: Canvas tote`, `  - text: $22.00`, `- text: Total $56.00`, `- button "Checkout" `,
+      ];
+      S.b.innerHTML =
+        `<div class="plabel"><span class="mk"><span class="w" id="lblR">It reads</span></span></div><div id="hlbar"></div>` +
+        TREE.map((h, i) => mkLine("tl", "t" + (i + 1), 96 + 88 * i, h)).join("") +
+        `<div id="clk">press Enter</div>`;
+
+      /* ---------- cast: real kit objects ---------- */
+      const shirt = M.objects.mount("#r1 .thumb", "shirt", { id: "shirt", width: 150, height: 150, vars: { "obj-base": "#6f8fb0" } });
+      const tote = M.objects.mount("#r2 .thumb", "tote", { id: "tote", width: 150, height: 150, vars: { "obj-base": "#e0c68a", "obj-accent": "var(--c-hero)" } });
+      const button = M.objects.mount("#btn", "button-checkout", { id: "button", width: 381, height: 140 });
+      button.setAttribute("preserveAspectRatio", "none");
+      $("#btn").prepend(button);
+      M.objects.mount("#agent-cursor", "cursor-arrow", { id: "cursor", width: 60, height: 60 });
+      M.objects.mount("#badge", "check-badge", { id: "badge", width: 80, height: 80, vars: { "obj-base": "var(--c-ink)", "obj-ring": "var(--c-page)", "obj-check": "var(--c-accent)" } });
+      M.objects.setLight(stage, { x: -0.5, y: -0.6, i: 1 });
+
+      /* the poster words: small lines and the kicker through the library splitter, the two hero words by id */
+      const wA = M.type.words($("#lnA")), wD = M.type.words($("#lnD")), wDoesnt = $("#wDoesnt"), wSee = $("#wSee"), wKick = $("#wKick");
+      const poster = [...wA, wDoesnt, wSee, ...wD, wKick];          // reading order
+      const slabWords = ["#gDoesnt", "#gSee", "#gItW", "#gReadsW", "#gThisW"];
+      const paneWords = ["#lblL", "#pg-head .w", "#r1 .w", "#r2 .w", "#tot .w", "#btnw", "#lblR", ".tl .w"];
+
+      /* every mask, word and pane clips on purpose */
+      $$("#stage *").forEach((e) => ["overlap", "occlusion", "overflow", "escape"].forEach((a) => e.setAttribute("data-layout-allow-" + a, "true")));
+
+      /* ---------- resting states: the poster is FINISHED on frame 0; everything else waits behind a mask ---------- */
+      gsap.set(paneWords.concat(slabWords), { yPercent: 118 });
+      gsap.set("#hlbar", { clipPath: "inset(0 100% 0 0)" });
+      gsap.set("#clk", { scaleX: 0, opacity: 0 });
+      gsap.set("#agent-cursor", { x: 940, y: 1010, opacity: 0 });
+      gsap.set("#badge", { scale: 0, opacity: 0, transformOrigin: "50% 50%" });
+
+      /* ===================================================== THE CLOCK: beat grid every 12 frames; ticker and beats stand still in the dead stop */
+      const HOLDS = plan.holds.map((h) => [h.at, h.end]);
+      M.grid.beats(tl, "#beat", { duration: D, pulse: 12, skip: HOLDS });
+      M.grid.ticker(tl, "#tk-run", { duration: D, unit: 1080, holds: HOLDS });
+
+      /* ===================================================== ACT 1: THE POSTER (f0-f36), then it leaves through its masks (f36-f49) */
+      M.type.nudge(tl, wDoesnt, { at: F(12), px: 9 }); M.type.nudge(tl, wSee, { at: F(13), px: 9 });
+      M.type.nudge(tl, wDoesnt, { at: F(24), px: 7 }); M.type.nudge(tl, wSee, { at: F(25), px: 7 });
+      const loopA = M.poster.loop(tl, poster, { leaveAt: F(36), restoreAt: F(214), leaveGap: F(1), leaveDur: F(6), restoreGap: 0.05, restoreDur: 0.4,
+        weights: ["light", "light", "light", "heavy", "heavy", "light", "light", "light"] });
+
+      /* ===================================================== ACT 2: THE SPLIT (f48), both panes on one beat */
+      M.split.open(tl, { a: S.a, b: S.b, div: S.div, rtl: false, at: F(48), dur: F(12) });
+      [["#lblL", 50], ["#pg-head .w", 50], ["#r1 .w", 52], ["#r2 .w", 55], ["#tot .w", 58], ["#btnw", 61], ["#lblR", 50]].forEach(([s, f]) => M.type.enter(tl, s, { at: F(f), dur: F(8) }));
+      /* the tree builds with ACCELERATING entrances: 5, 3, 2, 2, 2, 2, 1, 1 frames apart, all done by f77 */
+      [52, 57, 60, 62, 64, 66, 68, 69, 70].forEach((f, i) => M.type.enter(tl, `#t${i + 1} .w`, { at: F(f), dur: F(7) }));
+      tl.fromTo("#hlbar", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: F(6), ease: M.type.ease.light, immediateRender: false }, F(70));
+      tl.fromTo("#clk", { scaleX: 0, opacity: 1 }, { scaleX: 1, opacity: 1, duration: F(9), ease: M.type.ease.heavy, immediateRender: false }, F(72));
+      tl.fromTo(button, { opacity: 0, scale: 0.9, transformOrigin: "50% 50%" }, { opacity: 1, scale: 1, duration: F(8), ease: M.ease.overshootSoft, immediateRender: false }, F(60));
+      gsap.set(button, { opacity: 0 });
+      M.life.sway(tl, shirt, { at: U(F(50)), seed: "hs" });
+      M.life.swing(tl, tote, { at: U(F(54)), seed: "ht" });
+
+      /* the agent's cursor leaves the command pill and brakes dead above the Checkout button */
+      const START = [940, 1010], HOVER = [352, 930], CLICK = [262, 1040];
+      tl.fromTo("#agent-cursor", { opacity: 0 }, { opacity: 1, duration: F(3), ease: "power2.out", immediateRender: false }, F(74));
+      M.hand.arc(tl, "#agent-cursor", { at: F(74), duration: F(12), from: START, to: HOVER, lift: 0.18, side: -1, ease: M.cut.ease.brake, anticipate: 0, bank: 4, steps: 12 });
+
+      /* ===================================================== DEAD STOP f86-f96 (0.4 s, logged in shot-plan.json): no tween runs, the ticker and the beats stand still */
+
+      /* ===================================================== THE HIT (f102): lift 3 frames, expo-in slam 3 frames, impact on f102 */
+      tl.fromTo("#agent-cursor", { x: HOVER[0], y: HOVER[1], scale: 1 }, { x: HOVER[0] + 16, y: HOVER[1] - 20, scale: 1.06, duration: F(3), ease: "power2.out", immediateRender: false }, F(STOP1));
+      tl.fromTo("#agent-cursor", { x: HOVER[0] + 16, y: HOVER[1] - 20, scale: 1.06 }, { x: CLICK[0], y: CLICK[1], scale: 0.84, duration: F(HIT - STOP1 - 3), ease: M.cut.ease.slam, immediateRender: false }, F(STOP1 + 3));
+      tl.fromTo("#agent-cursor", { scale: 0.84 }, { scale: 1, duration: F(8), ease: M.ease.spring, immediateRender: false }, F(HIT));
+      M.hand.hit(tl, "#btn", { at: F(HIT) - 0.17, squash: 0.12, stretch: 0.06 });
+      M.objects.press(tl, button, { at: F(HIT), depth: 7 });
+      const BTN = { idle: { "--obj-face": P.rgb("accent", 1) }, done: { "--obj-face": P.rgb("hero", 1) } };
+      M.stateChange(tl, "#btn", { from: "idle", to: "done", at: F(HIT), duration: F(3), states: BTN });
+      tl.fromTo("#btn .blabel", { color: P.rgb("ink", 1) }, { color: P.rgb("base", 1), duration: F(3), ease: "none", immediateRender: false }, F(HIT));
+
+      /* click iris: a flat jade ring leads, the violet slab trails it by 2 frames, both grow out of the button's centre */
+      const CX = 215, CY = 1046;
+      M.cut.iris(tl, { at: F(HIT), dur: F(10), cx: CX, cy: CY, rMax: 1400, rim: "#irisRim", reveal: "#slab", lag: 0.08, rimColor: P.rgb("accent", 1) });
+      const stDoesnt = M.type.strikeBar("#gDoesnt", { color: "var(--c-ink)" }), stSee = M.type.strikeBar("#gSee", { color: "var(--c-ink)" });
+      M.type.enter(tl, "#gDoesnt", { at: F(104), dur: F(12), weight: "heavy" });
+      M.type.enter(tl, "#gSee", { at: F(107), dur: F(12), weight: "heavy" });
+      M.type.strike(tl, stDoesnt, { at: F(116), dur: F(5) });
+      M.type.strike(tl, stSee, { at: F(119), dur: F(5) });
+      /* "reads" replaces it: struck bars leave, the old words are pushed out upward as the new ones rise */
+      M.type.strike(tl, stDoesnt, { at: F(126), dur: F(5), out: true });
+      M.type.strike(tl, stSee, { at: F(128), dur: F(5), out: true });
+      M.type.exit(tl, "#gDoesnt", { at: F(128), dur: F(7) });
+      M.type.exit(tl, "#gSee", { at: F(130), dur: F(7) });
+      M.type.enter(tl, "#gReadsW", { at: F(134), dur: F(14), weight: "heavy" });
+      M.type.enter(tl, "#gItW", { at: F(137), dur: F(8) });
+      M.type.enter(tl, "#gThisW", { at: F(141), dur: F(9) });
+      M.type.nudge(tl, "#gReadsW", { at: F(150), px: 10 });
+
+      /* match cut (collapse): the violet slab is clipped down onto the button's rectangle on a steep ramp; the cut lands as they match */
+      const CUT = 174;
+      M.cut.match(tl, { at: F(CUT), from: "#slab", into: "#btn", mode: "collapse", collapseDur: F(8), rectTo: { x: 24, y: 976, w: 381, h: 140, r: 20 }, settle: 0.4 });
+      tl.set(slabWords, { yPercent: 118 }, F(CUT + 2));
+      tl.fromTo("#badge", { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: F(9), ease: M.ease.pop, immediateRender: false }, F(CUT + 2));
+      tl.fromTo("#agent-cursor", { opacity: 1 }, { opacity: 0, duration: F(4), ease: "power2.in", immediateRender: false }, F(CUT + 4));
+      M.life.glint(tl, button, { at: U(F(CUT + 12)) });
+      M.life.sway(tl, shirt, { at: U(F(CUT + 8)), seed: "hs2" });
+      M.life.swing(tl, tote, { at: U(F(CUT + 14)), seed: "ht2" });
+
+      /* ===================================================== SIGN-OFF: the identity beat and signature (opt-in; the card is on screen from frame 0) */
+      const hasId = !!(window.__brand && window.__brand.identity && window.__brand.identity.name);
+      const ident = hasId ? identity(tl, { plan, where: plan.identity.where, total: D, lang: "{{lang}}", accent: "var(--c-hero)", at: U(plan.identity.at), sigInk: "var(--c-ink)", sigAccent: "var(--c-hero)", sigSeamTail: 0.2 }) : null;
+      window.__identity = ident ? { at: ident.at, end: ident.end, problems: ident.problems, sig: ident.signature && { at: ident.signature.at, end: ident.signature.end } } : null;
+
+      /* ===================================================== RELEASE (f198-f238): the panes leave through their masks, the poster comes back */
+      $$(paneWords.filter((q) => q !== "#btnw").join(",")).forEach((el, i) => M.type.exit(tl, el, { at: F(198 + Math.min(i, 8)), dur: F(6) }));
+      tl.fromTo("#badge", { scale: 1, opacity: 1 }, { scale: 0, opacity: 0, duration: F(5), ease: "power2.in", immediateRender: false }, F(198));
+      tl.fromTo("#clk", { scaleX: 1 }, { scaleX: 0, duration: F(6), ease: M.type.ease.out, immediateRender: false }, F(200));
+      M.split.close(tl, { a: S.a, b: S.b, div: S.div, rtl: false, at: F(207), dur: F(10) });
+      tl.set(paneWords, { yPercent: 118 }, F(220));
+      tl.set("#clk", { scaleX: 0, opacity: 0 }, F(220));
+      tl.set("#hlbar", { clipPath: "inset(0 100% 0 0)" }, F(220));
+      tl.set("#agent-cursor", { x: START[0], y: START[1] }, F(220));
+      tl.set("#btn", { "--obj-face": P.rgb("accent", 1) }, F(220));
+      tl.set("#btn .blabel", { color: P.rgb("ink", 1) }, F(220));
+      tl.set(button, { opacity: 0 }, F(220));
+
+      /* ---------- register, then the probes ---------- */
+      M.loop.register(ID, tl, D);
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+      const probe = {};
+      try { probe.starts = M.loop.startAudit(tl, { fps: FPS }); } catch (e) { probe.starts = String(e); }
+      try { probe.poster = M.poster.check(tl, poster, { D }); } catch (e) { probe.poster = String(e); }
+      try {
+        const hash = (t) => { tl.seek(t); return Array.from(stage.querySelectorAll("*")).map((e) => e.getAttribute("style") || "").join("|"); };
+        const a = hash(F(STOP0) + 0.02), b = hash(F(STOP1) - 0.02);
+        probe.stopFrozen = a === b;
+        tl.seek(0);
+      } catch (e) { probe.stopFrozen = String(e); }
+      probe.plan = window.__plan; probe.palette = window.__palette && window.__palette.failures; probe.identity = window.__identity;
+      probe.beats = { loopA, HIT: F(HIT), STOP: [F(STOP0), F(STOP1)] };
+      window.__probe = probe;
+      document.body.setAttribute("data-probe", JSON.stringify(probe));
+    </script>
+  </body>
+</html>

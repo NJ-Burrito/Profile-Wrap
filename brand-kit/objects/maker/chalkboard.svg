@@ -1,0 +1,42 @@
+<!-- chalkboard: classroom board with a wooden frame, chalk drawing (a loop with a node and a spark), tray and chalk. Colour: obj-base (frame wood), obj-slate (board), obj-chalk (lines). Parts: draw (chalk strokes, fades), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 176" width="260" height="176" data-object="chalkboard" style="overflow:visible">
+<style>
+svg[data-object="chalkboard"]{--obj-hi:color-mix(in srgb,var(--obj-base,#b57a43) 62%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#b57a43) 60%,#000)}
+svg[data-object="chalkboard"] .sh{transform:translate(calc(var(--light-x,-.6)*-9px),calc(var(--light-y,-.6)*-2px));opacity:calc(.32 + .18*var(--light-i,1))}
+svg[data-object="chalkboard"] .hl{transform:translate(calc(var(--light-x,-.6)*14px),calc(var(--light-y,-.6)*8px));opacity:calc(.8*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="wood" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset=".5" style="stop-color:var(--obj-base,#b57a43)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="slate" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-slate,#12302e) 80%,#fff)"/><stop offset="1" style="stop-color:var(--obj-slate,#12302e)"/></linearGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".5"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clip"><rect x="14" y="10" width="232" height="140" rx="8"/></clipPath>
+<filter id="blur" x="-20%" y="-30%" width="140%" height="180%"><feGaussianBlur stdDeviation="5"/></filter>
+<filter id="chalk" x="-5%" y="-5%" width="110%" height="110%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="4" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2"/></filter>
+</defs>
+<rect class="sh" x="20" y="26" width="230" height="146" rx="10" fill="#000" filter="url(#blur)"/>
+<rect x="14" y="12" width="232" height="142" rx="9" style="fill:var(--obj-lo)"/>
+<rect x="14" y="10" width="232" height="142" rx="9" fill="url(#wood)"/>
+<path d="M18 30 H242 M18 60 H242 M18 100 H242 M18 130 H242" stroke="#000" stroke-opacity=".08" stroke-width="1.4"/>
+<rect x="30" y="24" width="200" height="112" rx="4" fill="#000" fill-opacity=".45"/>
+<rect x="30" y="22" width="200" height="112" rx="4" fill="url(#slate)"/>
+<g clip-path="url(#clip)"><g class="hl"><ellipse cx="90" cy="34" rx="90" ry="26" fill="url(#hlg)" opacity=".28"/></g></g>
+<g data-part="draw" filter="url(#chalk)" fill="none" stroke="var(--obj-chalk,#f3e9dc)" stroke-linecap="round" stroke-linejoin="round" opacity=".92">
+<path d="M52 108 C52 60 82 44 112 44 C146 44 168 62 168 88 C168 110 148 118 128 112" stroke-width="4"/>
+<circle cx="52" cy="112" r="6" stroke-width="3.4"/>
+<circle cx="132" cy="112" r="6" stroke-width="3.4"/>
+<path d="M146 112 H196" stroke-width="3.4" stroke-dasharray="1 10"/>
+<path d="M200 56 L204 66 L214 70 L204 74 L200 84 L196 74 L186 70 L196 66 Z" stroke-width="3.2"/>
+<path d="M62 124 H110" stroke-width="3" opacity=".6"/>
+</g>
+<g clip-path="url(#clip)"><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-70" y="0" width="30" height="170" fill="url(#sheeng)"/></g></g>
+<rect x="30" y="22" width="200" height="112" rx="4" fill="none" stroke="#000" stroke-opacity=".6" stroke-width="2"/>
+<rect x="30" y="22" width="200" height="112" rx="4" fill="none" stroke="#fff" stroke-opacity=".15" stroke-width="1"/>
+<rect x="14" y="10" width="232" height="142" rx="9" fill="none" stroke="#fff" stroke-opacity=".4" stroke-width="1.4"/>
+<rect x="14" y="10" width="232" height="142" rx="9" fill="none" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<rect x="60" y="146" width="140" height="12" rx="3" style="fill:var(--obj-lo)"/>
+<rect x="60" y="144" width="140" height="12" rx="3" fill="url(#wood)" stroke="#000" stroke-opacity=".5" stroke-width="1"/>
+<rect x="70" y="138" width="38" height="8" rx="3.4" fill="#f4f1ea" stroke="#000" stroke-opacity=".4" stroke-width="1"/>
+<rect x="74" y="139.6" width="30" height="2" rx="1" fill="#fff"/>
+<rect x="116" y="140" width="22" height="6" rx="3" fill="#e9b7c4" stroke="#000" stroke-opacity=".4" stroke-width="1"/>
+</svg>

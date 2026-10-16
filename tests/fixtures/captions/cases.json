@@ -1,0 +1,229 @@
+[
+  {
+    "file": "good_en_plain.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": "PASS"
+  },
+  {
+    "file": "good_en_numbers.txt",
+    "lang": "en",
+    "claims": [
+      "F01"
+    ],
+    "expect": "PASS"
+  },
+  {
+    "file": "good_en_listicle.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": "PASS"
+  },
+  {
+    "file": "good_en_date_year.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": "PASS"
+  },
+  {
+    "file": "good_ar_digits.txt",
+    "lang": "ar",
+    "claims": [
+      "F06"
+    ],
+    "expect": "PASS"
+  },
+  {
+    "file": "bad_number_uncited.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "numbers"
+    ]
+  },
+  {
+    "file": "bad_number_wrong_unit.txt",
+    "lang": "en",
+    "claims": [
+      "F02"
+    ],
+    "expect": [
+      "numbers"
+    ]
+  },
+  {
+    "file": "bad_number_draft_fact.txt",
+    "lang": "en",
+    "claims": [
+      "F03"
+    ],
+    "expect": [
+      "claims",
+      "numbers"
+    ]
+  },
+  {
+    "file": "bad_number_demo_fact.txt",
+    "lang": "en",
+    "claims": [
+      "F05"
+    ],
+    "expect": [
+      "claims"
+    ]
+  },
+  {
+    "file": "bad_number_unknown_claim.txt",
+    "lang": "en",
+    "claims": [
+      "F99"
+    ],
+    "expect": [
+      "claims"
+    ]
+  },
+  {
+    "file": "bad_em_dash.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "em_dash"
+    ]
+  },
+  {
+    "file": "bad_contrast.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "slop"
+    ]
+  },
+  {
+    "file": "bad_slop_word.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "slop"
+    ]
+  },
+  {
+    "file": "bad_link_bare_domain.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "links"
+    ]
+  },
+  {
+    "file": "bad_link_url.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "links"
+    ]
+  },
+  {
+    "file": "bad_hashtags.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "hashtags"
+    ]
+  },
+  {
+    "file": "bad_private_term.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "private_terms"
+    ]
+  },
+  {
+    "file": "bad_never_say.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "never_say"
+    ]
+  },
+  {
+    "file": "bad_job_seeking.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "job_seeking"
+    ]
+  },
+  {
+    "file": "bad_invisible.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "invisible"
+    ]
+  },
+  {
+    "file": "bad_email.txt",
+    "lang": "en",
+    "claims": [],
+    "expect": [
+      "contact"
+    ]
+  },
+  {
+    "file": "bad_ar_persian_letter.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "arabic"
+    ]
+  },
+  {
+    "file": "bad_ar_tatweel.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "arabic"
+    ]
+  },
+  {
+    "file": "bad_ar_bidi.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "arabic"
+    ]
+  },
+  {
+    "file": "bad_ar_latin_comma.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "arabic"
+    ]
+  },
+  {
+    "file": "bad_ar_latin_question.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "arabic"
+    ]
+  },
+  {
+    "file": "bad_ar_slop.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "slop"
+    ]
+  },
+  {
+    "file": "bad_ar_number_uncited.txt",
+    "lang": "ar",
+    "claims": [],
+    "expect": [
+      "numbers"
+    ]
+  }
+]

@@ -1,0 +1,31 @@
+<!-- dataset: three labelled sample cards fanned out, the middle one with a confidence bar. Colour: obj-base (picture tint), obj-accent (labels, bar). Parts: cardL, cardM, cardR (fan), conf (bar), sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" data-object="dataset" style="overflow:visible">
+<style>
+svg[data-object="dataset"]{--obj-hi:color-mix(in srgb,var(--obj-base,#5ee0c4) 60%,#fff);--obj-lo:color-mix(in srgb,var(--obj-base,#5ee0c4) 62%,#000)}
+svg[data-object="dataset"] .sh{transform:translate(calc(var(--light-x,-.6)*-8px),calc(var(--light-y,-.6)*-2px));opacity:calc(.3 + .16*var(--light-i,1))}
+svg[data-object="dataset"] .hl{transform:translate(calc(var(--light-x,-.6)*6px),calc(var(--light-y,-.6)*4px));opacity:calc(.7*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="paper" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fffdf6"/><stop offset="1" stop-color="#e2dccb"/></linearGradient>
+<linearGradient id="pic" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--obj-hi)"/><stop offset="1" style="stop-color:var(--obj-lo)"/></linearGradient>
+<linearGradient id="acc" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:color-mix(in srgb,var(--obj-accent,#ffc22e) 70%,#fff)"/><stop offset="1" style="stop-color:var(--obj-accent,#ffc22e)"/></linearGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="clipM"><rect x="58" y="34" width="84" height="116" rx="9"/></clipPath>
+<filter id="blur" x="-30%" y="-80%" width="160%" height="260%"><feGaussianBlur stdDeviation="4"/></filter>
+<g id="card"><rect x="58" y="34" width="84" height="116" rx="9" fill="url(#paper)" stroke="#000" stroke-opacity=".28" stroke-width="1.2"/><rect x="60" y="36" width="80" height="112" rx="8" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1"/><rect x="66" y="42" width="68" height="58" rx="5" fill="url(#pic)"/><rect x="66" y="42" width="68" height="58" rx="5" fill="none" stroke="#000" stroke-opacity=".25"/></g>
+</defs>
+<ellipse class="sh" cx="100" cy="176" rx="68" ry="8" fill="#000" filter="url(#blur)"/>
+<g data-part="cardL" data-pivot="100 168"><use href="#card"/>
+<circle cx="100" cy="71" r="17" fill="url(#acc)" stroke="#000" stroke-opacity=".3"/><ellipse cx="94" cy="65" rx="6" ry="4" fill="#fff" opacity=".6"/>
+<rect x="68" y="108" width="46" height="7" rx="3.5" fill="#000" opacity=".28"/><rect x="68" y="122" width="30" height="7" rx="3.5" fill="#000" opacity=".16"/><circle cx="124" cy="112" r="6" fill="url(#acc)" stroke="#000" stroke-opacity=".3"/><path d="M121 112 l2.4 2.6 l4.4 -5" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g data-part="cardR" data-pivot="100 168"><use href="#card"/>
+<path d="M100 52 L119 90 H81 Z" fill="#fff" fill-opacity=".92" stroke="#000" stroke-opacity=".3" stroke-linejoin="round"/><path d="M100 60 L110 82 H90 Z" fill="url(#acc)" opacity=".9"/>
+<rect x="68" y="108" width="40" height="7" rx="3.5" fill="#000" opacity=".28"/><rect x="68" y="122" width="52" height="7" rx="3.5" fill="#000" opacity=".16"/><circle cx="124" cy="112" r="6" fill="url(#acc)" stroke="#000" stroke-opacity=".3"/><path d="M121 112 l2.4 2.6 l4.4 -5" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></g>
+<g data-part="cardM" data-pivot="100 168"><use href="#card"/>
+<rect x="80" y="54" width="40" height="34" rx="8" fill="#fff" fill-opacity=".92" stroke="#000" stroke-opacity=".3"/><rect x="87" y="61" width="26" height="20" rx="4" fill="url(#acc)" opacity=".9"/>
+<rect x="68" y="108" width="68" height="9" rx="4.5" fill="#000" opacity=".22"/>
+<g data-part="conf" data-pivot="68 112"><rect x="68" y="108" width="58" height="9" rx="4.5" fill="url(#acc)" stroke="#000" stroke-opacity=".3" stroke-width="1"/><rect x="71" y="109.6" width="48" height="2.4" rx="1.2" fill="#fff" opacity=".6"/></g>
+<rect x="68" y="124" width="36" height="7" rx="3.5" fill="#000" opacity=".2"/><circle cx="124" cy="136" r="6" fill="url(#acc)" stroke="#000" stroke-opacity=".3"/><path d="M121 136 l2.4 2.6 l4.4 -5" fill="none" stroke="#000" stroke-opacity=".7" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="hl"><ellipse cx="86" cy="52" rx="26" ry="9" fill="#fff" opacity=".35"/></g>
+<g clip-path="url(#clipM)"><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="20" y="30" width="22" height="126" fill="url(#sheeng)"/></g></g></g>
+</svg>

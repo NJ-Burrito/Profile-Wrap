@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<title>Slides template</title>
+<!-- njli render injects the base64 @font-face rules and the --brand-* font variables from your brand config.
+     Edit the colour variables below for every post (a palette per post, recorded in meta.json). Text is never below 28 px.
+     For an Arabic post set lang="ar" dir="rtl": the layout mirrors with logical properties, nothing else changes. -->
+<style>
+  :root {
+    --c-base: #f4f1ea;      /* paper */
+    --c-surface: #e4dfd3;
+    --c-ink: #17202b;
+    --c-muted: #4b5563;
+    --c-hero: #3b3bd1;      /* the one idea colour */
+    --c-accent: #0e7c66;    /* the one action colour */
+    --pad: 84px;
+  }
+  @page { size: 1080px 1350px; margin: 0; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: var(--c-base); }
+  body { font-family: var(--brand-text, system-ui, sans-serif); color: var(--c-ink); }
+  [dir="rtl"] { letter-spacing: 0; }                       /* no letter-spacing on Arabic */
+  .slide { position: relative; width: 1080px; height: 1350px; overflow: hidden; background: var(--c-base); page-break-after: always; break-after: page;
+           padding: var(--pad); display: flex; flex-direction: column; }
+  .slide:last-child { page-break-after: auto; break-after: auto; }
+  .mast { display: flex; align-items: center; gap: 16px; font-family: var(--brand-sans, system-ui, sans-serif); font-weight: 700; font-size: 30px; letter-spacing: .08em; text-transform: uppercase; color: var(--c-muted); }
+  [dir="rtl"] .mast { letter-spacing: 0; text-transform: none; }
+  .mast .ic { width: 36px; height: 36px; stroke: var(--c-hero); }
+  .grow { flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center; gap: 36px; min-height: 0; }
+  h1 { font-family: var(--brand-display, system-ui, sans-serif); font-weight: 700; font-size: 132px; line-height: 1.04; letter-spacing: -.01em; }
+  [dir="rtl"] h1 { line-height: 1.4; letter-spacing: 0; }
+  h2 { font-family: var(--brand-display, system-ui, sans-serif); font-weight: 700; font-size: 84px; line-height: 1.1; }
+  [dir="rtl"] h2 { line-height: 1.4; }
+  p, li { font-size: 44px; line-height: 1.35; }
+  [dir="rtl"] p, [dir="rtl"] li { line-height: 1.6; }
+  .hot { color: var(--c-hero); }
+  ul { list-style: none; display: flex; flex-direction: column; gap: 28px; }
+  li { display: flex; gap: 24px; align-items: flex-start; }
+  li .ic { flex: none; width: 52px; height: 52px; margin-top: 4px; stroke: var(--c-accent); }
+  .foot { display: flex; justify-content: space-between; align-items: center; font-size: 30px; color: var(--c-muted); }
+  .ic { fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+</style>
+</head>
+<body>
+
+<section class="slide">
+  <div class="mast"><i data-icon="target"></i><span>Topic label</span></div>
+  <div class="grow">
+    <h1>One idea, <span class="hot">stated once.</span></h1>
+    <p>A sentence that earns the swipe.</p>
+  </div>
+  <div class="foot"><span>01 / 03</span><span>Swipe</span></div>
+</section>
+
+<section class="slide">
+  <div class="mast"><i data-icon="list-tree"></i><span>The point</span></div>
+  <div class="grow">
+    <h2>Three short lines, one point per slide.</h2>
+    <ul>
+      <li><i data-icon="circle-check"></i><span>First point, plain words.</span></li>
+      <li><i data-icon="circle-check"></i><span>Second point, one number if it is sourced.</span></li>
+      <li><i data-icon="circle-check"></i><span>Third point, then stop.</span></li>
+    </ul>
+  </div>
+  <div class="foot"><span>02 / 03</span><span></span></div>
+</section>
+
+<section class="slide">
+  <div class="mast"><i data-icon="rocket"></i><span>Next step</span></div>
+  <div class="grow">
+    <h2>Close with the one thing to do.</h2>
+    <p>The caption repeats the message; this slide does not need a link.</p>
+  </div>
+  <div class="foot"><span>03 / 03</span><span></span></div>
+</section>
+
+</body>
+</html>

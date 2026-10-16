@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "kind": "comment",
+      "author": "Sam Okafor (fictional)",
+      "text": "Short reports get read. Yours made me cut two charts from mine.",
+      "lang": "en",
+      "status": "pending",
+      "fictional": true
+    }
+  ]
+}

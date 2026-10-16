@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "comments_replies_per_day_max": 10,
+  "comments_per_post": 1,
+  "action_gap_seconds_floor": 60,
+  "post_gap_hours_floor": 12,
+  "post_gap_hours_default": 20,
+  "posts_per_week_max": 7,
+  "posts_per_due_run": 1,
+  "connect_slots_max": 5,
+  "connect_note_max": 200,
+  "likes_default": false,
+  "stop_statuses": [
+    403,
+    429
+  ],
+  "limits": [
+    {
+      "path": "posting.per_week",
+      "kind": "max",
+      "value": 7,
+      "label": "posts per week"
+    },
+    {
+      "path": "posting.min_gap_hours",
+      "kind": "min",
+      "value": 12,
+      "label": "hours between posts"
+    },
+    {
+      "path": "engagement.comments.daily_cap",
+      "kind": "max",
+      "value": 10,
+      "label": "comments plus replies per day"
+    },
+    {
+      "path": "engagement.connect.weekly_slots",
+      "kind": "max",
+      "value": 5,
+      "label": "connection slots waiting"
+    },
+    {
+      "path": "engagement.connect.note_max",
+      "kind": "max",
+      "value": 200,
+      "label": "connection note characters"
+    }
+  ]
+}

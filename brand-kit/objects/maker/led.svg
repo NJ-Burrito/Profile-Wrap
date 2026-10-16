@@ -1,0 +1,29 @@
+<!-- led: 5 mm LED in a black bezel, front view. Colour: obj-led (tween it for state: red off, green on). Parts: lens, sheen. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80" data-object="led" style="overflow:visible">
+<style>
+svg[data-object="led"]{--obj-ledhi:color-mix(in srgb,var(--obj-led,#ff5a47) 55%,#fff);--obj-ledlo:color-mix(in srgb,var(--obj-led,#ff5a47) 62%,#000)}
+svg[data-object="led"] .sh{transform:translate(calc(var(--light-x,-.6)*-3px),calc(3px + var(--light-y,-.6)*-1px));opacity:calc(.35 + .16*var(--light-i,1))}
+svg[data-object="led"] .hl{transform:translate(calc(var(--light-x,-.6)*3px),calc(var(--light-y,-.6)*3px));opacity:calc(.85*var(--light-i,1))}
+</style>
+<defs>
+<linearGradient id="bez" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a5f69"/><stop offset=".5" stop-color="#262a31"/><stop offset="1" stop-color="#0f1115"/></linearGradient>
+<radialGradient id="dome" cx=".38" cy=".32" r=".85"><stop offset="0" style="stop-color:var(--obj-ledhi)"/><stop offset=".5" style="stop-color:var(--obj-led,#ff5a47)"/><stop offset="1" style="stop-color:var(--obj-ledlo)"/></radialGradient>
+<radialGradient id="hlg" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#fff" stop-opacity=".95"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+<linearGradient id="sheeng" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".5" stop-color="#fff" stop-opacity=".7"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+<clipPath id="lensclip"><circle cx="40" cy="40" r="25"/></clipPath>
+<filter id="blur" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.4"/></filter>
+</defs>
+<circle class="sh" cx="40" cy="42" r="36" fill="#000" filter="url(#blur)"/>
+<circle cx="40" cy="40" r="36" fill="url(#bez)"/>
+<circle cx="40" cy="40" r="36" fill="none" stroke="#fff" stroke-opacity=".22" stroke-width="1.4"/>
+<circle cx="40" cy="40" r="29" fill="#07080a"/>
+<circle cx="40" cy="40" r="27" fill="none" stroke="#fff" stroke-opacity=".12" stroke-width="1"/>
+<g data-part="lens" data-pivot="40 40">
+<circle cx="40" cy="40" r="25" fill="url(#dome)"/>
+<path d="M30 26 V44 M40 26 V44 M50 26 V44" stroke="#000" stroke-opacity=".12" stroke-width="2"/>
+<rect x="33" y="30" width="14" height="14" rx="2" fill="#fff" opacity=".14"/>
+<g clip-path="url(#lensclip)"><g class="hl"><ellipse cx="31" cy="29" rx="14" ry="9" fill="url(#hlg)"/></g><g data-part="sheen" opacity="0"><rect transform="skewX(-16)" x="-40" y="0" width="16" height="80" fill="url(#sheeng)"/></g></g>
+<path d="M22 36 A19 19 0 0 1 40 21" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width="2" stroke-linecap="round"/>
+</g>
+<circle cx="40" cy="40" r="25" fill="none" stroke="#000" stroke-opacity=".35" stroke-width="1.4"/>
+</svg>

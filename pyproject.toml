@@ -1,0 +1,79 @@
+[build-system]
+requires = ["hatchling>=1.21"]
+build-backend = "hatchling.build"
+
+[project]
+name = "nj-linkedin"
+version = "0.1.0"
+description = "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code (official API only)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "nj-linkedin contributors" }]
+keywords = ["linkedin", "claude-code", "content", "automation", "official-api", "arabic", "bilingual"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: MacOS",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Communications",
+]
+dependencies = [
+  "tzdata; sys_platform == 'win32'",
+]
+
+[project.optional-dependencies]
+tz = ["tzdata"]
+media = ["pillow", "numpy", "scipy"]
+xlsx = ["openpyxl"]
+sig = ["fonttools", "scikit-image"]
+dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata"]
+
+[project.urls]
+Homepage = "https://github.com/NJ-Burrito/nj-linkedin"
+Changelog = "https://github.com/NJ-Burrito/nj-linkedin/blob/main/CHANGELOG.md"
+Issues = "https://github.com/NJ-Burrito/nj-linkedin/issues"
+
+[project.scripts]
+njli = "njli.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["njli"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"data" = "njli/_data/data"
+"schema" = "njli/_data/schema"
+"templates" = "njli/_data/templates"
+"brand-kit" = "njli/_data/brand-kit"
+"examples" = "njli/_data/examples"
+"prompts" = "njli/_data/prompts"
+"agents" = "njli/_data/agents"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-q"
+markers = [
+  "needs_git: test needs the git binary",
+]
+
+[tool.coverage.run]
+source = ["njli"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true

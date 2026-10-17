@@ -198,13 +198,21 @@ def test_readme_has_the_required_parts():
     for os_name in ("Windows", "Mac (Apple chip)", "Mac (Intel chip)", "Linux"):
         assert re.search(r"\[[^\]]*" + re.escape(os_name) + r"\]\(https://github\.com/NJ-Burrito/profile-wrap/releases/latest\)", text), os_name
     assert text.count("not affiliated") == 1
-    # plain language: no code, no commands, no jargon on the front page
-    assert "```" not in text and "profile-wrap " not in text
-    low = text.lower()
-    for jargon in ("api", "cli", "mcp", "uv", "pip", "gate", "token", "workspace", "terminal"):
+    # four equal ways in, in this order (owner, 2026-10-17): plugin, skills, MCP server, desktop app
+    anchors = [text.index(f'<a id="{a}"></a>') for a in ("plugin", "skills", "mcp", "app")]
+    assert anchors == sorted(anchors)
+    for needle in ("/plugin marketplace add NJ-Burrito/profile-wrap", "/plugin install profile-wrap@profile-wrap",
+                   "codex plugin marketplace add NJ-Burrito/profile-wrap", ".agents/skills",
+                   "claude mcp add profile-wrap -- uvx profile-wrap-mcp", "uv tool install profile-wrap"):
+        assert needle in text, needle
+    # below the install sections the page stays plain language: no code, no commands, no jargon
+    rest = text[text.index("## 3 steps"):]
+    assert "```" not in rest and "profile-wrap " not in rest
+    low = rest.lower()
+    for jargon in ("api", "cli", "uv", "pip", "gate", "token", "workspace", "terminal"):
         assert not re.search(r"\b" + jargon + r"\b", low), jargon
     assert "\u2014" not in text
-    assert len(re.findall(r"^\*\*[^\n]*\?\*\*$", text, re.M)) <= 5
+    assert len(re.findall(r"^\*\*[^\n]*\?\*\*$", text, re.M)) <= 6
 
 
 def test_developer_page_keeps_the_technical_and_safety_content():

@@ -6,25 +6,65 @@
 
 # You stay the boss.
 
-### ⬇️ Download (free)
+### Pick how you want it. All free. 👇
 
-## [🪟 Windows](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
-
-## [🍎 Mac (Apple chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
-
-## [💻 Mac (Intel chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
-
-## [🐧 Linux](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
-
-Not sure which Mac you have? Click the Apple menu, then About This Mac.
+| 🧩 Plugin | 🧠 Skills | 🔌 MCP server | 🖥️ Desktop app |
+|:---:|:---:|:---:|:---:|
+| For **Claude Code** and **Codex** | For any AI agent that reads skills | For any app that speaks MCP | No AI app? Use this |
+| [Install ↓](#plugin) | [Install ↓](#skills) | [Install ↓](#mcp) | [Download ↓](#app) |
 
 </div>
 
-## 3 steps
+<a id="plugin"></a>
 
-1️⃣ **Download** it
+## 🧩 Plugin
 
-2️⃣ **Open** it
+Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install profile-wrap`
+
+Claude Code, type these two lines:
+
+```
+/plugin marketplace add NJ-Burrito/profile-wrap
+/plugin install profile-wrap@profile-wrap
+```
+
+Codex: `codex plugin marketplace add NJ-Burrito/profile-wrap` ([Codex guide](docs/CODEX.md)).
+
+Then say: **"set up Profile-Wrap"**. Claude Code gets 5 skills, 6 commands and the MCP server in one go.
+
+<a id="skills"></a>
+
+## 🧠 Skills
+
+5 skills: **setup**, **plan**, **write**, **visuals**, **ship**.
+
+Get them on [Smithery](https://smithery.ai/skills/naderalzghoulbusiness), or copy the [`.agents/skills`](.agents/skills) folder into your agent.
+
+<a id="mcp"></a>
+
+## 🔌 MCP server
+
+8 tools: check your setup, see your calendar, draft a post, check facts, read your board, and post only what you allowed. Needs [uv](https://docs.astral.sh/uv/).
+
+```
+claude mcp add profile-wrap -- uvx profile-wrap-mcp
+```
+
+Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registry.modelcontextprotocol.io).
+
+<a id="app"></a>
+
+## 🖥️ Desktop app
+
+[🪟 Windows](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [🍎 Mac (Apple chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [💻 Mac (Intel chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [🐧 Linux](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
+
+Not sure which Mac you have? Click the Apple menu, then About This Mac.
+
+## 3 steps (any of the four)
+
+1️⃣ **Install** it
+
+2️⃣ **Ask** for your week of posts
 
 3️⃣ **Tap Allow** on each post you like
 
@@ -70,7 +110,10 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).
 
 **Do I need to code?**
-No. Download, open, tap. That is it.
+No. Install, ask, tap. That is it.
+
+**Which one should I pick?**
+Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.
 
 **Mac or Windows?**
 Both. Linux too.

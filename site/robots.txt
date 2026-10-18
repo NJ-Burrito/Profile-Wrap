@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nj-burrito.github.io/profile-wrap/sitemap.xml

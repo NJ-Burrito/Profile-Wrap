@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Profile-Wrap: free, open-source LinkedIn post manager</title>
+<meta name="description" content="Profile-Wrap plans your week of LinkedIn posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. Free and open source under the MIT licence.">
+<link rel="canonical" href="https://nj-burrito.github.io/profile-wrap/">
+<meta name="author" content="Nader Alzghoul">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Profile-Wrap">
+<meta property="og:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
+<meta property="og:description" content="Plans your week of LinkedIn posts, checks every one, and posts only what you tap Allow on. Free, MIT.">
+<meta property="og:url" content="https://nj-burrito.github.io/profile-wrap/">
+<meta property="og:image" content="https://nj-burrito.github.io/profile-wrap/hero.gif">
+<meta property="og:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Profile-Wrap",
+  "url": "https://nj-burrito.github.io/profile-wrap/",
+  "description": "A free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Windows, macOS, Linux",
+  "license": "https://opensource.org/license/mit",
+  "downloadUrl": "https://github.com/NJ-Burrito/profile-wrap/releases/latest",
+  "codeRepository": "https://github.com/NJ-Burrito/profile-wrap",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": {
+    "@type": "Person",
+    "name": "Nader Alzghoul",
+    "sameAs": [
+      "https://www.linkedin.com/in/nader-alzghoul",
+      "https://github.com/NJ-Burrito"
+    ]
+  }
+}
+</script>
+<style>
+@font-face{font-family:"PW Display";src:url("fonts/display-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"PW Sans";src:url("fonts/sans-regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"PW Sans";src:url("fonts/sans-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+:root{--bg:#faf8f4;--ink:#1d2330;--mute:#566074;--card:#fff;--line:#e4dfd5;--accent:#0a66c2;--accent-ink:#fff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PW Sans",sans-serif;font-size:1.125rem;line-height:1.6}
+main{max-width:46rem;margin:0 auto;padding:2rem 1.25rem 3rem}
+h1,h2{font-family:"PW Display",serif;font-weight:700;line-height:1.15;margin:0}
+h1{font-size:clamp(2.4rem,9vw,3.6rem)}
+h2{font-size:1.65rem;margin:2.5rem 0 .75rem}
+.lead{font-size:1.3rem;margin:.75rem 0 1.5rem}
+.hero{width:100%;height:auto;border-radius:14px;border:1px solid var(--line);display:block;margin:1.5rem 0}
+.btns{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.2rem;border-radius:10px;border:2px solid var(--accent);color:var(--accent);background:var(--card);font-weight:700;text-decoration:none;min-height:48px}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.btn svg{width:20px;height:20px;flex:none}
+ul.plain{list-style:none;padding:0;margin:0}
+ul.plain li{display:flex;gap:.75rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.85rem 1rem;margin:.6rem 0}
+ul.plain svg{width:24px;height:24px;flex:none;margin-top:.15rem;color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr;gap:.75rem}
+@media(min-width:34rem){.grid{grid-template-columns:1fr 1fr}}
+.grid li{margin:0}
+footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);color:var(--mute);font-size:1rem}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Profile-Wrap</h1>
+    <p class="lead">Your LinkedIn, on autopilot. You stay the boss.</p>
+    <p>Profile-Wrap is a free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks every one before it goes out.</p>
+    <div class="btns">
+      <a class="btn primary" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Download the latest release</a>
+      <a class="btn" href="https://github.com/NJ-Burrito/profile-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Source on GitHub</a>
+      <a class="btn" href="https://pypi.org/project/profile-wrap/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 8.7 5 8.7-5"/></svg>PyPI package</a>
+    </div>
+    <img class="hero" src="hero.gif" width="1280" height="640" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
+  </header>
+
+  <section>
+    <h2>What it does for you</h2>
+    <ul class="plain">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><span>Plans your week of posts</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg><span>Writes them in your voice</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Checks every post before it goes out</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Works in English and Arabic</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Four ways to use it</h2>
+    <p>Pick one. All are free.</p>
+    <ul class="plain grid">
+      <li><span><strong>Plugin</strong><br>For Claude Code and Codex.</span></li>
+      <li><span><strong>Skills</strong><br>For any AI agent that reads skills.</span></li>
+      <li><span><strong>MCP server</strong><br>For any app that speaks MCP.</span></li>
+      <li><span><strong>Desktop app</strong><br>No AI app? Use this. Windows, Mac and Linux.</span></li>
+    </ul>
+    <p>Install steps are in the <a href="https://github.com/NJ-Burrito/profile-wrap#readme">README</a>.</p>
+  </section>
+
+  <section>
+    <h2>You tap Allow</h2>
+    <ul class="plain">
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span>Every post waits on your board. Nothing goes out unless you tap Allow.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>It uses LinkedIn's own official way in, and it never asks for your LinkedIn password.</span></li>
+      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.929 4.929 19.07 19.071"/><circle cx="12" cy="12" r="10"/></svg><span>It never reads your private messages.</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Free and open source</h2>
+    <p>Profile-Wrap is free under the MIT licence. Writing uses your own ChatGPT, Claude or Gemini account, or a free local one. It is not affiliated with or endorsed by LinkedIn.</p>
+  </section>
+
+  <footer>
+    <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>.</p>
+  </footer>
+</main>
+</body>
+</html>

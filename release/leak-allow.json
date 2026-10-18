@@ -16,6 +16,11 @@
       "rule": "media-unlisted",
       "sha256": "b9d5513de6ebd84090d028b2b4d371cf21771805a77c5834ca3c4d1e57e029f9",
       "reason": "README review board screenshot, fictional demo persona"
+    },
+    {
+      "rule": "linkedin-url",
+      "path": "README.md",
+      "reason": "the author's own public LinkedIn profile, linked on purpose from the README badge row (Nader, 2026-10-18)"
     }
   ]
 }

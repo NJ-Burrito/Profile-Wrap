@@ -21,6 +21,26 @@
       "rule": "linkedin-url",
       "path": "README.md",
       "reason": "the author's own public LinkedIn profile, linked on purpose from the README badge row (Nader, 2026-10-18)"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "d36da84ee5423145415425bdd9c10dc27f57a66afec031bd7b78e662572846ce",
+      "reason": "Licensed web font for the Profile-Wrap site; owner licensed for web use (Nader, 2026-10-18)"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "90f7c5b4c796e102eee70e20a9346fe680c8bfe38289932b5e94290d9f150fb7",
+      "reason": "Licensed web font for the Profile-Wrap site; owner licensed for web use (Nader, 2026-10-18)"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "5bb4fa412273ca31d5c7a165191568b099069cb74bf1fc1dfcdc6a3c2a97552e",
+      "reason": "Licensed web font for the Profile-Wrap site; owner licensed for web use (Nader, 2026-10-18)"
+    },
+    {
+      "rule": "linkedin-url",
+      "path": "site/index.html",
+      "reason": "the author's own public LinkedIn profile, linked on purpose (sameAs and Made by) (Nader, 2026-10-18)"
     }
   ]
 }

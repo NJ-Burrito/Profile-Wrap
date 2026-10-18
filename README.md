@@ -18,8 +18,9 @@
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nader%20Alzghoul-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nader-alzghoul)
 [![GitHub](https://img.shields.io/badge/GitHub-NJ--Burrito-181717?logo=github&logoColor=white)](https://github.com/NJ-Burrito)
 [![Stars](https://img.shields.io/github/stars/NJ-Burrito/profile-wrap?style=social)](https://github.com/NJ-Burrito/profile-wrap/stargazers)
+[![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-0A66C2?logo=googlechrome&logoColor=white)](https://nj-burrito.github.io/profile-wrap/)
 
-**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow.
+**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow. Website: [nj-burrito.github.io/profile-wrap](https://nj-burrito.github.io/profile-wrap/).
 
 ### Pick how you want it. All free. 👇
 

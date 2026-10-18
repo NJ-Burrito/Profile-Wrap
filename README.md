@@ -2,9 +2,24 @@
 
 <img src="docs/assets/hero.gif" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow." width="640">
 
-# Your LinkedIn, on autopilot.
+# Profile-Wrap
 
-# You stay the boss.
+## Your LinkedIn, on autopilot.
+
+## You stay the boss.
+
+[![CI](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
+[![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](docs/PLATFORMS.md)
+[![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](.claude-plugin/plugin.json)
+[![Arabic and English](https://img.shields.io/badge/Arabic%20%2B%20English-first--class-0d9488.svg)](docs/GATES.md)
+[![PyPI](https://img.shields.io/pypi/v/profile-wrap.svg)](https://pypi.org/project/profile-wrap/)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Nader%20Alzghoul-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nader-alzghoul)
+[![GitHub](https://img.shields.io/badge/GitHub-NJ--Burrito-181717?logo=github&logoColor=white)](https://github.com/NJ-Burrito)
+[![Stars](https://img.shields.io/github/stars/NJ-Burrito/profile-wrap?style=social)](https://github.com/NJ-Burrito/profile-wrap/stargazers)
+
+**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow.
 
 ### Pick how you want it. All free. 👇
 

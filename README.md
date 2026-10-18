@@ -2,9 +2,13 @@
 
 <img src="docs/assets/hero.gif" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow." width="640">
 
-# Your LinkedIn, on autopilot.
+# Profile-Wrap
 
-# You stay the boss.
+## Your LinkedIn, on autopilot.
+
+## You stay the boss.
+
+**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow.
 
 ### Pick how you want it. All free. 👇
 

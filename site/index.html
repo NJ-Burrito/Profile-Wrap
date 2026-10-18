@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0a0f1a" media="(prefers-color-scheme: dark)">
 <title>Profile-Wrap: free, open-source LinkedIn post manager</title>
 <meta name="description" content="Profile-Wrap plans your week of LinkedIn posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. Free and open source under the MIT licence.">
 <link rel="canonical" href="https://nj-burrito.github.io/profile-wrap/">
@@ -15,6 +18,9 @@
 <meta property="og:image" content="https://nj-burrito.github.io/profile-wrap/hero.gif">
 <meta property="og:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23c2410c%27/%3E%3Cpath d=%27m9 16.5 4.5 4.5L23 11%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/display-bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/sans-regular.woff2" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -38,87 +44,319 @@
   }
 }
 </script>
+<script>document.documentElement.classList.add("js")</script>
 <style>
 @font-face{font-family:"PW Display";src:url("fonts/display-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:"PW Sans";src:url("fonts/sans-regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"PW Sans";src:url("fonts/sans-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
-:root{--bg:#faf8f4;--ink:#1d2330;--mute:#566074;--card:#fff;--line:#e4dfd5;--accent:#0a66c2;--accent-ink:#fff}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"PW Sans",sans-serif;font-size:1.125rem;line-height:1.6}
-main{max-width:46rem;margin:0 auto;padding:2rem 1.25rem 3rem}
-h1,h2{font-family:"PW Display",serif;font-weight:700;line-height:1.15;margin:0}
-h1{font-size:clamp(2.4rem,9vw,3.6rem)}
-h2{font-size:1.65rem;margin:2.5rem 0 .75rem}
-.lead{font-size:1.3rem;margin:.75rem 0 1.5rem}
-.hero{width:100%;height:auto;border-radius:14px;border:1px solid var(--line);display:block;margin:1.5rem 0}
-.btns{display:flex;flex-wrap:wrap;gap:.75rem;margin:1rem 0}
-.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.2rem;border-radius:10px;border:2px solid var(--accent);color:var(--accent);background:var(--card);font-weight:700;text-decoration:none;min-height:48px}
-.btn.primary{background:var(--accent);color:var(--accent-ink)}
-.btn:focus-visible,a:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-.btn svg{width:20px;height:20px;flex:none}
-ul.plain{list-style:none;padding:0;margin:0}
-ul.plain li{display:flex;gap:.75rem;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:.85rem 1rem;margin:.6rem 0}
-ul.plain svg{width:24px;height:24px;flex:none;margin-top:.15rem;color:var(--accent)}
-.grid{display:grid;grid-template-columns:1fr;gap:.75rem}
-@media(min-width:34rem){.grid{grid-template-columns:1fr 1fr}}
-.grid li{margin:0}
-footer{margin-top:3rem;padding-top:1.25rem;border-top:1px solid var(--line);color:var(--mute);font-size:1rem}
-a{color:var(--accent)}
+
+/* Tokens. One accent (ember orange, from the hero film), cool neutrals, one radius scale:
+   --r-lg 28px for surfaces, --r-md 16px for icon tiles, pill for controls. */
+:root{
+  --bg:#f5f5f7; --surface:#ffffff; --surface-2:#ececf0; --ink:#1d1d1f; --mute:#57575e;
+  --line:rgba(29,29,31,.12); --accent:#c2410c; --accent-ink:#ffffff; --accent-soft:rgba(194,65,12,.10);
+  --glass:rgba(245,245,247,.72); --glass-line:rgba(255,255,255,.7);
+  --shadow:0 1px 2px rgba(29,38,64,.06),0 12px 32px -8px rgba(29,38,64,.14),0 40px 80px -32px rgba(29,38,64,.22);
+  --glow:rgba(255,107,61,.20);
+  --r-lg:28px; --r-md:16px;
+  --ease:cubic-bezier(.32,.72,0,1);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0a0f1a; --surface:#121a2a; --surface-2:#1a2438; --ink:#f5f5f7; --mute:#a3abbd;
+    --line:rgba(245,245,247,.14); --accent:#ff7a4d; --accent-ink:#1a0a04; --accent-soft:rgba(255,122,77,.14);
+    --glass:rgba(10,15,26,.66); --glass-line:rgba(255,255,255,.14);
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -8px rgba(0,0,0,.55),0 48px 96px -32px rgba(0,0,0,.7);
+    --glow:rgba(255,107,61,.16);
+  }
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:5.5rem;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"PW Sans",system-ui,sans-serif;font-size:1.0625rem;line-height:1.55;letter-spacing:0;overflow-x:clip;-webkit-font-smoothing:antialiased;transition:background-color .6s var(--ease),color .6s var(--ease)}
+h1,h2,h3{font-family:"PW Display",serif;font-weight:700;margin:0;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+svg.i{width:1.5rem;height:1.5rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.wrap{width:min(100% - 2.5rem,68rem);margin-inline:auto}
+section{padding-block:clamp(4.5rem,11vw,9rem)}
+h2{font-size:clamp(2.1rem,5.6vw,4rem);line-height:1.04;letter-spacing:-.028em}
+.sub{color:var(--mute);font-size:clamp(1.1rem,2.2vw,1.35rem);line-height:1.45;margin-top:1rem;max-width:34rem}
+.center{text-align:center}.center .sub{margin-inline:auto}
+
+.skip{position:fixed;left:1rem;top:-4rem;z-index:30;padding:.6rem 1rem;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none;transition:top .2s var(--ease)}
+.skip:focus{top:1rem}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px}
+
+/* Floating glass nav (web approximation of a translucent material, not Apple's own) */
+.nav{position:fixed;z-index:20;top:max(.75rem,env(safe-area-inset-top));left:50%;translate:-50% 0;width:min(100% - 1.5rem,44rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem .4rem .4rem 1.25rem;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);box-shadow:0 8px 32px -12px rgba(20,28,50,.25)}
+.brand{font-family:"PW Display",serif;font-weight:700;font-size:1.2rem;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;padding:.7rem 1.5rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;font-size:1rem;letter-spacing:.005em;text-decoration:none;white-space:nowrap;transition:transform .5s var(--ease),background-color .3s var(--ease),box-shadow .5s var(--ease)}
+.btn:active{transform:scale(.96);transition-duration:.1s}
+.btn.primary{background:var(--accent);border-color:transparent;color:var(--accent-ink)}
+.btn.sm{min-height:44px;padding:.5rem 1.2rem}
+.btn .dot{display:grid;place-items:center;width:1.9rem;height:1.9rem;margin-right:-.6rem;border-radius:50%;background:rgba(255,255,255,.22);transition:transform .5s var(--ease)}
+@media (prefers-color-scheme:dark){.btn.primary .dot{background:rgba(0,0,0,.16)}}
+.btn .dot svg{width:1rem;height:1rem}
+@media (hover:hover){.btn:hover .dot{transform:translate(2px,-1px) scale(1.06)}.btn.primary:hover{box-shadow:0 12px 28px -10px var(--accent)}.btn:not(.primary):hover{background:var(--surface-2)}}
+
+/* Hero */
+.hero{position:relative;padding-top:clamp(7.5rem,16vw,10.5rem);padding-bottom:0;text-align:center;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:80%;z-index:-1;background:radial-gradient(60% 55% at 50% 0%,var(--glow),transparent 70%)}
+h1{font-size:clamp(3.4rem,13vw,8.25rem);line-height:.96;letter-spacing:-.045em}
+.hero .lead{font-family:"PW Display",serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.6rem);line-height:1.1;letter-spacing:-.02em;margin-top:1.25rem}
+.hero .sub{margin-top:1rem;margin-inline:auto}
+.ctas{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.75rem 1rem;margin-top:2rem}
+.link{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:700;text-decoration:none;color:var(--accent)}
+.link svg{width:1.1rem;height:1.1rem;transition:transform .5s var(--ease)}
+@media (hover:hover){.link:hover svg{transform:translateX(3px)}}
+.stage{margin:clamp(2.5rem,6vw,4.5rem) auto 0;width:min(100% - 1.25rem,62rem)}
+.shell{padding:.4rem;border-radius:calc(var(--r-lg) + .4rem);background:var(--glass);border:1px solid var(--line);box-shadow:var(--shadow)}
+.shell img{display:block;width:100%;height:auto;border-radius:var(--r-lg);background:var(--surface-2)}
+@media (max-width:40rem){.shell{padding:.25rem;border-radius:calc(var(--r-lg) - 8px)}.shell img{border-radius:calc(var(--r-lg) - 12px)}}
+
+/* Steps: three rows, hairlines, no cards */
+.steps{margin:clamp(2.5rem,6vw,4rem) 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
+.steps li{display:grid;grid-template-columns:auto 1fr;gap:1.25rem clamp(1.25rem,4vw,2.5rem);align-items:center;padding-block:clamp(1.5rem,4vw,2.5rem);border-bottom:1px solid var(--line)}
+.ico{display:grid;place-items:center;width:clamp(3.25rem,8vw,4.5rem);aspect-ratio:1;border-radius:var(--r-md);background:var(--accent-soft);color:var(--accent)}
+.ico svg{width:50%;height:50%}
+.steps h3{font-size:clamp(1.7rem,5.2vw,3.4rem);line-height:1.06;letter-spacing:-.03em}
+.done{margin-top:1.5rem;color:var(--mute);font-size:1.2rem}
+
+/* Board */
+.board .shell{margin-top:clamp(2rem,5vw,3.5rem)}
+.board figcaption{margin-top:1.25rem;color:var(--mute);text-align:center}
+.board .shell img{aspect-ratio:2880/2900;max-height:none}
+.board .crop{max-height:min(74vh,46rem);overflow:hidden;border-radius:var(--r-lg);-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
+.board .crop img{border-radius:var(--r-lg) var(--r-lg) 0 0}
+
+/* Bento */
+.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;margin-top:clamp(2.5rem,6vw,4rem)}
+.tile{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:.75rem;min-height:15rem;padding:clamp(1.4rem,3vw,2rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
+.tile h3{font-size:clamp(1.45rem,2.6vw,2rem);line-height:1.1;letter-spacing:-.02em}
+.tile p{color:var(--mute)}
+@media (hover:hover){.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}}
+.tile .ico{position:absolute;top:clamp(1.4rem,3vw,2rem);left:clamp(1.4rem,3vw,2rem);width:3.25rem}
+.t-plan{grid-column:span 5}.t-check{grid-column:span 7;grid-row:span 2;min-height:24rem;background:linear-gradient(160deg,var(--accent-soft),transparent 60%),var(--surface)}
+.t-write{grid-column:span 5}.t-ai{grid-column:span 7}.t-show{grid-column:span 5}.t-time{grid-column:span 5}.t-lang{grid-column:span 7;background:var(--ink);color:var(--bg);border-color:transparent}
+.t-lang p{color:inherit;opacity:.78}
+.t-check .big{position:absolute;right:-2.5rem;top:-2rem;width:17rem;height:17rem;stroke-width:1;color:var(--accent);opacity:.22}
+.t-lang .pair{position:absolute;top:1.25rem;right:1.75rem;display:flex;gap:1.25rem;align-items:baseline;font-family:"PW Display",serif;font-weight:700;font-size:clamp(3.5rem,8vw,6rem);line-height:1;letter-spacing:-.04em;color:var(--accent)}
+@media (max-width:48rem){.bento{grid-template-columns:1fr}.bento .tile{grid-column:auto!important;grid-row:auto!important;min-height:13rem}.t-check{min-height:17rem!important}.t-check .big{width:12rem;height:12rem}}
+
+/* Safe */
+.safe-panel{margin-top:clamp(2.5rem,6vw,4rem);padding:clamp(.5rem,2vw,1rem) clamp(1.25rem,4vw,3rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);text-align:left}
+.safe-panel ul{list-style:none;margin:0;padding:0}
+.safe-panel li{display:flex;gap:1.1rem;align-items:center;padding-block:1.25rem;font-size:clamp(1.1rem,2.4vw,1.4rem);line-height:1.3}
+.safe-panel li+li{border-top:1px solid var(--line)}
+.safe-panel .ico{width:3rem;flex:none}
+.shield{width:4.5rem;height:4.5rem;margin:0 auto 1.5rem;display:grid;place-items:center;border-radius:var(--r-md);background:var(--accent);color:var(--accent-ink)}
+.shield svg{width:2.4rem;height:2.4rem}
+
+/* Four ways */
+.ways{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:clamp(2.5rem,6vw,4rem)}
+.way{display:flex;flex-direction:column;gap:.6rem;padding:clamp(1.4rem,3vw,2rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line)}
+.way .ico{align-self:flex-start;flex:none;width:3.25rem;height:3.25rem;margin-bottom:.5rem}
+.way h3{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.02em;line-height:1.1}
+.way p{color:var(--mute)}
+.way .link{margin-top:auto;padding-top:.75rem}
+.way.feature{background:linear-gradient(160deg,var(--accent-soft),transparent 65%),var(--surface)}
+@media (max-width:40rem){.ways{grid-template-columns:1fr}}
+
+/* FAQ */
+.faq{max-width:46rem;margin:clamp(2rem,5vw,3rem) auto 0;text-align:left;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:64px;padding-block:1rem;cursor:pointer;list-style:none;font-weight:700;font-size:1.2rem;line-height:1.3}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary svg{transition:transform .5s var(--ease);color:var(--mute)}
+.faq details[open] summary svg{transform:rotate(180deg)}
+.faq details p{padding:0 0 1.4rem;color:var(--mute);max-width:38rem}
+
+/* Final + footer */
+.final{padding-bottom:clamp(3rem,7vw,5rem)}
+.final .ctas{margin-top:2rem}
+footer{padding:2.25rem 0 calc(2.5rem + env(safe-area-inset-bottom));border-top:1px solid var(--line);color:var(--mute);font-size:.95rem;letter-spacing:.01em}
+footer .wrap{display:flex;flex-direction:column;gap:.6rem}
+footer a{color:var(--ink)}
+
+/* Scroll reveal: progressive enhancement, content is visible without JS */
+@media (prefers-reduced-motion:no-preference){
+  .js .rv{opacity:0;transform:translateY(2.5rem) scale(.985);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
+  .js .rv.in{opacity:1;transform:none}
+  @supports (animation-timeline:view()){
+    .stage .shell{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
+    @keyframes rise{from{transform:scale(.93);opacity:.6}to{transform:none;opacity:1}}
+  }
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
+@media (prefers-reduced-transparency:reduce){.nav,.shell{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}}
+@media (prefers-contrast:more){:root{--line:currentColor;--mute:var(--ink)}.nav{background:var(--bg)}}
 </style>
 </head>
 <body>
-<main>
-  <header>
-    <h1>Profile-Wrap</h1>
-    <p class="lead">Your LinkedIn, on autopilot. You stay the boss.</p>
-    <p>Profile-Wrap is a free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks every one before it goes out.</p>
-    <div class="btns">
-      <a class="btn primary" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></svg>Download the latest release</a>
-      <a class="btn" href="https://github.com/NJ-Burrito/profile-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>Source on GitHub</a>
-      <a class="btn" href="https://pypi.org/project/profile-wrap/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 8.7 5 8.7-5"/></svg>PyPI package</a>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/></symbol>
+  <symbol id="i-code" viewBox="0 0 24 24"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></symbol>
+  <symbol id="i-package" viewBox="0 0 24 24"><path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 8.7 5 8.7-5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></symbol>
+  <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+  <symbol id="i-ban" viewBox="0 0 24 24"><path d="M4.929 4.929 19.07 19.071"/><circle cx="12" cy="12" r="10"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+  <symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
+  <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></symbol>
+  <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></symbol>
+</svg>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<nav class="nav" aria-label="Main">
+  <a class="brand" href="#top" translate="no">Profile-Wrap</a>
+  <a class="btn primary sm" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest">Download</a>
+</nav>
+
+<main id="main">
+  <section class="hero" id="top">
+    <div class="wrap">
+      <h1 class="rv" translate="no">Profile-Wrap</h1>
+      <p class="lead rv" style="--d:1">Your LinkedIn, on autopilot. You stay the boss.</p>
+      <p class="sub rv" style="--d:2">A free, open-source LinkedIn post manager. Nothing goes out until you tap Allow.</p>
+      <div class="ctas rv" style="--d:3">
+        <a class="btn primary" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
+        <a class="link" href="https://github.com/NJ-Burrito/profile-wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="link" href="https://pypi.org/project/profile-wrap/">PyPI package <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </div>
     </div>
-    <img class="hero" src="hero.gif" width="1280" height="640" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
-  </header>
-
-  <section>
-    <h2>What it does for you</h2>
-    <ul class="plain">
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2v4"/><path d="M16 2v4"/><rect width="18" height="18" x="3" y="4" rx="2"/><path d="M3 10h18"/></svg><span>Plans your week of posts</span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.376 3.622a1 1 0 0 1 3.002 3.002L7.368 18.635a2 2 0 0 1-.855.506l-2.872.838a.5.5 0 0 1-.62-.62l.838-2.872a2 2 0 0 1 .506-.854z"/></svg><span>Writes them in your voice</span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg><span>Checks every post before it goes out</span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Works in English and Arabic</span></li>
-    </ul>
+    <div class="stage rv" style="--d:4">
+      <div class="shell">
+        <picture>
+          <source media="(prefers-reduced-motion: reduce)" srcset="hero-still.png">
+          <img src="hero.gif" width="1280" height="640" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow." fetchpriority="high">
+        </picture>
+      </div>
+    </div>
   </section>
 
-  <section>
-    <h2>Four ways to use it</h2>
-    <p>Pick one. All are free.</p>
-    <ul class="plain grid">
-      <li><span><strong>Plugin</strong><br>For Claude Code and Codex.</span></li>
-      <li><span><strong>Skills</strong><br>For any AI agent that reads skills.</span></li>
-      <li><span><strong>MCP server</strong><br>For any app that speaks MCP.</span></li>
-      <li><span><strong>Desktop app</strong><br>No AI app? Use this. Windows, Mac and Linux.</span></li>
-    </ul>
-    <p>Install steps are in the <a href="https://github.com/NJ-Burrito/profile-wrap#readme">README</a>.</p>
+  <section id="how">
+    <div class="wrap center">
+      <h2 class="rv">3 steps. That is all.</h2>
+      <ol class="steps" style="text-align:left">
+        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span><h3>Install it</h3></li>
+        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-chat"/></svg></span><h3>Ask for your week of posts</h3></li>
+        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check-circle"/></svg></span><h3>Tap Allow on each post you like</h3></li>
+      </ol>
+    </div>
   </section>
 
-  <section>
-    <h2>You tap Allow</h2>
-    <ul class="plain">
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg><span>Every post waits on your board. Nothing goes out unless you tap Allow.</span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>It uses LinkedIn's own official way in, and it never asks for your LinkedIn password.</span></li>
-      <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.929 4.929 19.07 19.071"/><circle cx="12" cy="12" r="10"/></svg><span>It never reads your private messages.</span></li>
-    </ul>
+  <section class="board" id="board">
+    <div class="wrap center">
+      <h2 class="rv">Every post waits for you.</h2>
+      <p class="sub rv">Your board shows each post first. You say go.</p>
+      <figure style="margin:0">
+        <div class="shell rv">
+          <div class="crop"><img src="board.png" width="2880" height="2900" loading="lazy" alt="The Profile-Wrap review board: a list of posts on the left, one post with its image on the right, and the Allow, Reject and Improve buttons below it."></div>
+        </div>
+        <figcaption class="rv">Your board. Every post waits here until you say go.</figcaption>
+      </figure>
+    </div>
   </section>
 
-  <section>
-    <h2>Free and open source</h2>
-    <p>Profile-Wrap is free under the MIT licence. Writing uses your own ChatGPT, Claude or Gemini account, or a free local one. It is not affiliated with or endorsed by LinkedIn.</p>
+  <section id="does">
+    <div class="wrap">
+      <h2 class="rv center">What it does for you</h2>
+      <div class="bento">
+        <article class="tile t-plan rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><h3>Plans your week of posts</h3></article>
+        <article class="tile t-check rv" style="--d:1"><svg class="i big" aria-hidden="true"><use href="#i-check"/></svg><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span><h3>Checks every post before it goes out</h3></article>
+        <article class="tile t-write rv" style="--d:2"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg></span><h3>Writes them in your voice</h3></article>
+        <article class="tile t-ai rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span><h3>Uses your own AI account</h3><p>ChatGPT, Claude or Gemini.</p></article>
+        <article class="tile t-show rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg></span><h3>Shows you each one first</h3><p>You approve.</p></article>
+        <article class="tile t-time rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg></span><h3>Posts at a good time</h3></article>
+        <article class="tile t-lang rv" style="--d:1"><div class="pair" aria-hidden="true"><span>EN</span><span lang="ar" dir="rtl">ع</span></div><h3>Works in English and Arabic</h3><p>Side by side.</p></article>
+      </div>
+    </div>
   </section>
 
-  <footer>
-    <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>.</p>
-  </footer>
+  <section id="safe">
+    <div class="wrap center">
+      <div class="shield rv"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
+      <h2 class="rv">Is it safe?</h2>
+      <div class="safe-panel rv">
+        <ul>
+          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></span>It uses LinkedIn's own official way in.</li>
+          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-ban"/></svg></span>It never asks for your LinkedIn password.</li>
+          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-ban"/></svg></span>It never reads your private messages.</li>
+          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check-circle"/></svg></span>Nothing goes out unless you tap Allow.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="ways">
+    <div class="wrap center">
+      <h2 class="rv">Pick how you want it.</h2>
+      <p class="sub rv">All free.</p>
+      <div class="ways" style="text-align:left">
+        <article class="way rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-plug"/></svg></span><h3>Plugin</h3><p>For Claude Code and Codex.</p><a class="link" href="https://github.com/NJ-Burrito/profile-wrap#plugin">Install steps <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Skills</h3><p>For any AI agent that reads skills.</p><a class="link" href="https://github.com/NJ-Burrito/profile-wrap#skills">Get the skills <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg></span><h3>MCP server</h3><p>For any app that speaks MCP.</p><a class="link" href="https://github.com/NJ-Burrito/profile-wrap#mcp">Set it up <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way feature rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-monitor"/></svg></span><h3>Desktop app</h3><p>No AI app? Use this. Windows, Mac and Linux.</p><a class="link" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest">Get the app <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+      </div>
+    </div>
+  </section>
+
+  <section id="questions">
+    <div class="wrap center">
+      <h2 class="rv">Questions</h2>
+      <div class="faq rv">
+        <details><summary>Is it free?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).</p></details>
+        <details><summary>Do I need to code?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Install, ask, tap. That is it.</p></details>
+        <details><summary>Mac or Windows?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Both. Linux too.</p></details>
+        <details><summary>Arabic?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Arabic and English, side by side.</p></details>
+        <details><summary>What if I don't like a post?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Tap Reject, or ask for a better one. Nothing posts without you.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap center">
+      <h2 class="rv">Free, and you can stop any time.</h2>
+      <p class="sub rv">Profile-Wrap is free under the MIT licence.</p>
+      <div class="ctas rv">
+        <a class="btn primary" href="https://github.com/NJ-Burrito/profile-wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
+        <a class="link" href="https://github.com/NJ-Burrito/profile-wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-code"/></svg></a>
+        <a class="link" href="https://pypi.org/project/profile-wrap/">PyPI package <svg class="i" aria-hidden="true"><use href="#i-package"/></svg></a>
+      </div>
+    </div>
+  </section>
 </main>
+
+<footer>
+  <div class="wrap">
+    <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>.</p>
+    <p>Profile-Wrap is not affiliated with or endorsed by LinkedIn. Free and open source under the MIT licence.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var els=document.querySelectorAll(".rv");
+  if(!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});return}
+  var io=new IntersectionObserver(function(entries){
+    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}});
+  },{rootMargin:"0px 0px -8% 0px",threshold:.08});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
 </body>
 </html>

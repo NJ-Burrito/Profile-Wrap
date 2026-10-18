@@ -41,6 +41,11 @@
       "rule": "linkedin-url",
       "path": "site/index.html",
       "reason": "the author's own public LinkedIn profile, linked on purpose (sameAs and Made by) (Nader, 2026-10-18)"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "ccf8b76116acd35ea599e6ce43d3c0db8ecf26157b52cf03d7dee7a12021b732",
+      "reason": "site still frame cut from the README hero animation, shown when reduced motion is on; synthetic demo content"
     }
   ]
 }

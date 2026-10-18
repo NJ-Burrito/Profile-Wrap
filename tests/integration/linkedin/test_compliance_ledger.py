@@ -50,8 +50,26 @@ def test_owned_files_have_no_personal_data():
         for pat in banned:
             m = re.search(pat, text)
             assert m is None or "example" in m.group(0).lower(), f"{path.name}: {pat}: {m.group(0)}"
-    assert not [p for p in ROOT.rglob("*") if p.suffix.lower() in (".woff", ".woff2", ".ttf", ".otf")
-                and ".git" not in p.parts and "node_modules" not in p.parts]
+    assert not _stray_fonts(ROOT)
+
+
+def _stray_fonts(root):
+    # site/fonts: owner-licensed web font for the Pages site (Nader, 2026-10-18)
+    allowed_dir = root / "site" / "fonts"
+    return [p for p in root.rglob("*") if p.suffix.lower() in (".woff", ".woff2", ".ttf", ".otf")
+            and ".git" not in p.parts and "node_modules" not in p.parts
+            and not (p.parent == allowed_dir and p.suffix.lower() == ".woff2")]
+
+
+def test_font_exemption_is_only_woff2_directly_under_site_fonts(tmp_path):
+    (tmp_path / "site" / "fonts" / "sub").mkdir(parents=True)
+    (tmp_path / "docs").mkdir()
+    (tmp_path / "site" / "fonts" / "ok.woff2").write_bytes(b"x")
+    bad = [tmp_path / "docs" / "a.woff2", tmp_path / "site" / "a.woff2",
+           tmp_path / "site" / "fonts" / "b.ttf", tmp_path / "site" / "fonts" / "sub" / "c.woff2"]
+    for b in bad:
+        b.write_bytes(b"x")
+    assert sorted(_stray_fonts(tmp_path)) == sorted(bad)
 
 
 def test_ledger_collapses_rows_by_key(tmp_path):

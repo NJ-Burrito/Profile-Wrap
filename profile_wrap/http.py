@@ -118,6 +118,9 @@ def check_endpoint(host: str, path: str, hp: Optional[HostPolicy] = None) -> Non
 
 
 def is_public_read_path(path: str) -> bool:
+    low = (path or "").lower()
+    if ".." in low or "%2e" in low or "%2f" in low or "%5c" in low or "\\" in low or "//" in low:
+        return False
     return any(path.startswith(p) for p in policy.PUBLIC_READ_PREFIXES)
 
 
@@ -219,7 +222,9 @@ def request(method: str, url: str, *, headers: Optional[Dict[str, str]] = None,
     if public and token is not None:
         raise HttpError("blocked_host", "the access token is never sent with a public page read")
     hdrs: Dict[str, str] = {"User-Agent": user_agent(contact), "Accept": "application/json"}
-    hdrs.update(headers or {})
+    for k, v in (headers or {}).items():
+        if k.lower() != "user-agent":      # one neutral, honest User-Agent on every request; callers cannot replace it
+            hdrs[k] = v
     if public:  # never a Referer, never a login header
         for k in [k for k in hdrs if k.lower() in ("referer", "authorization")]:
             del hdrs[k]

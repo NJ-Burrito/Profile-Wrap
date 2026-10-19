@@ -57,7 +57,7 @@ PUBLIC_READ_PREFIXES = ("/in/", "/posts/", "/feed/update/", "/pulse/")
 PUBLIC_READ_GAP_SECONDS_FLOOR = 3
 PUBLIC_READ_PAGES_PER_DAY_DEFAULT = 30
 PUBLIC_READ_PAGES_PER_DAY_MAX = 100
-# Guest PROFILE pages are rate-limited per IP by LinkedIn (about 20 in an hour got an address blocked on 2026-10-19):
+# Guest PROFILE pages are rate-limited per IP by LinkedIn:
 # few per run, spread across the day, and a long pause after any 999.
 PUBLIC_PROFILE_PER_RUN_DEFAULT = 2
 PUBLIC_PROFILE_PER_DAY_DEFAULT = 12

@@ -97,7 +97,7 @@ takes `manual`, `export`, `apify` or `public` for a single reader.
 
 `public` reads the pages LinkedIn shows to anyone who is not signed in (`profile_wrap/linkedin/public_reader.py`):
 `post_stats`, `post_comments` for a post URL and `profile_posts` for a profile you chose. A post page that answers
-HTTP 999, 429 or 403 stops reading for the day. Guest profile pages are rate-limited per IP, so reads are spread
+HTTP 999, 429 or 403 stops reading for the day. The request carries the neutral `profile-wrap/<version>` User-Agent and nothing else that pretends to be a browser, so guest pages may refuse it; the reader then stops and the chain moves on. Guest pages are rate-limited per address. Guest profile pages are rate-limited per IP, so reads are spread
 across the day: `public.profile_max_per_run` (2), `public.profile_gap_minutes` (20, kept across runs) and
 `public.profile_max_per_day` (12); a 999 on a profile page pauses profile reads for 6 hours. If the acknowledgement goes stale after an update to the risk text, reading drops back to
 `manual` and `profile-wrap doctor` says so. Risk text: `docs/TERMS-AND-RISK.md`.
@@ -130,6 +130,8 @@ paid for twice. `public` may only be listed last. Code: `profile_wrap/linkedin/r
 `api.apify.com` / `api.tavily.com` stay blocked until their own acknowledgement is valid. Keys are read from the named
 environment variable at the moment of the call and are never written to the config, a ledger or a log.
 `profile-wrap doctor` lists both readers with what each may still spend today and makes no call.
+
+Try it on one person: `profile-wrap read posts https://www.linkedin.com/in/<name>/` (add `--json` for machine output, `--text` to also buy full text for Tavily-found posts, 1 credit each).
 
 Media posts are the one place where the post address and the comment address differ. If you turn on the experimental
 comments extra, `create_comment` repeats a comment once with the `ugcPost` address LinkedIn names when it answers

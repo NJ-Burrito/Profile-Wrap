@@ -243,7 +243,7 @@ def test_tavily_search_cache_and_ledger_rows(tmp_path):
     tv = tavily(tmp_path, net, now)
     posts, spent = tv.search_posts(TARGET)
     assert spent == 1 and len(posts) == 1 and posts[0]["source"] == "tavily"
-    assert net.of("/search")[0]["json"]["query"] == "Alex Example testing linkedin"
+    assert net.of("/search")[0]["json"]["query"] == "Alex Example linkedin"
     assert net.of("/search")[0]["headers"]["Authorization"] == f"Bearer {KEY}"
     again, spent2 = tv.search_posts(TARGET)               # inside the 3-day cache: free
     assert spent2 == 0 and again == posts and len(net.of("/search")) == 1
@@ -412,3 +412,81 @@ def test_comment_retries_once_with_the_real_thread_urn():
     with pytest.raises(api.ApiError):
         social_extra.create_comment(client, act, "urn:li:person:DEMO0000", "hello")
     assert len(client.sent) == 1
+
+
+# ------------------------------------------------------------------------------------------------ review fixes
+
+def test_bought_extract_text_is_cached_and_not_bought_twice(tmp_path):
+    net = FakeNet()
+    now = utc(2026, 10, 19)
+    net.search_results = [{"url": activity_url(SLUG, now - timedelta(days=1)), "content": "s"}]
+    tv = tavily(tmp_path, net, now)
+    posts, _ = tv.search_posts(TARGET)
+    assert tv.extract_texts(posts) == 1 and len(net.of("/extract")) == 1
+    again, spent = tv.search_posts(TARGET)                 # served from the cache, text included
+    assert spent == 0 and again[0]["text"] == "Body of the post"
+    assert tv.extract_texts(again) == 0 and len(net.of("/extract")) == 1
+
+
+def test_empty_extract_is_cached_as_no_text(tmp_path):
+    net = FakeNet()
+    net.extract_raw = ""
+    now = utc(2026, 10, 19)
+    net.search_results = [{"url": activity_url(SLUG, now - timedelta(days=1)), "content": "s"}]
+    tv = tavily(tmp_path, net, now)
+    posts, _ = tv.search_posts(TARGET)
+    tv.extract_texts(posts)
+    again, _ = tv.search_posts(TARGET)
+    assert again[0]["no_text"] is True
+    assert tv.extract_texts(again) == 0 and len(net.of("/extract")) == 1
+
+
+def test_tavily_topic_default_is_empty():
+    assert config.defaults("Europe/Lisbon")["engagement"]["reading"]["tavily"]["topic"] == ""
+
+
+def test_apify_token_env_must_be_a_name():
+    c = cfg_with([])
+    c["engagement"]["reading"]["apify"]["token_env"] = "apify" + "_api_" + "x" * 10
+    assert any("NAME of an environment" in e and "apify" in e for e in config.validate(c).errors)
+
+
+def _scan(text):
+    from profile_wrap import leakcheck
+    return [f.rule for f in leakcheck.scan_blob(text.encode(), "docs/x.md", leakcheck._Ctx([], None))]
+
+
+def test_leak_scan_and_sandbox_catch_tavily_keys_not_the_placeholder():
+    from profile_wrap import sandbox
+    real = "tvly" + "-" + "dev-" + "a1B2c3D4e5F6g7H8i9J0"
+    assert "token-tavily" in _scan(f"key {real}")
+    assert "token-tavily" not in _scan("TAVILY_API_KEY=tvly-xxxxxxxx")
+    assert sandbox.scan_secrets(real)
+    assert not sandbox.scan_secrets("TAVILY_API_KEY=tvly-xxxxxxxx")
+
+
+def test_child_env_passes_the_tavily_key_name():
+    from profile_wrap.schedule import runner
+    c = config.defaults("Europe/Lisbon")
+    env = runner.child_env(c, {"TAVILY_API_KEY": "v", "APIFY_TOKEN": "w", "OTHER_SECRET": "z"})
+    assert env.get("TAVILY_API_KEY") == "v" and env.get("APIFY_TOKEN") == "w" and "OTHER_SECRET" not in env
+
+
+def test_malformed_cache_entries_do_not_crash(tmp_path):
+    now = utc(2026, 10, 19)
+    tv = tavily(tmp_path, FakeNet(), now)
+    (tmp_path / "data").mkdir(exist_ok=True)
+    (tmp_path / "data" / "tavily_cache.json").write_text(json.dumps(
+        {SLUG: {"last_searched": now.isoformat(), "posts": ["x", {"url": "u"}, {"ts": "bad"}]}}))
+    assert tv.cached(SLUG) == []
+
+
+def test_doctor_reading_details_make_no_network_call(tmp_path, monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("doctor must not call the network")
+    monkeypatch.setattr(http, "request", boom)
+    ap = readers.ApifyReader(cfg_with([]), tmp_path, ack_valid=True, now=Clock(utc(2026, 10, 19)))
+    (tmp_path / "data").mkdir()
+    (tmp_path / "data" / "apify_budget.json").write_text(json.dumps(
+        {"day": "2026-10-18", "day_start": 3.0, "calls": 1, "cycle_end": "2026-10-19T00:00:00Z"}))
+    assert "once on the first use" in ap.status_local()

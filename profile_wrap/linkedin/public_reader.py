@@ -8,7 +8,7 @@ It reads three things, always with a plain GET:
     profile_posts(slug)  -> [{"url", "author", "published", "text", "reactions", "comments", "source": "public"}]
 
 Polite by construction: a gap of at least 3 s between pages, a daily page cap (default 30, kept in
-``data/public_reader.json``), one fixed browser User-Agent (never rotated), no Referer, no login state, no
+``data/public_reader.json``), the same neutral profile-wrap User-Agent as every other call (never disguised, never rotated), no Referer, no login state, no
 login, no proxy, no redirects. HTTP 999, 429 or 403 on a post page stops the reader for the rest of the day:
 nothing is retried or pushed. Guest PROFILE pages are rate-limited per IP by LinkedIn, so they have their own,
 stricter limits (2 per run, 20 minutes apart, 12 a day, kept across runs) and a 999 on one pauses profile
@@ -28,9 +28,7 @@ from .. import http, policy
 from ..atomic import atomic_write_json
 from ..fsutil import read_json
 
-UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) "
-      "Chrome/130.0.0.0 Safari/537.36")
-HEADERS = {"User-Agent": UA, "Accept": "text/html,application/xhtml+xml",
+HEADERS = {"Accept": "text/html,application/xhtml+xml",
            "Accept-Language": "en-US,en;q=0.9"}
 BASE = "https://www.linkedin.com"
 LD = re.compile(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>', re.S)
@@ -66,7 +64,11 @@ def _counts(ld: Dict[str, Any]) -> Dict[str, int]:
     stats = ld.get("interactionStatistic") or []
     if isinstance(stats, dict):
         stats = [stats]
+    if not isinstance(stats, list):
+        raise PublicReadError("unreadable", "page data has an unexpected shape")
     for s in stats:
+        if not isinstance(s, dict):
+            raise PublicReadError("unreadable", "page data has an unexpected shape")
         kind = str(s.get("interactionType", "")).rsplit("/", 1)[-1]
         n = s.get("userInteractionCount")
         if kind == "LikeAction":
@@ -93,8 +95,17 @@ def comments_from_page(page: str) -> List[Dict[str, Any]]:
         if ld.get("@type") != "SocialMediaPosting":
             continue
         out = []
-        for i, c in enumerate(ld.get("comment") or []):
+        raw = ld.get("comment") or []
+        if isinstance(raw, dict):
+            raw = [raw]
+        if not isinstance(raw, list):
+            raise PublicReadError("unreadable", "page data has an unexpected shape")
+        for i, c in enumerate(raw):
+            if not isinstance(c, dict):
+                raise PublicReadError("unreadable", "page data has an unexpected shape")
             author = c.get("author") or {}
+            if not isinstance(author, dict):
+                raise PublicReadError("unreadable", "page data has an unexpected shape")
             item = {"comment_id": f"pub-{i}", "text": str(c.get("text") or "").strip(),
                     "author": {"name": author.get("name") or "", "profile_url": author.get("url") or ""},
                     "source": "public", "urn_known": False}
@@ -112,6 +123,8 @@ def posts_from_page(page: str) -> List[Dict[str, Any]]:
         if ld.get("@type") not in ("DiscussionForumPosting", "SocialMediaPosting"):
             continue
         author = ld.get("author") or {}
+        if not isinstance(author, dict):
+            raise PublicReadError("unreadable", "page data has an unexpected shape")
         item = {"url": ld.get("url") or "", "author": author.get("name") or "",
                 "published": ld.get("datePublished") or "", "text": str(ld.get("text") or "").strip(),
                 "source": "public"}

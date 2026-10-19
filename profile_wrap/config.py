@@ -94,7 +94,7 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
                         "tavily": {"key_env": "TAVILY_API_KEY",
                                    "month_credits": policy.TAVILY_MONTH_CREDITS,
                                    "reserve_credits": policy.TAVILY_RESERVE_CREDITS,
-                                   "cache_days": policy.TAVILY_CACHE_DAYS, "topic": "testing"},
+                                   "cache_days": policy.TAVILY_CACHE_DAYS, "topic": ""},
                         "public": {"max_pages_per_day": policy.PUBLIC_READ_PAGES_PER_DAY_DEFAULT,
                                    "gap_seconds": policy.PUBLIC_READ_GAP_SECONDS_FLOOR,
                                    "profile_max_per_run": policy.PUBLIC_PROFILE_PER_RUN_DEFAULT,
@@ -306,6 +306,9 @@ def validate(cfg: Dict[str, Any], workspace: Optional[Path] = None) -> Report:
         report.errors.append("engagement.reading.tavily.key_env must be the NAME of an environment "
                              "variable (the key itself never goes in the config)")
     api = reading.get("apify") or {}
+    if not isinstance(api.get("token_env"), str) or not api.get("token_env")             or api["token_env"].startswith("apify_api_"):
+        report.errors.append("engagement.reading.apify.token_env must be the NAME of an environment "
+                             "variable (the token itself never goes in the config)")
     cost, res = api.get("cost_per_call_usd"), api.get("reserve_usd")
     if not isinstance(cost, (int, float)) or isinstance(cost, bool) or cost <= 0:
         report.errors.append("engagement.reading.apify.cost_per_call_usd must be above 0")

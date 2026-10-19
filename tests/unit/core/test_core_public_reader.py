@@ -200,7 +200,8 @@ def test_request_headers_no_referer_no_login(tmp_path, server):
     reader(tmp_path).post_comments(POST_URL)
     h = {k.lower(): v for k, v in Handler.seen[0]["headers"].items()}
     assert "referer" not in h and "cookie" not in h and "authorization" not in h
-    assert h["user-agent"] == pr.UA and "text/html" in h["accept"]
+    assert h["user-agent"] == http.user_agent() and h["user-agent"].startswith("profile-wrap/")
+    assert "mozilla" not in h["user-agent"].lower() and "text/html" in h["accept"]
     assert Handler.seen[0]["method"] == "GET"
 
 
@@ -215,3 +216,35 @@ def test_only_public_paths_and_get(tmp_path):
         http.request("POST", POST_URL, hp=http.HostPolicy(public_ack=True))
     with pytest.raises(pr.PublicReadError):
         r.profile_posts("../x")
+
+
+def test_a_caller_cannot_replace_the_neutral_user_agent(tmp_path, server):
+    http.request("GET", POST_URL, headers={"User-Agent": "Mozilla/5.0 Chrome"},
+                 hp=http.HostPolicy(public_ack=True))
+    ua = {k.lower(): v for k, v in Handler.seen[0]["headers"].items()}["user-agent"]
+    assert ua == http.user_agent() and "chrome" not in ua.lower()
+
+
+@pytest.mark.parametrize("path", ["/in/../messaging/", "/in/%2e%2e/messaging/", "/in//x/", "/posts/%2E%2e/x",
+                                  "/in/a/../../messaging", "/in/a%2fb", "/messaging/"])
+def test_public_path_rejects_traversal(path):
+    assert not http.is_public_read_path(path)
+
+
+def test_public_path_accepts_normal_paths():
+    assert http.is_public_read_path("/in/alex-example/") and http.is_public_read_path("/posts/alex_one-activity-1-AAAA")
+
+
+@pytest.mark.parametrize("page", [
+    '<script type="application/ld+json">{"@type":"SocialMediaPosting","interactionStatistic":"oops"}</script>',
+    '<script type="application/ld+json">{"@type":"SocialMediaPosting","interactionStatistic":["x"]}</script>',
+    '<script type="application/ld+json">{"@type":"SocialMediaPosting","comment":["x"]}</script>',
+    '<script type="application/ld+json">{"@type":"SocialMediaPosting","comment":[{"author":"x"}]}</script>',
+    '<script type="application/ld+json">{"@type":"DiscussionForumPosting","author":["x"]}</script>',
+])
+def test_malformed_json_ld_is_unreadable_not_a_crash(page):
+    for fn in (pr.comments_from_page, pr.posts_from_page, pr.stats_from_page):
+        try:
+            fn(page)
+        except pr.PublicReadError as exc:
+            assert exc.kind == "unreadable"

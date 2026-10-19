@@ -108,7 +108,7 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 
 🌍 Works in English and Arabic
 
-🔎 Finds posts to talk about with two free tools (Apify and Tavily) that complement each other. Both are optional.
+🔎 Optional readers can list a person's recent posts (details in docs/PROVIDERS.md). They use two free tools (Apify and Tavily), then public pages. All are off by default, and you accept the risk of each one yourself.
 
 ## Is it safe?
 

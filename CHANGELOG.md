@@ -5,8 +5,14 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Breaking
+
+- The risk text changed, so every earlier acknowledgement is stale. Re-run `profile-wrap config ack <action>` for every
+  acknowledgement you use (`apify`, `public`, and so on); until then that feature falls back to its safe mode.
+
 ### Added
 
+- `profile-wrap read posts <profile-url> [--json] [--text]` lists a person's recent posts through the readers you switched on.
 - Free `public` reading provider (`engagement.reading.provider = "public"`): reads the public LinkedIn pages of your
   own posts (counts, comments) and of profiles you choose, with no third party. Opt-in with
   `profile-wrap config ack public`; GET only, 3 s between pages, 30 pages a day by default, stops on HTTP 999/429/403 (profile pages: 2 per run, 20 minutes apart, 12 a day, 6-hour pause after a 999),
@@ -24,6 +30,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- The public reader sends the neutral `profile-wrap/<version>` User-Agent (no browser look-alike); `http.request` no longer lets a caller replace it.
+- Tavily `topic` defaults to empty; the doctor makes no network call; a bought Tavily text is cached; `tvly-` keys are caught by the leak scan.
 - The Apify risk text now says it also reads the recent posts of profiles you choose (it said own content only), so a
   stored Apify acknowledgement asks to be accepted again.
 

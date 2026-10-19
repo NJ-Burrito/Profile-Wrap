@@ -425,14 +425,7 @@ class Doctor:
         rd = self.cfg["engagement"]["reading"]
         if "apify" in chain:
             ap = readers.ApifyReader(self.cfg, self.workspace, ack_valid=True)
-            st = readers._read_state(ap.path)
-            if st.get("day") == f"{readers.utcnow():%Y-%m-%d}" and st.get("day_start") is not None:
-                try:
-                    msg = ap.status()
-                except readers.ReaderUnavailable as exc:
-                    msg = str(exc)
-            else:
-                msg = "credit is read once on the first use each day (a free call)"
+            msg = ap.status_local()
             has = bool(os.environ.get(rd["apify"]["token_env"]))
             self.add("reading_apify", "Reader: Apify (first)", "pass" if has else "warn",
                      msg + ("" if has else f"; {rd['apify']['token_env']} is not set"),

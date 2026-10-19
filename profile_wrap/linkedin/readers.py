@@ -169,6 +169,14 @@ class ApifyReader:
         allowed = min(self.max_calls, int(daily_usd / self.cost + 1e-9))
         return max(0, allowed - int(st.get("calls", 0)))
 
+    def status_local(self) -> str:
+        """What the ledger on disk says, without any network call (used by doctor)."""
+        st = _read_state(self.path)
+        if st.get("day") != f"{self._now():%Y-%m-%d}" or st.get("day_start") is None:
+            return "credit is read once on the first use each day (a free call)"
+        return (f"{max(0, int(self.max_calls) - int(st.get('calls', 0)))} call(s) at most left today, "
+                f"credit at the start of today ${float(st['day_start']):.2f}")
+
     def status(self) -> str:
         try:
             n = self.calls_left()
@@ -326,7 +334,8 @@ class TavilyReader:
         when = _iso_ts(e.get("last_searched")) if isinstance(e, dict) else None
         if when is None or now - when >= timedelta(days=self.cache_days):
             return None
-        return [p for p in e.get("posts", []) if now.timestamp() * 1000 - p["ts"] <= MAX_AGE_H * 3600 * 1000]
+        return [p for p in e.get("posts", []) if isinstance(p, dict) and isinstance(p.get("ts"), (int, float))
+                and now.timestamp() * 1000 - p["ts"] <= MAX_AGE_H * 3600 * 1000]
 
     def search_posts(self, target: Dict[str, Any]) -> Tuple[List[Dict[str, Any]], int]:
         """(posts newest first, credits spent). A target searched within ``cache_days`` costs nothing.
@@ -338,7 +347,8 @@ class TavilyReader:
         query = " ".join(x for x in (target.get("name", ""), target.get("topic") or self.topic, "linkedin") if x)
         data = self._call("/search", {"query": query, "topic": "news", "time_range": "week", "max_results": 10},
                           "search", target.get("name", slug))
-        posts = self.own_posts(data.get("results") or [], slug)
+        results = data.get("results")
+        posts = self.own_posts(results if isinstance(results, list) else [], slug)
         cache = self._cache()
         cache[slug] = {"last_searched": self._now().isoformat(), "posts": posts}
         atomic_write_json(self.cache_path, cache)
@@ -363,7 +373,7 @@ class TavilyReader:
         on the current CLI and are never sent). Stops at the daily allowance. Returns credits spent."""
         spent = 0
         for p in posts:
-            if p.get("text") or p.get("no_text"):
+            if not isinstance(p, dict) or p.get("text") or p.get("no_text"):
                 continue
             if self.remaining_today() < 1:
                 break
@@ -375,11 +385,25 @@ class TavilyReader:
                     break
                 continue
             spent += 1
-            raw = next((r.get("raw_content", "") for r in data.get("results") or []
+            results = data.get("results")
+            raw = next((r.get("raw_content", "") for r in (results if isinstance(results, list) else [])
                         if isinstance(r, dict) and r.get("url") == p["url"]), "")
-            p["text"] = strip_guest_header(raw)
+            p["text"] = strip_guest_header(raw if isinstance(raw, str) else "")
             p["no_text"] = not p["text"]
+            self._remember_text(p)
         return spent
+
+    def _remember_text(self, post: Dict[str, Any]) -> None:
+        """Keep a bought text in the search cache, so the same post is never extracted (and paid for) twice."""
+        cache = self._cache()
+        changed = False
+        for entry in cache.values():
+            for q in (entry.get("posts", []) if isinstance(entry, dict) else []):
+                if isinstance(q, dict) and q.get("url") == post.get("url"):
+                    q["text"], q["no_text"] = post.get("text", ""), bool(post.get("no_text"))
+                    changed = True
+        if changed:
+            atomic_write_json(self.cache_path, cache)
 
 
 def strip_guest_header(raw: str) -> str:

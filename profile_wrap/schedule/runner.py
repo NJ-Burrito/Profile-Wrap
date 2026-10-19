@@ -89,6 +89,9 @@ def child_env(cfg: Mapping[str, Any], source: Optional[Mapping[str, str]] = None
     apify_env = ((cfg.get("engagement", {}) or {}).get("reading", {}) or {}).get("apify", {}).get("token_env")
     if apify_env:
         names.add(apify_env)
+    tavily_env = ((cfg.get("engagement", {}) or {}).get("reading", {}) or {}).get("tavily", {}).get("key_env")
+    if tavily_env:
+        names.add(tavily_env)
     if runner.get("api_key_env"):
         names.add(runner["api_key_env"])
     lower = {k.lower(): k for k in src}

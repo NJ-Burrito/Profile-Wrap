@@ -36,10 +36,18 @@ rules, and the verified facts needed for that draft. The provider's own terms an
 
 ## LinkedIn data
 
-- Profile-Wrap uses only LinkedIn's official API, with a developer app you create and own (see
+- Publishing and your own account use only LinkedIn's official API, with a developer app you create and own (see
   `docs/linkedin-app-setup.md`). The access token is stored on your machine and used only to publish posts you approved.
-- It does not log in to LinkedIn with a password, drive a browser against LinkedIn, scrape, read direct messages, send
+- It does not log in to LinkedIn with a password, drive a browser against LinkedIn, read direct messages, send
   connection invitations or hide automation.
+- Optional readers, all off by default and each switched on only by your own typed acknowledgement, can look up other
+  people's recent posts. What each one sends, and where:
+  - Tavily (`api.tavily.com`): the person's name, a topic if you set one, and the word "linkedin", as a search query;
+    for full text, the address of one post. Your Tavily key goes only to that host.
+  - Apify (`api.apify.com`): the profile name (the last part of the profile address). Your Apify token goes only to that host.
+  - LinkedIn public pages (`www.linkedin.com`): a plain GET of a public page, with no sign-in, no cookies and no token.
+  Those services have their own terms and privacy policies. Reading public pages is restricted by the LinkedIn User
+  Agreement; see `docs/TERMS-AND-RISK.md`.
 - A post is published only after you press Allow on the review board. The MCP tool `post_allowed` can post only a draft
   that already has that board Allow.
 

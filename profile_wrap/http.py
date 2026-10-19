@@ -2,8 +2,9 @@
 
 Rules enforced here:
   * a host allowlist: LinkedIn API and OAuth hosts, upload hosts (https, linkedin.com or
-    licdn.com), hosts the caller names (configured public trend feeds), and api.apify.com only
-    when the caller says the Apify acknowledgement is valid;
+    licdn.com), hosts the caller names (configured public trend feeds), and api.apify.com / api.tavily.com only
+    when the caller says the matching acknowledgement is valid; public LinkedIn pages (GET only, no
+    token, no proxy) only when the caller says the public-reading acknowledgement is valid;
   * the Bearer token is sent only to LinkedIn hosts (or the loopback fake server in tests/demo);
   * the LinkedIn API host is limited to the endpoint allowlist in policy.py;
   * a neutral User-Agent, never rotated; ``Linkedin-Version`` always sent to the API host;
@@ -67,6 +68,8 @@ class Response:
 class HostPolicy:
     extra_hosts: Iterable[str] = field(default_factory=tuple)
     apify_ack: bool = False
+    public_ack: bool = False
+    tavily_ack: bool = False
     demo: bool = False
     extra_endpoints: Iterable[str] = field(default_factory=tuple)
 
@@ -114,6 +117,13 @@ def check_endpoint(host: str, path: str, hp: Optional[HostPolicy] = None) -> Non
         raise HttpError("blocked_endpoint", f"{path} is not on the LinkedIn endpoint allowlist")
 
 
+def is_public_read_path(path: str) -> bool:
+    low = (path or "").lower()
+    if ".." in low or "%2e" in low or "%2f" in low or "%5c" in low or "\\" in low or "//" in low:
+        return False
+    return any(path.startswith(p) for p in policy.PUBLIC_READ_PREFIXES)
+
+
 def check_url(url: str, hp: Optional[HostPolicy] = None, upload: bool = False) -> str:
     """Return the host if the URL may be requested, else raise ``HttpError``."""
     hp = hp or HostPolicy()
@@ -134,15 +144,22 @@ def check_url(url: str, hp: Optional[HostPolicy] = None, upload: bool = False) -
         check_endpoint(host, parts.path, hp)
         return host
     if host == policy.LINKEDIN_OAUTH_HOST:
+        if hp.public_ack and is_public_read_path(parts.path):
+            return host
         if upload or parts.path.startswith(OAUTH_PATH_PREFIX):
             return host
-        raise HttpError("blocked_endpoint", "www.linkedin.com is reachable for OAuth only")
+        raise HttpError("blocked_endpoint", "www.linkedin.com is reachable for OAuth only "
+                        "(and public pages with the public-reading acknowledgement)")
     if upload and host.endswith(policy.UPLOAD_HOST_SUFFIXES):
         return host
     if host == policy.APIFY_HOST:
         if hp.apify_ack:
             return host
         raise HttpError("blocked_host", "api.apify.com needs a valid Apify acknowledgement")
+    if host == policy.TAVILY_HOST:
+        if hp.tavily_ack:
+            return host
+        raise HttpError("blocked_host", "api.tavily.com needs a valid Tavily acknowledgement")
     if host in {h.lower() for h in hp.extra_hosts}:
         return host
     raise HttpError("blocked_host", f"host {host} is not on the allowlist")
@@ -167,8 +184,9 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
         return None
 
 
-def _opener() -> urllib.request.OpenerDirector:
-    return urllib.request.build_opener(_NoRedirect, urllib.request.ProxyHandler())
+def _opener(no_proxy: bool = False) -> urllib.request.OpenerDirector:
+    proxies = urllib.request.ProxyHandler({}) if no_proxy else urllib.request.ProxyHandler()
+    return urllib.request.build_opener(_NoRedirect, proxies)
 
 
 def _timeout_like(exc: BaseException) -> bool:
@@ -197,8 +215,19 @@ def request(method: str, url: str, *, headers: Optional[Dict[str, str]] = None,
     check_url(url, replace(hp, demo=False), upload=upload)
     url = _rewrite(url, hp)
     host = check_url(url, hp, upload=upload)
+    public = (orig_host == policy.LINKEDIN_OAUTH_HOST and hp.public_ack and not upload
+              and is_public_read_path(orig.path))
+    if public and method.upper() != "GET":
+        raise HttpError("blocked_endpoint", "public pages are read with GET only")
+    if public and token is not None:
+        raise HttpError("blocked_host", "the access token is never sent with a public page read")
     hdrs: Dict[str, str] = {"User-Agent": user_agent(contact), "Accept": "application/json"}
-    hdrs.update(headers or {})
+    for k, v in (headers or {}).items():
+        if k.lower() != "user-agent":      # one neutral, honest User-Agent on every request; callers cannot replace it
+            hdrs[k] = v
+    if public:  # never a Referer, never a login header
+        for k in [k for k in hdrs if k.lower() in ("referer", "authorization")]:
+            del hdrs[k]
     if token is not None:
         if not token_allowed(orig_host, hp):
             raise HttpError("blocked_host", f"the access token is never sent to {host}")
@@ -215,7 +244,7 @@ def request(method: str, url: str, *, headers: Optional[Dict[str, str]] = None,
     req = urllib.request.Request(url, data=data, method=method.upper(), headers=hdrs)
     stop = set(stop_on)
     try:
-        with _opener().open(req, timeout=timeout) as resp:
+        with _opener(no_proxy=public).open(req, timeout=timeout) as resp:
             result = Response(resp.status, {k.lower(): v for k, v in resp.headers.items()},
                               resp.read(), url)
     except urllib.error.HTTPError as err:

@@ -537,8 +537,48 @@
               "enum": [
                 "manual",
                 "export",
-                "apify"
+                "apify",
+                "public"
               ]
+            },
+            "public_ack": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/ack"
+                }
+              ]
+            },
+            "public": {
+              "type": "object",
+              "properties": {
+                "max_pages_per_day": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 100
+                },
+                "gap_seconds": {
+                  "type": "number",
+                  "minimum": 3
+                },
+                "profile_max_per_run": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 24
+                },
+                "profile_max_per_day": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 24
+                },
+                "profile_gap_minutes": {
+                  "type": "number",
+                  "minimum": 20
+                }
+              },
+              "additionalProperties": false
             },
             "apify_ack": {
               "anyOf": [
@@ -559,6 +599,17 @@
                 "max_calls_per_day": {
                   "type": "integer",
                   "minimum": 0
+                },
+                "actor": {
+                  "type": "string"
+                },
+                "cost_per_call_usd": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                },
+                "reserve_usd": {
+                  "type": "number",
+                  "minimum": 0
                 }
               },
               "additionalProperties": false,
@@ -566,6 +617,50 @@
                 "token_env",
                 "max_calls_per_day"
               ]
+            },
+            "providers": {
+              "type": "array",
+              "items": {
+                "enum": [
+                  "apify",
+                  "tavily",
+                  "public"
+                ]
+              }
+            },
+            "tavily_ack": {
+              "anyOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "$ref": "#/definitions/ack"
+                }
+              ]
+            },
+            "tavily": {
+              "type": "object",
+              "properties": {
+                "key_env": {
+                  "type": "string"
+                },
+                "month_credits": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "reserve_credits": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "cache_days": {
+                  "type": "integer",
+                  "minimum": 0
+                },
+                "topic": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
             }
           },
           "additionalProperties": false,
@@ -1495,6 +1590,26 @@
           ]
         },
         "scraping_risk": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        },
+        "public_reading": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/definitions/ack"
+            }
+          ]
+        },
+        "tavily_reading": {
           "anyOf": [
             {
               "type": "null"

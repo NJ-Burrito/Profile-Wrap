@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import datetime as _dt
 import json
+import re
 import time
 import urllib.parse
 from pathlib import Path
@@ -33,6 +34,8 @@ RECORD_REL = Path("work") / "selftest-comments.json"
 LOG_REL = Path("published") / "comments.jsonl"
 MARKER = ("extras", "comments-api", "installed.json")
 RECORD_MAX_AGE_DAYS = 30
+# LinkedIn answers 400 "actual threadUrn: <urn>" when a post with media lives under a ugcPost/share urn.
+THREAD_MISMATCH = re.compile(r"actual threadUrn: (urn:li:(?:ugcPost|share|activity):\d+)")
 PROBE_TARGET = "urn:li:activity:0"   # an id that cannot exist: the probe can never reach a real post
 
 
@@ -97,12 +100,21 @@ def create_comment(client: api.Client, target: str, actor: str, text: str,
     body: Dict[str, Any] = {"actor": actor, "object": target, "message": {"text": text}}
     if parent:
         body["parentComment"] = parent
-    where = parent or target
-    try:
-        resp = client.call("POST", f"{ROUTE}/{urllib.parse.quote(where, safe='')}/comments",
-                           extra_endpoints=(ROUTE,), json_body=body, stop_on=(429, 403))
-    except HttpError as exc:
-        raise api.ApiError(str(exc), exc.status) from exc
+    def send(where: str, payload: Dict[str, Any]):
+        try:
+            return client.call("POST", f"{ROUTE}/{urllib.parse.quote(where, safe='')}/comments",
+                               extra_endpoints=(ROUTE,), json_body=payload, stop_on=(429, 403))
+        except HttpError as exc:
+            raise api.ApiError(str(exc), exc.status) from exc
+
+    resp = send(parent or target, body)
+    if resp.status == 400:
+        # A post with media lives under a ugcPost/share urn, not the activity id a URL gives. Repeat ONCE with
+        # the urn LinkedIn names; any other 400, or a second failure, is reported as before.
+        m = THREAD_MISMATCH.search(resp.text())
+        if m and m.group(1) != target:
+            real = m.group(1)
+            resp = send(parent or real, {**body, "object": real})
     if not resp.ok:
         raise api.ApiError(f"comment answered {resp.status}", resp.status, resp.text()[:200])
     return resp.headers.get("x-restli-id")

@@ -389,6 +389,58 @@ class Doctor:
                      + ", ".join(g.name for g in gates),
                      hint="Review them; they are your code, not the plugin's")
 
+    def check_reading(self) -> None:
+        if not self.cfg:
+            self.add("reading", "Reading provider", "skip", "no workspace config loaded")
+            return
+        try:
+            wanted = self.cfg["engagement"]["reading"]["provider"]
+            modes = config.effective_modes(self.cfg, self.workspace, root=self.root)
+        except (KeyError, TypeError):
+            self.add("reading", "Reading provider", "warn", "reading settings not readable")
+            return
+        used = modes["reading"]
+        chain = modes.get("reading_chain") or []
+        rd = self.cfg["engagement"]["reading"]
+        if len(chain) > 1 or rd.get("providers"):
+            self.add("reading", "Reading providers", "pass" if chain else "warn",
+                     " then ".join(chain) if chain else "none usable (reading is manual)",
+                     hint="" if chain else "Run 'profile-wrap config ack <apify|tavily|public>' for each one you listed")
+            self._reading_details(chain)
+        elif used == wanted:
+            extra = ""
+            if used == "public":
+                pub = self.cfg["engagement"]["reading"].get("public", {})
+                extra = (f" (free public pages, at most {pub.get('max_pages_per_day')} a day, "
+                         f"{pub.get('gap_seconds')} s apart)")
+            self.add("reading", "Reading provider", "pass", f"{used}{extra}")
+            self._reading_details(chain)
+        else:
+            self.add("reading", "Reading provider", "warn", f"{wanted} requested, {used} in use",
+                     hint=f"Run 'profile-wrap config ack {wanted}' to accept the current risk text")
+
+    def _reading_details(self, chain: List[str]) -> None:
+        """One line per reader in use: what it may still spend today. Reads local ledgers only, calls nothing."""
+        from .linkedin import readers
+        rd = self.cfg["engagement"]["reading"]
+        if "apify" in chain:
+            ap = readers.ApifyReader(self.cfg, self.workspace, ack_valid=True)
+            msg = ap.status_local()
+            has = bool(os.environ.get(rd["apify"]["token_env"]))
+            self.add("reading_apify", "Reader: Apify (first)", "pass" if has else "warn",
+                     msg + ("" if has else f"; {rd['apify']['token_env']} is not set"),
+                     hint="" if has else "Set the variable in your shell; the token never goes in the config")
+        if "tavily" in chain:
+            tv = readers.TavilyReader(self.cfg, self.workspace, ack_valid=True)
+            has = bool(os.environ.get(rd["tavily"]["key_env"]))
+            self.add("reading_tavily", "Reader: Tavily (fills the gaps)", "pass" if has else "warn",
+                     tv.status() + ("" if has else f"; {rd['tavily']['key_env']} is not set"),
+                     hint="" if has else "Set the variable in your shell; the key never goes in the config")
+        if "public" in chain:
+            pub = rd.get("public", {})
+            self.add("reading_public", "Reader: public pages (last)", "pass",
+                     f"at most {pub.get('max_pages_per_day')} pages a day, {pub.get('profile_max_per_run')} profile pages a run")
+
     def check_compliance(self) -> None:
         try:
             lint = importlib.import_module("profile_wrap.compliance.lint")
@@ -432,7 +484,7 @@ class Doctor:
         steps: List[Callable[[], None]] = [
             self.check_python, self.check_tzdata, self.check_tools, self.check_render,
             self.check_network, self.check_secrets, self.check_token, self.check_api_version,
-            self.check_runtime, self.check_workspace, self.check_compliance, self.check_launchd,
+            self.check_runtime, self.check_workspace, self.check_reading, self.check_compliance, self.check_launchd,
         ]
         for step in steps:
             step()

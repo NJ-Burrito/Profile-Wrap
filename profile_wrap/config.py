@@ -85,8 +85,21 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
                          "gap_seconds": [60, 300], "like": False, "max_chars": 1250,
                          "language": "post"},
             "replies": {"mode": "draft"},
-            "reading": {"provider": "manual", "apify_ack": None,
-                        "apify": {"token_env": "APIFY_TOKEN", "max_calls_per_day": 20}},
+            "reading": {"provider": "manual", "providers": [], "apify_ack": None, "public_ack": None,
+                        "tavily_ack": None,
+                        "apify": {"token_env": "APIFY_TOKEN", "max_calls_per_day": 20,
+                                  "actor": "apimaestro~linkedin-profile-posts",
+                                  "cost_per_call_usd": 0.01,
+                                  "reserve_usd": policy.APIFY_RESERVE_USD},
+                        "tavily": {"key_env": "TAVILY_API_KEY",
+                                   "month_credits": policy.TAVILY_MONTH_CREDITS,
+                                   "reserve_credits": policy.TAVILY_RESERVE_CREDITS,
+                                   "cache_days": policy.TAVILY_CACHE_DAYS, "topic": ""},
+                        "public": {"max_pages_per_day": policy.PUBLIC_READ_PAGES_PER_DAY_DEFAULT,
+                                   "gap_seconds": policy.PUBLIC_READ_GAP_SECONDS_FLOOR,
+                                   "profile_max_per_run": policy.PUBLIC_PROFILE_PER_RUN_DEFAULT,
+                                   "profile_max_per_day": policy.PUBLIC_PROFILE_PER_DAY_DEFAULT,
+                                   "profile_gap_minutes": policy.PUBLIC_PROFILE_GAP_MINUTES_DEFAULT}},
             "connect": {"enabled": True, "weekly_slots": 3, "min_score": 8,
                         "note_max": policy.CONNECT_NOTE_MAX, "pass_days": 60},
             "targets_file": "engage/targets.json", "max_post_age_hours": 168,
@@ -152,7 +165,8 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
             },
         },
         "board": {"host": "127.0.0.1", "port": 8770, "ui_language": "en"},
-        "ack": {"terms_read": None, "comments_api": None, "scraping_risk": None},
+        "ack": {"terms_read": None, "comments_api": None, "scraping_risk": None,
+                "public_reading": None, "tavily_reading": None},
     }
 
 
@@ -261,6 +275,63 @@ def validate(cfg: Dict[str, Any], workspace: Optional[Path] = None) -> Report:
     if cfg["engagement"]["reading"]["provider"] == "apify" and not \
             cfg["engagement"]["reading"]["apify_ack"]:
         report.errors.append("engagement.reading.provider=apify needs 'profile-wrap config ack apify'")
+    reading = cfg["engagement"]["reading"]
+    if reading["provider"] not in ("manual", "export", "apify", "public"):
+        report.errors.append("engagement.reading.provider must be manual, export, apify or public")
+    if reading["provider"] == "public" and not reading.get("public_ack"):
+        report.errors.append("engagement.reading.provider=public needs 'profile-wrap config ack public'")
+    chain = reading.get("providers")
+    if not isinstance(chain, list) or any(p not in policy.READING_CHAIN_PROVIDERS for p in chain) \
+            or len(set(chain)) != len(chain):
+        report.errors.append("engagement.reading.providers must be a list without repeats drawn from "
+                             + ", ".join(policy.READING_CHAIN_PROVIDERS))
+    else:
+        if "public" in chain and chain[-1] != "public":
+            report.errors.append("engagement.reading.providers: 'public' must come last (it is the "
+                                 "rate-limited fallback)")
+        for name in chain:
+            if not reading.get(f"{name}_ack"):
+                report.errors.append(f"engagement.reading.providers lists {name}: run "
+                                     f"'profile-wrap config ack {name}'")
+    tav = reading.get("tavily") or {}
+    mc, rc, cd = tav.get("month_credits"), tav.get("reserve_credits"), tav.get("cache_days")
+    if not isinstance(mc, int) or isinstance(mc, bool) or mc < 1 or mc > policy.TAVILY_MONTH_CREDITS * 100:
+        report.errors.append("engagement.reading.tavily.month_credits must be a positive integer")
+    if not isinstance(rc, int) or isinstance(rc, bool) or rc < 0 or (isinstance(mc, int) and rc >= mc):
+        report.errors.append("engagement.reading.tavily.reserve_credits must be 0 or more and below month_credits")
+    if not isinstance(cd, int) or isinstance(cd, bool) or cd < 0:
+        report.errors.append("engagement.reading.tavily.cache_days must be 0 or more")
+    if not isinstance(tav.get("key_env"), str) or not tav.get("key_env") \
+            or tav["key_env"].startswith("tvly-"):
+        report.errors.append("engagement.reading.tavily.key_env must be the NAME of an environment "
+                             "variable (the key itself never goes in the config)")
+    api = reading.get("apify") or {}
+    if not isinstance(api.get("token_env"), str) or not api.get("token_env") \
+            or api["token_env"].startswith("apify_api_"):
+        report.errors.append("engagement.reading.apify.token_env must be the NAME of an environment "
+                             "variable (the token itself never goes in the config)")
+    cost, res = api.get("cost_per_call_usd"), api.get("reserve_usd")
+    if not isinstance(cost, (int, float)) or isinstance(cost, bool) or cost <= 0:
+        report.errors.append("engagement.reading.apify.cost_per_call_usd must be above 0")
+    if not isinstance(res, (int, float)) or isinstance(res, bool) or res < 0:
+        report.errors.append("engagement.reading.apify.reserve_usd must be 0 or more")
+    pub = reading.get("public") or {}
+    pages, gap = pub.get("max_pages_per_day"), pub.get("gap_seconds")
+    if not isinstance(pages, int) or isinstance(pages, bool) or not 1 <= pages <= policy.PUBLIC_READ_PAGES_PER_DAY_MAX:
+        report.errors.append(
+            f"engagement.reading.public.max_pages_per_day must be 1 to {policy.PUBLIC_READ_PAGES_PER_DAY_MAX}")
+    if not isinstance(gap, (int, float)) or isinstance(gap, bool) or gap < policy.PUBLIC_READ_GAP_SECONDS_FLOOR:
+        report.errors.append(
+            f"engagement.reading.public.gap_seconds must be at least {policy.PUBLIC_READ_GAP_SECONDS_FLOOR}")
+    for key in ("profile_max_per_run", "profile_max_per_day"):
+        v = pub.get(key)
+        if not isinstance(v, int) or isinstance(v, bool) or not 1 <= v <= policy.PUBLIC_PROFILE_PER_DAY_MAX:
+            report.errors.append(
+                f"engagement.reading.public.{key} must be 1 to {policy.PUBLIC_PROFILE_PER_DAY_MAX}")
+    pg = pub.get("profile_gap_minutes")
+    if not isinstance(pg, (int, float)) or isinstance(pg, bool) or pg < policy.PUBLIC_PROFILE_GAP_MINUTES_FLOOR:
+        report.errors.append("engagement.reading.public.profile_gap_minutes must be at least "
+                             f"{policy.PUBLIC_PROFILE_GAP_MINUTES_FLOOR}")
     if comments["like"] and not cfg["ack"]["comments_api"]:
         report.errors.append("engagement.comments.like=true needs 'profile-wrap config ack comments_api'")
 
@@ -449,11 +520,24 @@ def effective_modes(cfg: Dict[str, Any], workspace: Optional[Path] = None,
     if reading == "apify" and status["apify"][0] != "valid":
         reading = "manual"
         notes.append("reading downgraded to manual: " + status["apify"][1])
+    if reading == "public" and status["public"][0] != "valid":
+        reading = "manual"
+        notes.append("reading downgraded to manual: " + status["public"][1])
+    chain: List[str] = []
+    for name in (cfg["engagement"]["reading"].get("providers") or []):
+        if status[name][0] == "valid":
+            chain.append(name)
+        else:
+            notes.append(f"reading provider {name} skipped: " + status[name][1])
+    if not chain and reading in policy.READING_CHAIN_PROVIDERS:
+        chain = [reading]
+    if chain:
+        reading = chain[0]
     likes = bool(cfg["engagement"]["comments"]["like"]) and status["comments_api"][0] == "valid"
     if workspace is not None and limits.is_paused(Path(workspace), "posting"):
         notes.append("posting is paused")
-    return {"posting": posting, "comments": comments, "reading": reading, "likes": likes,
-            "notes": notes}
+    return {"posting": posting, "comments": comments, "reading": reading, "reading_chain": chain,
+            "likes": likes, "notes": notes}
 
 
 def ack_valid(cfg: Dict[str, Any], action: str, **kw: Any) -> bool:

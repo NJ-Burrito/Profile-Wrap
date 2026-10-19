@@ -25,7 +25,19 @@ Your own LinkedIn account, your own developer app and your own decisions are inv
 
 ### Apify reader
 
-- It reads your own posts and comments through a third-party service that scrapes LinkedIn pages. The User Agreement (section 8.2) bars scraping the Services. It is off by default, restricted to your own content, capped per day, and cannot read other people's posts.
+- It reads posts and comments through a third-party service that scrapes LinkedIn pages: your own, and the recent posts of profiles you chose to engage with. The User Agreement (section 8.2) bars scraping the Services. It is off by default, capped per day, and paced so the free monthly credit lasts the whole billing cycle (when the credit is gone it rests until the cycle ends). Your Apify token stays in an environment variable and is sent only to api.apify.com. It is an opt-in you accept with `profile-wrap config ack apify`.
+
+### Tavily reader
+
+- It asks the Tavily search service, which indexes the open web, for the recent public LinkedIn posts of profiles you chose, and can fetch the text of one post page at a time. Profile-Wrap sends Tavily the person's name, a topic word and, for the text, the post address; Tavily's own terms and privacy policy apply to that request, and Profile-Wrap does not open LinkedIn for it. Whether this counts as scraping under the User Agreement (section 8.2) is not defined in the text, so it is an opt-in you accept with `profile-wrap config ack tavily`.
+- It is off by default. The free plan gives 1,000 credits a month; Profile-Wrap never spends the last 100, spreads the rest over the days left in the calendar month, caches a search for 3 days and fetches one page per call. Your Tavily key stays in an environment variable and is sent only to api.tavily.com. Tavily finds posts about three days after they appear and may miss a person; it never decides that someone is inactive.
+- Apify and Tavily are designed to be used together: Apify first for same-day posts, Tavily for the people and days Apify does not cover, the public reader last. Each has its own acknowledgement and its own limits.
+
+### Public reader
+
+- It opens the public LinkedIn page of a post or a profile, the same page a visitor who is not signed in sees, and reads the structured data on it. No third party is involved and nothing is paid. The User Agreement (section 8.2) bars scraping the Services, so this is an opt-in you accept with `profile-wrap config ack public`.
+- It is off by default. It sends plain GET requests only, waits at least 3 seconds between pages, stops at 30 pages a day (you can lower it, up to 100), sends the same neutral profile-wrap User-Agent as every other call (it does not pretend to be a browser), sends no Referer, uses no sign-in, no proxy and no disguise, and stops for the rest of the day when a post page answers 999, 429 or 403. Guest profile pages are rate-limited per IP, so reads are spread across the day: at most 2 profile pages per run, at least 20 minutes apart (kept across runs), 12 a day, and after a 999 on a profile page profile reads pause for 6 hours. LinkedIn may refuse a request that does not look like a browser; then that reader stops and the next one takes over.
+- LinkedIn may show less on a public page, change it, or block your address. When it does, reading falls back to manual: paste the numbers yourself.
 
 ### Likes
 

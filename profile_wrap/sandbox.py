@@ -41,6 +41,7 @@ def _join(*parts: str) -> str:
 SECRET_PATTERNS: Tuple[Tuple[str, "re.Pattern[str]"], ...] = (
     ("linkedin-token", re.compile(r"\bAQ[VUWX][A-Za-z0-9_-]{70,}")),
     ("apify-token", re.compile(_join(r"\bapify", r"_api_", r"[A-Za-z0-9]{8,}"))),
+    ("tavily-key", re.compile(_join(r"\btvly", r"-(?:dev-|prod-)?", r"(?![xX]+\b)[A-Za-z0-9]{16,}"))),
     ("anthropic-key", re.compile(_join(r"\bsk", r"-ant-", r"[A-Za-z0-9_-]{10,}"))),
     ("generic-sk-key", re.compile(_join(r"\bsk", r"-(?:or-v1-|proj-)?", r"[A-Za-z0-9_-]{24,}"))),
     ("github-token", re.compile(r"\bgh[pousr]_[A-Za-z0-9]{30,}")),

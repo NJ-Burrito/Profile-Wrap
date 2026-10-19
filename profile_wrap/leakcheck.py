@@ -325,6 +325,7 @@ _TEXT_RULES: list[tuple[str, re.Pattern, object]] = [
     ("token-anthropic", re.compile(r"\bsk-ant-[A-Za-z0-9_-]{10,}"), _always),
     ("token-sk", re.compile(r"\bsk-(?:or-v1-|proj-)?[A-Za-z0-9_-]{24,}"), _always),
     ("token-apify", re.compile(r"\bapify_api_[A-Za-z0-9]{8,}"), _always),
+    ("token-tavily", re.compile(r"\btvly-(?:dev-|prod-)?([A-Za-z0-9]{16,})"), lambda m: not re.fullmatch(r"[xX]+", m.group(1))),
     ("token-linkedin", re.compile(r"\bAQ[VUWX][A-Za-z0-9_-]{70,}"), _always),
     ("token-aws", re.compile(r"\bAKIA[0-9A-Z]{16}\b"), _always),
     ("token-slack", re.compile(r"\bxox[abprs]-[A-Za-z0-9-]{10,}"), _always),

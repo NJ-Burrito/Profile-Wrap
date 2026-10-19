@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 from typing import Any, Dict, List
 
 from .. import config as config_mod
@@ -54,6 +56,50 @@ def cmd_auth(args: argparse.Namespace) -> int:
         print(f"profile-wrap auth: {exc}", file=sys.stderr)
         return policy.EXIT_FAIL
     return policy.EXIT_OK
+
+
+PROFILE_URL = re.compile(r"^https://www\.linkedin\.com/in/([\w%.\-]{1,100})/?$")
+
+
+def name_from_slug(slug: str) -> str:
+    """'alex-example-1a2b3c4d' -> 'Alex Example': drop a trailing id-like token, dashes to spaces, title case."""
+    parts = [x for x in unquote(slug).replace("_", "-").split("-") if x]
+    if len(parts) > 1 and re.fullmatch(r"(?=.*\d)[0-9a-fA-F]{5,}|\d{3,}", parts[-1]):
+        parts.pop()
+    return " ".join(parts).title() if parts and not any(x.isdigit() for x in parts) else ""
+
+
+def cmd_read(args: argparse.Namespace) -> int:
+    """``read posts <profile-url>``: recent public posts of one person through the reading providers you switched on."""
+    from . import readers
+
+    m = PROFILE_URL.match(args.url or "")
+    if not m:
+        print("profile-wrap read: give a profile address like https://www.linkedin.com/in/<name>/", file=sys.stderr)
+        return policy.EXIT_USAGE
+    ws = _ws(args)
+    cfg = config_mod.load(ws)
+    name = (getattr(args, "name", None) or "").strip() or name_from_slug(m.group(1))
+    chain = readers.build_chain(cfg, ws)
+    if not chain.order:
+        print("profile-wrap read: no reader is switched on. Readers are optional and off by default; "
+              "see docs/PROVIDERS.md (set engagement.reading.providers, then run 'profile-wrap config ack <name>').",
+              file=sys.stderr)
+        return policy.EXIT_FAIL
+    res = chain.profile_posts({"profile_url": args.url, "name": name})
+    posts = list(res["posts"])
+    if getattr(args, "text", False):
+        chain.fill_text(posts)
+    out = {"source": res["source"], "clean_empty": res["clean_empty"], "notes": res["notes"], "posts": posts}
+    if getattr(args, "json", False):
+        _emit(args, out)
+    else:
+        for note in res["notes"]:
+            print(f"note: {note}", file=sys.stderr)
+        print(f"{len(posts)} post(s) via {res['source'] or 'no reader'}")
+        for p in posts:
+            print(f"- {p.get('url', '')}")
+    return policy.EXIT_OK if (posts or res["clean_empty"]) else policy.EXIT_FAIL
 
 
 def _hp(cfg: Dict[str, Any]):
@@ -250,6 +296,14 @@ def register(subparsers: Any) -> None:
     p.add_argument("--url", help="with --resolve --posted: the post's address")
     _common(p)
     p.set_defaults(func=cmd_post)
+
+    p = subparsers.add_parser("read", help="recent posts of one person through your optional readers (off by default)")
+    p.add_argument("what", choices=["posts"], help="'posts' lists recent public posts")
+    p.add_argument("url", help="profile address, https://www.linkedin.com/in/<name>/")
+    p.add_argument("--name", help="the name to search for, First Last (default: taken from the address)")
+    p.add_argument("--text", action="store_true", help="also fetch full text where the reader needs a paid call")
+    _common(p)
+    p.set_defaults(func=cmd_read)
 
     p = subparsers.add_parser("due", help="post the queued draft whose slot has come (scheduled job)")
     _common(p)

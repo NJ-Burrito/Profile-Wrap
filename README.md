@@ -108,6 +108,8 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 
 🌍 Works in English and Arabic
 
+🔎 Finds posts to talk about with two free tools (Apify and Tavily) that complement each other. Both are optional.
+
 ## Is it safe?
 
 🔒 It uses LinkedIn's own official way in

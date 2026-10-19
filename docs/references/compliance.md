@@ -45,8 +45,10 @@ Each needs a typed acknowledgement stored with the date and the hash of this fil
 
 1. **Unattended posting** (`posting.mode = api_scheduled`). The API Terms restrict using the APIs to automate posting; whether that reaches a scheduled post to your own account is not defined in the text. You carry the risk.
 2. **API comments and replies** (experimental extra only). The User Agreement restricts bots that comment or like. The route is undocumented and may be closed.
-3. **Apify reader** (own content only). It scrapes the Services, which the User Agreement restricts.
-4. **Likes.**
+3. **Apify reader** (`profile-wrap config ack apify`). A third-party service that scrapes the Services, which the User Agreement restricts; it reads your own posts and the recent posts of profiles you choose. Capped per day and paced to the free monthly credit; it rests when the credit is gone. The token is read from an environment variable and goes only to api.apify.com.
+4. **Public reader** (free, `engagement.reading.provider = "public"`, `profile-wrap config ack public`). It reads LinkedIn pages that open without a sign-in: the comments and counts of your own posts and the recent posts of profiles you choose to engage with. The User Agreement restricts scraping the Services. GET only, at least 3 s between pages, at most 30 pages a day by default, one fixed browser User-Agent, no Referer, no login state, no proxy, no redirects; HTTP 999, 429 or 403 on a post page stops it for the day. Guest profile pages are rate-limited per IP, so reads are spread across the day: at most 2 profile pages per run, 20 minutes apart (kept across runs), 12 a day, and a 999 on a profile page pauses profile reads for 6 hours.
+5. **Tavily reader** (free plan, `engagement.reading.providers` includes `tavily`, `profile-wrap config ack tavily`). A web search service finds the recent public LinkedIn posts of profiles you choose; Profile-Wrap never opens LinkedIn for it. Whether that reaches the User Agreement's limit on scraping is not defined in the text. Paced to the calendar month (1,000 credits, 100 never spent), searches cached 3 days, one page per fetch. The key is read from an environment variable and goes only to api.tavily.com. Used together with Apify (Apify first) and the public reader (last).
+6. **Likes.**
 
 ## Posting safety
 

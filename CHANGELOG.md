@@ -3,6 +3,30 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- Free `public` reading provider (`engagement.reading.provider = "public"`): reads the public LinkedIn pages of your
+  own posts (counts, comments) and of profiles you choose, with no third party. Opt-in with
+  `profile-wrap config ack public`; GET only, 3 s between pages, 30 pages a day by default, stops on HTTP 999/429/403 (profile pages: 2 per run, 20 minutes apart, 12 a day, 6-hour pause after a 999),
+  no Referer, no login state, no proxy. `profile-wrap doctor` shows the provider in use. The risk text
+  (`docs/references/compliance.md`, `docs/TERMS-AND-RISK.md`) changed, so earlier acknowledgements ask to be accepted again.
+- Two free readers that complement each other: `engagement.reading.providers = ["apify", "tavily", "public"]` (any subset,
+  in this order, `public` last). Apify first for same-day posts, paced so its free monthly credit lasts the billing cycle;
+  Tavily (`profile-wrap config ack tavily`, key from the environment variable named in `reading.tavily.key_env`) fills the
+  people and days Apify does not cover, paced so 1,000 free credits last the calendar month with a 100-credit reserve,
+  a 3-day search cache, a ledger that fails closed and one URL per extract call. A reader that cannot answer hands over
+  to the next. `profile-wrap doctor` lists each reader and what it may still spend today, with no network call.
+  `api.tavily.com` is reachable only with its own acknowledgement. New module `profile_wrap/linkedin/readers.py`.
+- The experimental comments extra repeats a comment once with the `ugcPost` address when LinkedIn answers 400 `actual threadUrn`
+  (posts with media).
+
+### Changed
+
+- The Apify risk text now says it also reads the recent posts of profiles you choose (it said own content only), so a
+  stored Apify acknowledgement asks to be accepted again.
+
 ## [0.2.1] - 2026-10-16
 
 ### Fixed

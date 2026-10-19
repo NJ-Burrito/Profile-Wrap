@@ -45,6 +45,27 @@ LINKEDIN_OAUTH_HOST = "www.linkedin.com"
 LINKEDIN_TOKEN_HOSTS = (LINKEDIN_API_HOST, LINKEDIN_OAUTH_HOST)
 UPLOAD_HOST_SUFFIXES = (".linkedin.com", ".licdn.com")
 APIFY_HOST = "api.apify.com"
+TAVILY_HOST = "api.tavily.com"
+# Reading providers, in the order a user may chain them; "public" is always the last, rate-limited fallback.
+READING_CHAIN_PROVIDERS = ("apify", "tavily", "public")
+TAVILY_MONTH_CREDITS = 1000          # Tavily free plan, per calendar month
+TAVILY_RESERVE_CREDITS = 100         # never spent by an automatic run
+TAVILY_CACHE_DAYS = 3
+APIFY_RESERVE_USD = 0.05             # left unspent in the free monthly credit
+# Free "public" reader: GET-only, these path prefixes on www.linkedin.com, only with its own acknowledgement.
+PUBLIC_READ_PREFIXES = ("/in/", "/posts/", "/feed/update/", "/pulse/")
+PUBLIC_READ_GAP_SECONDS_FLOOR = 3
+PUBLIC_READ_PAGES_PER_DAY_DEFAULT = 30
+PUBLIC_READ_PAGES_PER_DAY_MAX = 100
+# Guest PROFILE pages are rate-limited per IP by LinkedIn (about 20 in an hour got an address blocked on 2026-10-19):
+# few per run, spread across the day, and a long pause after any 999.
+PUBLIC_PROFILE_PER_RUN_DEFAULT = 2
+PUBLIC_PROFILE_PER_DAY_DEFAULT = 12
+PUBLIC_PROFILE_PER_DAY_MAX = 24
+PUBLIC_PROFILE_GAP_MINUTES_DEFAULT = 20
+PUBLIC_PROFILE_GAP_MINUTES_FLOOR = 20
+PUBLIC_PROFILE_PAUSE_HOURS = 6
+PUBLIC_READ_STOP_STATUSES = (999, 429, 403)
 LINKEDIN_ENDPOINT_ALLOWLIST = (
     "/v2/userinfo",
     "/rest/posts",
@@ -76,6 +97,8 @@ ACK_ACTIONS = {
     "api_scheduled": ("posting.api_scheduled_ack",),
     "comments_api": ("engagement.comments.api_ack", "ack.comments_api"),
     "apify": ("engagement.reading.apify_ack", "ack.scraping_risk"),
+    "public": ("engagement.reading.public_ack", "ack.public_reading"),
+    "tavily": ("engagement.reading.tavily_ack", "ack.tavily_reading"),
     "likes": (),
 }
 # Documents whose sha256 binds an acknowledgement, relative to the plugin root.

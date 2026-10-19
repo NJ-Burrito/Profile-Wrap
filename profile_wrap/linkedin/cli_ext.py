@@ -6,6 +6,7 @@ import json
 import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote
 from typing import Any, Dict, List
 
 from .. import config as config_mod
@@ -60,6 +61,14 @@ def cmd_auth(args: argparse.Namespace) -> int:
 PROFILE_URL = re.compile(r"^https://www\.linkedin\.com/in/([\w%.\-]{1,100})/?$")
 
 
+def name_from_slug(slug: str) -> str:
+    """'alex-example-1a2b3c4d' -> 'Alex Example': drop a trailing id-like token, dashes to spaces, title case."""
+    parts = [x for x in unquote(slug).replace("_", "-").split("-") if x]
+    if len(parts) > 1 and re.fullmatch(r"(?=.*\d)[0-9a-fA-F]{5,}|\d{3,}", parts[-1]):
+        parts.pop()
+    return " ".join(parts).title() if parts and not any(x.isdigit() for x in parts) else ""
+
+
 def cmd_read(args: argparse.Namespace) -> int:
     """``read posts <profile-url>``: recent public posts of one person through the reading providers you switched on."""
     from . import readers
@@ -70,13 +79,14 @@ def cmd_read(args: argparse.Namespace) -> int:
         return policy.EXIT_USAGE
     ws = _ws(args)
     cfg = config_mod.load(ws)
+    name = (getattr(args, "name", None) or "").strip() or name_from_slug(m.group(1))
     chain = readers.build_chain(cfg, ws)
     if not chain.order:
         print("profile-wrap read: no reader is switched on. Readers are optional and off by default; "
               "see docs/PROVIDERS.md (set engagement.reading.providers, then run 'profile-wrap config ack <name>').",
               file=sys.stderr)
         return policy.EXIT_FAIL
-    res = chain.profile_posts({"profile_url": args.url, "name": ""})
+    res = chain.profile_posts({"profile_url": args.url, "name": name})
     posts = list(res["posts"])
     if getattr(args, "text", False):
         chain.fill_text(posts)
@@ -290,6 +300,7 @@ def register(subparsers: Any) -> None:
     p = subparsers.add_parser("read", help="recent posts of one person through your optional readers (off by default)")
     p.add_argument("what", choices=["posts"], help="'posts' lists recent public posts")
     p.add_argument("url", help="profile address, https://www.linkedin.com/in/<name>/")
+    p.add_argument("--name", help="the name to search for, First Last (default: taken from the address)")
     p.add_argument("--text", action="store_true", help="also fetch full text where the reader needs a paid call")
     _common(p)
     p.set_defaults(func=cmd_read)

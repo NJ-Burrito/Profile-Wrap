@@ -490,3 +490,14 @@ def test_doctor_reading_details_make_no_network_call(tmp_path, monkeypatch):
     (tmp_path / "data" / "apify_budget.json").write_text(json.dumps(
         {"day": "2026-10-18", "day_start": 3.0, "calls": 1, "cycle_end": "2026-10-19T00:00:00Z"}))
     assert "once on the first use" in ap.status_local()
+
+
+def test_tavily_query_has_the_name_and_empty_name_spends_nothing(tmp_path):
+    net = FakeNet()
+    now = utc(2026, 10, 19)
+    tv = tavily(tmp_path, net, now)
+    tv.search_posts({"name": "Alex Example", "profile_url": f"https://www.linkedin.com/in/{SLUG}/"})
+    assert "Alex Example" in net.of("/search")[0]["json"]["query"]
+    with pytest.raises(readers.ReaderUnavailable):
+        tv.search_posts({"name": "", "profile_url": f"https://www.linkedin.com/in/{SLUG}-b/"})
+    assert len(net.of("/search")) == 1

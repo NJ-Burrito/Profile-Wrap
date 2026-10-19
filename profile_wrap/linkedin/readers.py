@@ -344,6 +344,8 @@ class TavilyReader:
         hit = self.cached(slug)
         if hit is not None:
             return hit, 0
+        if not target.get("name"):
+            raise ReaderUnavailable("unusable", "no person name to search for (give one with --name)")
         query = " ".join(x for x in (target.get("name", ""), target.get("topic") or self.topic, "linkedin") if x)
         data = self._call("/search", {"query": query, "topic": "news", "time_range": "week", "max_results": 10},
                           "search", target.get("name", slug))

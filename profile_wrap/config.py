@@ -306,7 +306,8 @@ def validate(cfg: Dict[str, Any], workspace: Optional[Path] = None) -> Report:
         report.errors.append("engagement.reading.tavily.key_env must be the NAME of an environment "
                              "variable (the key itself never goes in the config)")
     api = reading.get("apify") or {}
-    if not isinstance(api.get("token_env"), str) or not api.get("token_env")             or api["token_env"].startswith("apify_api_"):
+    if not isinstance(api.get("token_env"), str) or not api.get("token_env") \
+            or api["token_env"].startswith("apify_api_"):
         report.errors.append("engagement.reading.apify.token_env must be the NAME of an environment "
                              "variable (the token itself never goes in the config)")
     cost, res = api.get("cost_per_call_usd"), api.get("reserve_usd")

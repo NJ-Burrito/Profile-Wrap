@@ -79,3 +79,20 @@ def test_every_copy_of_the_compliance_text_is_identical():
     assert len(copies) >= 10
     stale = [str(p.relative_to(REPO)) for p in copies if p.read_bytes() != master]
     assert not stale, f"copy docs/references/compliance.md over: {stale}"
+
+
+def test_name_from_slug():
+    from profile_wrap.linkedin.cli_ext import name_from_slug
+    assert name_from_slug("alex-example") == "Alex Example"
+    assert name_from_slug("alex-example-1a2b3c4d") == "Alex Example"
+    assert name_from_slug("alex-example-123456") == "Alex Example"
+    assert name_from_slug("12345678") == ""
+
+
+def test_read_passes_the_name(monkeypatch, capsys, make_workspace):
+    ws = make_workspace()
+    chain = FakeChain(["apify"], readers.ReadResult(posts=[], source="apify", notes=[], clean_empty=True))
+    run(monkeypatch, capsys, ws, chain)
+    assert chain.seen[0]["name"] == "Alex Example"
+    run(monkeypatch, capsys, ws, chain, "--name", "Alexandra Example")
+    assert chain.seen[1]["name"] == "Alexandra Example"

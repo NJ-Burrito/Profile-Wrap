@@ -97,7 +97,7 @@ takes `manual`, `export`, `apify` or `public` for a single reader.
 
 `public` reads the pages LinkedIn shows to anyone who is not signed in (`profile_wrap/linkedin/public_reader.py`):
 `post_stats`, `post_comments` for a post URL and `profile_posts` for a profile you chose. A post page that answers
-HTTP 999, 429 or 403 stops reading for the day. The request carries the neutral `profile-wrap/<version>` User-Agent and nothing else that pretends to be a browser, so guest pages may refuse it; the reader then stops and the chain moves on. Guest pages are rate-limited per address. Guest profile pages are rate-limited per IP, so reads are spread
+HTTP 999, 429 or 403 stops reading for the day. The request carries the neutral `profile-wrap/<version>` User-Agent and nothing else that pretends to be a browser, so guest pages may refuse it; the reader then stops and the chain moves on. Guest profile pages are rate-limited per IP, so reads are spread
 across the day: `public.profile_max_per_run` (2), `public.profile_gap_minutes` (20, kept across runs) and
 `public.profile_max_per_day` (12); a 999 on a profile page pauses profile reads for 6 hours. If the acknowledgement goes stale after an update to the risk text, reading drops back to
 `manual` and `profile-wrap doctor` says so. Risk text: `docs/TERMS-AND-RISK.md`.

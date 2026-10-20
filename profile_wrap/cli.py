@@ -462,7 +462,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return policy.EXIT_USAGE
     if os.name == "nt":
         os.environ.setdefault("PYTHONUTF8", "1")
-    updates.startup_notice(argv if argv is not None else sys.argv[1:], bool(getattr(args, "json", False)))
+    updates.startup_notice(argv if argv is not None else sys.argv[1:], bool(getattr(args, "json", False)), args)
     try:
         code = func(args)
     except KeyboardInterrupt:

@@ -9,8 +9,8 @@ submitted automatically.
 - [ ] You have a paid claude.ai plan and can sign in at https://claude.ai.
 - [ ] The repository https://github.com/NJ-Burrito/profile-wrap is public and `main` contains the folder
       `plugins/profile-wrap/` at version 0.2.0 (tag `v0.2.0` exists).
-- [ ] `profile-wrap-mcp` 0.2.0 is published on PyPI. The plugin starts it with `uvx profile-wrap-mcp==0.2.1`, and a
-      pinned launcher whose version does not exist makes the plugin fail. Check: `uvx profile-wrap-mcp==0.2.1 --help`.
+- [ ] `profile-wrap-mcp` 0.2.0 is published on PyPI. The plugin starts it with `uvx profile-wrap-mcp==0.3.0`, and a
+      pinned launcher whose version does not exist makes the plugin fail. Check: `uvx profile-wrap-mcp==0.3.0 --help`.
 - [ ] `profile_wrap` is on PyPI, or the README install line is changed to install from GitHub.
 - [ ] These URLs open in a private browser window (they are in `plugin.json`):
       `docs/PRIVACY.md`, `LICENSE`, `README.md` and the issues page on GitHub, and the raw `assets/icon.svg` link.

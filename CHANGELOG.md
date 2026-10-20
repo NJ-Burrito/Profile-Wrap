@@ -5,6 +5,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-10-20
+
 ### Breaking
 
 - The risk text changed, so every earlier acknowledgement is stale. Re-run `profile-wrap config ack <action>` for every

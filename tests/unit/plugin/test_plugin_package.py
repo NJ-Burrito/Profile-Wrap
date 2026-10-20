@@ -36,7 +36,7 @@ def test_manifest_required_and_directory_fields():
     m = load(PLUGIN / ".claude-plugin" / "plugin.json")
     assert m["name"] == "profile-wrap" and KEBAB.match(m["name"]) and len(m["name"]) <= 64
     assert m["name"] not in RESERVED
-    assert m["version"] == "0.2.1"
+    assert m["version"] == "0.3.0"
     assert m["license"] == "MIT"
     assert m["description"] and m["author"]["name"] and m["keywords"]
     for key in ("homepage", "repository", "documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl", "icon"):
@@ -91,7 +91,7 @@ def test_no_unresolvable_plugin_root_paths():
 def test_mcp_launcher_is_pinned_and_https_only():
     cfg = load(PLUGIN / ".mcp.json")["mcpServers"]["profile-wrap"]
     assert cfg["command"] == "uvx"
-    assert cfg["args"] == ["profile-wrap-mcp==0.2.1"]
+    assert cfg["args"] == ["profile-wrap-mcp==0.3.0"]
     assert not any(str(a).startswith("http://") for a in cfg["args"])
 
 

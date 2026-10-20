@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "profile-wrap-mcp"
-version = "0.2.1"
+version = "0.3.0"
 description = "MCP server (stdio) for Profile-Wrap: workspace status, drafts, gate, facts, review state, and posting of board-Allowed drafts only. Not affiliated with LinkedIn."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -21,7 +21,7 @@ classifiers = [
   "Programming Language :: Python :: 3",
 ]
 dependencies = [
-  "profile_wrap>=0.2.0,<0.3",
+  "profile_wrap>=0.3.0,<0.4",
   "mcp>=2.3,<3",
 ]
 

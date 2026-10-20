@@ -66,7 +66,9 @@ Get them on [Smithery](https://smithery.ai/skills/naderalzghoulbusiness), or cop
 claude mcp add profile-wrap -- uvx profile-wrap-mcp
 ```
 
-Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registry.modelcontextprotocol.io).
+Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registry.modelcontextprotocol.io) and graded A on mcprush:
+
+[![Profile-Wrap MCP server](https://mcprush.com/badge/profile-wrap-mcp/card.svg)](https://mcprush.com/to/profile-wrap-mcp?ref=badge)
 
 <a id="app"></a>
 

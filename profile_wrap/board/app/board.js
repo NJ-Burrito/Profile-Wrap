@@ -96,6 +96,19 @@
         t("tab." + id), n !== null ? h("span", { class: "count", text: String(n) }) : null);
     }));
   }
+  function updateBanner(u) {
+    const news = h("div", { hidden: true }, (u.news || []).map((r) => h("div", {}, h("strong", { text: r.tag }), h("pre", { class: "update-notes", text: (r.body || "").trim() || t("update.nonotes") }))));
+    const how = h("div", { hidden: true }, h("p", {}, t("update.method", { label: u.method.label })),
+      u.method.command ? h("p", {}, t("update.run"), " ", h("code", { text: u.method.command })) : null,
+      u.method.note ? h("p", { text: u.method.note }) : null,
+      u.method.id === "desktop" ? h("a", { href: u.url, target: "_blank", rel: "noopener noreferrer" }, t("update.download")) : null);
+    const dismiss = async (kind) => { const r = await api("/api/update/" + kind, { method: "POST", body: {} }); if (r.code === 200) { S.updateHidden = true; renderBanners(); } };
+    return h("div", { class: "banner update" }, h("strong", { text: t("update.title", { latest: u.latest, current: u.current }) }), " ", t("update.optional"),
+      h("button", { class: "btn", onclick: () => { news.hidden = !news.hidden; } }, t("update.news")),
+      h("button", { class: "btn primary", onclick: () => { how.hidden = !how.hidden; } }, t("update.apply")),
+      h("button", { class: "btn", onclick: () => dismiss("skip") }, t("update.skip")),
+      h("button", { class: "btn", onclick: () => dismiss("later") }, t("update.later")), news, how);
+  }
   function renderBanners() {
     const box = document.getElementById("banners");
     const items = [];
@@ -105,6 +118,7 @@
     if (S.state && S.state.config_problem) items.push(h("div", { class: "banner warn" }, t("banner.config", { problem: S.state.config_problem })));
     const tk = S.data.settings && S.data.settings.token;
     if (tk && (tk.status === "warn" || tk.status === "fail")) items.push(h("div", { class: "banner " + (tk.status === "fail" ? "bad" : "warn") }, t("banner.token", { detail: tk.detail }), tk.hint ? h("code", { text: tk.hint }) : null));
+    if (S.update && S.update.notify && !S.updateHidden) items.push(updateBanner(S.update));
     for (const n of (S.state && S.state.notifications || []).slice(0, 1)) items.push(h("div", { class: "banner" }, h("strong", { text: n.title }), " ", n.message));
     box.replaceChildren(...items);
     const live = document.getElementById("live");
@@ -300,6 +314,7 @@
     document.getElementById("lang").addEventListener("change", async (e) => { localStorage.setItem("profile_wrapLang", e.target.value); await loadStrings(e.target.value); render(); });
     window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (TABS.includes(id) && id !== S.tab) { S.tab = id; render(); loadTab(); } });
     await refresh(true);
+    api("/api/update").then((r) => { if (r.code === 200) { S.update = r.body; renderBanners(); } }).catch(() => {});
     setInterval(() => { if (!document.hidden) refresh(false); }, 5000);
     S.health = first;
   }

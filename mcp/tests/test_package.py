@@ -66,5 +66,5 @@ def test_real_stdio_server_lists_tools_and_answers(env):
                 res = await s.call_tool("review_state", {})
                 return {t.name for t in tools.tools}, res
     names, res = asyncio.run(asyncio.wait_for(go(), 60))
-    assert "post_allowed" in names and len(names) == 8
+    assert "post_allowed" in names and len(names) == 9
     assert not res.is_error

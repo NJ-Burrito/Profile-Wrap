@@ -1,0 +1,16 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "command -v profile-wrap >/dev/null 2>&1 && profile-wrap update check --hook 2>/dev/null; exit 0",
+            "timeout": 6
+          }
+        ]
+      }
+    ]
+  }
+}

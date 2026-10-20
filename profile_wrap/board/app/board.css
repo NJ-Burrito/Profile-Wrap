@@ -79,3 +79,5 @@ th, td { text-align: start; padding: 6px 8px; border-block-end: 1px solid var(--
 #toast.show { opacity: 1; }
 [dir="rtl"] #toast { transform: translateX(50%); }
 @media (prefers-reduced-motion: reduce) { #toast { transition: none; } }
+
+.update-notes { white-space: pre-wrap; max-height: 16em; overflow: auto; font: 13px/1.5 ui-monospace, Consolas, monospace; margin: 4px 0 8px; }

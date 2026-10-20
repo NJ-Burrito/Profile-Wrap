@@ -20,7 +20,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from .. import __version__
 from .. import config as config_mod
-from .. import paths
+from .. import paths, updates
 from ..board.security import CSP, host_allowed, origin_allowed, token_ok
 from . import logic
 from .logic import GuiError
@@ -51,6 +51,7 @@ class GuiApp:
         self.doctor_fn = doctor_fn or self._doctor
         self._doctor_cache: Optional[Tuple[float, Path, Dict[str, Any]]] = None
         self.board: Any = None
+        self.update_enabled = False   # set by window.run: only a real app window asks GitHub
         self.quit = threading.Event()
         self.lock = threading.Lock()
 
@@ -96,7 +97,9 @@ class GuiApp:
                 if not config_mod.config_path(self.ws).is_file():
                     raise GuiError("this folder has no workspace config; run `profile-wrap init` first", 409)
                 try:
-                    self.board = BoardServer(self.ws, port=0).start_background()
+                    self.board = BoardServer(self.ws, port=0)
+                    self.board.app.update_enabled = self.update_enabled
+                    self.board.start_background()
                 except ValueError as exc:
                     raise GuiError(str(exc), 409) from None
             return {"running": True, "url": self.board.url}
@@ -123,6 +126,8 @@ class GuiApp:
             return {"entries": logic.calendar_rows(self.ws)}
         if path == "/api/settings":
             return logic.settings_view(self.ws, self.cfg())
+        if path == "/api/update":
+            return updates.web_status(self.ws, self.update_enabled)
         raise GuiError("not found", 404)
 
     def api_post(self, path: str, body: Dict[str, Any]) -> Any:
@@ -160,6 +165,8 @@ class GuiApp:
             self.ws = new
             self._doctor_cache = None
             return logic.settings_view(self.ws, self.cfg())
+        if path in ("/api/update/skip", "/api/update/later"):
+            return updates.web_action(path.rsplit("/", 1)[1], ws)
         if path == "/api/quit":
             self.quit.set()
             return {"ok": True}

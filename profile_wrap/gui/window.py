@@ -23,6 +23,7 @@ def run(ws: Path, *, force_browser: bool = False) -> int:
     except (OSError, ValueError) as exc:
         print(f"profile-wrap gui: could not start the local server: {exc}", file=sys.stderr)
         return policy.EXIT_FAIL
+    server.app.update_enabled = True   # a real window: check GitHub for a newer release (optional, cached)
     try:
         if not force_browser and have_webview():
             import webview

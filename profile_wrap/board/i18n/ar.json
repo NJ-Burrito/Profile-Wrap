@@ -157,5 +157,15 @@
   "settings.doctor.none": "لا نتائج.",
   "settings.board": "هذه اللوحة",
   "settings.board.addr": "العنوان",
-  "settings.board.ws": "مساحة العمل"
+  "settings.board.ws": "مساحة العمل",
+  "update.title": "الإصدار {latest} من Profile-Wrap متاح (إصدارك {current}).",
+  "update.optional": "التحديث اختياري.",
+  "update.news": "ما الجديد",
+  "update.apply": "تحديث",
+  "update.skip": "تخطَّ هذا الإصدار",
+  "update.later": "لاحقاً",
+  "update.nonotes": "(لا توجد ملاحظات للإصدار)",
+  "update.method": "طريقة التثبيت: {label}.",
+  "update.run": "شغّل هذا الأمر في الطرفية:",
+  "update.download": "افتح صفحة التنزيل"
 }

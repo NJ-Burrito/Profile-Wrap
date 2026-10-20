@@ -103,7 +103,8 @@ def test_directory_limits_and_hygiene():
         assert p.suffix.lower() in IMAGE_OK | {".md", ".json"} or p.name == "LICENSE", p
         assert p.stat().st_size < 256 * 1024, p
         assert p.name != ".DS_Store"
-    assert not (PLUGIN / "hooks").exists() and not (PLUGIN / "bin").exists()
+    assert not (PLUGIN / "bin").exists()
+    assert [p.name for p in (PLUGIN / "hooks").rglob("*") if p.is_file()] == ["hooks.json"]
     assert not (PLUGIN / ".gitattributes").exists()
     assert "MIT License" in (PLUGIN / "LICENSE").read_text(encoding="utf-8")
 
@@ -120,3 +121,13 @@ def test_readme_requirements():
 def test_submission_checklist_exists():
     text = (PLUGIN / "SUBMISSION.md").read_text(encoding="utf-8")
     assert "claude.ai/directory/manage" in text and "[ ]" in text
+
+
+def test_session_hook_is_the_optional_update_check_only():
+    hooks = load(PLUGIN / "hooks" / "hooks.json")["hooks"]
+    assert list(hooks) == ["SessionStart"]
+    cmd = hooks["SessionStart"][0]["hooks"][0]
+    assert cmd["type"] == "command" and "profile-wrap update check --hook" in cmd["command"]
+    assert "command -v profile-wrap" in cmd["command"] and cmd["command"].rstrip().endswith("exit 0")
+    assert cmd["timeout"] <= 10
+    assert not re.search(r"curl|wget|http|install", cmd["command"])

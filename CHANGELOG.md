@@ -13,8 +13,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 ### Added
 
 - Optional update notifier. Every surface asks GitHub (one anonymous read of the public releases list, cached for an hour,
-  3 s timeout, never blocks startup) whether a newer release exists and says so inside that surface: a stderr line in the
-  CLI, a banner with What's new / Update / Skip this version / Later in the desktop app and the review board (English and
+  3 s timeout; the desktop app and board check on a background thread) whether a newer release exists and says so inside that surface: a stderr line in the
+  CLI (it reads the cache and refreshes on a background thread it waits for at most 0.3 s), a banner with What's new / Update / Skip this version / Later in the desktop app and the review board (English and
   Arabic), a `SessionStart` hook in the Claude Code plugin, an `update_status` MCP tool plus a notice in the server
   instructions, and a first step in the five skills. `profile-wrap update [check|news|apply|skip|later] [--json]` shows the
   release notes (plain parsing, no model call) and the exact command for your install method; `apply` asks y/N first and

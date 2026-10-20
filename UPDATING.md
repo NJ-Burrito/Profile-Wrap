@@ -35,7 +35,9 @@ and Later. "What's new" is the release notes copied as text (or the matching `CH
 
 To switch the check off: `profile-wrap config set updates.check false`, or set `PROFILE_WRAP_NO_UPDATE_CHECK=1`.
 Set `updates.prereleases` to `true` (or `PROFILE_WRAP_UPDATE_PRERELEASES=1`) to hear about release candidates.
-It is off by itself under CI and in the test suite. What is sent, and how often, is in [docs/PRIVACY.md](docs/PRIVACY.md).
+If the repository is ever renamed, GitHub answers the releases request with a 301 redirect. The check never follows
+redirects (so no request can be sent to another host), treats that as "could not check" and says nothing; update by the
+commands in section 1 until a release changes the address. It is off by itself under CI and in the test suite. What is sent, and how often, is in [docs/PRIVACY.md](docs/PRIVACY.md).
 
 ## 2. Check your workspace
 

@@ -19,7 +19,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Tuple
 from urllib.parse import urlsplit
 
-from .. import __version__, config as config_mod, limits, policy
+from .. import __version__, config as config_mod, limits, policy, updates
 from ..notify import notify as desktop_notify
 from . import security
 from .actions import Decider
@@ -67,6 +67,7 @@ class BoardApp:
         self.decider = Decider(self.store, gate_fn=gate_fn, worker=self.worker, notify_fn=self.notify_fn)
         self.worker.bind(self.decider)
         self.start_worker = start_worker
+        self.update_enabled = False   # set by `profile-wrap board` and the desktop app, never by tests
         self._doctor: Optional[Tuple[float, Dict[str, Any]]] = None
         self.started = time.time()
 
@@ -315,6 +316,8 @@ def _make_handler(app: BoardApp):
                 return self.send_json(200, store.metrics())
             if raw == "/api/settings":
                 return self.send_json(200, app.settings())
+            if raw == "/api/update":
+                return self.send_json(200, updates.web_status(app.ws, app.update_enabled))
             if len(segs) == 3 and segs[:2] == ["api", "draft"] and clean[2]:
                 detail = store.draft_detail(clean[2])
                 return self.send_json(200, detail) if detail else self.send_json(404, {"error": "unknown_post"})
@@ -369,6 +372,8 @@ def _make_handler(app: BoardApp):
                 code, resp = app.decider.pending_done(text("id"), text("action"))
             elif path == "/api/profile-done":
                 code, resp = app.decider.profile_done(text("id"), body.get("done") is True)
+            elif path in ("/api/update/skip", "/api/update/later"):
+                code, resp = 200, updates.web_action(path.rsplit("/", 1)[1], app.ws)
             elif path == "/api/pause":
                 code, resp = app.decider.set_pause(text("kind"), body.get("paused") is True)
             else:

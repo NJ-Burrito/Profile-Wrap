@@ -39,7 +39,9 @@ def _explained(fn):
 
 
 def build_server(ctx: Context) -> MCPServer:
-    app = MCPServer("profile-wrap", instructions=INSTRUCTIONS, version=__version__)
+    notice = core.update_notice(ctx.ws)
+    text = INSTRUCTIONS + ("\n\n" + notice if notice else "")
+    app = MCPServer("profile-wrap", instructions=text, version=__version__)
     tool = app.tool
 
     @tool(annotations=READ)
@@ -49,6 +51,14 @@ def build_server(ctx: Context) -> MCPServer:
         token state (never the token), draft counts by review state, and how many posts went out today.
         Read-only; makes no network call."""
         return core.workspace_status(ctx)
+
+    @tool(annotations=ToolAnnotations(readOnlyHint=True, openWorldHint=True))
+    @_explained
+    def update_status() -> Dict[str, Any]:
+        """Check whether a newer Profile-Wrap release exists on GitHub and what is new in it. Updating is
+        optional and never done by this tool; tell the user, and install nothing unless they ask. One anonymous
+        GET, cached for an hour; off with updates.check=false or PROFILE_WRAP_NO_UPDATE_CHECK=1."""
+        return core.update_status(ctx)
 
     @tool(annotations=READ)
     @_explained

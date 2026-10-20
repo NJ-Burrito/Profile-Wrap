@@ -54,6 +54,29 @@ class Context:
         return post.default_gate(slug, self.ws, write)
 
 
+def update_status(ctx: Context) -> Dict[str, Any]:
+    """Is a newer Profile-Wrap release out? One cached, anonymous GitHub read; nothing is installed.
+    Older profile_wrap versions have no notifier, which is reported as unavailable."""
+    try:
+        from profile_wrap import updates
+    except ImportError:
+        return {"available": False, "source": "unavailable", "note": "this profile_wrap has no update notifier"}
+    st = updates.public_status(updates.status(workspace=ctx.ws))
+    st["notice"] = updates.notice(st) if st.get("notify") else ""
+    return st
+
+
+def update_notice(ws: Path) -> str:
+    """Cache-only notice for the server instructions (no network at start); also warms the cache."""
+    try:
+        from profile_wrap import updates
+        updates.check_in_background(workspace=ws)
+        st = updates.status(workspace=ws, network=False)
+        return updates.notice(st, max_lines=8) if st.get("notify") else ""
+    except Exception:
+        return ""
+
+
 class ToolRefused(Exception):
     """A request was refused on purpose. The message is safe to show the model."""
 

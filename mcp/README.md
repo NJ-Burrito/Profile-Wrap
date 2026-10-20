@@ -16,6 +16,7 @@ official API with your own developer app, and only inside `post_allowed`.
 | Tool | What it does | Writes |
 |---|---|---|
 | `workspace_status` | posting mode, pauses and stops, 20 h gap, token state, draft counts, posts today | nothing |
+| `update_status` | is a newer release on GitHub, and what is new (optional; installs nothing; one cached anonymous read) | nothing |
 | `calendar_list` | content-calendar entries, optional status filter | nothing |
 | `draft_create` | new text draft from a topic with your chosen provider; verified facts only; state `draft` | `drafts/<slug>/` |
 | `gate_run` | the deterministic gate on a draft (numbers, claims, language, banned patterns) | `gates.json` |

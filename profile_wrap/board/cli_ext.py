@@ -35,6 +35,7 @@ def _cmd_board(args: argparse.Namespace) -> int:
     except ValueError as exc:
         print(f"profile-wrap board: {exc}", file=sys.stderr)
         return policy.EXIT_FAIL
+    server.app.update_enabled = True   # optional release check, cached for an hour, off with updates.check=false
     recovered = server.prepare()
     print(f"Review board on {server.url}  (workspace {ws.name}; stop it with Ctrl+C)", flush=True)
     for slug in recovered:

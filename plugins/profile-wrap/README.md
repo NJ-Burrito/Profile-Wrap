@@ -14,7 +14,8 @@ Profile-Wrap is an independent open-source project. It is not affiliated with, e
 |---|---|
 | Skills | `pw-setup`, `pw-plan`, `pw-write`, `pw-visuals`, `pw-ship` |
 | Slash commands | `/profile-wrap:setup`, `:week`, `:board`, `:post`, `:pause`, `:doctor` |
-| MCP server | `profile-wrap`, launched with `uvx profile-wrap-mcp==0.2.1` (needs `uv`) |
+| Session hook | `SessionStart`: runs `profile-wrap update check --hook`, which says so in the session when a newer release exists (optional, silent otherwise or when the tool is not installed) |
+| MCP server | `profile-wrap`, launched with `uvx profile-wrap-mcp==0.3.0` (needs `uv`) |
 
 The skills and commands drive the `profile-wrap` command line tool, which does the real work on your machine.
 
@@ -30,6 +31,9 @@ The skills and commands drive the `profile-wrap` command line tool, which does t
 - Profile-Wrap has no server and no telemetry. It sends data only to LinkedIn's official API when you post, and to
   the AI provider you choose, with your own key.
 - API keys live in your operating system keychain, never in files, logs or the ledger.
+- Once an hour at most, the session hook and the tools make one anonymous read of GitHub's public releases list to see
+  whether a newer version exists. Nothing is updated unless you choose; turn it off with
+  `profile-wrap config set updates.check false` or `PROFILE_WRAP_NO_UPDATE_CHECK=1`.
 - The plugin reads no messages and never collects LinkedIn passwords.
 
 Full policy: https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/PRIVACY.md

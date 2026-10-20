@@ -1539,6 +1539,19 @@
         "jobs"
       ]
     },
+    "updates": {
+      "type": "object",
+      "description": "Optional update notifier (profile_wrap/updates.py). check=false turns the GitHub release check off.",
+      "properties": {
+        "check": {
+          "type": "boolean"
+        },
+        "prereleases": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
     "board": {
       "type": "object",
       "properties": {

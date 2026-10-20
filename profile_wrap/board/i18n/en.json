@@ -157,5 +157,15 @@
   "settings.doctor.none": "No results.",
   "settings.board": "This board",
   "settings.board.addr": "Address",
-  "settings.board.ws": "Workspace"
+  "settings.board.ws": "Workspace",
+  "update.title": "Profile-Wrap {latest} is available (you have {current}).",
+  "update.optional": "Updating is optional.",
+  "update.news": "What's new",
+  "update.apply": "Update",
+  "update.skip": "Skip this version",
+  "update.later": "Later",
+  "update.nonotes": "(no release notes)",
+  "update.method": "Install method: {label}.",
+  "update.run": "Run this in a terminal:",
+  "update.download": "Open the download page"
 }

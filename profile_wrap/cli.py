@@ -15,14 +15,14 @@ import sys
 from pathlib import Path
 from typing import Any, Callable, List, Optional
 
-from . import __version__, config, doctor, handoff, init_wizard, limits, paths, policy, scaffold, upgrade
+from . import __version__, config, doctor, handoff, init_wizard, limits, paths, policy, scaffold, updates, upgrade
 from .bootstrap import runtime as runtime_mod
 from .migrations import runner as migration_runner
 
 EXTENSIONS = (
     "facts", "gate", "plan", "research", "profile", "visuals", "linkedin", "board", "engage",
     "track", "schedule", "demo", "claude_runner", "leakcheck", "compliance", "deps",
-    "import_legacy", "update", "agents_render", "providers", "gui",
+    "import_legacy", "update", "agents_render", "providers", "gui", "updates",
 )
 
 
@@ -462,6 +462,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return policy.EXIT_USAGE
     if os.name == "nt":
         os.environ.setdefault("PYTHONUTF8", "1")
+    updates.startup_notice(argv if argv is not None else sys.argv[1:], bool(getattr(args, "json", False)), args)
     try:
         code = func(args)
     except KeyboardInterrupt:

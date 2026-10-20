@@ -5,7 +5,7 @@ import json
 
 from conftest import call, gate_fail, with_client
 
-EXPECTED = {"workspace_status", "calendar_list", "draft_create", "gate_run", "facts_list", "facts_add",
+EXPECTED = {"update_status", "workspace_status", "calendar_list", "draft_create", "gate_run", "facts_list", "facts_add",
             "review_state", "post_allowed"}
 
 

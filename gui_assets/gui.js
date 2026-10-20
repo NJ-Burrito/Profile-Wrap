@@ -254,5 +254,35 @@
 
   function fail(e) { mount(h("p", { class: "card" }, "Could not load this screen: " + e.message)); say(e.message, "bad"); }
 
+  // ---- Optional update notice: asked first thing on load; never installs anything by itself
+  function updateBanner() {
+    var box = document.getElementById("update");
+    api("/api/update").then(function (u) {
+      if (!u || !u.notify) return;
+      var news = h("div", { class: "update-news", hidden: true }, (u.news || []).map(function (r) {
+        return h("div", null, h("h3", null, r.tag), h("pre", null, (r.body || "").trim() || "(no release notes)"));
+      }));
+      var how = h("div", { class: "update-how", hidden: true },
+        h("p", null, "Install method: " + u.method.label + ". Updating is optional."),
+        u.method.command ? h("p", null, "Run this in a terminal: ", h("code", null, u.method.command)) : null,
+        u.method.note ? h("p", null, u.method.note) : null,
+        u.method.id === "desktop" ? h("a", { href: u.url, target: "_blank", rel: "noopener noreferrer" }, "Open the download page") : null);
+      function toggle(el) { el.hidden = !el.hidden; }
+      function dismiss(kind, msg) {
+        api("/api/update/" + kind, {}).then(function () { box.hidden = true; say(msg, "ok"); }).catch(function (e) { say(e.message, "bad"); });
+      }
+      box.replaceChildren(
+        h("p", null, h("strong", null, "Profile-Wrap " + u.latest + " is available"), " (you have " + u.current + "). Updating is optional."),
+        h("div", { class: "row" },
+          h("button", { type: "button", class: "ghost", onclick: function () { toggle(news); } }, "What's new"),
+          h("button", { type: "button", onclick: function () { toggle(how); } }, "Update"),
+          h("button", { type: "button", class: "ghost", onclick: function () { dismiss("skip", "This version is skipped."); } }, "Skip this version"),
+          h("button", { type: "button", class: "ghost", onclick: function () { dismiss("later", "We will remind you in 24 hours."); } }, "Later")),
+        news, how);
+      box.hidden = false;
+    }).catch(function () { /* offline or off: no banner, nothing to say */ });
+  }
+  updateBanner();
+
   ({ home: home, board: board, providers: providers, build: build, settings: settings })[SCREEN]();
 })();

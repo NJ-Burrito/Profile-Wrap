@@ -41,12 +41,12 @@ in the CLI. Add it to `~/.codex/config.toml`, or to `.codex/config.toml` in a tr
 ```toml
 [mcp_servers.profile-wrap]
 command = "uvx"
-args = ["profile-wrap-mcp==0.2.1"]
+args = ["profile-wrap-mcp==0.3.0"]
 startup_timeout_sec = 30
 tool_timeout_sec = 60
 ```
 
-Or add it from the command line: `codex mcp add profile-wrap -- uvx profile-wrap-mcp==0.2.1`. Pin the version.
+Or add it from the command line: `codex mcp add profile-wrap -- uvx profile-wrap-mcp==0.3.0`. Pin the version.
 The server is a local stdio process, so it is not part of the plugin that goes to a public directory.
 
 ## 4. AGENTS.md section for your workspace

@@ -16,7 +16,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from .. import init_wizard, policy
 from .server import SCREENS, GuiServer
 
-API_GETS = ("/api/home", "/api/board", "/api/providers", "/api/calendar", "/api/settings")
+API_GETS = ("/api/home", "/api/board", "/api/providers", "/api/calendar", "/api/settings", "/api/update")
 
 
 def _get(url: str, headers: Optional[Dict[str, str]] = None) -> Tuple[int, bytes, Dict[str, str]]:

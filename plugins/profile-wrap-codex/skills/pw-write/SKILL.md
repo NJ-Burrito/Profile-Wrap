@@ -12,6 +12,12 @@ leaves a file the next stage reads, so a revision re-runs one stage.
 The command is `profile-wrap` (installed from PyPI or the release; check with `profile-wrap --version`). The workspace is the current folder, or
 `--workspace <path>`.
 
+## First step: update check
+
+Run `profile-wrap update check` once, first thing. If a newer release exists, tell the user in one line that
+updating is optional, then carry on with their request. Update only if they ask (`profile-wrap update apply`
+asks before it runs anything). Offline or switched off: say nothing.
+
 ## Compliance first
 
 Read `references/compliance.md` in this skill folder before anything else. This skill writes

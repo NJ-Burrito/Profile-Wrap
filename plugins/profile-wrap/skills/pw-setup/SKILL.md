@@ -11,6 +11,12 @@ request. Every stage leaves a file the next stage reads, so a stop resumes where
 
 The command is `profile-wrap`, installed on your PATH with `uv tool install profile_wrap` (see the plugin README).
 
+## First step: update check
+
+Run `profile-wrap update check` once, first thing. If a newer release exists, tell the user in one line that
+updating is optional, then carry on with their request. Update only if they ask (`profile-wrap update apply`
+asks before it runs anything). Offline or switched off: say nothing.
+
 ## Compliance first
 
 Read `${CLAUDE_PLUGIN_ROOT}/references/compliance.md` before anything else. This package uses

@@ -9,6 +9,12 @@ Turn an approved draft into its visual. Work the nj-method way: look up before i
 machine step once, review against the request. The command is `profile-wrap` (`"${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap"`); the workspace is the
 current folder or `--workspace <path>`.
 
+## First step: update check
+
+Run `profile-wrap update check` once, first thing. If a newer release exists, tell the user in one line that
+updating is optional, then carry on with their request. Update only if they ask (`profile-wrap update apply`
+asks before it runs anything). Offline or switched off: say nothing.
+
 ## Compliance first
 
 This skill makes files. It never posts, never logs in to LinkedIn and never captures or imitates LinkedIn's interface or logos.

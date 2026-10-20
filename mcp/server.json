@@ -3,7 +3,7 @@
   "name": "io.github.NJ-Burrito/profile-wrap-mcp",
   "title": "Profile-Wrap",
   "description": "Draft, gate and review LinkedIn posts in a Profile-Wrap workspace; posts only board-Allowed drafts.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "websiteUrl": "https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/MCP.md",
   "repository": {
     "url": "https://github.com/NJ-Burrito/profile-wrap",
@@ -15,7 +15,7 @@
       "registryType": "pypi",
       "registryBaseUrl": "https://pypi.org",
       "identifier": "profile-wrap-mcp",
-      "version": "0.2.1",
+      "version": "0.3.0",
       "runtimeHint": "uvx",
       "transport": {
         "type": "stdio"

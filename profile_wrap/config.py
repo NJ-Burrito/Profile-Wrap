@@ -165,6 +165,7 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
             },
         },
         "board": {"host": "127.0.0.1", "port": 8770, "ui_language": "en"},
+        "updates": {"check": True, "prereleases": False},
         "ack": {"terms_read": None, "comments_api": None, "scraping_risk": None,
                 "public_reading": None, "tavily_reading": None},
     }

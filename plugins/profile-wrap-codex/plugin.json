@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "profile-wrap-codex",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Fact-gated, compliance-first content pipeline for LinkedIn, for Codex: setup, plan the week, write with gates, visuals, ship with Allow. Independent, not affiliated with LinkedIn.",
   "author": { "name": "profile-wrap contributors" },
   "homepage": "https://github.com/NJ-Burrito/profile-wrap",

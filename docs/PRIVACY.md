@@ -1,6 +1,6 @@
 # Profile-Wrap privacy policy
 
-Last updated: 2026-10-16. Applies to Profile-Wrap (the `profile-wrap` command line, desktop app and Claude Code and Codex
+Last updated: 2026-10-20. Applies to Profile-Wrap (the `profile-wrap` command line, desktop app and Claude Code and Codex
 plugins) and `profile-wrap-mcp`. Profile-Wrap is an independent open source project (MIT). It is not affiliated with LinkedIn, Anthropic or OpenAI.
 
 ## Short version
@@ -9,6 +9,7 @@ plugins) and `profile-wrap-mcp`. Profile-Wrap is an independent open source proj
 - API keys live in the operating system keychain only, and are sent only to the provider you chose.
 - LinkedIn is reached only through the official LinkedIn API, with your own developer app and your own token.
 - There is no telemetry, no analytics, no account with us and no server of ours. The maintainers receive nothing.
+- The only other call is an optional, anonymous check of GitHub for a newer release (see "Update check"); you can turn it off.
 
 ## What stays on your machine
 
@@ -50,6 +51,21 @@ rules, and the verified facts needed for that draft. The provider's own terms an
   Agreement; see `docs/TERMS-AND-RISK.md`.
 - A post is published only after you press Allow on the review board. The MCP tool `post_allowed` can post only a draft
   that already has that board Allow.
+
+## Update check (optional, on by default)
+
+When a surface starts (command line in a terminal, desktop app, review board, the Claude Code plugin session hook, the
+MCP server), Profile-Wrap makes one anonymous `GET https://api.github.com/repos/NJ-Burrito/profile-wrap/releases` to learn
+whether a newer release exists. If the newest release has no notes it makes a second `GET` of `CHANGELOG.md` from the same
+host. It sends no token, no cookie and no workspace data: GitHub sees your IP address and the neutral
+`User-Agent: profile-wrap/<version>`, as for any web request. The answer is cached in your user cache folder for one hour
+(so at most one request an hour, well inside GitHub's anonymous limit) and nothing is installed unless you run
+`profile-wrap update apply` or follow the instructions yourself. It is the only network call that is not LinkedIn, your AI
+provider or a reader you switched on.
+
+Turn it off with `updates.check = false` in `config/profile-wrap.json` (`profile-wrap config set updates.check false`) or
+the environment variable `PROFILE_WRAP_NO_UPDATE_CHECK=1`. It is also off under CI and in tests. The local choices (skipped
+version, remind later) live in the same cache folder.
 
 ## Telemetry and cookies
 

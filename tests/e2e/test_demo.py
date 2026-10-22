@@ -196,13 +196,13 @@ def test_readme_has_the_required_parts():
                    "docs/FOR-DEVELOPERS.md", "docs/INSTALL-DESKTOP.md", "MIT", "not affiliated with or endorsed by LinkedIn"):
         assert needle in text, needle
     for os_name in ("Windows", "Mac (Apple chip)", "Mac (Intel chip)", "Linux"):
-        assert re.search(r"\[[^\]]*" + re.escape(os_name) + r"\]\(https://github\.com/NJ-Burrito/profile-wrap/releases/latest\)", text), os_name
+        assert re.search(r"\[[^\]]*" + re.escape(os_name) + r"\]\(https://github\.com/NJ-Burrito/Profile-Wrap/releases/latest\)", text), os_name
     assert text.count("not affiliated") == 1
     # four equal ways in, in this order (owner, 2026-10-17): plugin, skills, MCP server, desktop app
     anchors = [text.index(f'<a id="{a}"></a>') for a in ("plugin", "skills", "mcp", "app")]
     assert anchors == sorted(anchors)
-    for needle in ("/plugin marketplace add NJ-Burrito/profile-wrap", "/plugin install profile-wrap@profile-wrap",
-                   "codex plugin marketplace add NJ-Burrito/profile-wrap", ".agents/skills",
+    for needle in ("/plugin marketplace add NJ-Burrito/Profile-Wrap", "/plugin install profile-wrap@profile-wrap",
+                   "codex plugin marketplace add NJ-Burrito/Profile-Wrap", ".agents/skills",
                    "claude mcp add profile-wrap -- uvx profile-wrap-mcp", "uv tool install profile-wrap"):
         assert needle in text, needle
     # below the install sections the page stays plain language: no code, no commands, no jargon

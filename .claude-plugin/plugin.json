@@ -3,8 +3,8 @@
   "version": "0.3.0",
   "description": "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code. Official API only, your own developer app, a human click for every invite.",
   "author": { "name": "profile-wrap contributors" },
-  "homepage": "https://github.com/NJ-Burrito/profile-wrap",
-  "repository": "https://github.com/NJ-Burrito/profile-wrap",
+  "homepage": "https://github.com/NJ-Burrito/Profile-Wrap",
+  "repository": "https://github.com/NJ-Burrito/Profile-Wrap",
   "license": "MIT",
   "keywords": ["linkedin", "content", "official-api", "arabic", "bilingual", "fact-gate"]
 }

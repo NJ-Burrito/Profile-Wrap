@@ -4,9 +4,9 @@
   "title": "Profile-Wrap",
   "description": "Draft, gate and review LinkedIn posts in a Profile-Wrap workspace; posts only board-Allowed drafts.",
   "version": "0.3.0",
-  "websiteUrl": "https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/MCP.md",
+  "websiteUrl": "https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/MCP.md",
   "repository": {
-    "url": "https://github.com/NJ-Burrito/profile-wrap",
+    "url": "https://github.com/NJ-Burrito/Profile-Wrap",
     "source": "github",
     "subfolder": "mcp"
   },

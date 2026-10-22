@@ -3,7 +3,7 @@
 Every surface (CLI, desktop app, board, Claude plugin hook, MCP server, skills) asks this module whether
 a newer release exists. It never installs anything by itself and never raises.
 
-What leaves the machine: one anonymous ``GET https://api.github.com/repos/NJ-Burrito/profile-wrap/releases``
+What leaves the machine: one anonymous ``GET https://api.github.com/repos/NJ-Burrito/Profile-Wrap/releases``
 (public, no token, the usual ``profile-wrap/<version>`` User-Agent), at most once an hour, plus one
 ``GET .../contents/CHANGELOG.md`` when a release has no notes. Nothing about you or your workspace is sent.
 
@@ -30,7 +30,7 @@ from urllib.parse import urlsplit
 from . import __version__, http, policy
 from .atomic import atomic_write_json
 
-REPO = "NJ-Burrito/profile-wrap"
+REPO = "NJ-Burrito/Profile-Wrap"
 GITHUB_API = "https://api.github.com"
 GITHUB_HOST = "api.github.com"
 RELEASES_PAGE = f"https://github.com/{REPO}/releases/latest"

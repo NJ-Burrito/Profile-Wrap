@@ -6,7 +6,7 @@ Profile-Wrap is an independent tool. It is not affiliated with LinkedIn.
 
 ## 1️⃣ Download
 
-Open the [Releases page](https://github.com/NJ-Burrito/profile-wrap/releases/latest).
+Open the [Releases page](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest).
 
 Scroll down to **Assets**. Click the file for your computer:
 
@@ -104,6 +104,6 @@ Download the newer release. Unzip it over the old folder. Your posts and setting
 
 ## 🆘 Still stuck?
 
-Open an [issue](https://github.com/NJ-Burrito/profile-wrap/issues) and say what you saw on screen.
+Open an [issue](https://github.com/NJ-Burrito/Profile-Wrap/issues) and say what you saw on screen.
 
 Developers: [FOR-DEVELOPERS.md](FOR-DEVELOPERS.md) has the checksums, the Linux packages and the command line.

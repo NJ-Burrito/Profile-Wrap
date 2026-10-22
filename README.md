@@ -8,7 +8,7 @@
 
 ## You stay the boss.
 
-[![CI](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml)
+[![CI](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](docs/PLATFORMS.md)
@@ -17,10 +17,10 @@
 [![PyPI](https://img.shields.io/pypi/v/profile-wrap.svg)](https://pypi.org/project/profile-wrap/)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Nader%20Alzghoul-0A66C2?logo=linkedin&logoColor=white)](https://www.linkedin.com/in/nader-alzghoul)
 [![GitHub](https://img.shields.io/badge/GitHub-NJ--Burrito-181717?logo=github&logoColor=white)](https://github.com/NJ-Burrito)
-[![Stars](https://img.shields.io/github/stars/NJ-Burrito/profile-wrap?style=social)](https://github.com/NJ-Burrito/profile-wrap/stargazers)
-[![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-0A66C2?logo=googlechrome&logoColor=white)](https://nj-burrito.github.io/profile-wrap/)
+[![Stars](https://img.shields.io/github/stars/NJ-Burrito/Profile-Wrap?style=social)](https://github.com/NJ-Burrito/Profile-Wrap/stargazers)
+[![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-0A66C2?logo=googlechrome&logoColor=white)](https://nj-burrito.github.io/Profile-Wrap/)
 
-**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow. Website: [nj-burrito.github.io/profile-wrap](https://nj-burrito.github.io/profile-wrap/).
+**Profile-Wrap is a free, open-source LinkedIn post manager.** Use it as a Claude Code plugin, as skills, as an MCP server, or as a desktop app for Windows, Mac and Linux. Nothing is posted until you tap Allow. Website: [nj-burrito.github.io/Profile-Wrap](https://nj-burrito.github.io/Profile-Wrap/).
 
 ### Pick how you want it. All free. 👇
 
@@ -40,11 +40,11 @@ Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install profile-wrap`
 Claude Code, type these two lines:
 
 ```
-/plugin marketplace add NJ-Burrito/profile-wrap
+/plugin marketplace add NJ-Burrito/Profile-Wrap
 /plugin install profile-wrap@profile-wrap
 ```
 
-Codex: `codex plugin marketplace add NJ-Burrito/profile-wrap` ([Codex guide](docs/CODEX.md)).
+Codex: `codex plugin marketplace add NJ-Burrito/Profile-Wrap` ([Codex guide](docs/CODEX.md)).
 
 Then say: **"set up Profile-Wrap"**. Claude Code gets 5 skills, 6 commands and the MCP server in one go.
 
@@ -74,7 +74,7 @@ Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registr
 
 ## 🖥️ Desktop app
 
-[🪟 Windows](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [🍎 Mac (Apple chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [💻 Mac (Intel chip)](https://github.com/NJ-Burrito/profile-wrap/releases/latest) · [🐧 Linux](https://github.com/NJ-Burrito/profile-wrap/releases/latest)
+[🪟 Windows](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest) · [🍎 Mac (Apple chip)](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest) · [💻 Mac (Intel chip)](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest) · [🐧 Linux](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
 
 Not sure which Mac you have? Click the Apple menu, then About This Mac.
 

@@ -6,7 +6,7 @@ The plain-language front page is the [README](../README.md). This page is the te
 
 **Plan, write, check and ship LinkedIn posts from Claude Code, inside LinkedIn's terms.**
 
-[![CI](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/profile-wrap/actions/workflows/ci.yml)
+[![CI](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](../LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](../pyproject.toml)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](PLATFORMS.md)
@@ -38,9 +38,9 @@ and the board.
 
 | You are | Use | Start here |
 |---|---|---|
-| 🖥️ Anyone, no terminal | the desktop app (Windows, macOS, Linux) | download from [Releases](https://github.com/NJ-Burrito/profile-wrap/releases), then [docs/INSTALL-DESKTOP.md](INSTALL-DESKTOP.md) |
+| 🖥️ Anyone, no terminal | the desktop app (Windows, macOS, Linux) | download from [Releases](https://github.com/NJ-Burrito/Profile-Wrap/releases), then [docs/INSTALL-DESKTOP.md](INSTALL-DESKTOP.md) |
 | 🔑 Any AI provider | Anthropic, OpenAI, OpenRouter, Gemini, Ollama or your own Claude Code | the app's Providers screen, or [docs/PROVIDERS.md](PROVIDERS.md) |
-| 🧩 Claude Code user | the plugin | `/plugin marketplace add NJ-Burrito/profile-wrap` |
+| 🧩 Claude Code user | the plugin | `/plugin marketplace add NJ-Burrito/Profile-Wrap` |
 | 🧩 Codex user | the Codex plugin and skills | [docs/CODEX.md](CODEX.md) |
 | 🔌 Any MCP client | `profile-wrap-mcp` | [docs/MCP.md](MCP.md) |
 | ⌨️ Terminal | the `profile-wrap` command | the quickstart below |
@@ -55,8 +55,8 @@ You need Python 3.10 or newer. Nothing else.
 uv tool install profile-wrap        # or: pipx install profile-wrap
 ```
 
-Not on PyPI for you yet? Use `uv tool install git+https://github.com/NJ-Burrito/profile-wrap`. As a Claude
-Code plugin: `/plugin marketplace add NJ-Burrito/profile-wrap`, then `/plugin install profile-wrap@profile-wrap`.
+Not on PyPI for you yet? Use `uv tool install git+https://github.com/NJ-Burrito/Profile-Wrap`. As a Claude
+Code plugin: `/plugin marketplace add NJ-Burrito/Profile-Wrap`, then `/plugin install profile-wrap@profile-wrap`.
 
 **2. Try it on a fictional person. No account, no network, no model.**
 
@@ -197,7 +197,7 @@ live in your config folder, never in the workspace. See [docs/PLATFORMS.md](PLAT
 The plain steps are in [INSTALL-DESKTOP.md](INSTALL-DESKTOP.md). Details that page leaves out:
 
 - Release assets are named `profile-wrap-<version>-windows-x64.zip`, `-macos-arm64.zip`, `-macos-x64.zip` and `-linux-x64.tar.gz`.
-- Verify: download `SHA256SUMS` from the release, then `Get-FileHash .\<file> -Algorithm SHA256` (PowerShell) or `shasum -a 256 <file>` (macOS, Linux). Provenance: `gh attestation verify <file> --repo NJ-Burrito/profile-wrap`.
+- Verify: download `SHA256SUMS` from the release, then `Get-FileHash .\<file> -Algorithm SHA256` (PowerShell) or `shasum -a 256 <file>` (macOS, Linux). Provenance: `gh attestation verify <file> --repo NJ-Burrito/Profile-Wrap`.
 - The builds are not code-signed (Apple silicon builds are ad-hoc signed by PyInstaller). Last resort on macOS: `xattr -dr com.apple.quarantine <app folder>`.
 - Linux: extract with `tar xzf`, run `./Profile-Wrap/Profile-Wrap`. The native window needs GTK 3 and WebKitGTK (Debian, Ubuntu: `sudo apt install gir1.2-gtk-3.0 gir1.2-webkit2-4.1`; Fedora: `sudo dnf install gtk3 webkit2gtk4.1`). Without them the app opens your browser on `127.0.0.1`. Built for glibc at least as new as Ubuntu 22.04.
 - Keys go to the OS keychain under the service name `profile-wrap`. With no keychain (headless Linux) set `PROFILE_WRAP_<PROVIDER>_API_KEY`. Details: [PROVIDERS.md](PROVIDERS.md).

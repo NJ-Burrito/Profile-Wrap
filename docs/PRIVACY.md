@@ -55,7 +55,7 @@ rules, and the verified facts needed for that draft. The provider's own terms an
 ## Update check (optional, on by default)
 
 When a surface starts (command line in a terminal, desktop app, review board, the Claude Code plugin session hook, the
-MCP server), Profile-Wrap makes one anonymous `GET https://api.github.com/repos/NJ-Burrito/profile-wrap/releases` to learn
+MCP server), Profile-Wrap makes one anonymous `GET https://api.github.com/repos/NJ-Burrito/Profile-Wrap/releases` to learn
 whether a newer release exists. If the newest release has no notes it makes a second `GET` of `CHANGELOG.md` from the same
 host. It sends no token, no cookie and no workspace data: GitHub sees your IP address and the neutral
 `User-Agent: profile-wrap/<version>`, as for any web request. The answer is cached in your user cache folder for one hour
@@ -85,5 +85,5 @@ your LinkedIn developer app to cut off posting. `profile-wrap pause` stops all p
 
 ## Contact
 
-Questions and requests: https://github.com/NJ-Burrito/profile-wrap/issues . Changes to this policy are made in this file and
+Questions and requests: https://github.com/NJ-Burrito/Profile-Wrap/issues . Changes to this policy are made in this file and
 are visible in its git history.

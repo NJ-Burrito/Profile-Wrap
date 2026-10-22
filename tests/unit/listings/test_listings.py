@@ -7,8 +7,8 @@ import pytest
 
 ROOT = Path(__file__).resolve().parents[3]
 LISTINGS = sorted((ROOT / "docs" / "listings").glob("*.md"))
-REPO = "https://github.com/NJ-Burrito/profile-wrap"
-OWN_HOSTS = ("github.com/NJ-Burrito/profile-wrap", "raw.githubusercontent.com/NJ-Burrito/profile-wrap")
+REPO = "https://github.com/NJ-Burrito/Profile-Wrap"
+OWN_HOSTS = ("github.com/NJ-Burrito/Profile-Wrap", "raw.githubusercontent.com/NJ-Burrito/Profile-Wrap")
 # External sites a listing may link to (directories, not the product).
 EXTERNAL_OK = ("pypi.org/project/profile-wrap-mcp", "claude.ai/directory/manage", "mcp.so/submit", "glama.ai")
 
@@ -42,7 +42,7 @@ def test_links_point_at_repo(path):
         ok = any(h in url for h in OWN_HOSTS) or any(h in url for h in EXTERNAL_OK)
         assert ok, f"unexpected link {url} in {path.name}"
         if "github.com/" in url:
-            assert "github.com/NJ-Burrito/profile-wrap" in url, url
+            assert "github.com/NJ-Burrito/Profile-Wrap" in url, url
 
 
 @pytest.mark.parametrize("path", LISTINGS, ids=lambda p: p.stem)

@@ -22,7 +22,7 @@ The skills and commands drive the `profile-wrap` command line tool, which does t
 ## Install
 
 1. Install the tool: `uv tool install profile_wrap` (Python 3.10 or newer).
-2. In Claude Code: `/plugin marketplace add NJ-Burrito/profile-wrap`, then `/plugin install profile-wrap@profile-wrap`.
+2. In Claude Code: `/plugin marketplace add NJ-Burrito/Profile-Wrap`, then `/plugin install profile-wrap@profile-wrap`.
 3. Run `/profile-wrap:setup demo` for a no-account tour, then `/profile-wrap:doctor` to check your machine.
 
 ## Privacy
@@ -36,8 +36,8 @@ The skills and commands drive the `profile-wrap` command line tool, which does t
   `profile-wrap config set updates.check false` or `PROFILE_WRAP_NO_UPDATE_CHECK=1`.
 - The plugin reads no messages and never collects LinkedIn passwords.
 
-Full policy: https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/PRIVACY.md
+Full policy: https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/PRIVACY.md
 
 ## Licence
 
-MIT, see `LICENSE`. Source and issues: https://github.com/NJ-Burrito/profile-wrap
+MIT, see `LICENSE`. Source and issues: https://github.com/NJ-Burrito/Profile-Wrap

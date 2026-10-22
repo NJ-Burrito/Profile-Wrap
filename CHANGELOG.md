@@ -5,6 +5,10 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The GitHub repository is now NJ-Burrito/Profile-Wrap and the site is https://nj-burrito.github.io/Profile-Wrap/. Every link and display name says Profile-Wrap. Package names, the command and the plugin and registry ids stay lowercase `profile-wrap`.
+
 ## [0.3.0] - 2026-10-20
 
 ### Breaking

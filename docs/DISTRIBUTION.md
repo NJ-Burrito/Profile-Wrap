@@ -27,7 +27,7 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 ## 1. PyPI, trusted publishing (no token stored anywhere)
 
-Needs: a PyPI account and the repo `NJ-Burrito/profile-wrap` public. Files: `.github/workflows/release.yml` (package C),
+Needs: a PyPI account and the repo `NJ-Burrito/Profile-Wrap` public. Files: `.github/workflows/release.yml` (package C),
 `pyproject.toml` (name `profile-wrap`), `mcp/pyproject.toml` (name `profile-wrap-mcp`), `mcp/README.md`.
 
 **The maintainer, once per package** (a pending publisher creates the project on first upload):
@@ -75,7 +75,7 @@ Optional later: publish from GitHub Actions with OIDC (`mcp-publisher login gith
 ## 3. mcp.so
 
 Needs: public repo. **The maintainer**: open https://mcp.so/submit , give the repository URL
-`https://github.com/NJ-Burrito/profile-wrap`, check the pulled name, description and tags against
+`https://github.com/NJ-Burrito/Profile-Wrap`, check the pulled name, description and tags against
 `docs/listings/mcp-so.md`, submit. Listing goes live after their review. No files in the repo are required.
 
 ## 4. Glama
@@ -103,20 +103,20 @@ Files: `plugins/profile-wrap/.claude-plugin/plugin.json` (five directory URL fie
 **Lead** before the maintainer starts: `claude plugin validate --strict plugins/profile-wrap` and
 `python -m profile_wrap.leakcheck scan --tree .` must pass. **The maintainer** (only he submits): open https://claude.ai/directory/manage
 and follow `plugins/profile-wrap/SUBMISSION.md` sections A to D. Record the directory link and date in the status table.
-Self-hosted route, no review, works now: `claude plugin marketplace add NJ-Burrito/profile-wrap`, then
+Self-hosted route, no review, works now: `claude plugin marketplace add NJ-Burrito/Profile-Wrap`, then
 `claude plugin install profile-wrap@profile-wrap`.
 
 ## 7. OpenAI Codex (not in the maintainer's list, kept for completeness)
 
 The Codex plugin (`plugins/profile-wrap-codex/`, marketplace `.agents/plugins/marketplace.json`) installs from the repo with
-`codex plugin marketplace add NJ-Burrito/profile-wrap`. A public OpenAI directory submission and an awesome-codex-cli pull
+`codex plugin marketplace add NJ-Burrito/Profile-Wrap`. A public OpenAI directory submission and an awesome-codex-cli pull
 request are not planned; steps are in `docs/CODEX.md`.
 
 ## Known gaps
 
-- `plugin.json` `privacyPolicyUrl` is `https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/PRIVACY.md` (a page URL, not the
+- `plugin.json` `privacyPolicyUrl` is `https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/PRIVACY.md` (a page URL, not the
   raw file). It opens and is https; the portal accepts it, but the raw form would be
-  `https://raw.githubusercontent.com/NJ-Burrito/profile-wrap/main/docs/PRIVACY.md`. Lead decides; plugin files are not edited here.
+  `https://raw.githubusercontent.com/NJ-Burrito/Profile-Wrap/main/docs/PRIVACY.md`. Lead decides; plugin files are not edited here.
 - `docs/PRIVACY.md` must be on `main` before any submission, or those URLs 404.
 - `release.yml` does not exist yet (package C); the PyPI steps depend on it.
 - Directory rules change; where a screen differs from this file, follow the screen and keep the intent.

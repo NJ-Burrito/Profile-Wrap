@@ -38,9 +38,9 @@ gui = ["pywebview", "keyring"]
 dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow", "keyring", "pyyaml", "tomli; python_version < '3.11'"]
 
 [project.urls]
-Homepage = "https://github.com/NJ-Burrito/profile-wrap"
-Changelog = "https://github.com/NJ-Burrito/profile-wrap/blob/main/CHANGELOG.md"
-Issues = "https://github.com/NJ-Burrito/profile-wrap/issues"
+Homepage = "https://github.com/NJ-Burrito/Profile-Wrap"
+Changelog = "https://github.com/NJ-Burrito/Profile-Wrap/blob/main/CHANGELOG.md"
+Issues = "https://github.com/NJ-Burrito/Profile-Wrap/issues"
 
 [project.scripts]
 profile-wrap = "profile_wrap.cli:main"

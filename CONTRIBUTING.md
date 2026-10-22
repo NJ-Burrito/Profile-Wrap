@@ -5,8 +5,8 @@ Thanks for helping. Small, tested changes are easiest to review.
 ## Set up
 
 ```bash
-git clone https://github.com/NJ-Burrito/profile-wrap
-cd profile-wrap
+git clone https://github.com/NJ-Burrito/Profile-Wrap
+cd Profile-Wrap
 uv sync                                  # or: python -m venv .venv && pip install -e ".[dev]"
 uv run --with tzdata python -m profile_wrap demo run     # the whole pipeline, offline
 ```

@@ -3,7 +3,7 @@
 <!-- mcp-name: io.github.NJ-Burrito/profile-wrap-mcp -->
 mcp-name: io.github.NJ-Burrito/profile-wrap-mcp
 
-A stdio [MCP](https://modelcontextprotocol.io) server for a [Profile-Wrap](https://github.com/NJ-Burrito/profile-wrap) workspace.
+A stdio [MCP](https://modelcontextprotocol.io) server for a [Profile-Wrap](https://github.com/NJ-Burrito/Profile-Wrap) workspace.
 It lets an MCP client (Claude Code, Codex, any other) check the workspace, draft a post from a topic, run the
 fact gate, manage unverified facts and read the review board. It can also post, but **only a draft a person
 already pressed Allow on, on the review board**.
@@ -44,4 +44,4 @@ claude mcp add profile-wrap -- uvx profile-wrap-mcp --workspace /path/to/your/wo
 ```
 
 Without `--workspace` the server uses `PROFILE_WRAP_WORKSPACE`, then the usual Profile-Wrap lookup.
-More: [docs/MCP.md](https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/MCP.md).
+More: [docs/MCP.md](https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/MCP.md).

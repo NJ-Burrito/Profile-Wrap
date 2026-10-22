@@ -4,7 +4,7 @@
 
 ## 1️⃣ Download
 
-Go to the [Releases page](https://github.com/NJ-Burrito/profile-wrap/releases/latest).
+Go to the [Releases page](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest).
 
 Scroll to **Assets**. Pick the file for your computer:
 
@@ -64,6 +64,6 @@ Open **Settings** in the app and press the big pause button. Nothing posts until
 
 ## 🆘 Stuck?
 
-Open an [issue](https://github.com/NJ-Burrito/profile-wrap/issues) and say what you saw on the screen.
+Open an [issue](https://github.com/NJ-Burrito/Profile-Wrap/issues) and say what you saw on the screen.
 
 Developers: [docs/FOR-DEVELOPERS.md](docs/FOR-DEVELOPERS.md)

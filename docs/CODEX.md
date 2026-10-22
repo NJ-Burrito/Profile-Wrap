@@ -20,7 +20,7 @@ Pick one.
 **As a plugin (any folder):**
 
 ```
-codex plugin marketplace add NJ-Burrito/profile-wrap     # or a local path to a checkout
+codex plugin marketplace add NJ-Burrito/Profile-Wrap     # or a local path to a checkout
 codex plugin add profile-wrap-codex@profile-wrap
 ```
 

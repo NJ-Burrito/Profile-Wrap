@@ -14,7 +14,7 @@ NOW = 1_800_000_000.0
 
 
 def rel(tag, body="- something new", pre=False, draft=False):
-    return {"tag_name": tag, "name": tag, "body": body, "html_url": f"https://github.com/NJ-Burrito/profile-wrap/releases/tag/{tag}",
+    return {"tag_name": tag, "name": tag, "body": body, "html_url": f"https://github.com/NJ-Burrito/Profile-Wrap/releases/tag/{tag}",
             "prerelease": pre, "draft": draft, "published_at": "2026-10-20T00:00:00Z"}
 
 
@@ -350,7 +350,7 @@ def test_real_http_layer_against_a_loopback_fixture(tmp_path, monkeypatch, capsy
         out = capsys.readouterr().out
         assert "0.4.0 is available" in out and "over real http" in out
         path, agent, auth = srv.seen[0]
-        assert path.startswith("/repos/NJ-Burrito/profile-wrap/releases") and agent == f"profile-wrap/{__version__}"
+        assert path.startswith("/repos/NJ-Burrito/Profile-Wrap/releases") and agent == f"profile-wrap/{__version__}"
         assert auth is None                                    # public read, never a token
     finally:
         srv.shutdown()
@@ -410,10 +410,10 @@ def test_hostile_release_notes_are_capped_stripped_and_framed(env):
 def test_release_url_must_be_on_the_project_repository(env):
     ok = rel("v0.4.0")
     bad = dict(rel("v0.4.1"), html_url="https://evil.example/x")
-    sneaky = dict(rel("v0.4.2"), html_url="https://github.com/NJ-Burrito/profile-wrap-evil/x")
+    sneaky = dict(rel("v0.4.2"), html_url="https://github.com/NJ-Burrito/Profile-Wrap-evil/x")
     s = st(env, Fake([ok, bad, sneaky]))
     urls = {r["tag"]: r["url"] for r in s["news"]}
-    assert urls["v0.4.0"].startswith("https://github.com/NJ-Burrito/profile-wrap/")
+    assert urls["v0.4.0"].startswith("https://github.com/NJ-Burrito/Profile-Wrap/")
     assert urls["v0.4.1"] == urls["v0.4.2"] == updates.RELEASES_PAGE
 
 

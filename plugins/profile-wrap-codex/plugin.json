@@ -4,8 +4,8 @@
   "version": "0.3.0",
   "description": "Fact-gated, compliance-first content pipeline for LinkedIn, for Codex: setup, plan the week, write with gates, visuals, ship with Allow. Independent, not affiliated with LinkedIn.",
   "author": { "name": "profile-wrap contributors" },
-  "homepage": "https://github.com/NJ-Burrito/profile-wrap",
-  "repository": "https://github.com/NJ-Burrito/profile-wrap",
+  "homepage": "https://github.com/NJ-Burrito/Profile-Wrap",
+  "repository": "https://github.com/NJ-Burrito/Profile-Wrap",
   "license": "MIT",
   "keywords": ["content", "official-api", "arabic", "bilingual", "fact-gate", "agent-skills"],
   "skills": "./skills",
@@ -18,7 +18,7 @@
         "developerName": "profile-wrap contributors",
         "category": "Productivity",
         "capabilities": ["Read", "Write"],
-        "websiteURL": "https://github.com/NJ-Burrito/profile-wrap"
+        "websiteURL": "https://github.com/NJ-Burrito/Profile-Wrap"
       }
     }
   }

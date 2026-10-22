@@ -28,18 +28,18 @@ Content, Social media, Productivity
 
 ## Screenshots
 
-- `docs/assets/board.png` (The review board: a gated draft waiting for Allow): https://raw.githubusercontent.com/NJ-Burrito/profile-wrap/main/docs/assets/board.png
-- `docs/assets/hero.gif` (Idea to gated draft to Allow to post): https://raw.githubusercontent.com/NJ-Burrito/profile-wrap/main/docs/assets/hero.gif
-- `docs/assets/flow.svg` (How a post moves from idea to LinkedIn): https://raw.githubusercontent.com/NJ-Burrito/profile-wrap/main/docs/assets/flow.svg
+- `docs/assets/board.png` (The review board: a gated draft waiting for Allow): https://raw.githubusercontent.com/NJ-Burrito/Profile-Wrap/main/docs/assets/board.png
+- `docs/assets/hero.gif` (Idea to gated draft to Allow to post): https://raw.githubusercontent.com/NJ-Burrito/Profile-Wrap/main/docs/assets/hero.gif
+- `docs/assets/flow.svg` (How a post moves from idea to LinkedIn): https://raw.githubusercontent.com/NJ-Burrito/Profile-Wrap/main/docs/assets/flow.svg
 
 ## Links
 
-- Repository: https://github.com/NJ-Burrito/profile-wrap
-- Licence: MIT (https://github.com/NJ-Burrito/profile-wrap/blob/main/LICENSE)
-- Privacy policy: https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/PRIVACY.md
-- Support: https://github.com/NJ-Burrito/profile-wrap/issues
-- Server URL (submit form): https://github.com/NJ-Burrito/profile-wrap
-- Docs: https://github.com/NJ-Burrito/profile-wrap/blob/main/docs/MCP.md
+- Repository: https://github.com/NJ-Burrito/Profile-Wrap
+- Licence: MIT (https://github.com/NJ-Burrito/Profile-Wrap/blob/main/LICENSE)
+- Privacy policy: https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/PRIVACY.md
+- Support: https://github.com/NJ-Burrito/Profile-Wrap/issues
+- Server URL (submit form): https://github.com/NJ-Burrito/Profile-Wrap
+- Docs: https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/MCP.md
 
 ## Notes
 

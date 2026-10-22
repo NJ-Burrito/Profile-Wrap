@@ -7,7 +7,7 @@ submitted automatically.
 ## A. Before you open the portal (all must be true)
 
 - [ ] You have a paid claude.ai plan and can sign in at https://claude.ai.
-- [ ] The repository https://github.com/NJ-Burrito/profile-wrap is public and `main` contains the folder
+- [ ] The repository https://github.com/NJ-Burrito/Profile-Wrap is public and `main` contains the folder
       `plugins/profile-wrap/` at version 0.2.0 (tag `v0.2.0` exists).
 - [ ] `profile-wrap-mcp` 0.2.0 is published on PyPI. The plugin starts it with `uvx profile-wrap-mcp==0.3.0`, and a
       pinned launcher whose version does not exist makes the plugin fail. Check: `uvx profile-wrap-mcp==0.3.0 --help`.
@@ -16,7 +16,7 @@ submitted automatically.
       `docs/PRIVACY.md`, `LICENSE`, `README.md` and the issues page on GitHub, and the raw `assets/icon.svg` link.
 - [ ] In the repo folder, run `claude plugin validate --strict plugins/profile-wrap`. It must say "Validation passed".
 - [ ] `python -m profile_wrap.leakcheck scan --tree .` prints PASS (no keys or tokens anywhere).
-- [ ] Optional dry run on your machine: `claude plugin marketplace add NJ-Burrito/profile-wrap`, then
+- [ ] Optional dry run on your machine: `claude plugin marketplace add NJ-Burrito/Profile-Wrap`, then
       `claude plugin install profile-wrap@profile-wrap`. It should install version 0.2.0 with 5 skills and 6 commands.
 
 ## B. Facts the portal checks (already satisfied, listed so you can confirm)
@@ -40,8 +40,8 @@ not be mistakable for a known brand.
 
 1. [ ] Open https://claude.ai/directory/manage and sign in with your paid account.
 2. [ ] Click the button to submit a new plugin (wording such as "Submit plugin" or "Add plugin").
-3. [ ] Choose GitHub as the source and authorise the GitHub connection if asked. Grant access to `NJ-Burrito/profile-wrap` only.
-4. [ ] Select the repository `NJ-Burrito/profile-wrap`, branch `main`.
+3. [ ] Choose GitHub as the source and authorise the GitHub connection if asked. Grant access to `NJ-Burrito/Profile-Wrap` only.
+4. [ ] Select the repository `NJ-Burrito/Profile-Wrap`, branch `main`.
 5. [ ] When asked for the plugin folder, enter `plugins/profile-wrap` (the folder that contains `.claude-plugin/plugin.json`).
 6. [ ] Wait for the automatic checks. If one fails, copy its message and fix the file named; do not edit the portal fields to hide it.
 7. [ ] Check that the preview shows: name `profile-wrap`, version 0.2.0, MIT, the icon, and the five links.
@@ -61,5 +61,5 @@ not be mistakable for a known brand.
 
 ## E. If you want to publish without waiting (no review)
 
-Users can already install from your own marketplace: `/plugin marketplace add NJ-Burrito/profile-wrap`, then
+Users can already install from your own marketplace: `/plugin marketplace add NJ-Burrito/Profile-Wrap`, then
 `/plugin install profile-wrap@profile-wrap`. This does not depend on the directory.

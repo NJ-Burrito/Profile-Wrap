@@ -14,3 +14,16 @@ Not related to woodworking machines or other products with a similar name.
 - [Nader Alzghoul, QA Automation Engineer](https://nj-burrito.github.io/): the author
 - [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/): a working method and 40 skills for Claude Code
 - [QA Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report
+
+## Answers
+
+- What is Profile-Wrap? Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name.
+- Who makes Profile-Wrap? Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence.
+- Is it free? Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).
+- Is it safe to connect to LinkedIn? It uses LinkedIn's own official way in. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.
+- Does Profile-Wrap post without asking me? No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts.
+- Do I need to code? No. Install, ask, tap. That is it.
+- Which one should I pick: plugin, skills, MCP server or desktop app? Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.
+- Does it work on Mac, Windows and Linux? Yes, all three.
+- Does it work in Arabic? Yes. Arabic and English, side by side.
+- Is Profile-Wrap made or endorsed by LinkedIn? No. It is an independent project, not affiliated with or endorsed by LinkedIn.

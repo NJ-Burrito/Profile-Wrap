@@ -10,6 +10,7 @@
 <meta name="description" content="Profile-Wrap plans your week of LinkedIn posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. Free and open source under the MIT licence.">
 <link rel="canonical" href="https://nj-burrito.github.io/Profile-Wrap/">
 <meta name="author" content="Nader Alzghoul">
+<meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Profile-Wrap">
 <meta property="og:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
@@ -35,6 +36,10 @@
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   "name": "Profile-Wrap",
+  "alternateName": ["Profile-Wrap LinkedIn post manager","Profile Wrap"],
+  "applicationSubCategory": "LinkedIn post manager and scheduler",
+  "isAccessibleForFree": true,
+  "sameAs": ["https://github.com/NJ-Burrito/Profile-Wrap","https://pypi.org/project/profile-wrap/"],
   "url": "https://nj-burrito.github.io/Profile-Wrap/",
   "description": "A free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.",
   "applicationCategory": "BusinessApplication",
@@ -57,6 +62,94 @@
       "https://github.com/NJ-Burrito"
     ]
   }
+}
+</script>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@type": "FAQPage",
+ "mainEntity": [
+  {
+   "@type": "Question",
+   "name": "What is Profile-Wrap?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Who makes Profile-Wrap?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is it free?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one)."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is it safe to connect to LinkedIn?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "It uses LinkedIn's own official way in. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Does Profile-Wrap post without asking me?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Do I need to code?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. Install, ask, tap. That is it."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Which one should I pick: plugin, skills, MCP server or desktop app?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Does it work on Mac, Windows and Linux?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes, all three."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Does it work in Arabic?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "Yes. Arabic and English, side by side."
+   }
+  },
+  {
+   "@type": "Question",
+   "name": "Is Profile-Wrap made or endorsed by LinkedIn?",
+   "acceptedAnswer": {
+    "@type": "Answer",
+    "text": "No. It is an independent project, not affiliated with or endorsed by LinkedIn."
+   }
+  }
+ ]
 }
 </script>
 <script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: reduce)").matches)addEventListener("DOMContentLoaded",function(){var v=document.getElementById("heroVid");if(v){v.removeAttribute("autoplay");v.pause()}})</script>
@@ -119,6 +212,7 @@ h2{font-size:clamp(2.1rem,5.6vw,4rem);line-height:1.04;letter-spacing:-.028em}
 /* Hero */
 .hero{position:relative;padding-top:clamp(7.5rem,16vw,10.5rem);padding-bottom:0;text-align:center;isolation:isolate}
 .hero::before{content:"";position:absolute;inset:0 0 auto 0;height:80%;z-index:-1;background:radial-gradient(60% 55% at 50% 0%,var(--glow),transparent 70%)}
+.h1d{display:block;font-family:"PW Sans",sans-serif;font-weight:400;font-size:clamp(1rem,2.6vw,1.5rem);letter-spacing:0;line-height:1.3;margin-top:1rem;color:var(--mute)}
 h1{font-size:clamp(3.4rem,13vw,8.25rem);line-height:.96;letter-spacing:-.045em}
 .hero .lead{font-family:"PW Display",serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.6rem);line-height:1.1;letter-spacing:-.02em;margin-top:1.25rem}
 .hero .sub{margin-top:1rem;margin-inline:auto}
@@ -245,9 +339,9 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
 <main id="main">
   <section class="hero" id="top">
     <div class="wrap">
-      <h1 class="rv" translate="no">Profile-Wrap</h1>
+      <h1 class="rv"><span translate="no">Profile-Wrap</span><span class="h1d">Free, open-source LinkedIn post manager</span></h1>
       <p class="lead rv" style="--d:1">Your LinkedIn, on autopilot. You stay the boss.</p>
-      <p class="sub rv" style="--d:2">A free, open-source LinkedIn post manager and scheduler. Nothing goes out until you tap Allow.</p>
+      <p class="sub rv" style="--d:2">Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
       <div class="ctas rv" style="--d:3">
         <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
         <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -337,11 +431,16 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
     <div class="wrap center">
       <h2 class="rv">Questions</h2>
       <div class="faq rv">
+        <details><summary>What is Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name.</p></details>
+        <details><summary>Who makes Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence.</p></details>
         <details><summary>Is it free?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).</p></details>
+        <details><summary>Is it safe to connect to LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>It uses LinkedIn's own official way in. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.</p></details>
+        <details><summary>Does Profile-Wrap post without asking me?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts.</p></details>
         <details><summary>Do I need to code?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Install, ask, tap. That is it.</p></details>
-        <details><summary>Mac or Windows?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Both. Linux too.</p></details>
-        <details><summary>Arabic?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Arabic and English, side by side.</p></details>
-        <details><summary>What if I don't like a post?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Tap Reject, or ask for a better one. Nothing posts without you.</p></details>
+        <details><summary>Which one should I pick: plugin, skills, MCP server or desktop app?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.</p></details>
+        <details><summary>Does it work on Mac, Windows and Linux?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes, all three.</p></details>
+        <details><summary>Does it work in Arabic?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Arabic and English, side by side.</p></details>
+        <details><summary>Is Profile-Wrap made or endorsed by LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. It is an independent project, not affiliated with or endorsed by LinkedIn.</p></details>
         <details><summary>My computer asks "are you sure?". Is that normal?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is new and unsigned, so your computer may ask once. The <a href="https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/INSTALL-DESKTOP.md">picture guide</a> shows what to tap.</p></details>
       </div>
     </div>
@@ -362,7 +461,8 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
 
 <footer>
   <div class="wrap">
-    <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>. <a href="https://nj-burrito.github.io/">Maker</a>.</p>
+    <p><a href="#how">How it works</a> · <a href="#board">Review board</a> · <a href="#safe">Is it safe?</a> · <a href="#ways">Ways to install</a> · <a href="#questions">Questions</a></p>
+    <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>. <a href="https://nj-burrito.github.io/">Maker portfolio</a>.</p>
     <div class="more">
       <p lang="en"><strong>More from NJ:</strong> <a href="https://nj-burrito.github.io/">Portfolio</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>, a free working method for Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA Wrap</a>, a QA toolkit that lives in your browser · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
       <p lang="ar" dir="rtl"><strong>المزيد من نادر:</strong> <a href="https://nj-burrito.github.io/">الموقع الشخصي</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>، منهج عمل مجاني لـ Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA Wrap</a>، أداة اختبار جودة تعمل داخل المتصفح · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>

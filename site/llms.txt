@@ -13,7 +13,7 @@ Not related to woodworking machines or other products with a similar name.
 
 - [Nader Alzghoul, QA Automation Engineer](https://nj-burrito.github.io/): the author
 - [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/): a working method and 40 skills for Claude Code
-- [QA Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report
+- [QA-Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report
 
 ## Answers
 

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -15,9 +15,18 @@
 <meta property="og:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
 <meta property="og:description" content="Plans your week of LinkedIn posts, checks every one, and posts only what you tap Allow on. Free, MIT.">
 <meta property="og:url" content="https://nj-burrito.github.io/Profile-Wrap/">
-<meta property="og:image" content="https://nj-burrito.github.io/Profile-Wrap/hero.gif">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://nj-burrito.github.io/Profile-Wrap/hero-still.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1280">
+<meta property="og:image:height" content="640">
 <meta property="og:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
+<meta name="twitter:description" content="Plans your week of LinkedIn posts, checks every one, and posts only what you tap Allow on. Free, MIT.">
+<meta name="twitter:image" content="https://nj-burrito.github.io/Profile-Wrap/hero-still.png">
+<meta name="twitter:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
+<link rel="preload" as="image" href="hero-still.webp" fetchpriority="high">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23c2410c%27/%3E%3Cpath d=%27m9 16.5 4.5 4.5L23 11%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
 <link rel="preload" href="fonts/display-bold.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/sans-regular.woff2" as="font" type="font/woff2" crossorigin>
@@ -30,6 +39,12 @@
   "description": "A free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Windows, macOS, Linux",
+  "softwareVersion": "0.3.0",
+  "datePublished": "2026-10-20",
+  "image": "https://nj-burrito.github.io/Profile-Wrap/hero-still.png",
+  "screenshot": "https://nj-burrito.github.io/Profile-Wrap/board.webp",
+  "featureList": ["Plans your week of LinkedIn posts","Writes them in your voice","Checks every post before it goes out","Uses your own AI account","Shows you each post and posts only what you tap Allow on","Posts at a good time","Works in English and Arabic"],
+  "inLanguage": ["en","ar"],
   "license": "https://opensource.org/license/mit",
   "downloadUrl": "https://github.com/NJ-Burrito/Profile-Wrap/releases/latest",
   "codeRepository": "https://github.com/NJ-Burrito/Profile-Wrap",
@@ -44,7 +59,7 @@
   }
 }
 </script>
-<script>document.documentElement.classList.add("js")</script>
+<script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: reduce)").matches)addEventListener("DOMContentLoaded",function(){var v=document.getElementById("heroVid");if(v){v.removeAttribute("autoplay");v.pause()}})</script>
 <style>
 @font-face{font-family:"PW Display";src:url("fonts/display-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:"PW Sans";src:url("fonts/sans-regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
@@ -113,7 +128,7 @@ h1{font-size:clamp(3.4rem,13vw,8.25rem);line-height:.96;letter-spacing:-.045em}
 @media (hover:hover){.link:hover svg{transform:translateX(3px)}}
 .stage{margin:clamp(2.5rem,6vw,4.5rem) auto 0;width:min(100% - 1.25rem,62rem)}
 .shell{padding:.4rem;border-radius:calc(var(--r-lg) + .4rem);background:var(--glass);border:1px solid var(--line);box-shadow:var(--shadow)}
-.shell img{display:block;width:100%;height:auto;border-radius:var(--r-lg);background:var(--surface-2)}
+.shell img,.shell video{display:block;width:100%;height:auto;border-radius:var(--r-lg);background:var(--surface-2)}
 @media (max-width:40rem){.shell{padding:.25rem;border-radius:calc(var(--r-lg) - 8px)}.shell img{border-radius:calc(var(--r-lg) - 12px)}}
 
 /* Steps: three rows, hairlines, no cards */
@@ -232,7 +247,7 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
     <div class="wrap">
       <h1 class="rv" translate="no">Profile-Wrap</h1>
       <p class="lead rv" style="--d:1">Your LinkedIn, on autopilot. You stay the boss.</p>
-      <p class="sub rv" style="--d:2">A free, open-source LinkedIn post manager. Nothing goes out until you tap Allow.</p>
+      <p class="sub rv" style="--d:2">A free, open-source LinkedIn post manager and scheduler. Nothing goes out until you tap Allow.</p>
       <div class="ctas rv" style="--d:3">
         <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
         <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -241,10 +256,10 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
     </div>
     <div class="stage rv" style="--d:4">
       <div class="shell">
-        <picture>
-          <source media="(prefers-reduced-motion: reduce)" srcset="hero-still.png">
-          <img src="hero.gif" width="1280" height="640" alt="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow." fetchpriority="high">
-        </picture>
+        <video id="heroVid" width="1280" height="640" autoplay muted loop playsinline preload="metadata" poster="hero-still.webp" aria-label="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
+            <source src="hero.webm" type="video/webm">
+            <source src="hero.mp4" type="video/mp4">
+          </video>
       </div>
     </div>
   </section>
@@ -266,7 +281,7 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
       <p class="sub rv">Your board shows each post first. You say go.</p>
       <figure style="margin:0">
         <div class="shell rv">
-          <div class="crop"><img src="board.png" width="2880" height="2900" loading="lazy" alt="The Profile-Wrap review board: a list of posts on the left, one post with its image on the right, and the Allow, Reject and Improve buttons below it."></div>
+          <div class="crop"><img src="board.webp" width="2880" height="2900" loading="lazy" alt="The Profile-Wrap review board: a list of posts on the left, one post with its image on the right, and the Allow, Reject and Improve buttons below it."></div>
         </div>
         <figcaption class="rv">Your board. Every post waits here until you say go.</figcaption>
       </figure>
@@ -349,8 +364,8 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
   <div class="wrap">
     <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>. <a href="https://nj-burrito.github.io/">Maker</a>.</p>
     <div class="more">
-      <p lang="en"><strong>More from NJ:</strong> <a href="https://nj-burrito.github.io/">Portfolio</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>, a free working method for Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>, a QA toolkit that lives in your browser · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
-      <p lang="ar" dir="rtl"><strong>المزيد من نادر:</strong> <a href="https://nj-burrito.github.io/">الموقع الشخصي</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>، منهج عمل مجاني لـ Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>، أداة اختبار جودة تعمل داخل المتصفح · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
+      <p lang="en"><strong>More from NJ:</strong> <a href="https://nj-burrito.github.io/">Portfolio</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>, a free working method for Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA Wrap</a>, a QA toolkit that lives in your browser · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
+      <p lang="ar" dir="rtl"><strong>المزيد من نادر:</strong> <a href="https://nj-burrito.github.io/">الموقع الشخصي</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>، منهج عمل مجاني لـ Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA Wrap</a>، أداة اختبار جودة تعمل داخل المتصفح · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
     </div>
     <p>Profile-Wrap is not affiliated with or endorsed by LinkedIn. Free and open source under the MIT licence.</p>
   </div>

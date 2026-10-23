@@ -1,0 +1,16 @@
+# Profile-Wrap
+
+> Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. MIT licence, by Nader Alzghoul.
+
+Not related to woodworking machines or other products with a similar name.
+
+- [Website](https://nj-burrito.github.io/Profile-Wrap/): what it does, the 3 steps, the review board, FAQ
+- [Source code](https://github.com/NJ-Burrito/Profile-Wrap): README, issues, MIT licence
+- [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): version 0.3.0 at the time of writing
+- [PyPI package](https://pypi.org/project/profile-wrap/)
+
+## Related
+
+- [Nader Alzghoul, QA Automation Engineer](https://nj-burrito.github.io/): the author
+- [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/): a working method and 40 skills for Claude Code
+- [QA Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report

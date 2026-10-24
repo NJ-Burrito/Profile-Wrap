@@ -46,6 +46,56 @@
       "rule": "media-unlisted",
       "sha256": "ccf8b76116acd35ea599e6ce43d3c0db8ecf26157b52cf03d7dee7a12021b732",
       "reason": "site still frame cut from the README hero animation, shown when reduced motion is on; synthetic demo content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "1eb27eedf92d0bd52a56b5f7c34cc4d9a178a915ad59986bb6d6811a5d527065",
+      "reason": "README hero, cut from Nader's own published 2026-10-17 Profile-Wrap launch post (paper-cutout)"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "62010bbb6c03aa28c385215ebbb4ef767006d684e3b80aeffe8c48852d245c32",
+      "reason": "site hero film, from the same published launch post"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "cce560018006b9f0ca06d4bdfb23ab1fc5e33b8ec5596d143eb634a54f4c4a2e",
+      "reason": "site hero film, from the same published launch post"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "2d72e688c88c13d89a99efa2b35e61a7c8c10f2f8904006d799ff7cc9632ee34",
+      "reason": "still frame of the site hero film"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "3f2cc24d9a46ccf4ddb227151d908213ced84cdfe0917dd22a6787004adec696",
+      "reason": "Open Graph card for the site (paper-cutout)"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "c9e5357a89ca75ff65368de8f4656404aa36d0238c29fb86803162e6b46a4d0a",
+      "reason": "paper grain tile, synthetic noise"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "16f8430512059a80ca2c969cb53321f9f7c2c366f6335d6bae435548f0653a10",
+      "reason": "review board screenshot on the site, fictional demo persona"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "d6c68c417ea6d2cd49246c3fbe03159c3a82317ee4c1b30fac412e12aebee666",
+      "reason": "Latin subset of the site's licensed web font (licence covers the owner's sites, 2026-10-18)"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "5943b42569201683a03f756db36fbabbf4cb30dbf56fed0e5a5b7853d7905e33",
+      "reason": "Latin subset of the site's licensed web font"
+    },
+    {
+      "rule": "font-binary",
+      "sha256": "de60b809e36b2d684ef8fd1c3aac08f04b17eaac6fe2c6ed8796cac50d00be4f",
+      "reason": "Latin subset of the site's licensed web font"
     }
   ]
 }

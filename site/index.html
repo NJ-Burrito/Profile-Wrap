@@ -4,304 +4,415 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0a0f1a" media="(prefers-color-scheme: dark)">
-<title>Profile-Wrap: free, open-source LinkedIn post manager</title>
-<meta name="description" content="Profile-Wrap plans your week of LinkedIn posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. Free and open source under the MIT licence.">
+<meta name="theme-color" content="#F1E6CB" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1F2B45" media="(prefers-color-scheme: dark)">
+<title>Profile-Wrap: free, open-source LinkedIn post manager and scheduler</title>
+<meta name="description" content="Profile-Wrap is a free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. Desktop app, Claude Code plugin and MCP server.">
 <link rel="canonical" href="https://nj-burrito.github.io/Profile-Wrap/">
 <meta name="author" content="Nader Alzghoul">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Profile-Wrap">
 <meta property="og:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
-<meta property="og:description" content="Plans your week of LinkedIn posts, checks every one, and posts only what you tap Allow on. Free, MIT.">
+<meta property="og:description" content="Plans your week of LinkedIn posts, writes them in your voice, checks every one, and posts only what you tap Allow on. Free, MIT.">
 <meta property="og:url" content="https://nj-burrito.github.io/Profile-Wrap/">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://nj-burrito.github.io/Profile-Wrap/hero-still.png">
+<meta property="og:locale:alternate" content="ar_AR">
+<meta property="og:image" content="https://nj-burrito.github.io/Profile-Wrap/og.png">
 <meta property="og:image:type" content="image/png">
-<meta property="og:image:width" content="1280">
-<meta property="og:image:height" content="640">
-<meta property="og:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Profile-Wrap, a free, open-source LinkedIn post manager. Paper flags read Plan, Write, Allow. Nothing posts until you tap Allow.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Profile-Wrap: free, open-source LinkedIn post manager">
 <meta name="twitter:description" content="Plans your week of LinkedIn posts, checks every one, and posts only what you tap Allow on. Free, MIT.">
-<meta name="twitter:image" content="https://nj-burrito.github.io/Profile-Wrap/hero-still.png">
-<meta name="twitter:image:alt" content="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
-<link rel="preload" as="image" href="hero-still.webp" fetchpriority="high">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 rx=%278%27 fill=%27%23c2410c%27/%3E%3Cpath d=%27m9 16.5 4.5 4.5L23 11%27 fill=%27none%27 stroke=%27white%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
-<link rel="preload" href="fonts/display-bold.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fonts/sans-regular.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="twitter:image" content="https://nj-burrito.github.io/Profile-Wrap/og.png">
+<meta name="twitter:image:alt" content="Profile-Wrap, a free, open-source LinkedIn post manager. Nothing posts until you tap Allow.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Cpath d=%27M3 4h26L16 29z%27 fill=%27%23B4491F%27/%3E%3Cpath d=%27m10 11 4 4 8-7%27 fill=%27none%27 stroke=%27%23FBF6E8%27 stroke-width=%273%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E">
+<link rel="preload" href="fonts/display-bold-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/sans-regular-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="sitemap" type="application/xml" href="sitemap.xml">
+<link rel="alternate" type="text/plain" href="llms.txt" title="llms.txt">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Profile-Wrap",
-  "alternateName": ["Profile-Wrap LinkedIn post manager","Profile Wrap"],
-  "applicationSubCategory": "LinkedIn post manager and scheduler",
-  "isAccessibleForFree": true,
-  "sameAs": ["https://github.com/NJ-Burrito/Profile-Wrap","https://pypi.org/project/profile-wrap/"],
-  "url": "https://nj-burrito.github.io/Profile-Wrap/",
-  "description": "A free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.",
-  "applicationCategory": "BusinessApplication",
-  "operatingSystem": "Windows, macOS, Linux",
-  "softwareVersion": "0.3.0",
-  "datePublished": "2026-10-20",
-  "image": "https://nj-burrito.github.io/Profile-Wrap/hero-still.png",
-  "screenshot": "https://nj-burrito.github.io/Profile-Wrap/board.webp",
-  "featureList": ["Plans your week of LinkedIn posts","Writes them in your voice","Checks every post before it goes out","Uses your own AI account","Shows you each post and posts only what you tap Allow on","Posts at a good time","Works in English and Arabic"],
-  "inLanguage": ["en","ar"],
-  "license": "https://opensource.org/license/mit",
-  "downloadUrl": "https://github.com/NJ-Burrito/Profile-Wrap/releases/latest",
-  "codeRepository": "https://github.com/NJ-Burrito/Profile-Wrap",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-  "author": {
-    "@type": "Person",
-    "name": "Nader Alzghoul",
-    "sameAs": [
-      "https://www.linkedin.com/in/nader-alzghoul",
-      "https://github.com/NJ-Burrito"
-    ]
-  }
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://nj-burrito.github.io/Profile-Wrap/#website",
+      "url": "https://nj-burrito.github.io/Profile-Wrap/",
+      "name": "Profile-Wrap",
+      "alternateName": "Profile-Wrap LinkedIn post manager",
+      "inLanguage": [
+        "en",
+        "ar"
+      ],
+      "publisher": {
+        "@id": "https://nj-burrito.github.io/#person"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://nj-burrito.github.io/#person",
+      "name": "Nader Alzghoul",
+      "jobTitle": "QA Automation Engineer",
+      "url": "https://nj-burrito.github.io/",
+      "sameAs": [
+        "https://www.linkedin.com/in/nader-alzghoul",
+        "https://github.com/NJ-Burrito"
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://nj-burrito.github.io/Profile-Wrap/#app",
+      "name": "Profile-Wrap",
+      "alternateName": [
+        "Profile-Wrap LinkedIn post manager",
+        "Profile Wrap"
+      ],
+      "description": "A free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.",
+      "url": "https://nj-burrito.github.io/Profile-Wrap/",
+      "applicationCategory": "BusinessApplication",
+      "applicationSubCategory": "LinkedIn post manager and scheduler",
+      "operatingSystem": "Windows, macOS, Linux",
+      "softwareVersion": "0.3.0",
+      "datePublished": "2026-10-20",
+      "isAccessibleForFree": true,
+      "license": "https://opensource.org/license/mit",
+      "image": "https://nj-burrito.github.io/Profile-Wrap/og.png",
+      "screenshot": "https://nj-burrito.github.io/Profile-Wrap/board.webp",
+      "downloadUrl": "https://github.com/NJ-Burrito/Profile-Wrap/releases/latest",
+      "installUrl": "https://github.com/NJ-Burrito/Profile-Wrap#plugin",
+      "featureList": [
+        "Plans your week of LinkedIn posts",
+        "Writes them in your voice",
+        "Checks every post before it goes out",
+        "Uses your own AI account",
+        "Shows you each post and posts only what you tap Allow on",
+        "Posts at a good time",
+        "Works in English and Arabic",
+        "Desktop app, Claude Code plugin, skills and MCP server"
+      ],
+      "inLanguage": [
+        "en",
+        "ar"
+      ],
+      "sameAs": [
+        "https://github.com/NJ-Burrito/Profile-Wrap",
+        "https://pypi.org/project/profile-wrap/"
+      ],
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "author": {
+        "@id": "https://nj-burrito.github.io/#person"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://nj-burrito.github.io/Profile-Wrap/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What is Profile-Wrap?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there a free, open-source LinkedIn post scheduler?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, posts each one at a good time, and only after you tap Allow."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How is Profile-Wrap different from Buffer or Taplio?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses your own AI account. On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Who makes Profile-Wrap?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it free?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is it safe to connect to LinkedIn?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Profile-Wrap post without asking me?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to code?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. Install, ask, tap. That is it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Which one should I pick: plugin, skills, MCP server or desktop app?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work on Mac, Windows and Linux?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, all three."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does it work in Arabic?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Arabic and English, side by side."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Is Profile-Wrap made or endorsed by LinkedIn?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "No. It is an independent project, not affiliated with or endorsed by LinkedIn."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "My computer asks \"are you sure?\". Is that normal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. The app is new and unsigned, so your computer may ask once. The picture guide shows what to tap."
+          }
+        }
+      ]
+    }
+  ]
 }
 </script>
-<script type="application/ld+json">
-{
- "@context": "https://schema.org",
- "@type": "FAQPage",
- "mainEntity": [
-  {
-   "@type": "Question",
-   "name": "What is Profile-Wrap?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Who makes Profile-Wrap?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Is it free?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one)."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Is it safe to connect to LinkedIn?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "It uses LinkedIn's own official way in. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Does Profile-Wrap post without asking me?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Do I need to code?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "No. Install, ask, tap. That is it."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Which one should I pick: plugin, skills, MCP server or desktop app?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Does it work on Mac, Windows and Linux?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Yes, all three."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Does it work in Arabic?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "Yes. Arabic and English, side by side."
-   }
-  },
-  {
-   "@type": "Question",
-   "name": "Is Profile-Wrap made or endorsed by LinkedIn?",
-   "acceptedAnswer": {
-    "@type": "Answer",
-    "text": "No. It is an independent project, not affiliated with or endorsed by LinkedIn."
-   }
-  }
- ]
-}
-</script>
-<script>document.documentElement.classList.add("js");if(matchMedia("(prefers-reduced-motion: reduce)").matches)addEventListener("DOMContentLoaded",function(){var v=document.getElementById("heroVid");if(v){v.removeAttribute("autoplay");v.pause()}})</script>
+<script>document.documentElement.classList.add("js")</script>
 <style>
-@font-face{font-family:"PW Display";src:url("fonts/display-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
-@font-face{font-family:"PW Sans";src:url("fonts/sans-regular.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"PW Sans";src:url("fonts/sans-bold.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"PW Display";src:url("fonts/display-bold-latin.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212}
+@font-face{font-family:"PW Sans";src:url("fonts/sans-regular-latin.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212}
+@font-face{font-family:"PW Sans";src:url("fonts/sans-bold-latin.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+2000-206F,U+20AC,U+2122,U+2190-2193,U+2212}
 
-/* Tokens. One accent (ember orange, from the hero film), cool neutrals, one radius scale:
-   --r-lg 28px for surfaces, --r-md 16px for icon tiles, pill for controls. */
+/* Profile-Wrap's own world: cut paper. Palette from the launch film's paper kit (cream, rust, teal, mustard, sky, navy).
+   Cards are paper in both schemes; the page behind them turns from a cream sheet (day) to a navy sky (night). */
 :root{
-  --bg:#f5f5f7; --surface:#ffffff; --surface-2:#ececf0; --ink:#1d1d1f; --mute:#57575e;
-  --line:rgba(29,29,31,.12); --accent:#c2410c; --accent-ink:#ffffff; --accent-soft:rgba(194,65,12,.10);
-  --glass:rgba(245,245,247,.72); --glass-line:rgba(255,255,255,.7);
-  --shadow:0 1px 2px rgba(29,38,64,.06),0 12px 32px -8px rgba(29,38,64,.14),0 40px 80px -32px rgba(29,38,64,.22);
-  --glow:rgba(255,107,61,.20);
-  --r-lg:28px; --r-md:16px;
-  --ease:cubic-bezier(.32,.72,0,1);
+  --cream:#F1E6CB; --paper:#F8F3E6; --paper-ink:#1B1A2E; --paper-mute:#4D4864;
+  --rust:#B4491F; --rust-2:#8E3414; --teal:#2F7F76; --teal-2:#1F5E58; --mustard:#D9A22E; --blue:#3E6A8F; --sky:#A9C4D6;
+  --navy:#1F2B45; --navy-2:#141C31; --card:#B9854F; --tape:rgba(231,211,163,.88); --on-dark:#FBF6E8;
+  --bg:var(--cream); --fg:var(--paper-ink); --mute:var(--paper-mute); --link:var(--rust-2);
+  --lift:3px 5px 0 -1px rgba(16,16,28,.10),6px 11px 16px -6px rgba(16,16,28,.38);
+  --lift-hi:4px 7px 0 -1px rgba(16,16,28,.12),9px 16px 22px -8px rgba(16,16,28,.42);
+  --edge:4px 7px 5px 9px / 8px 5px 9px 6px;
+  --ease:cubic-bezier(.22,1,.36,1);
   color-scheme:light dark;
 }
 @media (prefers-color-scheme:dark){
-  :root{
-    --bg:#0a0f1a; --surface:#121a2a; --surface-2:#1a2438; --ink:#f5f5f7; --mute:#a3abbd;
-    --line:rgba(245,245,247,.14); --accent:#ff7a4d; --accent-ink:#1a0a04; --accent-soft:rgba(255,122,77,.14);
-    --glass:rgba(10,15,26,.66); --glass-line:rgba(255,255,255,.14);
-    --shadow:0 1px 2px rgba(0,0,0,.4),0 16px 40px -8px rgba(0,0,0,.55),0 48px 96px -32px rgba(0,0,0,.7);
-    --glow:rgba(255,107,61,.16);
-  }
+  :root{--bg:var(--navy); --fg:var(--on-dark); --mute:#C9D6E3; --link:#E8B845}
 }
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:5.5rem;-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"PW Sans",system-ui,sans-serif;font-size:1.0625rem;line-height:1.55;letter-spacing:0;overflow-x:clip;-webkit-font-smoothing:antialiased;transition:background-color .6s var(--ease),color .6s var(--ease)}
+body{margin:0;background-color:var(--bg);color:var(--fg);font-family:"PW Sans",system-ui,sans-serif;font-size:1.125rem;line-height:1.6;overflow-x:clip;-webkit-font-smoothing:antialiased}
+body{background-image:url("grain.webp");background-size:128px}
+.band{background-image:url("grain.webp");background-size:128px}
 h1,h2,h3{font-family:"PW Display",serif;font-weight:700;margin:0;text-wrap:balance}
 p{margin:0;text-wrap:pretty}
-a{color:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
-svg.i{width:1.5rem;height:1.5rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
-.wrap{width:min(100% - 2.5rem,68rem);margin-inline:auto}
-section{padding-block:clamp(4.5rem,11vw,9rem)}
-h2{font-size:clamp(2.1rem,5.6vw,4rem);line-height:1.04;letter-spacing:-.028em}
-.sub{color:var(--mute);font-size:clamp(1.1rem,2.2vw,1.35rem);line-height:1.45;margin-top:1rem;max-width:34rem}
-.center{text-align:center}.center .sub{margin-inline:auto}
+a{color:var(--link);text-underline-offset:.2em;text-decoration-thickness:.08em;-webkit-tap-highlight-color:transparent}
+::selection{background:var(--mustard);color:var(--paper-ink)}
+:focus-visible{outline:3px solid var(--link);outline-offset:3px;border-radius:6px}
+code{font-family:ui-monospace,Consolas,monospace;font-size:.92em;padding:.05em .35em;border-radius:4px;background:rgba(27,26,46,.08)}
+svg.i{width:1.5rem;height:1.5rem;flex:none;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.wrap{width:min(100% - 2.5rem,70rem);margin-inline:auto}
+.narrow{width:min(100% - 2.5rem,46rem);margin-inline:auto}
+.center{text-align:center}
+h2{font-size:clamp(2.1rem,5.4vw,3.75rem);line-height:1.05;letter-spacing:-.025em}
+.sub{color:var(--mute);font-size:clamp(1.12rem,2.2vw,1.3rem);line-height:1.5;margin-top:1rem;max-width:36rem}
+.center .sub{margin-inline:auto}
 
-.skip{position:fixed;left:1rem;top:-4rem;z-index:30;padding:.6rem 1rem;border-radius:999px;background:var(--ink);color:var(--bg);text-decoration:none;transition:top .2s var(--ease)}
+/* Bands: each section is a sheet of coloured paper with a torn top edge */
+.band{position:relative;background-color:var(--bg);color:var(--fg);padding-block:clamp(4.5rem,10vw,8rem)}
+.band::before{content:"";position:absolute;left:0;right:0;top:-17px;height:18px;background:inherit;background-position:0 -17px;clip-path:polygon(0 70%,3% 40%,6% 62%,10% 30%,14% 55%,18% 35%,22% 66%,26% 38%,30% 58%,34% 28%,38% 60%,42% 42%,46% 70%,50% 36%,54% 58%,58% 30%,62% 64%,66% 40%,70% 60%,74% 32%,78% 62%,82% 44%,86% 68%,90% 34%,94% 58%,97% 40%,100% 64%,100% 100%,0 100%)}
+.b-teal{--bg:var(--teal-2);--fg:var(--on-dark);--mute:#D8E9E5;--link:#F3CB6B}
+.b-sky{--bg:var(--sky);--fg:var(--paper-ink);--mute:#2D3448;--link:#7A2C10}
+.b-mustard{--bg:var(--mustard);--fg:var(--paper-ink);--mute:#2E2617;--link:#5E1F08}
+.b-rust{--bg:var(--rust-2);--fg:var(--on-dark);--mute:var(--on-dark);--link:var(--on-dark)}
+.b-paper{--bg:var(--paper)}
+@media (prefers-color-scheme:dark){
+  .b-sky{--bg:var(--navy-2);--fg:var(--on-dark);--mute:#C9D6E3;--link:#E8B845}
+  .b-paper{--bg:#26324F;--fg:var(--on-dark);--mute:#C9D6E3;--link:#E8B845}
+  .b-mustard{--bg:#16203A;--fg:var(--on-dark);--mute:#C9D6E3;--link:#E8B845}
+}
+
+/* Paper pieces */
+.paper{position:relative;background:var(--paper);color:var(--paper-ink);border-radius:var(--edge);box-shadow:var(--lift)}
+.paper a{color:var(--rust-2)}
+.paper .mute{color:var(--paper-mute)}
+.taped::before{content:"";position:absolute;top:-.8rem;left:50%;width:5.5rem;height:1.6rem;translate:-50% 0;rotate:-3deg;background:var(--tape);box-shadow:0 1px 2px rgba(16,16,28,.12)}
+
+.skip{position:fixed;left:1rem;top:-4rem;z-index:60;padding:.6rem 1rem;border-radius:999px;background:var(--paper-ink);color:var(--paper);text-decoration:none}
 .skip:focus{top:1rem}
-:focus-visible{outline:3px solid var(--accent);outline-offset:3px;border-radius:8px}
 
-/* Floating glass nav (web approximation of a translucent material, not Apple's own) */
-.nav{position:fixed;z-index:20;top:max(.75rem,env(safe-area-inset-top));left:50%;translate:-50% 0;width:min(100% - 1.5rem,44rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem .4rem .4rem 1.25rem;border-radius:999px;background:var(--glass);border:1px solid var(--glass-line);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);box-shadow:0 8px 32px -12px rgba(20,28,50,.25)}
-.brand{font-family:"PW Display",serif;font-weight:700;font-size:1.2rem;letter-spacing:-.02em;text-decoration:none;white-space:nowrap}
+/* Nav: a paper strip */
+.nav{position:fixed;z-index:50;top:max(.75rem,env(safe-area-inset-top));left:50%;translate:-50% 0;width:min(100% - 1.5rem,46rem);display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.4rem .4rem .4rem 1.1rem;border-radius:12px 16px 11px 15px;background:var(--paper);color:var(--paper-ink);box-shadow:var(--lift)}
+.brand{display:flex;align-items:center;gap:.55rem;font-family:"PW Display",serif;font-weight:700;font-size:1.2rem;letter-spacing:-.02em;text-decoration:none;color:var(--paper-ink);white-space:nowrap}
+.brand svg{width:1.4rem;height:1.4rem}
+.nav ul{display:flex;gap:1.1rem;list-style:none;margin:0;padding:0;font-weight:700;font-size:.98rem}
+.nav ul a{color:var(--paper-ink);text-decoration:none;padding:.5rem .1rem}
+@media (hover:hover){.nav ul a:hover{text-decoration:underline}}
+@media (max-width:44rem){.nav ul{display:none}}
 
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:48px;padding:.7rem 1.5rem;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;font-size:1rem;letter-spacing:.005em;text-decoration:none;white-space:nowrap;transition:transform .5s var(--ease),background-color .3s var(--ease),box-shadow .5s var(--ease)}
-.btn:active{transform:scale(.96);transition-duration:.1s}
-.btn.primary{background:var(--accent);border-color:transparent;color:var(--accent-ink)}
-.btn.sm{min-height:44px;padding:.5rem 1.2rem}
-.btn .dot{display:grid;place-items:center;width:1.9rem;height:1.9rem;margin-right:-.6rem;border-radius:50%;background:rgba(255,255,255,.22);transition:transform .5s var(--ease)}
-@media (prefers-color-scheme:dark){.btn.primary .dot{background:rgba(0,0,0,.16)}}
-.btn .dot svg{width:1rem;height:1rem}
-@media (hover:hover){.btn:hover .dot{transform:translate(2px,-1px) scale(1.06)}.btn.primary:hover{box-shadow:0 12px 28px -10px var(--accent)}.btn:not(.primary):hover{background:var(--surface-2)}}
+/* Buttons: cut-paper slabs */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.6rem;min-height:52px;padding:.75rem 1.5rem;border-radius:10px 14px 9px 13px;border:0;background:var(--paper);color:var(--paper-ink);font:700 1.05rem/1.2 "PW Sans",system-ui,sans-serif;text-decoration:none;white-space:nowrap;box-shadow:var(--lift);transition:transform .35s var(--ease),box-shadow .35s var(--ease);cursor:pointer}
+.btn.primary{background:var(--rust);color:var(--on-dark)}
+.btn.sm{min-height:44px;padding:.5rem 1.1rem;font-size:.98rem}
+.btn svg{width:1.2rem;height:1.2rem}
+.btn:active{transform:translateY(2px) scale(.98);box-shadow:2px 3px 0 -1px rgba(16,16,28,.12),3px 5px 8px -4px rgba(16,16,28,.35);transition-duration:.08s}
+@media (hover:hover){.btn:hover{transform:translateY(-2px) rotate(-.6deg);box-shadow:var(--lift-hi)}}
+.link{display:inline-flex;align-items:center;gap:.45rem;min-height:44px;font-weight:700;color:var(--link);text-decoration:underline;text-decoration-color:transparent;transition:text-decoration-color .25s var(--ease)}
+.link svg{width:1.1rem;height:1.1rem;transition:transform .35s var(--ease)}
+@media (hover:hover){.link:hover{text-decoration-color:currentColor}.link:hover svg{transform:translateX(3px)}}
+.ctas{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1.25rem;margin-top:2rem}
 
 /* Hero */
-.hero{position:relative;padding-top:clamp(7.5rem,16vw,10.5rem);padding-bottom:0;text-align:center;isolation:isolate}
-.hero::before{content:"";position:absolute;inset:0 0 auto 0;height:80%;z-index:-1;background:radial-gradient(60% 55% at 50% 0%,var(--glow),transparent 70%)}
-.h1d{display:block;font-family:"PW Sans",sans-serif;font-weight:400;font-size:clamp(1rem,2.6vw,1.5rem);letter-spacing:0;line-height:1.3;margin-top:1rem;color:var(--mute)}
-h1{font-size:clamp(3.4rem,13vw,8.25rem);line-height:.96;letter-spacing:-.045em}
-.hero .lead{font-family:"PW Display",serif;font-weight:700;font-size:clamp(1.5rem,4vw,2.6rem);line-height:1.1;letter-spacing:-.02em;margin-top:1.25rem}
-.hero .sub{margin-top:1rem;margin-inline:auto}
-.ctas{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:.75rem 1rem;margin-top:2rem}
-.link{display:inline-flex;align-items:center;gap:.5rem;min-height:44px;font-weight:700;text-decoration:none;color:var(--accent)}
-.link svg{width:1.1rem;height:1.1rem;transition:transform .5s var(--ease)}
-@media (hover:hover){.link:hover svg{transform:translateX(3px)}}
-.stage{margin:clamp(2.5rem,6vw,4.5rem) auto 0;width:min(100% - 1.25rem,62rem)}
-.shell{padding:.4rem;border-radius:calc(var(--r-lg) + .4rem);background:var(--glass);border:1px solid var(--line);box-shadow:var(--shadow)}
-.shell img,.shell video{display:block;width:100%;height:auto;border-radius:var(--r-lg);background:var(--surface-2)}
-@media (max-width:40rem){.shell{padding:.25rem;border-radius:calc(var(--r-lg) - 8px)}.shell img{border-radius:calc(var(--r-lg) - 12px)}}
+.hero{position:relative;padding:clamp(6.5rem,13vw,8.5rem) 0 clamp(4rem,8vw,6rem)}
+.hero .wrap{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(2rem,5vw,4.5rem);align-items:center}
+@media (max-width:52rem){.hero .wrap{grid-template-columns:1fr}}
+.bunting{position:relative;height:clamp(6.5rem,13vw,8.25rem);margin:0 0 1.25rem -.25rem;max-width:26rem}
+.bunting svg.string{position:absolute;left:-1rem;right:-1rem;top:.15rem;width:calc(100% + 2rem);height:2.2rem;overflow:visible}
+.flags{position:relative;display:flex;gap:clamp(.6rem,2vw,1.1rem);padding-left:.5rem;filter:drop-shadow(4px 7px 3px rgba(16,16,28,.32))}
+.flag{display:flex;justify-content:center;width:clamp(5.6rem,12vw,7.25rem);aspect-ratio:1/1.02;padding-top:clamp(.85rem,2vw,1.15rem);clip-path:polygon(0 0,100% 0,50% 100%);font-family:"PW Display",serif;font-weight:700;font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1;color:var(--on-dark);transform-origin:50% 0}
+.flag:nth-child(1){background:var(--rust);rotate:-4deg}.flag:nth-child(2){background:var(--teal-2);rotate:3deg;margin-top:.35rem}.flag:nth-child(3){background:var(--blue);rotate:-2deg;margin-top:.15rem}
+h1{font-size:clamp(3.4rem,10vw,6rem);line-height:.95;letter-spacing:-.04em}
+.h1d{display:block;margin-top:.9rem;font-family:"PW Sans",sans-serif;font-weight:700;font-size:clamp(1.15rem,2.6vw,1.5rem);line-height:1.3;letter-spacing:0;color:var(--mute)}
+.lead{margin-top:1.4rem;font-family:"PW Display",serif;font-weight:700;font-size:clamp(1.5rem,3.6vw,2.2rem);line-height:1.3;letter-spacing:-.015em}
+.hero .sub{margin-top:1rem}
+.film{justify-self:center;width:min(100%,24rem)}
+.film .paper{padding:.7rem .7rem 3.4rem;rotate:2deg}
+.film video{display:block;width:100%;height:auto;aspect-ratio:1080/1350;border-radius:3px;background:var(--sky)}
+.film .ctl{position:absolute;left:.7rem;bottom:.55rem;display:inline-flex;align-items:center;gap:.45rem;min-height:44px;padding:0 .6rem;border:0;background:none;font:700 .95rem "PW Sans",sans-serif;color:var(--paper-ink);cursor:pointer;border-radius:8px}
+.film .ctl svg{width:1.1rem;height:1.1rem}
+.film .note{position:absolute;right:.9rem;bottom:1rem;font-size:.9rem;color:var(--paper-mute)}
 
-/* Steps: three rows, hairlines, no cards */
-.steps{margin:clamp(2.5rem,6vw,4rem) 0 0;padding:0;list-style:none;border-top:1px solid var(--line)}
-.steps li{display:grid;grid-template-columns:auto 1fr;gap:1.25rem clamp(1.25rem,4vw,2.5rem);align-items:center;padding-block:clamp(1.5rem,4vw,2.5rem);border-bottom:1px solid var(--line)}
-.ico{display:grid;place-items:center;width:clamp(3.25rem,8vw,4.5rem);aspect-ratio:1;border-radius:var(--r-md);background:var(--accent-soft);color:var(--accent)}
-.ico svg{width:50%;height:50%}
-.steps h3{font-size:clamp(1.7rem,5.2vw,3.4rem);line-height:1.06;letter-spacing:-.03em}
-.done{margin-top:1.5rem;color:var(--mute);font-size:1.2rem}
+/* Steps: three paper cards pinned on teal */
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(1.25rem,3vw,2rem);margin:clamp(2.5rem,6vw,3.75rem) 0 0;padding:0;list-style:none;counter-reset:s}
+@media (max-width:48rem){.steps{grid-template-columns:1fr}}
+.steps li{padding:2.1rem 1.5rem 1.6rem;text-align:left;counter-increment:s}
+.steps li:nth-child(1){rotate:-1.2deg}.steps li:nth-child(2){rotate:.9deg}.steps li:nth-child(3){rotate:-.6deg}
+.steps .num{display:grid;place-items:center;width:3rem;height:3rem;margin-bottom:1rem;border-radius:50%;background:var(--rust);color:var(--on-dark);font:700 1.35rem "PW Display",serif}
+.steps h3{font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;letter-spacing:-.02em}
+.steps p{margin-top:.5rem;color:var(--paper-mute)}
 
 /* Board */
-.board .shell{margin-top:clamp(2rem,5vw,3.5rem)}
+.board figure{margin:clamp(2.25rem,5vw,3.5rem) auto 0;max-width:62rem}
+.board .paper{padding:.6rem}
+.board .crop{max-height:min(74vh,44rem);overflow:hidden;border-radius:3px;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)}
+.board img{display:block;width:100%;height:auto}
 .board figcaption{margin-top:1.25rem;color:var(--mute);text-align:center}
-.board .shell img{aspect-ratio:2880/2900;max-height:none}
-.board .crop{max-height:min(74vh,46rem);overflow:hidden;border-radius:var(--r-lg);-webkit-mask-image:linear-gradient(#000 80%,transparent);mask-image:linear-gradient(#000 80%,transparent)}
-.board .crop img{border-radius:var(--r-lg) var(--r-lg) 0 0}
 
-/* Bento */
-.bento{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;margin-top:clamp(2.5rem,6vw,4rem)}
-.tile{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;gap:.75rem;min-height:15rem;padding:clamp(1.4rem,3vw,2rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);transition:transform .6s var(--ease),box-shadow .6s var(--ease)}
-.tile h3{font-size:clamp(1.45rem,2.6vw,2rem);line-height:1.1;letter-spacing:-.02em}
-.tile p{color:var(--mute)}
-@media (hover:hover){.tile:hover{transform:translateY(-3px);box-shadow:var(--shadow)}}
-.tile .ico{position:absolute;top:clamp(1.4rem,3vw,2rem);left:clamp(1.4rem,3vw,2rem);width:3.25rem}
-.t-plan{grid-column:span 5}.t-check{grid-column:span 7;grid-row:span 2;min-height:24rem;background:linear-gradient(160deg,var(--accent-soft),transparent 60%),var(--surface)}
-.t-write{grid-column:span 5}.t-ai{grid-column:span 7}.t-show{grid-column:span 5}.t-time{grid-column:span 5}.t-lang{grid-column:span 7;background:var(--ink);color:var(--bg);border-color:transparent}
-.t-lang p{color:inherit;opacity:.78}
-.t-check .big{position:absolute;right:-2.5rem;top:-2rem;width:17rem;height:17rem;stroke-width:1;color:var(--accent);opacity:.22}
-.t-lang .pair{position:absolute;top:1.25rem;right:1.75rem;display:flex;gap:1.25rem;align-items:baseline;font-family:"PW Display",serif;font-weight:700;font-size:clamp(3.5rem,8vw,6rem);line-height:1;letter-spacing:-.04em;color:var(--accent)}
-@media (max-width:48rem){.bento{grid-template-columns:1fr}.bento .tile{grid-column:auto!important;grid-row:auto!important;min-height:13rem}.t-check{min-height:17rem!important}.t-check .big{width:12rem;height:12rem}}
+/* What it does: hanging paper tags */
+.tags{display:flex;flex-wrap:wrap;justify-content:center;gap:1.4rem 1.1rem;margin:clamp(2.5rem,6vw,3.5rem) 0 0;padding:0;list-style:none}
+.tags{filter:drop-shadow(4px 7px 4px rgba(16,16,28,.3))}
+.tags li{box-shadow:none;display:flex;align-items:center;gap:.8rem;min-height:4.25rem;padding:.9rem 1.4rem .9rem 2.4rem;font-weight:700;font-size:clamp(1.05rem,2.2vw,1.25rem);line-height:1.25;clip-path:polygon(1.1rem 0,100% 0,100% 100%,1.1rem 100%,0 50%);border-radius:0 10px 8px 0;transition:rotate .5s var(--ease)}
+.tags li::after{content:"";position:absolute;left:.85rem;top:50%;width:.6rem;height:.6rem;translate:0 -50%;border-radius:50%;background:var(--sky);box-shadow:inset 1px 1px 2px rgba(16,16,28,.4)}
+.tags li:nth-child(odd){rotate:-1.5deg}.tags li:nth-child(even){rotate:1.2deg}
+.tags li svg{color:var(--rust)}
+.tags small{display:block;font-weight:400;font-size:.95rem;color:var(--paper-mute)}
+@media (hover:hover){.tags li:hover{rotate:0deg}}
+@media (prefers-color-scheme:dark){.tags li::after{background:var(--navy-2)}}
+.aside{margin:2.5rem auto 0;max-width:40rem;color:var(--mute);font-size:1rem;text-align:center}
 
-/* Safe */
-.safe-panel{margin-top:clamp(2.5rem,6vw,4rem);padding:clamp(.5rem,2vw,1rem) clamp(1.25rem,4vw,3rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);text-align:left}
-.safe-panel ul{list-style:none;margin:0;padding:0}
-.safe-panel li{display:flex;gap:1.1rem;align-items:center;padding-block:1.25rem;font-size:clamp(1.1rem,2.4vw,1.4rem);line-height:1.3}
-.safe-panel li+li{border-top:1px solid var(--line)}
-.safe-panel .ico{width:3rem;flex:none}
-.shield{width:4.5rem;height:4.5rem;margin:0 auto 1.5rem;display:grid;place-items:center;border-radius:var(--r-md);background:var(--accent);color:var(--accent-ink)}
-.shield svg{width:2.4rem;height:2.4rem}
+/* Safe: a cardboard promise sheet */
+.promise{max-width:44rem;margin:clamp(2.25rem,5vw,3.25rem) auto 0;padding:clamp(1.5rem,4vw,2.5rem);background:var(--card);color:var(--paper-ink);text-align:left}
+.promise ul{list-style:none;margin:0;padding:0}
+.promise li{display:flex;gap:1rem;align-items:center;padding-block:1rem;font-weight:700;font-size:clamp(1.1rem,2.4vw,1.35rem);line-height:1.3}
+.promise li+li{border-top:2px dashed rgba(27,26,46,.28)}
+.promise .ico{display:grid;place-items:center;flex:none;width:2.9rem;height:2.9rem;border-radius:50%;background:var(--paper);color:var(--teal-2)}
 
-/* Four ways */
-.ways{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:clamp(2.5rem,6vw,4rem)}
-.way{display:flex;flex-direction:column;gap:.6rem;padding:clamp(1.4rem,3vw,2rem);border-radius:var(--r-lg);background:var(--surface);border:1px solid var(--line)}
-.way .ico{align-self:flex-start;flex:none;width:3.25rem;height:3.25rem;margin-bottom:.5rem}
-.way h3{font-size:clamp(1.5rem,3vw,2.1rem);letter-spacing:-.02em;line-height:1.1}
-.way p{color:var(--mute)}
-.way .link{margin-top:auto;padding-top:.75rem}
-.way.feature{background:linear-gradient(160deg,var(--accent-soft),transparent 65%),var(--surface)}
-@media (max-width:40rem){.ways{grid-template-columns:1fr}}
+/* Compare */
+.table-wrap{margin-top:clamp(2.25rem,5vw,3.25rem);padding:clamp(.75rem,2.5vw,1.5rem);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:1rem;text-align:left}
+caption{caption-side:bottom;padding-top:1rem;color:var(--paper-mute);font-size:.92rem;text-align:left}
+th,td{padding:.85rem .75rem;border-bottom:1px solid rgba(27,26,46,.16);vertical-align:top}
+thead th{font-size:.9rem;letter-spacing:.02em;color:var(--paper-mute)}
+tbody th{font-family:"PW Display",serif;font-size:1.15rem;white-space:nowrap}
+@media (max-width:34rem){table{font-size:.94rem}th,td{padding:.7rem .45rem}tbody th{font-size:1.02rem}}
+tr.us{background:rgba(217,162,46,.2)}
+tr.us th{color:var(--rust-2)}
+.diff{margin:2rem auto 0;max-width:42rem}
+
+/* Ways */
+.ways{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;margin-top:clamp(2.5rem,6vw,3.5rem)}
+@media (max-width:60rem){.ways{grid-template-columns:1fr 1fr}}
+@media (max-width:34rem){.ways{grid-template-columns:1fr}}
+.way{display:flex;flex-direction:column;gap:.5rem;padding:1.5rem;text-align:left}
+.way .ico{display:grid;place-items:center;width:3rem;height:3rem;margin-bottom:.4rem;border-radius:10px 12px 9px 13px;background:var(--teal-2);color:var(--on-dark)}
+.way h3{font-size:1.6rem;letter-spacing:-.02em;line-height:1.1}
+.way p{color:var(--paper-mute)}
+.way .link{margin-top:auto;padding-top:.5rem;color:var(--rust-2)}
+.way.feature{background:var(--paper);outline:3px solid var(--rust);outline-offset:-3px}
+.badge{margin-top:2.25rem}
+
+/* Arabic */
+.ar{font-size:1.2rem;line-height:1.9}
+.ar h2{line-height:1.3;letter-spacing:0}
+.ar .sub{line-height:1.9}
 
 /* FAQ */
-.faq{max-width:46rem;margin:clamp(2rem,5vw,3rem) auto 0;text-align:left;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:64px;padding-block:1rem;cursor:pointer;list-style:none;font-weight:700;font-size:1.2rem;line-height:1.3}
+.faq{margin-top:clamp(2rem,5vw,3rem);padding:.25rem clamp(1rem,3vw,2rem);text-align:left}
+.faq details+details{border-top:1px solid rgba(27,26,46,.16)}
+.faq summary{display:flex;justify-content:space-between;align-items:center;gap:1rem;min-height:64px;padding-block:1rem;cursor:pointer;list-style:none;font-weight:700;font-size:1.15rem;line-height:1.35}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary svg{transition:transform .5s var(--ease);color:var(--mute)}
-.faq details[open] summary svg{transform:rotate(180deg)}
-.faq details p{padding:0 0 1.4rem;color:var(--mute);max-width:38rem}
+.faq summary svg{color:var(--rust);transition:rotate .35s var(--ease)}
+.faq details[open] summary svg{rotate:180deg}
+.faq details p{padding:0 0 1.35rem;color:var(--paper-mute);max-width:38rem}
 
 /* Final + footer */
-.final{padding-bottom:clamp(3rem,7vw,5rem)}
-.final .ctas{margin-top:2rem}
-footer{padding:2.25rem 0 calc(2.5rem + env(safe-area-inset-bottom));border-top:1px solid var(--line);color:var(--mute);font-size:.95rem;letter-spacing:.01em}
-footer .wrap{display:flex;flex-direction:column;gap:.6rem}
-footer a{color:var(--ink)}
-footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}footer .more p{margin:0}footer .more strong{color:var(--ink);font-weight:700}
+.final h2{color:var(--on-dark)}
+.final .ctas{justify-content:center}
+.final .btn.primary{background:var(--paper);color:var(--rust-2)}
+footer{padding:2.5rem 0 calc(2.5rem + env(safe-area-inset-bottom));background:var(--navy-2);color:#C9D6E3;font-size:.98rem}
+footer a{color:var(--on-dark)}
+footer .wrap{display:flex;flex-direction:column;gap:.7rem}
+footer strong{color:var(--on-dark)}
 
-/* Scroll reveal: progressive enhancement, content is visible without JS */
-@media (prefers-reduced-motion:no-preference){
-  .js .rv{opacity:0;transform:translateY(2.5rem) scale(.985);transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--d,0)*70ms)}
-  .js .rv.in{opacity:1;transform:none}
-  @supports (animation-timeline:view()){
-    .stage .shell{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
-    @keyframes rise{from{transform:scale(.93);opacity:.6}to{transform:none;opacity:1}}
-  }
-}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition-duration:.01ms!important}}
-@media (prefers-reduced-transparency:reduce){.nav,.shell{-webkit-backdrop-filter:none;backdrop-filter:none;background:var(--surface)}}
-@media (prefers-contrast:more){:root{--line:currentColor;--mute:var(--ink)}.nav{background:var(--bg)}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important}}
+@media (prefers-contrast:more){body,.band{background-image:none}.paper,.btn,.nav{outline:2px solid currentColor}}
+@media (forced-colors:active){.flag,.tags li{clip-path:none;border:1px solid CanvasText}}
 </style>
 </head>
 <body>
@@ -316,95 +427,107 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
   <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></symbol>
   <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
   <symbol id="i-ban" viewBox="0 0 24 24"><path d="M4.929 4.929 19.07 19.071"/><circle cx="12" cy="12" r="10"/></symbol>
-  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
   <symbol id="i-eye" viewBox="0 0 24 24"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"/><circle cx="12" cy="12" r="3"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 0 0-16 0"/></symbol>
-  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M22 17a2 2 0 0 1-2 2H6.828a2 2 0 0 0-1.414.586l-2.202 2.202A.71.71 0 0 1 2 21.286V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2z"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
   <symbol id="i-plug" viewBox="0 0 24 24"><path d="M12 22v-5"/><path d="M9 8V2"/><path d="M15 8V2"/><path d="M18 8v5a4 4 0 0 1-4 4h-4a4 4 0 0 1-4-4V8Z"/></symbol>
   <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></symbol>
   <symbol id="i-server" viewBox="0 0 24 24"><rect width="20" height="8" x="2" y="2" rx="2" ry="2"/><rect width="20" height="8" x="2" y="14" rx="2" ry="2"/><path d="M6 6h.01"/><path d="M6 18h.01"/></symbol>
   <symbol id="i-monitor" viewBox="0 0 24 24"><rect width="20" height="14" x="2" y="3" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></symbol>
+  <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 3h16l-8 15z"/></symbol>
 </svg>
 
 <a class="skip" href="#main">Skip to content</a>
 
 <nav class="nav" aria-label="Main">
-  <a class="brand" href="#top" translate="no">Profile-Wrap</a>
+  <a class="brand" href="#top" translate="no"><svg class="i" aria-hidden="true" style="color:var(--rust);fill:var(--rust)"><use href="#i-flag"/></svg>Profile-Wrap</a>
+  <ul>
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#compare">Compare</a></li>
+    <li><a href="#questions">Questions</a></li>
+  </ul>
   <a class="btn primary sm" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download</a>
 </nav>
 
 <main id="main">
   <section class="hero" id="top">
     <div class="wrap">
-      <h1 class="rv"><span translate="no">Profile-Wrap</span><span class="h1d">Free, open-source LinkedIn post manager</span></h1>
-      <p class="lead rv" style="--d:1">Your LinkedIn, on autopilot. You stay the boss.</p>
-      <p class="sub rv" style="--d:2">Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
-      <div class="ctas rv" style="--d:3">
-        <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
-        <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="link" href="https://pypi.org/project/profile-wrap/">PyPI package <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-      </div>
-    </div>
-    <div class="stage rv" style="--d:4">
-      <div class="shell">
-        <video id="heroVid" width="1280" height="640" autoplay muted loop playsinline preload="metadata" poster="hero-still.webp" aria-label="Profile-Wrap turns an idea into a checked LinkedIn post. You tap Allow.">
-            <source src="hero.webm" type="video/webm">
-            <source src="hero.mp4" type="video/mp4">
-          </video>
-      </div>
-    </div>
-  </section>
-
-  <section id="how">
-    <div class="wrap center">
-      <h2 class="rv">3 steps. That is all.</h2>
-      <ol class="steps" style="text-align:left">
-        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span><h3>Install it</h3></li>
-        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-chat"/></svg></span><h3>Ask for your week of posts</h3></li>
-        <li class="rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check-circle"/></svg></span><h3>Tap Allow on each post you like</h3></li>
-      </ol>
-    </div>
-  </section>
-
-  <section class="board" id="board">
-    <div class="wrap center">
-      <h2 class="rv">Every post waits for you.</h2>
-      <p class="sub rv">Your board shows each post first. You say go.</p>
-      <figure style="margin:0">
-        <div class="shell rv">
-          <div class="crop"><img src="board.webp" width="2880" height="2900" loading="lazy" alt="The Profile-Wrap review board: a list of posts on the left, one post with its image on the right, and the Allow, Reject and Improve buttons below it."></div>
+      <div>
+        <div class="bunting" aria-hidden="true">
+          <svg class="string" viewBox="0 0 400 36" preserveAspectRatio="none"><path d="M0 6 Q200 34 400 6" fill="none" stroke="#8B5E34" stroke-width="3"/></svg>
+          <div class="flags"><span class="flag">Plan</span><span class="flag">Write</span><span class="flag">Allow</span></div>
         </div>
-        <figcaption class="rv">Your board. Every post waits here until you say go.</figcaption>
+        <h1><span translate="no">Profile-Wrap</span><span class="h1d">Free, open-source LinkedIn post manager</span></h1>
+        <p class="lead">Your LinkedIn, on autopilot. You stay the boss.</p>
+        <p class="sub">Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
+        <div class="ctas">
+          <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download the free app</a>
+          <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </div>
+      <figure class="film" style="margin:0">
+        <div class="paper taped">
+          <video id="film" width="540" height="676" muted loop playsinline preload="none" poster="film-poster.webp" aria-label="A paper-cut film: a cardboard helper writes a LinkedIn post, fills the week's calendar, and every post waits for your approval.">
+            <source src="film.webm" type="video/webm">
+            <source src="film.mp4" type="video/mp4">
+          </video>
+          <button class="ctl" type="button" id="filmCtl" aria-pressed="false" hidden><svg class="i" aria-hidden="true"><use href="#i-pause"/></svg><span>Pause</span></button>
+          <span class="note">10 second loop</span>
+        </div>
       </figure>
     </div>
   </section>
 
-  <section id="does">
-    <div class="wrap">
-      <h2 class="rv center">What it does for you</h2>
-      <div class="bento">
-        <article class="tile t-plan rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><h3>Plans your week of posts</h3></article>
-        <article class="tile t-check rv" style="--d:1"><svg class="i big" aria-hidden="true"><use href="#i-check"/></svg><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg></span><h3>Checks every post before it goes out</h3></article>
-        <article class="tile t-write rv" style="--d:2"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg></span><h3>Writes them in your voice</h3></article>
-        <article class="tile t-ai rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span><h3>Uses your own AI account</h3><p>ChatGPT, Claude or Gemini.</p></article>
-        <article class="tile t-show rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg></span><h3>Shows you each one first</h3><p>You approve.</p></article>
-        <article class="tile t-time rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg></span><h3>Posts at a good time</h3></article>
-        <article class="tile t-lang rv" style="--d:1"><div class="pair" aria-hidden="true"><span>EN</span><span lang="ar" dir="rtl">ع</span></div><h3>Works in English and Arabic</h3><p>Side by side.</p></article>
-      </div>
-      <p class="sub center rv" style="margin-inline:auto;margin-top:2rem">Want to see a person's recent posts? The command <code>profile-wrap read posts</code> can ask two free tools, Apify and Tavily, and then public pages. All are optional and off by default, and you accept the risk of each one yourself.</p>
+  <section class="band b-teal" id="how">
+    <div class="wrap center">
+      <h2>3 steps. That is all.</h2>
+      <ol class="steps">
+        <li class="paper taped pin"><span class="num" aria-hidden="true">1</span><h3>Install it</h3><p>Plugin, skills, MCP server or desktop app. All free.</p></li>
+        <li class="paper taped pin"><span class="num" aria-hidden="true">2</span><h3>Ask for your week of posts</h3><p>It plans the week and writes each post in your voice.</p></li>
+        <li class="paper taped pin"><span class="num" aria-hidden="true">3</span><h3>Tap Allow on each post you like</h3><p>Nothing goes out without you.</p></li>
+      </ol>
     </div>
   </section>
 
-  <section id="safe">
+  <section class="band board" id="board">
     <div class="wrap center">
-      <div class="shield rv"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div>
-      <h2 class="rv">Is it safe?</h2>
-      <div class="safe-panel rv">
+      <h2>Every post waits for you.</h2>
+      <p class="sub">Your board shows each post first. You say go.</p>
+      <figure>
+        <div class="paper taped">
+          <div class="crop"><img src="board.webp" width="2880" height="2900" loading="lazy" decoding="async" alt="The Profile-Wrap review board: a list of posts on the left, one post with its image on the right, and the Allow, Reject and Improve buttons below it."></div>
+        </div>
+        <figcaption>Allow, Reject or Improve. Every post waits here until you say go.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band b-sky" id="does">
+    <div class="wrap center">
+      <h2>What it does for you</h2>
+      <ul class="tags">
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Plans your week of posts</li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg>Writes them in your voice</li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Checks every post before it goes out</li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>Uses your own AI account<small>ChatGPT, Claude, Gemini, or a free local one</small></span></li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg>Shows you each one first</li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>Posts at a good time</li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>Works in English and Arabic</li>
+      </ul>
+      <p class="aside">Want to see a person's recent posts? The command <code>profile-wrap read posts</code> can ask two free tools, Apify and Tavily, and then public pages. All are optional and off by default, and you accept the risk of each one yourself.</p>
+    </div>
+  </section>
+
+  <section class="band" id="safe">
+    <div class="wrap center">
+      <h2>Is it safe?</h2>
+      <div class="paper promise taped">
         <ul>
-          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></span>It uses LinkedIn's own official way in.</li>
+          <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></span>It uses LinkedIn's official API, through your own free developer app.</li>
           <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-ban"/></svg></span>It never asks for your LinkedIn password.</li>
           <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-ban"/></svg></span>It never reads your private messages.</li>
           <li><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-check-circle"/></svg></span>Nothing goes out unless you tap Allow.</li>
@@ -413,28 +536,64 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
     </div>
   </section>
 
-  <section id="ways">
-    <div class="wrap center">
-      <h2 class="rv">Pick how you want it.</h2>
-      <p class="sub rv">All free.</p>
-      <div class="ways" style="text-align:left">
-        <article class="way rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-plug"/></svg></span><h3>Plugin</h3><p>For Claude Code and Codex.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#plugin">Install steps <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
-        <article class="way rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Skills</h3><p>For any AI agent that reads skills.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#skills">Get the skills <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
-        <article class="way rv"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg></span><h3>MCP server</h3><p>For any app that speaks MCP.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#mcp">Set it up <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
-        <article class="way feature rv" style="--d:1"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-monitor"/></svg></span><h3>Desktop app</h3><p>No AI app? Use this. Windows, Mac and Linux.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Get the app <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+  <section class="band b-paper" id="compare">
+    <div class="narrow center">
+      <h2>Profile-Wrap and other LinkedIn post tools</h2>
+      <p class="sub">What it costs to start, from each tool's own pricing page.</p>
+    </div>
+    <div class="wrap">
+      <div class="paper table-wrap" style="max-width:52rem;margin-inline:auto">
+        <table>
+          <caption>Prices checked on 24 October 2026 at <a href="https://buffer.com/pricing" rel="noopener">buffer.com/pricing</a>, <a href="https://taplio.com/pricing" rel="noopener">taplio.com/pricing</a>, <a href="https://authoredup.com/pricing" rel="noopener">authoredup.com/pricing</a> and the <a href="https://github.com/gitroomhq/postiz-app" rel="noopener">Postiz repository</a>. Prices change; check the source.</caption>
+          <thead><tr><th scope="col">Tool</th><th scope="col">Cost to start</th><th scope="col">Free option</th></tr></thead>
+          <tbody>
+            <tr class="us"><th scope="row" translate="no">Profile-Wrap</th><td>$0</td><td>Free and open source (MIT)</td></tr>
+            <tr><th scope="row">Buffer</th><td>From $5 a month</td><td>Free plan</td></tr>
+            <tr><th scope="row">AuthoredUp</th><td>$16.63 a month, billed yearly</td><td>Free trial</td></tr>
+            <tr><th scope="row">Taplio</th><td>$39 a month</td><td>Free trial</td></tr>
+            <tr><th scope="row">Postiz</th><td>Free to self-host</td><td>Open source (AGPL-3.0)</td></tr>
+          </tbody>
+        </table>
       </div>
-      <p class="rv" style="margin-top:2rem"><a href="https://mcprush.com/nj-burrito/profile-wrap-mcp" rel="noopener"><img width="380" height="200" style="max-width:100%;height:auto" src="https://mcprush.com/badge/profile-wrap-mcp/card.svg" alt="Profile-Wrap MCP server, graded A on mcprush" loading="lazy"></a></p>
+      <p class="sub center diff">What sets Profile-Wrap apart: it runs on your own computer or inside your AI app (Claude Code, Codex, or any app that speaks MCP), and every post waits on your board until you tap Allow.</p>
     </div>
   </section>
 
-  <section id="questions">
+  <section class="band b-mustard" id="ways">
     <div class="wrap center">
-      <h2 class="rv">Questions</h2>
-      <div class="faq rv">
+      <h2>Pick how you want it.</h2>
+      <p class="sub">All free.</p>
+      <div class="ways">
+        <article class="way paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-plug"/></svg></span><h3>Plugin</h3><p>For Claude Code and Codex.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#plugin">Install steps <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg></span><h3>Skills</h3><p>For any AI agent that reads skills.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#skills">Get the skills <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg></span><h3>MCP server</h3><p>For any app that speaks MCP.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#mcp">Set it up <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+        <article class="way feature paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-monitor"/></svg></span><h3>Desktop app</h3><p>No AI app? Use this. Windows, Mac and Linux.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Get the app <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
+      </div>
+      <p class="badge"><a href="https://mcprush.com/nj-burrito/profile-wrap-mcp" rel="noopener"><img width="380" height="200" style="max-width:100%;height:auto" src="https://mcprush.com/badge/profile-wrap-mcp/card.svg" alt="Profile-Wrap MCP server, graded A on mcprush" loading="lazy" decoding="async"></a></p>
+    </div>
+  </section>
+
+  <section class="band b-teal ar" id="ar" lang="ar" dir="rtl">
+    <div class="narrow center">
+      <h2><span translate="no" dir="ltr">Profile-Wrap</span> بالعربية</h2>
+      <p class="sub"><span translate="no" dir="ltr">Profile-Wrap</span> مدير منشورات لينكدإن مجاني ومفتوح المصدر. يخطط منشورات أسبوعك، ويكتبها بأسلوبك، ويفحص كل منشور قبل نشره. لا يُنشر شيء حتى توافق عليه بنفسك.</p>
+      <p class="sub">يعمل بالعربية والإنجليزية، على ويندوز وماك ولينكس.</p>
+      <div class="ctas" style="justify-content:center">
+        <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>حمّل التطبيق المجاني</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="questions">
+    <div class="narrow center">
+      <h2>Questions</h2>
+      <div class="paper faq">
         <details><summary>What is Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name.</p></details>
+        <details><summary>Is there a free, open-source LinkedIn post scheduler?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, posts each one at a good time, and only after you tap Allow.</p></details>
+        <details><summary>How is Profile-Wrap different from Buffer or Taplio?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses your own AI account. On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month.</p></details>
         <details><summary>Who makes Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence.</p></details>
         <details><summary>Is it free?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).</p></details>
-        <details><summary>Is it safe to connect to LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>It uses LinkedIn's own official way in. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.</p></details>
+        <details><summary>Is it safe to connect to LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>It uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.</p></details>
         <details><summary>Does Profile-Wrap post without asking me?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts.</p></details>
         <details><summary>Do I need to code?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Install, ask, tap. That is it.</p></details>
         <details><summary>Which one should I pick: plugin, skills, MCP server or desktop app?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.</p></details>
@@ -446,12 +605,12 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
     </div>
   </section>
 
-  <section class="final">
+  <section class="band b-rust final">
     <div class="wrap center">
-      <h2 class="rv">Free, and you can stop any time.</h2>
-      <p class="sub rv">Profile-Wrap is free under the MIT licence.</p>
-      <div class="ctas rv">
-        <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download the latest release<span class="dot"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg></span></a>
+      <h2>Free, and you can stop any time.</h2>
+      <p class="sub">Profile-Wrap is free under the MIT licence.</p>
+      <div class="ctas">
+        <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download the free app</a>
         <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-code"/></svg></a>
         <a class="link" href="https://pypi.org/project/profile-wrap/">PyPI package <svg class="i" aria-hidden="true"><use href="#i-package"/></svg></a>
       </div>
@@ -461,24 +620,52 @@ footer .more{display:flex;flex-direction:column;gap:.4rem;padding-bottom:.6rem}f
 
 <footer>
   <div class="wrap">
-    <p><a href="#how">How it works</a> · <a href="#board">Review board</a> · <a href="#safe">Is it safe?</a> · <a href="#ways">Ways to install</a> · <a href="#questions">Questions</a></p>
+    <p><a href="#how">How it works</a> · <a href="#board">Review board</a> · <a href="#safe">Is it safe?</a> · <a href="#compare">Compare</a> · <a href="#ways">Ways to install</a> · <a href="#ar" lang="ar">بالعربية</a> · <a href="#questions">Questions</a></p>
     <p>Made by <a href="https://www.linkedin.com/in/nader-alzghoul">Nader Alzghoul</a> on LinkedIn. Code on <a href="https://github.com/NJ-Burrito">GitHub</a>. <a href="https://nj-burrito.github.io/">Maker portfolio</a>.</p>
-    <div class="more">
-      <p lang="en"><strong>More from NJ:</strong> <a href="https://nj-burrito.github.io/">Portfolio</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>, a free working method for Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>, a QA toolkit that lives in your browser · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
-      <p lang="ar" dir="rtl"><strong>المزيد من نادر:</strong> <a href="https://nj-burrito.github.io/">الموقع الشخصي</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>، منهج عمل مجاني لـ Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>، أداة اختبار جودة تعمل داخل المتصفح · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
-    </div>
+    <p lang="en"><strong>More from NJ:</strong> <a href="https://nj-burrito.github.io/">Portfolio</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>, a free working method for Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>, a QA toolkit that lives in your browser · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
+    <p lang="ar" dir="rtl"><strong>المزيد من نادر:</strong> <a href="https://nj-burrito.github.io/">الموقع الشخصي</a> · <a href="https://nj-burrito.github.io/NJ-Kit/">NJ-Kit</a>، منهج عمل مجاني لـ Claude Code · <a href="https://nj-burrito.github.io/QA-Wrap/">QA-Wrap</a>، أداة اختبار جودة تعمل داخل المتصفح · <a href="https://github.com/NJ-Burrito">GitHub</a> · <a href="https://www.linkedin.com/in/nader-alzghoul">LinkedIn</a></p>
     <p>Profile-Wrap is not affiliated with or endorsed by LinkedIn. Free and open source under the MIT licence.</p>
   </div>
 </footer>
 
 <script>
 (function(){
-  var els=document.querySelectorAll(".rv");
-  if(!("IntersectionObserver" in window)){els.forEach(function(e){e.classList.add("in")});return}
-  var io=new IntersectionObserver(function(entries){
-    entries.forEach(function(en){if(en.isIntersecting){en.target.classList.add("in");io.unobserve(en.target)}});
-  },{rootMargin:"0px 0px -8% 0px",threshold:.08});
-  els.forEach(function(e){io.observe(e)});
+  var reduce = matchMedia("(prefers-reduced-motion: reduce)");
+  /* Arabic faces load after the page: the Latin subsets carry the first screen, the full Thmanyah files carry the Arabic. */
+  function arabicFonts(){ var st = document.createElement("style"); st.textContent = "@font-face{font-family:\"PW Display\";src:url(\"fonts/display-bold.woff2\") format(\"woff2\");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}@font-face{font-family:\"PW Sans\";src:url(\"fonts/sans-regular.woff2\") format(\"woff2\");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}@font-face{font-family:\"PW Sans\";src:url(\"fonts/sans-bold.woff2\") format(\"woff2\");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}"; document.head.appendChild(st); }
+  var v = document.getElementById("film"), b = document.getElementById("filmCtl");
+  /* The film plays only when motion is allowed and it is on screen; a visible Pause control is always offered (WCAG 2.2.2). */
+  if (v && b) {
+    b.hidden = false;
+    var userPaused = reduce.matches;
+    function label(){ var p = v.paused; b.setAttribute("aria-pressed", String(!p)); b.querySelector("span").textContent = p ? "Play" : "Pause"; b.querySelector("use").setAttribute("href", p ? "#i-play" : "#i-pause"); }
+    b.addEventListener("click", function(){ if (v.paused) { userPaused = false; v.play().catch(function(){}); } else { userPaused = true; v.pause(); } });
+    v.addEventListener("play", label); v.addEventListener("pause", label);
+    if ("IntersectionObserver" in window) new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting && !userPaused) v.play().catch(function(){}); else if (!e.isIntersecting) v.pause(); }); }, { threshold: .25 }).observe(v);
+    label();
+  }
+  /* FAQ: open one answer at a time keeps the list short for a skimming reader. */
+  document.querySelectorAll(".faq details").forEach(function(d){ d.addEventListener("toggle", function(){ if (d.open) document.querySelectorAll(".faq details[open]").forEach(function(o){ if (o !== d) o.open = false; }); }); });
+  /* Stop-motion layer: GSAP is fetched only when motion is allowed, after the page has loaded. Content is never hidden. */
+  function add(src, sri){ return new Promise(function(ok, no){ var s = document.createElement("script"); s.src = src; s.integrity = sri; s.crossOrigin = "anonymous"; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+  function boot(){
+    add("https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js", "sha384-XmJ9SoHtVOHoQUcKvFAzVXwdkKo1Ie3bhmSoIAkcdsHGaIrVJIkmozyq0FJeb/Ly")
+    .then(function(){ return add("https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js", "sha384-wl5TeDVvOWt30Pbf8aSo2ZrzsOjddu3avOBvHe+p+OhJt9gP6w9YXmDkN5DK2/dF"); })
+    .then(function(){
+      var gsap = window.gsap; gsap.registerPlugin(window.ScrollTrigger);
+      var mm = gsap.matchMedia();
+      mm.add("(prefers-reduced-motion: no-preference)", function(){
+        /* Flags swing on their string in stepped frames, like the launch film, then settle. */
+        gsap.fromTo(".flag", { rotation: function(i){ return [-18, 15, -14][i]; }, y: -10 }, { rotation: 0, y: 0, duration: 1.1, ease: "steps(7)", stagger: .16, clearProps: "y" });
+        gsap.fromTo(".film .paper", { rotation: -7, y: 24 }, { rotation: 0, y: 0, duration: .8, ease: "steps(6)", delay: .25 });
+        /* Paper cards are placed by hand as they scroll in: a short stepped drop from a tilt. */
+        window.ScrollTrigger.batch(".pin", { start: "top 92%", once: true, onEnter: function(els){ gsap.from(els, { y: 26, rotation: function(i){ return i % 2 ? 4 : -4; }, duration: .5, ease: "steps(5)", stagger: .09, overwrite: true }); } });
+      });
+    }).catch(function(){});
+  }
+  function later(fn){ var go = function(){ setTimeout(function(){ ("requestIdleCallback" in window) ? requestIdleCallback(fn, { timeout: 1500 }) : fn(); }, 1200); }; if (document.readyState === "complete") go(); else addEventListener("load", go); }
+  later(arabicFonts);
+  if (!reduce.matches) later(boot);
 })();
 </script>
 </body>

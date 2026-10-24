@@ -32,22 +32,6 @@ It plans your week of posts, writes them in your voice and checks each one.
 
 </div>
 
-## 3 steps (any of the four)
-
-1️⃣ **Install** it
-
-2️⃣ **Ask** for your week of posts
-
-3️⃣ **Tap Allow** on each post you like
-
-That is all.
-
-Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESKTOP.md)
-
-![Your review board: every post waits here until you tap Allow](docs/assets/board.png)
-
-👆 Your board. Allow, Reject or Improve. Every post waits here until you say go.
-
 <a id="plugin"></a>
 
 ## 🧩 Plugin
@@ -95,6 +79,22 @@ Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registr
 
 Not sure which Mac you have? Click the Apple menu, then About This Mac.
 
+## 3 steps (any of the four)
+
+1️⃣ **Install** it
+
+2️⃣ **Ask** for your week of posts
+
+3️⃣ **Tap Allow** on each post you like
+
+That is all.
+
+Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESKTOP.md)
+
+![Your review board: every post waits here until you tap Allow](docs/assets/board.png)
+
+👆 Your board. Allow, Reject or Improve. Every post waits here until you say go.
+
 ## What it does for you
 
 📅 Plans your week of posts
@@ -115,7 +115,7 @@ Not sure which Mac you have? Click the Apple menu, then About This Mac.
 
 ## Is it safe?
 
-🔒 It uses LinkedIn's official API, through your own free developer app ([setup guide](docs/linkedin-app-setup.md))
+🔒 It uses LinkedIn's own official way in, through your own free LinkedIn app ([setup guide](docs/linkedin-app-setup.md))
 
 🙈 It never asks for your LinkedIn password
 
@@ -152,12 +152,6 @@ No. Install, ask, tap. That is it.
 
 **Which one should I pick?**
 Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.
-
-**Mac or Windows?**
-Both. Linux too.
-
-**Arabic?**
-Yes. Arabic and English, side by side.
 
 **What if I don't like a post?**
 Tap Reject, or ask for a better one. Nothing posts without you.

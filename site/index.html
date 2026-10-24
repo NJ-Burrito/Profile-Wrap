@@ -631,7 +631,7 @@ footer strong{color:var(--on-dark)}
 <script>
 (function(){
   var reduce = matchMedia("(prefers-reduced-motion: reduce)");
-  /* Arabic faces load after the page: the Latin subsets carry the first screen, the full Thmanyah files carry the Arabic. */
+  /* Arabic faces load after the page: the Latin subsets carry the first screen, the full font files carry the Arabic. */
   function arabicFonts(){ var st = document.createElement("style"); st.textContent = "@font-face{font-family:\"PW Display\";src:url(\"fonts/display-bold.woff2\") format(\"woff2\");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}@font-face{font-family:\"PW Sans\";src:url(\"fonts/sans-regular.woff2\") format(\"woff2\");font-weight:400;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}@font-face{font-family:\"PW Sans\";src:url(\"fonts/sans-bold.woff2\") format(\"woff2\");font-weight:700;font-style:normal;font-display:swap;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}"; document.head.appendChild(st); }
   var v = document.getElementById("film"), b = document.getElementById("filmCtl");
   /* The film plays only when motion is allowed and it is on screen; a visible Pause control is always offered (WCAG 2.2.2). */

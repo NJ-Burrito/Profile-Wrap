@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="docs/assets/hero.gif" alt="A paper-cut film: a cardboard helper writes a LinkedIn post, fills the week's calendar, and every post waits for your approval." width="360">
+<img src="docs/assets/hero.gif" alt="Profile-Wrap turns an idea into a checked LinkedIn post: idea, facts, GIF post, review, official API, posted. You tap Allow." width="640">
 
 # Profile-Wrap
 

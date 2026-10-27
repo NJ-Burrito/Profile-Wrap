@@ -5,6 +5,7 @@
 Not related to woodworking machines or other products with a similar name.
 
 - [Website](https://nj-burrito.github.io/Profile-Wrap/): what it does, the 3 steps, the review board, a price comparison, FAQ, a short Arabic summary
+- [الموقع بالعربية](https://nj-burrito.github.io/Profile-Wrap/ar/): Arabic version of the website, with its own FAQ
 - [Source code](https://github.com/NJ-Burrito/Profile-Wrap): README, issues, MIT licence
 - [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.3.0 at the time of writing
 - [PyPI package](https://pypi.org/project/profile-wrap/)

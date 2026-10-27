@@ -61,7 +61,7 @@ Then say: **"set up Profile-Wrap"**. Claude Code gets 5 skills, 6 commands and t
 
 5 skills: **setup**, **plan**, **write**, **visuals**, **ship**.
 
-Get them on [Smithery](https://smithery.ai/skills/naderalzghoulbusiness), or copy the [`.agents/skills`](.agents/skills) folder into your agent.
+Get them on [Smithery](https://smithery.ai/skills), or copy the [`.agents/skills`](.agents/skills) folder into your agent.
 
 <a id="mcp"></a>
 

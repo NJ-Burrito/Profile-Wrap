@@ -4,9 +4,19 @@
 
 # Profile-Wrap
 
-### Free, open-source LinkedIn post manager
+## Your LinkedIn, on autopilot.
 
-## Your LinkedIn, on autopilot. You stay the boss.
+**Free post manager. You stay the boss.**
+
+- ✍️ **Writes your week of posts** in your voice
+- ✅ **Checks every post** before it can go out
+- 🔒 **Nothing is posted until you tap Allow**
+
+[**⬇️ Download the free app**](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
+
+</div>
+
+---
 
 [![CI](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
@@ -19,9 +29,7 @@
 
 **Profile-Wrap is a free, open-source LinkedIn post manager and scheduler.**
 It plans your week of posts, writes them in your voice and checks each one.
-**Nothing goes out until you tap Allow.**
-
-[**⬇️ Download the free app**](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest) · [🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [📦 PyPI](https://pypi.org/project/profile-wrap/)
+[🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [📦 PyPI](https://pypi.org/project/profile-wrap/)
 
 ### Pick how you want it. All free. 👇
 
@@ -29,8 +37,6 @@ It plans your week of posts, writes them in your voice and checks each one.
 |:---:|:---:|:---:|:---:|
 | For **Claude Code** and **Codex** | For any AI agent that reads skills | For any app that speaks MCP | No AI app? Use this |
 | [Install ↓](#plugin) | [Install ↓](#skills) | [Install ↓](#mcp) | [Download ↓](#app) |
-
-</div>
 
 <a id="plugin"></a>
 

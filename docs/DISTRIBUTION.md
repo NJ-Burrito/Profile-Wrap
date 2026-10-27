@@ -22,7 +22,7 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 | Official MCP Registry | PyPI `profile-wrap-mcp` live | The maintainer (login) | done | 2026-10-16 | io.github.NJ-Burrito/profile-wrap-mcp 0.2.1 |
 | mcp.so | public repo | The maintainer | skipped (paid listing; Profile-Wrap stays free) | 2026-10-16 | |
 | Glama | `glama.json` on `main` | The maintainer (claim) | submitted for review | 2026-10-16 | glama.ai/mcp/servers |
-| Smithery | Agent Skills on `main` | The maintainer (login) | done: 5 skills (the MCP form takes hosted URLs only) | 2026-10-16 | smithery.ai/skills/naderalzghoulbusiness |
+| Smithery | Agent Skills on `main` | The maintainer (login) | done: 5 skills (the MCP form takes hosted URLs only) | 2026-10-16 | smithery.ai/skills |
 | Anthropic plugin directory | PyPI `profile-wrap-mcp` live | The maintainer (paid claude.ai) | submitted for review; push webhook live | 2026-10-16 | |
 
 ## 1. PyPI, trusted publishing (no token stored anywhere)

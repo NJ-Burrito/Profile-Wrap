@@ -22,8 +22,8 @@ jobs:
         python: ["3.10", "3.12"]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: ${{ matrix.python }}
       - name: Install
@@ -43,8 +43,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.12"
       - name: Install the way the README says
@@ -61,10 +61,22 @@ jobs:
       # A repository secret holding the salted-hash JSON (hashes only, never the terms).
       LEAK_DENYLIST_JSON: ${{ secrets.PROFILE_WRAP_LEAK_DENYLIST_JSON }}
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7
         with:
           python-version: "3.12"
+      - name: Require the private denylist (fail, never skip, on push and schedule)
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ -z "$LEAK_DENYLIST_JSON" ]; then
+            if [ "$EVENT_NAME" = "pull_request" ]; then
+              echo "::warning::private denylist not available to this pull request (fork or Dependabot); the private-term scan did not run"
+            else
+              echo "::error::PROFILE_WRAP_LEAK_DENYLIST_JSON is missing: the private-term scan cannot run. Add the repository secret (hashes only)."
+              exit 1
+            fi
+          fi
       - name: Write denylist outside the checkout
         if: env.LEAK_DENYLIST_JSON != ''
         run: |

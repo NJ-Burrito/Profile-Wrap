@@ -12,7 +12,6 @@ from __future__ import annotations
 import http.server
 import json
 import os
-import socket
 import socketserver
 import sys
 import time
@@ -143,21 +142,8 @@ class _QuietServer(http.server.HTTPServer):
         self.server_port = self.server_address[1]
 
 
-def _make_server(host_v6: bool, port: int, handler: type) -> http.server.HTTPServer:
-    if host_v6 and socket.has_ipv6:
-        class DualStack(_QuietServer):
-            address_family = socket.AF_INET6
-
-            def server_bind(self) -> None:
-                try:
-                    self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
-                except (OSError, AttributeError):
-                    pass
-                super().server_bind()
-        try:
-            return DualStack(("::", port), handler)
-        except OSError:
-            pass  # IPv6 is switched off on this machine: use IPv4 only
+def _make_server(port: int, handler: type) -> http.server.HTTPServer:
+    """The sign-in listener binds the IPv4 loopback only, never "::" or "0.0.0.0" (nothing on the LAN can reach it)."""
     return _QuietServer(("127.0.0.1", port), handler)
 
 
@@ -186,7 +172,7 @@ def wait_for_callback(redirect_uri: str, state: str, timeout: float = CALLBACK_T
             return
 
     try:
-        srv = _make_server(True, port, Handler)
+        srv = _make_server(port, Handler)
     except OSError as exc:
         raise AuthError(f"cannot listen on port {port} for the redirect ({exc}). "
                         "Use 'profile-wrap auth --paste-redirect' instead.") from exc

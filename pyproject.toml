@@ -30,12 +30,12 @@ dependencies = [
 
 [project.optional-dependencies]
 tz = ["tzdata"]
-media = ["pillow", "numpy", "scipy"]
+media = ["pillow>=13.0.0; python_version >= '3.11'", "pillow; python_version < '3.11'", "numpy", "scipy"]
 xlsx = ["openpyxl"]
 sig = ["fonttools", "scikit-image"]
 keys = ["keyring"]
 gui = ["pywebview", "keyring"]
-dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow", "keyring", "pyyaml", "tomli; python_version < '3.11'"]
+dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow>=13.0.0; python_version >= '3.11'", "pillow; python_version < '3.11'", "keyring", "pyyaml", "tomli; python_version < '3.11'"]
 
 [project.urls]
 Homepage = "https://github.com/NJ-Burrito/Profile-Wrap"

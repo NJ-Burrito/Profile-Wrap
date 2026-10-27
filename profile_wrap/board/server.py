@@ -17,7 +17,7 @@ import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any, Callable, Dict, Optional, Tuple
-from urllib.parse import urlsplit
+from urllib.parse import parse_qs, urlsplit
 
 from .. import __version__, config as config_mod, limits, policy, updates
 from ..notify import notify as desktop_notify
@@ -170,7 +170,8 @@ class BoardServer:
 
     @property
     def url(self) -> str:
-        return f"http://127.0.0.1:{self.port}/" if self.host != "::1" else f"http://[::1]:{self.port}/"
+        host = "127.0.0.1" if self.host != "::1" else "[::1]"
+        return f"http://{host}:{self.port}/?t={self.app.token}"
 
     @property
     def token(self) -> str:
@@ -290,6 +291,10 @@ def _make_handler(app: BoardApp):
         def route_get(self) -> None:
             raw = urlsplit(self.path).path
             if raw in ("/", "/index.html"):
+                supplied = parse_qs(urlsplit(self.path).query).get("t", [None])[0]
+                if not security.token_ok(supplied, app.token):
+                    return self.send_bytes(403, b"Open the board from the link that profile-wrap prints: this page needs its launch token.",
+                                           "text/plain; charset=utf-8")
                 return self.send_bytes(200, app.index_html(), "text/html; charset=utf-8")
             if raw in STATIC:
                 name, ctype = STATIC[raw]

@@ -174,7 +174,9 @@ def test_every_response_carries_the_hardening_headers(board, ws):
 def test_the_token_appears_only_in_the_page_never_in_an_api_answer(board, ws):
     srv, c = board
     make_draft(ws, "s1", media=True)
-    code, _h, page = c.get("/")
+    assert c.get("/")[0] == 403 and c.get("/?t=wrong")[0] == 403   # the page does not hand out its token
+    assert srv.token.encode() not in c.get("/")[2]
+    code, _h, page = c.get(f"/?t={srv.token}")
     assert code == 200 and srv.token.encode() in page
     for path in ("/api/state", "/api/health", "/api/draft/s1", "/api/pending", "/api/connect", "/api/profile",
                  "/api/metrics", "/api/settings", "/app/board.js", "/app/board.css", "/i18n/en.json", "/app/fonts.css"):
@@ -184,7 +186,7 @@ def test_the_token_appears_only_in_the_page_never_in_an_api_answer(board, ws):
 
 def test_the_page_has_no_inline_script_or_style_and_the_app_never_uses_innerhtml(board):
     srv, c = board
-    page = c.get("/")[2].decode()
+    page = c.get(f"/?t={srv.token}")[2].decode()
     assert "<script>" not in page and "<style" not in page and "onclick=" not in page and ' style="' not in page
     js = c.get("/app/board.js")[2].decode()
     assert "innerHTML" not in js and "document.write" not in js and "eval(" not in js
@@ -262,3 +264,9 @@ def test_security_helpers_directly():
     for bad in (good.replace("https", "http"), "https://linkedin.com.evil.example/", "javascript:alert(1)",
                 good + " x", None, 5):
         assert security.safe_linkedin_url(bad) is None
+
+
+def test_the_launch_url_carries_the_token_and_opens_the_page(board):
+    srv, c = board
+    assert srv.url.endswith(f"/?t={srv.token}")
+    assert c.get(srv.url.split(str(srv.port), 1)[1])[0] == 200

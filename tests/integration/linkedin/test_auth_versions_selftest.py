@@ -222,3 +222,12 @@ def test_403_on_the_extra_falls_back_to_draft_and_the_post_stays_live(env):
     assert social_extra.read_record(env.ws)["result"] == "disabled"
     assert social_extra.enabled(env.ws, env.cfg())[0] is False
     assert env.meta("a")["status"] == "posted"
+
+
+def test_the_sign_in_listener_binds_ipv4_loopback_only():
+    import http.server
+    srv = auth._make_server(0, http.server.BaseHTTPRequestHandler)
+    try:
+        assert srv.server_address[0] == "127.0.0.1"
+    finally:
+        srv.server_close()

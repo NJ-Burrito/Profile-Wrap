@@ -2,6 +2,8 @@
 <html lang="en" dir="ltr">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'sha256-qOhFsq0QMV2REqNwk5hGH5bZE9SkX6gt6yeyKdYPv+U=' 'sha256-2djHSUkefYGrC8ARDt208cK7FPojLo+JdE/HdAqPFtQ=' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; media-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" content="#F1E6CB" media="(prefers-color-scheme: light)">
@@ -219,6 +221,14 @@
           "acceptedAnswer": {
             "@type": "Answer",
             "text": "Yes. The app is new and unsigned, so your computer may ask once. The picture guide shows what to tap."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I check my download?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Compare your file with SHA256SUMS on the release page, or run gh attestation verify <file> --repo NJ-Burrito/Profile-Wrap."
           }
         }
       ]
@@ -573,7 +583,7 @@ footer strong{color:var(--on-dark)}
         <article class="way paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-server"/></svg></span><h3>MCP server</h3><p>For any app that speaks MCP.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap#mcp">Set it up <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
         <article class="way feature paper pin"><span class="ico"><svg class="i" aria-hidden="true"><use href="#i-monitor"/></svg></span><h3>Desktop app</h3><p>No AI app? Use this. Windows, Mac and Linux.</p><a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Get the app <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></article>
       </div>
-      <p class="badge"><a href="https://mcprush.com/nj-burrito/profile-wrap-mcp" rel="noopener"><img width="380" height="200" style="max-width:100%;height:auto" src="https://mcprush.com/badge/profile-wrap-mcp/card.svg" alt="Profile-Wrap MCP server, graded A on mcprush" loading="lazy" decoding="async"></a></p>
+      <p class="badge"><a href="https://mcprush.com/nj-burrito/profile-wrap-mcp" rel="noopener"><img width="380" height="200" style="max-width:100%;height:auto" src="mcprush-card.svg" alt="Profile-Wrap MCP server, graded A on mcprush" loading="lazy" decoding="async"></a></p>
     </div>
   </section>
 
@@ -606,6 +616,7 @@ footer strong{color:var(--on-dark)}
         <details><summary>Does it work in Arabic?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Arabic and English, side by side.</p></details>
         <details><summary>Is Profile-Wrap made or endorsed by LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. It is an independent project, not affiliated with or endorsed by LinkedIn.</p></details>
         <details><summary>My computer asks "are you sure?". Is that normal?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is new and unsigned, so your computer may ask once. The <a href="https://github.com/NJ-Burrito/Profile-Wrap/blob/main/docs/INSTALL-DESKTOP.md">picture guide</a> shows what to tap.</p></details>
+        <details><summary>How do I check my download?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Compare your file with SHA256SUMS on the release page, or run <code>gh attestation verify &lt;file&gt; --repo NJ-Burrito/Profile-Wrap</code>.</p></details>
       </div>
     </div>
   </section>

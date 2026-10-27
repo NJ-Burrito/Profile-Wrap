@@ -21,24 +21,35 @@ jobs:
   version:
     name: resolve version
     runs-on: ubuntu-latest
+    permissions: {}
     outputs:
       version: ${{ steps.v.outputs.version }}
       is_tag: ${{ steps.v.outputs.is_tag }}
     steps:
       - id: v
         shell: bash
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
         run: |
           if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
-            echo "is_tag=true" >> "$GITHUB_OUTPUT"
+            VERSION="${GITHUB_REF_NAME#v}"
+            IS_TAG=true
           else
-            echo "version=${{ inputs.version }}" >> "$GITHUB_OUTPUT"
-            echo "is_tag=false" >> "$GITHUB_OUTPUT"
+            VERSION="$INPUT_VERSION"
+            IS_TAG=false
           fi
+          if [[ ! "$VERSION" =~ ^[0-9A-Za-z.+-]+$ ]]; then
+            echo "::error::invalid version label"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "is_tag=$IS_TAG" >> "$GITHUB_OUTPUT"
 
   desktop:
     name: desktop build (${{ matrix.label }})
     needs: version
+    permissions:
+      contents: read
     strategy:
       fail-fast: false
       matrix:
@@ -49,8 +60,8 @@ jobs:
           - { label: linux-x64, os: ubuntu-latest }
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
       - name: Linux web view libraries
@@ -62,12 +73,14 @@ jobs:
       - name: Install build tools
         run: python -m pip install --upgrade pip && python -m pip install . pyinstaller pywebview keyring
       - name: Build the app, run --selftest on it, pack it
-        run: python release/desktop/build.py --version "${{ needs.version.outputs.version }}" --out dist-release
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: python release/desktop/build.py --version "$VERSION" --out dist-release
       - name: Smoke test the packed artifact (--selftest from a fresh unpack)
         shell: bash
         run: |
           for f in dist-release/*; do python release/desktop/selftest_artifact.py "$f"; done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: desktop-${{ matrix.label }}
           path: dist-release/*
@@ -76,9 +89,11 @@ jobs:
   python-dist:
     name: python packages (sdist and wheel)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip build
@@ -86,7 +101,7 @@ jobs:
         run: python -m build --outdir dist/profile-wrap .
       - name: Build profile-wrap-mcp
         run: python -m build --outdir dist/profile-wrap-mcp mcp
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: python-dist
           path: dist/
@@ -101,7 +116,7 @@ jobs:
       id-token: write
       attestations: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           path: collected
       - name: Gather release files and write SHA256SUMS
@@ -111,10 +126,10 @@ jobs:
           cd release-files && sha256sum * > SHA256SUMS && cat SHA256SUMS
       - name: Attest build provenance
         if: startsWith(github.ref, 'refs/tags/v')
-        uses: actions/attest-build-provenance@v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: "release-files/*"
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: release-files
           path: release-files/*
@@ -129,12 +144,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: python-dist
           path: dist
       - name: Publish profile-wrap
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist/profile-wrap
 
@@ -148,12 +163,12 @@ jobs:
     permissions:
       id-token: write
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: python-dist
           path: dist
       - name: Publish profile-wrap-mcp
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
         with:
           packages-dir: dist/profile-wrap-mcp
 
@@ -165,13 +180,15 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: release-files
           path: release-files
       - name: Notes from the CHANGELOG section
-        run: python release/desktop/changelog_section.py "${{ needs.version.outputs.version }}" CHANGELOG.md > notes.md
+        env:
+          VERSION: ${{ needs.version.outputs.version }}
+        run: python release/desktop/changelog_section.py "$VERSION" CHANGELOG.md > notes.md
       - name: Create the release
         env:
           GH_TOKEN: ${{ github.token }}

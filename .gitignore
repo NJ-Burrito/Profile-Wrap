@@ -50,3 +50,7 @@ node_modules/
 work/
 .DS_Store
 Thumbs.db
+
+# Profiler dumps
+*.out
+*.prof

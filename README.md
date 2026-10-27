@@ -139,6 +139,8 @@ What it costs to start, from each tool's own pricing page (checked 24 October 20
 
 ✨ What sets Profile-Wrap apart: it runs on your own computer or inside your AI app (Claude Code, Codex, or any app that speaks MCP), and every post waits on your board until you tap Allow.
 
+🔎 Looking for a free LinkedIn scheduler, an open-source LinkedIn post automation tool, a LinkedIn MCP server for Claude Code, or a free alternative to Buffer, Taplio and AuthoredUp? This is a free, open-source option for all four jobs: it plans, writes, checks and schedules, and you approve each post.
+
 ## Questions
 
 **What is Profile-Wrap?**
@@ -163,7 +165,7 @@ No. It is an independent project by [Nader Alzghoul](https://www.linkedin.com/in
 
 **Profile-Wrap** مدير منشورات لينكدإن مجاني ومفتوح المصدر. يخطط منشورات أسبوعك، ويكتبها بأسلوبك، ويفحص كل منشور قبل نشره. لا يُنشر شيء حتى توافق عليه بنفسك. يعمل بالعربية والإنجليزية، على ويندوز وماك ولينكس.
 
-[⬇️ حمّل التطبيق المجاني](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
+[⬇️ حمّل التطبيق المجاني](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest) · [الصفحة العربية الكاملة](https://nj-burrito.github.io/Profile-Wrap/ar/)
 
 <br>
 

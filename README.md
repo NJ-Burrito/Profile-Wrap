@@ -175,6 +175,6 @@ No. It is an independent project by [Nader Alzghoul](https://www.linkedin.com/in
 
 <br>
 
-[For developers →](docs/FOR-DEVELOPERS.md) · More from NJ: [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/) · [QA-Wrap](https://nj-burrito.github.io/QA-Wrap/) · [Portfolio](https://nj-burrito.github.io/)
+[For developers →](docs/FOR-DEVELOPERS.md) · More from NJ: [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/) · [QA Wrap](https://nj-burrito.github.io/QA-Wrap/) · [Business-Wrap](https://nj-burrito.github.io/Business-Wrap/) · [Portfolio](https://nj-burrito.github.io/)
 
 Profile-Wrap is not affiliated with or endorsed by LinkedIn. Free and open source under the [MIT licence](LICENSE).

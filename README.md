@@ -27,7 +27,7 @@
 [![Stars](https://img.shields.io/github/stars/NJ-Burrito/Profile-Wrap?style=social)](https://github.com/NJ-Burrito/Profile-Wrap/stargazers)
 [![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-B4491F)](https://nj-burrito.github.io/Profile-Wrap/)
 
-**Profile-Wrap is a free, open-source LinkedIn post manager and scheduler.**
+**Profile-Wrap is a free, open-source LinkedIn post manager and scheduler, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
 It plans your week of posts, writes them in your voice and checks each one.
 [🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [📦 PyPI](https://pypi.org/project/profile-wrap/)
 

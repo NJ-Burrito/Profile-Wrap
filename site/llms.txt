@@ -1,6 +1,6 @@
 # Profile-Wrap
 
-> Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. MIT licence, by Nader Alzghoul.
+> Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow. MIT licence, by Nader Alzghoul (NJ-Burrito).
 
 Not related to woodworking machines or other products with a similar name.
 

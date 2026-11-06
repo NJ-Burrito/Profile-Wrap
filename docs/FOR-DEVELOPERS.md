@@ -112,20 +112,13 @@ your account. Read [docs/TERMS-AND-RISK.md](TERMS-AND-RISK.md) first.
 The fact gate is a traceability guarantee, not a truth guarantee: it proves each number came from a
 fact you verified, not that the fact is true.
 
-## Reading other people's posts (Apify, Tavily, public)
+## Reading other people's posts
 
-`engagement.reading.providers` takes any subset of `["apify", "tavily", "public"]`, in that order (`public` last). Each
-needs its own typed acknowledgement (`profile-wrap config ack apify|tavily|public`); `config.effective_modes` drops a
-provider whose acknowledgement is missing or stale and lists it in `notes`, and returns the live order as
-`reading_chain`. `profile_wrap/linkedin/readers.py` holds the code: `build_chain(cfg, workspace)` returns a
-`ReadingChain`; `chain.profile_posts(target)` gives `{posts, source, notes, clean_empty}` and
-`chain.fill_text(posts)` fetches full text for Tavily-found posts, one URL per call; a bought text is kept in the search cache. The command `profile-wrap read posts <profile-url> [--json] [--text]` runs this chain for one person (it respects acknowledgements, pacing and ledgers, and exits 1 when no reader is switched on or none could answer). Pacing (Apify: credit left at the
-start of the day over the days left in the billing cycle; Tavily: 1,000 credits minus a 100 reserve over the days left in
-the calendar month) and the state files (`data/apify_budget.json`, `data/tavily_usage.json`, `data/tavily_cache.json`)
-are described in `docs/PROVIDERS.md`. Requests go through `profile_wrap/http.py`; `HostPolicy(apify_ack=...)` and
-`HostPolicy(tavily_ack=...)` open `api.apify.com` and `api.tavily.com`, the keys come from the environment variable named in
-the config and are sent as a bearer header only to those hosts. Tests inject a fake requester, so none touch the network
-(`tests/unit/core/test_core_readers.py`).
+Removed in 0.4.0. Profile-Wrap reads only through the official API. `profile_wrap/linkedin/readers.py` and the public
+page reader are gone; `profile-wrap read` prints "removed in 0.4.0: profile-wrap reads only through the official API"
+and exits 2, and `profile_wrap/http.py` has no host or page allowance beyond the LinkedIn API and OAuth hosts, the upload
+hosts and the trend-feed hosts the caller names. `config.validate` rejects an old config that still carries
+`engagement.reading` or the matching `ack` keys, naming the removal (`tests/unit/core/test_core_read_cli.py`).
 
 ## Commands
 

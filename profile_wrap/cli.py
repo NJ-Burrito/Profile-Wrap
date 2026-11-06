@@ -141,6 +141,11 @@ def cmd_config(args: argparse.Namespace) -> int:
             print("profile-wrap: an agent cannot record an acknowledgement; run this yourself in a "
                   "terminal", file=sys.stderr)
             return policy.EXIT_FAIL
+        if args.action not in policy.ACK_ACTIONS:
+            print(f"profile-wrap: unknown action '{args.action}'; choose from "
+                  f"{', '.join(sorted(policy.ACK_ACTIONS))}. Reader acknowledgements: "
+                  f"{policy.REMOVED_READERS_MSG}", file=sys.stderr)
+            return policy.EXIT_USAGE
         phrase = args.phrase
         if phrase is None:
             if not _is_tty():
@@ -361,7 +366,7 @@ def build_parser() -> argparse.ArgumentParser:
     q.add_argument("value", help="JSON (true, 3, [\"a\"]) or a plain string")
     _common(q)
     q = cs.add_parser("ack", help="record a typed acknowledgement of a risk text")
-    q.add_argument("action", choices=sorted(policy.ACK_ACTIONS))
+    q.add_argument("action", help="one of: " + ", ".join(sorted(policy.ACK_ACTIONS)))
     q.add_argument("--phrase", help="the typed phrase (otherwise you are prompted)")
     _common(q)
     p.set_defaults(func=cmd_config)

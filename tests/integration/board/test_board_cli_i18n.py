@@ -118,7 +118,7 @@ def test_every_string_the_app_asks_for_exists_in_both_languages():
     dynamic += [f"gate.{g}" for g in ("pass", "fail")] + [f"verdict.{v}" for v in ("pass", "revise", "blockers", "invalid")]
     dynamic += [f"kind.{k}" for k in ("comment", "reply", "posting", "comments", "all")]
     dynamic += [f"connect.action.{a}" for a in ("connect", "follow")] + [f"ack.{a}" for a in ("valid", "stale", "missing", "unknown")]
-    dynamic += [f"settings.mode.{m}" for m in ("posting", "comments", "reading", "likes")]
+    dynamic += [f"settings.mode.{m}" for m in ("posting", "comments", "likes")]
     dynamic += [f"warn.{w}" for w in ("no_schedule", "past_missed_window", "bad_schedule")]
     dynamic += ["msg.allow", "msg.reject", "msg.improve", "msg.done", "msg.skipped", "msg.sent", "msg.pause"]
     assert not [k for k in dynamic if k not in en], [k for k in dynamic if k not in en]
@@ -148,7 +148,7 @@ def test_the_feed_has_no_aria_live_region_only_the_toast():
 
 def test_no_machine_specific_or_secret_shaped_text_in_the_board_files():
     patterns = [re.compile(r"[A-Za-z]:[\\]"), re.compile(r"/(Users|home)/[a-z]"), re.compile(r"[\w.+-]+@[\w-]+\.[a-z]{2,}"),
-                re.compile(r"(?:sk|apify_api|xox[bp])[-_][A-Za-z0-9]{12,}"), re.compile(r"li_at|JSESSIONID")]
+                re.compile(r"(?:sk|xox[bp])[-_][A-Za-z0-9]{12,}"), re.compile(r"li_at|JSESSIONID")]
     scanned = 0
     for path in list(BOARD.rglob("*")) + [REPO / "docs" / "references" / "review-board.md"]:
         if path.is_file() and path.suffix in (".py", ".js", ".css", ".html", ".json", ".md"):

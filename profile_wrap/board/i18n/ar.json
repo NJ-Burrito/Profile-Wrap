@@ -145,7 +145,6 @@
   "settings.modes": "الأوضاع الفعلية",
   "settings.mode.posting": "النشر",
   "settings.mode.comments": "التعليقات",
-  "settings.mode.reading": "القراءة",
   "settings.mode.likes": "الإعجابات",
   "settings.acks": "الإقرارات",
   "settings.acks.how": "اقبل نص المخاطرة من الطرفية بالأمر profile-wrap config ack.",

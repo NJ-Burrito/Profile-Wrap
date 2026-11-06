@@ -175,7 +175,7 @@ def test_settings_tab_reports_modes_acks_doctor_pause_and_the_token(board, ws):
     code, s = c.get_json("/api/settings")
     assert code == 200
     assert s["modes"]["posting"] in ("copy", "api_click", "api_scheduled") and s["modes"]["likes"] is False
-    assert set(s["acks"]) >= {"terms_read", "api_scheduled", "comments_api", "apify", "likes"}
+    assert set(s["acks"]) >= {"terms_read", "api_scheduled", "comments_api", "likes"}
     assert s["doctor"]["checks"] and any(ch["id"] == "token" for ch in s["doctor"]["checks"])
     assert s["pause"] == [] and s["caps"]["comments_replies_per_day_max"] == 10
     assert s["board"]["port"] == srv.port and "/" not in s["workspace"] and "\\" not in s["workspace"]

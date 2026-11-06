@@ -101,7 +101,7 @@ def test_token_allowed_only_for_linkedin_api_and_oauth_hosts():
     hp = HostPolicy()
     assert token_allowed("api.linkedin.com", hp) and token_allowed("www.linkedin.com", hp)
     for host in ("upload.licdn.com", "dms.linkedin.com", "evil.example", "api.linkedin.com.evil.example",
-                 "api.apify.com", "127.0.0.1"):
+                 "api.example.com", "127.0.0.1"):
         assert not token_allowed(host, hp), host
 
 

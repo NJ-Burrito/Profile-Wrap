@@ -91,7 +91,7 @@ class BoardApp:
         try:
             modes = config_mod.effective_modes(cfg, self.ws)
         except Exception as exc:  # a broken ack file must not blank the tab
-            modes = {"posting": cfg.get("posting", {}).get("mode"), "comments": "draft", "reading": "manual",
+            modes = {"posting": cfg.get("posting", {}).get("mode"), "comments": "draft",
                      "likes": False, "notes": [f"modes unavailable: {exc}"]}
         try:
             acks = {k: {"status": v[0], "reason": v[1]} for k, v in config_mod.ack_statuses(cfg, self.ws).items()}

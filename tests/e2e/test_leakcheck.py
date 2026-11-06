@@ -17,7 +17,6 @@ from profile_wrap import leakcheck as L
 # Terms and secrets are assembled at run time so this file never contains them whole.
 TERM = "Fern" + "hill Cycles"
 GH = "gh" + "p_" + "A1b2C3d4" * 5
-APIFY = "apify" + "_api_" + "Zx9Qw8Er7Ty6"
 MAIL = "jane.doe" + "@" + "gmail.com"
 CDN = "https://media.lic" + "dn.com/dms/image/v2/ABC/photo.jpg?e=1999999999&v=beta&t=abcDEF123"
 WINHOME = "C:" + "\\Users\\" + "jdoe\\Desktop"
@@ -62,7 +61,6 @@ def test_clean_tree_passes(tmp_path):
     "name,files,expected",
     [
         ("token", {"a.txt": f"key = {GH}\n"}, "token-github"),
-        ("apify", {"a.txt": f"APIFY={APIFY}\n"}, "token-apify"),
         ("email", {"a.txt": f"contact {MAIL}\n"}, "email"),
         ("signed-cdn", {"a.md": f"![x]({CDN})\n"}, "signed-cdn-url"),
         ("win-home", {"a.py": f"P = r'{WINHOME}'\n"}, "home-path"),

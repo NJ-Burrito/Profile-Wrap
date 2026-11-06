@@ -12,7 +12,7 @@ command: 0 ok, 1 fail, 2 usage, 3 conflicts to resolve, 4 paused.
 | `config validate` says "unknown key" | a typo, or a key from another version | remove or fix the key; `profile-wrap config show` lists the real ones |
 | "above the ceiling of ..." | a value beyond a locked limit | lower it; ceilings live in the code and cannot be raised by config |
 | "posting.window ... minutes wide" | the window plus the gap leaves no room for consecutive days | shorten the window or lower `min_gap_hours` (never below 12) |
-| `needs an acknowledgement` | `api_scheduled`, API comments or Apify without the typed acknowledgement | run `profile-wrap config ack <action>` in a terminal, or switch the mode back |
+| `needs an acknowledgement` | `api_scheduled` or API comments without the typed acknowledgement | run `profile-wrap config ack <action>` in a terminal, or switch the mode back |
 | "downgraded until you accept again" | the shipped risk text changed in an update | read the new text and run `profile-wrap config ack <action>` again |
 | `init` refuses the folder | it is inside the plugin directory, or not empty | choose a folder under your home directory |
 | `upgrade --apply` exits 3 | a file was edited by you and changed in the new release | merge the `<file>.new` files, delete them, then `profile-wrap upgrade --resolve` (or `--mine` / `--theirs`) |

@@ -104,7 +104,7 @@ def test_git_check_ignore_confirms_the_generated_gitignore(tmp_path, plugin_root
     must_ignore = [
         "brand/fonts/Some-Font.woff2", "brand/fonts/readme.txt", "brand/vendor/gsap/gsap.min.js",
         "sub/dir/font.ttf", "sub/font.otf", "token.json", "config/token.json", "linkedin.env",
-        "apify.env", ".env", "ack.json", "engage/pending.json", "engage/inbox/post.txt",
+        ".env", "ack.json", "engage/pending.json", "engage/inbox/post.txt",
         "published/ledger.jsonl", "published/REPORT.md", "metrics/posts.csv",
         "profile/exports/data-export.zip", "profile/voice.md", "profile/story-bank.md",
         "brand/identity/me.jpg", "brand/identity/me.png", "data/logs/runs.jsonl",

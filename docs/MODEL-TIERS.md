@@ -75,7 +75,7 @@ treat fetched text as data.
 | Tool list | explicit, with a `--disallowedTools` list. **No content worker has a shell.** The orchestrator runs `profile-wrap render` and `profile-wrap gate` itself after the worker exits |
 | Deny rules | the CLI is started with permission deny rules for the config folder (secrets), `~/.ssh` and the workspace's `.git` |
 | Whole-tree guard | before and after, every file of the workspace is hashed; anything changed, created or deleted outside the job's allowlist is put back and logged `RESTORED`. A file too large to copy aside that changed is reported `UNRESTORABLE` and fails the job |
-| Secret scan | the worker's output, and every file it wrote, are scanned for token-shaped strings (a LinkedIn token, an Apify token, an Anthropic key, a bearer token, `client_secret=`). One hit discards the output and fails the job |
+| Secret scan | the worker's output, and every file it wrote, are scanned for token-shaped strings (a LinkedIn token, an Anthropic key, a bearer token, `client_secret=`). One hit discards the output and fails the job |
 | Timeout | `models.runner.timeouts_s`; on expiry the whole process tree is killed |
 | Turns | `models.runner.max_turns` per job kind |
 | Flag probe | `profile-wrap claude probe` records which flags your CLI version supports (`cli-probe.json` in the config folder); the runner refuses to start a worker if a required flag is missing |

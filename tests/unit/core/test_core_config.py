@@ -100,9 +100,6 @@ def test_modes_need_acknowledgements():
     c["engagement"]["comments"]["mode"] = "api"
     assert any("comments_api" in e for e in config.validate(c).errors)
     c = cfg()
-    c["engagement"]["reading"]["provider"] = "apify"
-    assert any("apify" in e for e in config.validate(c).errors)
-    c = cfg()
     c["engagement"]["comments"]["like"] = True
     assert any("like" in e for e in config.validate(c).errors)
 
@@ -243,16 +240,15 @@ def test_changed_risk_text_downgrades_the_action(make_workspace, plugin_root, tm
     assert config.effective_modes(config.load(ws), ws, cdir, plugin_root)["posting"] == "api_scheduled"
 
 
-def test_effective_modes_for_comments_reading_likes(make_workspace, plugin_root, tmp_path):
+def test_effective_modes_for_comments_likes(make_workspace, plugin_root, tmp_path):
     ws = make_workspace()
     cdir = tmp_path / "ackcfg"
     c = config.load(ws)
     c["engagement"]["comments"]["mode"] = "api"
-    c["engagement"]["reading"]["provider"] = "apify"
     c["engagement"]["comments"]["like"] = True
     modes = config.effective_modes(c, ws, cdir, plugin_root)
-    assert modes["comments"] == "draft" and modes["reading"] == "manual" and modes["likes"] is False
-    assert len(modes["notes"]) == 2
+    assert modes["comments"] == "draft" and modes["likes"] is False
+    assert len(modes["notes"]) == 1
     # missing documents make every ack stale, never valid
     status = config.ack_statuses(
         {**c, "ack": {"terms_read": {"date": "d", "sha256": "0" * 64}, "comments_api": None,

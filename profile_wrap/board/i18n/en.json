@@ -145,7 +145,6 @@
   "settings.modes": "Modes in effect",
   "settings.mode.posting": "Posting",
   "settings.mode.comments": "Comments",
-  "settings.mode.reading": "Reading",
   "settings.mode.likes": "Likes",
   "settings.acks": "Acknowledgements",
   "settings.acks.how": "Accept a risk text in the terminal with profile-wrap config ack.",

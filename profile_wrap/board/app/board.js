@@ -274,7 +274,7 @@
       h("section", { class: "card" }, h("h3", { text: t("settings.kill") }), h("p", { class: "sub", text: t("settings.kill.body") }),
         h("button", { class: "pause-big" + (all ? " resume" : ""), onclick: () => post("/api/pause", { kind: "all", paused: !all }, "msg.pause") }, all ? t("settings.resume.all") : t("settings.pause.all")),
         h("div", { class: "actions" }, kindBtn("posting"), kindBtn("comments"))),
-      h("section", { class: "card" }, h("h3", { text: t("settings.modes") }), h("table", {}, ["posting", "comments", "reading"].map((k) => h("tr", {}, h("th", { text: t("settings.mode." + k) }), h("td", { text: String(s.modes[k]) }))), h("tr", {}, h("th", { text: t("settings.mode.likes") }), h("td", { text: String(s.modes.likes) }))),
+      h("section", { class: "card" }, h("h3", { text: t("settings.modes") }), h("table", {}, ["posting", "comments"].map((k) => h("tr", {}, h("th", { text: t("settings.mode." + k) }), h("td", { text: String(s.modes[k]) }))), h("tr", {}, h("th", { text: t("settings.mode.likes") }), h("td", { text: String(s.modes.likes) }))),
         (s.modes.notes || []).length ? h("ul", { class: "plain" }, s.modes.notes.map((n) => h("li", { class: "warn", text: n }))) : null),
       h("section", { class: "card" }, h("h3", { text: t("settings.acks") }), h("table", {}, Object.entries(s.acks).map(([k, v]) => h("tr", {}, h("th", { text: k }), h("td", {}, badge(v.status === "valid" ? "pass" : v.status === "missing" ? "warn" : "fail", t("ack." + v.status)), " ", h("span", { class: "sub", text: v.reason }))))),
         h("p", { class: "sub", text: t("settings.acks.how") })),

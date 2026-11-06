@@ -79,7 +79,6 @@ def secret_samples():
     # assembled at run time so this file never holds a token-shaped literal
     return {
         "linkedin-token": "AQ" + "V" + "k3" * 50,
-        "apify-token": "apify" + "_api_" + "Qw12Er34Ty56",
         "anthropic-key": "sk-" + "ant-" + "api03-" + "Ab1" * 6,
         "github-token": "gh" + "p_" + "Zz9" * 12,
         "bearer": "Bearer " + "abcDEF0123" * 4,

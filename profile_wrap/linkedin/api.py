@@ -71,7 +71,7 @@ class Client:
              stop_on: Tuple[int, ...] = (429,), **kw: Any) -> Response:
         """A request to a path the caller names (used by the opt-in extra). The endpoint
         allowlist in ``profile_wrap.http`` still applies; ``extra_endpoints`` widens it for this call."""
-        hp = HostPolicy(extra_hosts=self.hp.extra_hosts, apify_ack=self.hp.apify_ack,
+        hp = HostPolicy(extra_hosts=self.hp.extra_hosts,
                         demo=self.hp.demo, extra_endpoints=tuple(extra_endpoints))
         return request(method, f"{API}{path}", token=self._token, hp=hp,
                        linkedin_version=self.version, timeout=self.timeout,

@@ -86,12 +86,6 @@ def child_env(cfg: Mapping[str, Any], source: Optional[Mapping[str, str]] = None
     src = dict(os.environ if source is None else source)
     runner = (cfg.get("models", {}) or {}).get("runner", {}) or {}
     names = set(runner.get("env_allow") or []) | set(claude_runner.OS_ENV) | {"PYTHONPATH", "NODE_PATH"}
-    apify_env = ((cfg.get("engagement", {}) or {}).get("reading", {}) or {}).get("apify", {}).get("token_env")
-    if apify_env:
-        names.add(apify_env)
-    tavily_env = ((cfg.get("engagement", {}) or {}).get("reading", {}) or {}).get("tavily", {}).get("key_env")
-    if tavily_env:
-        names.add(tavily_env)
     if runner.get("api_key_env"):
         names.add(runner["api_key_env"])
     lower = {k.lower(): k for k in src}

@@ -99,10 +99,9 @@ def test_upload_hosts_are_limited_to_linkedin_domains():
         http.check_url("https://media.licdn.com/dms/image/abc")
 
 
-def test_apify_and_extra_hosts_need_permission():
-    with pytest.raises(http.HttpError, match="Apify"):
-        http.check_url("https://api.apify.com/v2/acts")
-    assert http.check_url("https://api.apify.com/v2/acts", http.HostPolicy(apify_ack=True))
+def test_extra_hosts_need_permission():
+    with pytest.raises(http.HttpError):
+        http.check_url("https://api.example.com/v2/acts")
     with pytest.raises(http.HttpError):
         http.check_url("https://news.example/feed.xml")
     assert http.check_url("https://news.example/feed.xml",

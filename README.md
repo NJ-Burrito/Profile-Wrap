@@ -4,7 +4,7 @@
 
 # Profile-Wrap
 
-## Your LinkedIn, on autopilot.
+## Your LinkedIn week, drafted and checked. You approve.
 
 **Free post manager. You stay the boss.**
 
@@ -27,15 +27,39 @@
 [![Stars](https://img.shields.io/github/stars/NJ-Burrito/Profile-Wrap?style=social)](https://github.com/NJ-Burrito/Profile-Wrap/stargazers)
 [![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-B4491F)](https://nj-burrito.github.io/Profile-Wrap/)
 
-**Profile-Wrap is a free, open-source LinkedIn post manager and scheduler, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
+**Profile-Wrap is a free, open-source LinkedIn post manager, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
 It plans your week of posts, writes them in your voice and checks each one.
 [🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [📦 PyPI](https://pypi.org/project/profile-wrap/)
+
+### What you need first
+
+Profile-Wrap is free, but setup takes a few steps. This is the full list.
+
+**No account needed**
+- 👀 The offline demo: a made-up account, a real review board. Nothing leaves your computer.
+- 📋 Copy mode: Profile-Wrap writes the post and you paste it into LinkedIn yourself. No LinkedIn developer app. You still need a writing helper (below).
+
+**A writing helper (pick one)**
+- Claude Code, with its `claude` command installed
+- A paid key from an AI provider (Anthropic, OpenAI, OpenRouter or Gemini). You pay that provider
+- Ollama, a free model that runs on your computer
+
+A ChatGPT or Claude chat subscription is not a key and does not work on its own. [All providers](docs/PROVIDERS.md).
+
+**To post from Profile-Wrap (optional)**
+- A free LinkedIn developer app that you create yourself, a LinkedIn Page you manage (LinkedIn's form may ask for one), and one redirect address. Plan for roughly 15 minutes. That time is a guess, not measured.
+- Sign in again about every 60 days. There is no refresh.
+- Step by step: [LinkedIn app setup](docs/linkedin-app-setup.md)
+
+**Good to know**
+- The desktop app writes **text drafts only**. Slides and GIFs need the command line (`build-week`) plus Node 22 or newer, Chrome and ffmpeg ([details](docs/GUI.md)).
+- The downloads are unsigned, so your computer will warn you once ([how to open them](docs/INSTALL-DESKTOP.md)).
 
 ### Pick how you want it. All free. 👇
 
 | 🧩 Plugin | 🧠 Skills | 🔌 MCP server | 🖥️ Desktop app |
 |:---:|:---:|:---:|:---:|
-| For **Claude Code** and **Codex** | For any AI agent that reads skills | For any app that speaks MCP | No AI app? Use this |
+| For **Claude Code** and **Codex** | For any AI agent that reads skills | For any app that speaks MCP | Text drafts only. No Claude Code needed |
 | [Install ↓](#plugin) | [Install ↓](#skills) | [Install ↓](#mcp) | [Download ↓](#app) |
 
 <a id="plugin"></a>
@@ -107,21 +131,21 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 
 ✍️ Writes them in your voice
 
-🔑 Uses your own ChatGPT, Claude or Gemini account
+🔑 Writes with your own AI helper: Claude Code, a provider key or a free local model
 
 ✅ Checks every post before it goes out
 
 👀 Shows you each one first. You approve.
 
-⏰ Posts at a good time
+⏰ Suggests a good time for each post. Timed posting is optional and sits in a grey area of LinkedIn's rules, so read docs/TERMS-AND-RISK.md first
 
 🌍 Works in English and Arabic
 
-🔎 Optional readers can list a person's recent posts (details in docs/PROVIDERS.md). They use two free tools (Apify and Tavily), then public pages. All are off by default, and you accept the risk of each one yourself.
+🔎 Optional readers can list a person's recent posts (details in docs/PROVIDERS.md). They use two free tools (Apify and Tavily), then public pages. These do not use LinkedIn's official way in and may break LinkedIn's rules. All are off by default, and you accept the risk of each one yourself.
 
 ## Is it safe?
 
-🔒 It uses LinkedIn's own official way in, through your own free LinkedIn app ([setup guide](docs/linkedin-app-setup.md))
+🔒 For posting, it uses LinkedIn's own official way in, through your own free LinkedIn app ([setup guide](docs/linkedin-app-setup.md))
 
 🙈 It never asks for your LinkedIn password
 
@@ -145,21 +169,20 @@ What it costs to start, from each tool's own pricing page (checked 24 October 20
 
 ✨ What sets Profile-Wrap apart: it runs on your own computer or inside your AI app (Claude Code, Codex, or any app that speaks MCP), and every post waits on your board until you tap Allow.
 
-🔎 Looking for a free LinkedIn scheduler, an open-source LinkedIn post automation tool, a LinkedIn MCP server for Claude Code, or a free alternative to Buffer, Taplio and AuthoredUp? This is a free, open-source option for all four jobs: it plans, writes, checks and schedules, and you approve each post.
 
 ## Questions
 
 **What is Profile-Wrap?**
-A free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines with a similar name.
+A free, open-source LinkedIn post manager. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines with a similar name.
 
 **Is it free?**
-Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).
+Yes. The app is free. Writing uses an AI helper you set up: Claude Code, a key from an AI provider (the provider may charge you), or a free local model.
 
 **Do I need to code?**
-No. Install, ask, tap. That is it.
+You do not write code. You do set up a few accounts and keys first, see What you need first above. After setup, daily use is: ask, check, tap.
 
 **Which one should I pick?**
-Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.
+Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app (text drafts only).
 
 **What if I don't like a post?**
 Tap Reject, or ask for a better one. Nothing posts without you.

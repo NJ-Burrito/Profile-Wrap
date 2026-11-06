@@ -191,7 +191,7 @@ def test_every_profile_wrap_command_in_the_docs_exists(doc, tmp_path):
 def test_readme_has_the_required_parts():
     """The front page is plain language: hero, promise, downloads, 3 steps, safety, FAQ, one developer link."""
     text = (REPO / "README.md").read_text(encoding="utf-8")
-    for needle in ("docs/assets/hero.gif", "docs/assets/board.png", "Your LinkedIn, on autopilot.", "You stay the boss.",
+    for needle in ("docs/assets/hero.gif", "docs/assets/board.png", "Your LinkedIn week, drafted and checked. You approve.", "You stay the boss.", "### What you need first", "text drafts only",
                    "## 3 steps", "## What it does for you", "## Is it safe?", "## Questions",
                    "docs/FOR-DEVELOPERS.md", "docs/INSTALL-DESKTOP.md", "MIT", "not affiliated with or endorsed by LinkedIn"):
         assert needle in text, needle
@@ -212,6 +212,7 @@ def test_readme_has_the_required_parts():
     for jargon in ("api", "cli", "uv", "pip", "gate", "token", "workspace", "terminal"):
         assert not re.search(r"\b" + jargon + r"\b", low), jargon
     assert "\u2014" not in text
+    assert "autopilot" not in text.lower() and "your own chatgpt" not in text.lower()
     assert len(re.findall(r"^\*\*[^\n]*\?\*\*$", text, re.M)) <= 6
 
 

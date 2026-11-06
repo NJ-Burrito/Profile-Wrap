@@ -11,6 +11,10 @@ For a native window install the optional package: `uv pip install pywebview`. Wi
 machine has no web view (WebView2 on Windows, WebKit on macOS, WebKitGTK on Linux), the app opens your
 default browser on the same local address. Profile-Wrap is independent and not affiliated with LinkedIn.
 
+**What the app does not do (0.3.1).** It makes text drafts only. Slides and GIFs need the command line
+(`profile-wrap build-week`) plus Node 22 or newer, Chrome and ffmpeg (see `PLATFORMS.md`). It has no screen
+for connecting LinkedIn: sign in once with `profile-wrap auth` ([setup](linkedin-app-setup.md)), or use copy mode.
+
 ## Screens
 
 | Screen | What it does |

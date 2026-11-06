@@ -9,7 +9,7 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 ## Order
 
-1. Release v0.2.0 (tag, GitHub Release, CI green). 2. PyPI `profile-wrap`. 3. PyPI `profile-wrap-mcp` (needs 2).
+1. Release a version (tag, GitHub Release, CI green; current: v0.3.1). 2. PyPI `profile-wrap`. 3. PyPI `profile-wrap-mcp` (needs 2).
 4. Official MCP Registry (needs 3). 5. mcp.so, Glama, Smithery (need the public repo; Smithery also needs the bundle).
 6. Anthropic plugin directory (needs 3, because the plugin starts `uvx profile-wrap-mcp==0.3.1`).
 
@@ -17,9 +17,9 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 | Directory | Needs first | Who | Status | Date | Link |
 |---|---|---|---|---|---|
-| PyPI `profile-wrap` | pending publisher, tag `v0.2.1` | The maintainer (once) then CI | done | 2026-10-16 | https://pypi.org/project/profile-wrap/ |
+| PyPI `profile-wrap` | pending publisher, tag `v0.3.1` (first upload was `v0.2.1`) | The maintainer (once) then CI | done | 2026-10-16 | https://pypi.org/project/profile-wrap/ |
 | PyPI `profile-wrap-mcp` | PyPI `profile-wrap` live | The maintainer (once) then CI | done | 2026-10-16 | https://pypi.org/project/profile-wrap-mcp/ |
-| Official MCP Registry | PyPI `profile-wrap-mcp` live | The maintainer (login) | done | 2026-10-16 | io.github.NJ-Burrito/profile-wrap-mcp 0.2.1 |
+| Official MCP Registry | PyPI `profile-wrap-mcp` live | The maintainer (login) | done | 2026-10-16 | io.github.NJ-Burrito/profile-wrap-mcp is listed at 0.2.1; `mcp/server.json` is 0.3.1, so the entry is stale until `mcp-publisher publish` runs again (maintainer step, not done) |
 | mcp.so | public repo | The maintainer | skipped (paid listing; Profile-Wrap stays free) | 2026-10-16 | |
 | Glama | `glama.json` on `main` | The maintainer (claim) | submitted for review | 2026-10-16 | glama.ai/mcp/servers |
 | Smithery | Agent Skills on `main` | The maintainer (login) | done: 5 skills (the MCP form takes hosted URLs only) | 2026-10-16 | smithery.ai/skills |
@@ -48,15 +48,15 @@ Needs: a PyPI account and the repo `NJ-Burrito/Profile-Wrap` public. Files: `.gi
 **Lead/CI**: the PyPI job in `release.yml` has `permissions: id-token: write`, `environment: pypi`, builds both wheels and
 sdists and uploads with `pypa/gh-action-pypi-publish`; upload `profile-wrap` first, then `profile-wrap-mcp`.
 Commands to check before tagging: `uv build` and `uv build mcp`, then `uvx twine check dist/*`.
-Release: `git tag v0.2.0 && git push origin v0.2.0` (Lead only). Check after: `uvx profile-wrap-mcp==0.3.1 --help`.
+Release: `git tag v0.3.1 && git push origin v0.3.1` (Lead only; use the version in `pyproject.toml`). Check after: `uvx profile-wrap-mcp==0.3.1 --help`.
 
 ## 2. Official MCP Registry
 
-Needs: `profile-wrap-mcp` 0.2.0 live on PyPI; `mcp/README.md` carries `mcp-name: io.github.NJ-Burrito/profile-wrap-mcp`
+Needs: `profile-wrap-mcp` 0.3.1 live on PyPI; `mcp/README.md` carries `mcp-name: io.github.NJ-Burrito/profile-wrap-mcp`
 (done); `mcp/server.json` (schema 2025-12-11). Text: `docs/listings/official-mcp-registry.md`.
 
-**Check before publishing:** `mcp/server.json` says version `0.1.0` in two places, while `mcp/pyproject.toml` is `0.2.0`.
-Set both `version` fields in `server.json` to `0.2.0` (Lead, package E file).
+**Check before publishing:** both `version` fields in `mcp/server.json` must equal `version` in `mcp/pyproject.toml`
+(both are 0.3.1 now). The registry itself still shows 0.2.1, so run the publish step below again to refresh it.
 
 **The maintainer** (GitHub login, namespace `io.github.NJ-Burrito/*`), from the repo folder:
 
@@ -97,7 +97,7 @@ the manifest). **The maintainer**: `smithery auth login`, then `smithery mcp pub
 
 ## 6. Anthropic plugin directory (Claude Code)
 
-Needs: paid claude.ai plan; `plugins/profile-wrap/` at 0.2.0 on `main`; `profile-wrap-mcp` 0.2.0 live on PyPI.
+Needs: paid claude.ai plan; `plugins/profile-wrap/` at the current version on `main`; `profile-wrap-mcp` 0.3.1 live on PyPI.
 Files: `plugins/profile-wrap/.claude-plugin/plugin.json` (five directory URL fields set), `plugins/profile-wrap/SUBMISSION.md`
 (the click-by-click checklist, followed as written), `docs/listings/anthropic-plugin-directory.md`.
 **Lead** before the maintainer starts: `claude plugin validate --strict plugins/profile-wrap` and

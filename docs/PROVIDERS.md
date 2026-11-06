@@ -14,6 +14,10 @@ to the provider you chose.
 | `ollama` | local server at `http://localhost:11434/v1` | no | `llama3.2` |
 | `gemini` | Gemini native `generateContent` | yes | `gemini-2.5-flash` |
 
+**A chat subscription is not an API key.** ChatGPT Plus or a Claude chat plan cannot be used here on its own.
+You need one of: the `claude` CLI (your own Claude Code install), a paid API key from Anthropic, OpenAI,
+OpenRouter or Gemini, or Ollama on your own computer. API keys are billed by the provider.
+
 The default model names are starting points, not a recommendation, and were not checked against each
 vendor's live model list. Set the one you want: `profile-wrap providers use openai --model <name>`.
 `--base-url` points an adapter at a self-hosted or proxied endpoint (https, or http on localhost).

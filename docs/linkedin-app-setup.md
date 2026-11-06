@@ -2,6 +2,8 @@
 
 You post through your own free developer app. Nothing here costs money. Not legal advice; the portal's wording and screens change, so follow what you see there.
 
+Only needed to post from Profile-Wrap. Copy mode and the demo need no developer app. Plan for roughly 15 minutes the first time (a guess, not timed), and a sign-in again about every 60 days.
+
 ## 1. Create the app
 
 1. Open the LinkedIn Developer Portal and choose Create app.

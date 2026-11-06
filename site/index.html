@@ -141,7 +141,7 @@
           "name": "Is there a free, open-source LinkedIn post scheduler?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, posts each one at a good time, and only after you tap Allow."
+            "text": "Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, suggests a good time for each one, and nothing goes out until you tap Allow."
           }
         },
         {
@@ -149,7 +149,7 @@
           "name": "How is Profile-Wrap different from Buffer or Taplio?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses your own AI account. On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month."
+            "text": "Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses an AI helper you set up (Claude Code, a provider key or a free local model). On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month."
           }
         },
         {
@@ -165,7 +165,7 @@
           "name": "Is it free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one)."
+            "text": "Yes. The app is free. Writing uses an AI helper you set up: Claude Code, a key from an AI provider (the provider may charge you), or a free local model. A ChatGPT or Claude chat subscription is not a key."
           }
         },
         {
@@ -173,7 +173,7 @@
           "name": "Is it safe to connect to LinkedIn?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "It uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow."
+            "text": "For posting, it uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow."
           }
         },
         {
@@ -189,7 +189,7 @@
           "name": "Do I need to code?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No. Install, ask, tap. That is it."
+            "text": "You do not write code, but you do set up a few things first. Copy mode and the demo need no LinkedIn account. Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page. Writing needs Claude Code, an AI provider key or a free local model. After setup, daily use is: ask, check, tap."
           }
         },
         {
@@ -197,7 +197,7 @@
           "name": "Which one should I pick: plugin, skills, MCP server or desktop app?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app."
+            "text": "Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app (text drafts only)."
           }
         },
         {
@@ -486,8 +486,9 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
           <div class="flags"><span class="flag">Plan</span><span class="flag">Write</span><span class="flag">Allow</span></div>
         </div>
         <h1><span translate="no">Profile-Wrap</span><span class="h1d">Free, open-source LinkedIn post manager</span></h1>
-        <p class="lead">Your LinkedIn, on autopilot. You stay the boss.</p>
+        <p class="lead">Your LinkedIn week, drafted and checked. You approve. You stay the boss.</p>
         <p class="sub">Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
+        <p class="sub"><strong>What you need first.</strong> The demo and copy mode need no LinkedIn account. A writing helper is required: Claude Code, a paid key from an AI provider, or a free local model (a ChatGPT or Claude chat subscription is not a key). Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page you create yourself, plus a sign-in about every 60 days. The desktop app writes text drafts only. Slides and GIFs need the command line, Node, Chrome and ffmpeg.</p>
         <div class="ctas">
           <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download the free app</a>
           <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -537,12 +538,12 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Plans your week of posts</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg>Writes them in your voice</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Checks every post before it goes out</li>
-        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>Uses your own AI account<small>ChatGPT, Claude, Gemini, or a free local one</small></span></li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>Writes with your own AI helper<small>Claude Code, a provider key, or a free local model</small></span></li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg>Shows you each one first</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>Posts at a good time</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>Works in English and Arabic</li>
       </ul>
-      <p class="aside">Want to see a person's recent posts? The command <code>profile-wrap read posts</code> can ask two free tools, Apify and Tavily, and then public pages. All are optional and off by default, and you accept the risk of each one yourself.</p>
+      <p class="aside">Want to see a person's recent posts? The command <code>profile-wrap read posts</code> can ask two free tools, Apify and Tavily, and then public pages. These do not use LinkedIn's official API and may break LinkedIn's rules. All are optional and off by default, and you accept the risk of each one yourself.</p>
     </div>
   </section>
 
@@ -614,14 +615,14 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
       <h2>Questions</h2>
       <div class="paper faq">
         <details><summary>What is Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name.</p></details>
-        <details><summary>Is there a free, open-source LinkedIn post scheduler?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, posts each one at a good time, and only after you tap Allow.</p></details>
-        <details><summary>How is Profile-Wrap different from Buffer or Taplio?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses your own AI account. On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month.</p></details>
+        <details><summary>Is there a free, open-source LinkedIn post scheduler?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, suggests a good time for each one, and nothing goes out until you tap Allow.</p></details>
+        <details><summary>How is Profile-Wrap different from Buffer or Taplio?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses an AI helper you set up (Claude Code, a provider key or a free local model). On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month.</p></details>
         <details><summary>Who makes Profile-Wrap?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence.</p></details>
-        <details><summary>Is it free?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).</p></details>
-        <details><summary>Is it safe to connect to LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>It uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.</p></details>
+        <details><summary>Is it free?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. The app is free. Writing uses an AI helper you set up: Claude Code, a key from an AI provider (the provider may charge you), or a free local model. A ChatGPT or Claude chat subscription is not a key.</p></details>
+        <details><summary>Is it safe to connect to LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>For posting, it uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.</p></details>
         <details><summary>Does Profile-Wrap post without asking me?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts.</p></details>
-        <details><summary>Do I need to code?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. Install, ask, tap. That is it.</p></details>
-        <details><summary>Which one should I pick: plugin, skills, MCP server or desktop app?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.</p></details>
+        <details><summary>Do I need to code?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>You do not write code, but you do set up a few things first. Copy mode and the demo need no LinkedIn account. Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page. Writing needs Claude Code, an AI provider key or a free local model. After setup, daily use is: ask, check, tap.</p></details>
+        <details><summary>Which one should I pick: plugin, skills, MCP server or desktop app?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app (text drafts only).</p></details>
         <details><summary>Does it work on Mac, Windows and Linux?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes, all three.</p></details>
         <details><summary>Does it work in Arabic?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Yes. Arabic and English, side by side.</p></details>
         <details><summary>Is Profile-Wrap made or endorsed by LinkedIn?<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>No. It is an independent project, not affiliated with or endorsed by LinkedIn.</p></details>

@@ -18,7 +18,7 @@ Value is H, M or L. Effort is S (days), M (1 to 2 weeks), L (a month or more).
 | Item | Value | Effort | Backed by |
 |---|---|---|---|
 | Watch 3 non-technical people go from the release page to one real post, no help, timed. Everything else depends on it | H | S | devil #1 |
-| Copy mode as the default first run in the desktop app ("copy post, open LinkedIn"); API posting becomes opt-in | H | S | consultant 3 (#1), devil rework |
+| ~~Copy mode as the default first run in the desktop app ("copy post, open LinkedIn"); API posting becomes opt-in~~ **Done 2026-11-07**: `init` starts new workspaces in `copy`, the app opens on the copy steps, Build has the copy buttons, `profile-wrap copy <draft>`; existing workspaces keep their mode | H | S | consultant 3 (#1), devil rework |
 | Plain writing-helper chooser: "I have Claude Code", "I have an API key", "free local model" | H | S | consultant 5.4, devil #2 |
 | Re-publish the MCP Registry entry (it shows 0.2.1, `server.json` is 0.3.1) | M | S | consultant 6.1 |
 | Shrink the sdist (15.9 MB against a 0.66 MB wheel) with an include list | L | S | consultant 4 |
@@ -37,7 +37,7 @@ Target: 5 first drafts finished by people who are not the maintainer.
 |---|---|---|---|
 | Voice profile from 5 past posts, with a before and after on the board (proves "in your voice") | H | M | consultant 3 (#2) |
 | Analytics import and a weekly summary | H | M | consultant 3 (#3) |
-| Guided "Connect LinkedIn" screen with a live check per step | H | M | consultant 3 (#4) |
+| ~~Guided "Connect LinkedIn" screen with a live check per step~~ **Done 2026-11-07**: desktop screen and `profile-wrap auth connect`, English and Arabic, shows the re-sign-in date, never asks for a password | H | M | consultant 3 (#4) |
 | LinkedIn preview card (mobile width, "see more" cut) | M | S | consultant 3 (#5) |
 | Start Windows code signing and Apple notarisation | H | M (cost) | consultant 3 (#9), risk 3 |
 | One article on the fact gate; 2 or 3 search pages with real screenshots | M | M | consultant 6.4 |

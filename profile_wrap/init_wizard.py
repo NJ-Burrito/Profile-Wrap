@@ -17,7 +17,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
-from . import __version__, config, doctor, paths, policy, scaffold, schemalite
+from . import __version__, config, doctor, i18n, paths, policy, scaffold, schemalite
 from .atomic import atomic_write_json, atomic_write_text
 from .fsutil import read_json
 
@@ -35,6 +35,8 @@ DEFAULT_WEEKDAYS = {
     5: ["mon", "tue", "wed", "thu", "fri"], 6: ["mon", "tue", "wed", "thu", "fri", "sat"],
     7: ["mon", "tue", "wed", "thu", "fri", "sat", "sun"],
 }
+
+FIRST_RUN_POSTING_MODE = "copy"
 
 DEMO_ANSWERS: Dict[str, Any] = {
     "schema_version": 1,
@@ -115,6 +117,9 @@ def answers_to_config(answers: Dict[str, Any]) -> Dict[str, Any]:
     if "style_preset" in voice:
         persona["style_preset"] = voice["style_preset"]
     persona["demo"] = bool(answers.get("options", {}).get("demo", False))
+    # First run lands in copy mode: draft, gate, copy, paste by hand. No developer app, no token.
+    # The fictional demo posts to a fake LinkedIn on this machine, so it keeps the click mode.
+    cfg["posting"]["mode"] = "api_click" if persona["demo"] else FIRST_RUN_POSTING_MODE
     brand_in = answers.get("brand", {})
     brand = cfg["brand"]
     if "font_source" in brand_in:
@@ -326,11 +331,14 @@ def init_workspace(target: Path, answers: Dict[str, Any], plugin_root: Optional[
     if git and answers.get("options", {}).get("git_commit", True):
         notes.append(_commit(ws))
         notes.append(_leak_note(ws))
+    next_steps = ["profile-wrap doctor --workspace " + str(ws),
+                  "add and verify facts: profile-wrap facts add / profile-wrap facts verify",
+                  "plan a week: profile-wrap calendar fill --weeks 1"]
+    if cfg["posting"]["mode"] == "copy":
+        next_steps += [i18n.t("init.next.copy", lang) for lang in i18n.LANGS]
     return {"workspace": str(ws), "profile_id": cfg["profile_id"], "demo": fictional,
-            "preflight": pre["summary"], "notes": notes,
-            "next": ["profile-wrap doctor --workspace " + str(ws),
-                     "add and verify facts: profile-wrap facts add / profile-wrap facts verify",
-                     "plan a week: profile-wrap calendar fill --weeks 1"]}
+            "posting_mode": cfg["posting"]["mode"],
+            "preflight": pre["summary"], "notes": notes, "next": next_steps}
 
 
 def init_demo(target: Optional[Path] = None, plugin_root: Optional[Path] = None) -> Dict[str, Any]:

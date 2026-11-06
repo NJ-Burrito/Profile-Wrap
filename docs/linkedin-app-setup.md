@@ -2,7 +2,9 @@
 
 You post through your own free developer app. Nothing here costs money. Not legal advice; the portal's wording and screens change, so follow what you see there.
 
-Only needed to post from Profile-Wrap. Copy mode and the demo need no developer app. Plan for roughly 15 minutes the first time (a guess, not timed), and a sign-in again about every 60 days.
+Only needed to post from Profile-Wrap. Copy mode (where every new workspace starts) and the demo need no developer app.
+
+You can follow this page, or let Profile-Wrap walk you through it with a check at each step: the **Connect LinkedIn** screen in the desktop app, or `profile-wrap auth connect` in a terminal (`--lang ar` for Arabic). Both use the same five steps below and show the date you will need to sign in again. Neither ever asks for your LinkedIn password. Plan for roughly 15 minutes the first time (a guess, not timed), and a sign-in again about every 60 days.
 
 ## 1. Create the app
 
@@ -34,6 +36,7 @@ On the Auth tab add exactly this redirect URL:
 You are asked for the client id and the client secret (the secret is typed into a hidden prompt). They are stored in the config directory with user-only permissions, never in the workspace. Your browser opens the consent page; press Allow. The token is valid for about 60 days.
 
 - On a server or over SSH: `profile-wrap auth --paste-redirect` prints a link, you open it anywhere, press Allow, and paste back the address the browser ends on.
+- The sign-in date: the Connect LinkedIn screen shows the day it ends and the day the warnings start; `profile-wrap auth connect` prints it at the end.
 - Check the state any time with `profile-wrap auth check`. `profile-wrap doctor` and the board warn from 10 days before expiry.
 - There is no refresh token for an ordinary app. Run `profile-wrap auth` again before the token expires; if you are still signed in to LinkedIn in that browser, the consent step is skipped.
 - If you change the scopes, earlier tokens stop working.
@@ -46,8 +49,8 @@ It reads your member id and checks the API version. It never posts.
 
 ## 6. Pick the posting mode
 
-- `copy`: you paste the block yourself.
-- `api_click` (default): you press Allow on the board, then Post now.
+- `copy` (the start for every new workspace): you paste the block yourself (`profile-wrap copy <draft>`).
+- `api_click`: you press Allow on the board, then Post now. The Connect LinkedIn screen can switch to this for you once you are signed in; it never sets `api_scheduled`.
 - `api_scheduled`: the scheduled job posts at the slot. Read `TERMS-AND-RISK.md` first; you must type the acknowledgement.
 
 ## Keep safe

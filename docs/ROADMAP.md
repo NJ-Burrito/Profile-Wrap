@@ -58,7 +58,7 @@ Target: 10 weekly users (self-reported) and one public quote.
 
 | Cut | Why | Backed by |
 |---|---|---|
-| Scraping readers (Apify, Tavily, public pages) | They contradict "official API only" and add legal risk and docs. Option: move them to a separate opt-in package | devil #3, consultant risk 2 |
+| ~~Scraping readers (third-party tools, public pages)~~ | Done: removed in 0.4.0, official API only | devil #3, consultant risk 2 |
 | Codex plugin copy and duplicate skill trees | Skills live in 3 to 4 places and drift unless the build script runs. Option: generate on release only | devil #4 |
 | Linux desktop build | 2 downloads, 31 MB. Wait until someone asks | devil, consultant |
 | Directory chasing (Glama and similar) | Developers browse registries, the target reader does not | devil #6 |

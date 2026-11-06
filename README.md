@@ -144,7 +144,7 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 
 🌍 Works in English and Arabic
 
-🔎 Optional readers can list a person's recent posts (details in docs/PROVIDERS.md). They use two free tools (Apify and Tavily), then public pages. These do not use LinkedIn's official way in and may break LinkedIn's rules. All are off by default, and you accept the risk of each one yourself.
+🔎 Reads only through LinkedIn's official API. The old optional readers (third-party tools and public pages) were removed in 0.4.0.
 
 ## Is it safe?
 

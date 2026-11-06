@@ -5,6 +5,16 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Copy mode is the first-run default: `init` and the desktop app start new workspaces in copy mode (draft, gate, copy, paste by hand), with no LinkedIn developer app needed. Existing workspaces keep their mode. New `profile-wrap copy <draft>`.
+- A guided Connect LinkedIn screen in the desktop app (Alt+6) and `profile-wrap auth connect [--lang ar]`: five checked steps for the developer app, products, redirect URL, client id and secret, and sign-in, with the re-sign-in date. Posting through the API stays opt-in.
+- The new screens and messages are in English and Arabic (`gui_assets/i18n/`).
+
+### Removed
+
+- The optional non-official readers (two third-party services and public-page reading) and the `read posts` command. Profile-Wrap now reads only through LinkedIn's official API. An old config that still sets the reading keys fails `config validate` with a message naming what to delete; `read` exits 2 with the reason.
+
 ## [0.3.1] - 2026-11-06
 
 ### Changed

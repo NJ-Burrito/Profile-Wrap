@@ -114,7 +114,7 @@
           "name": "هل توجد أداة مجانية ومفتوحة المصدر لجدولة منشورات لينكدإن؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "نعم. Profile-Wrap مجاني ومفتوح المصدر بترخيص MIT. يخطط منشوراتك على لينكدإن وينشر كل منشور في وقت مناسب، وذلك بعد أن تضغط موافقة فقط."
+            "text": "نعم. Profile-Wrap مجاني ومفتوح المصدر بترخيص MIT. يخطط منشوراتك على لينكدإن ويقترح وقتا مناسبا لكل منشور، ولا ينشر شيئا قبل أن تضغط موافقة."
           }
         },
         {
@@ -122,7 +122,7 @@
           "name": "ما الفرق بين Profile-Wrap وBuffer أو Taplio؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Profile-Wrap لا يكلف شيئا وشيفرته مفتوحة. يعمل على حاسوبك أو داخل تطبيق الذكاء الاصطناعي الذي تستخدمه، والكتابة تتم بحساب الذكاء الاصطناعي الخاص بك. في 24 أكتوبر 2026 كانت خطط Buffer المدفوعة تبدأ من 5 دولارات شهريا، وخطط Taplio من 39 دولارا شهريا."
+            "text": "Profile-Wrap لا يكلف شيئا وشيفرته مفتوحة. يعمل على حاسوبك أو داخل تطبيق الذكاء الاصطناعي الذي تستخدمه، والكتابة تتم بمساعد ذكاء اصطناعي تجهزه أنت (Claude Code أو مفتاح من مزود ذكاء اصطناعي أو نموذج محلي مجاني). في 24 أكتوبر 2026 كانت خطط Buffer المدفوعة تبدأ من 5 دولارات شهريا، وخطط Taplio من 39 دولارا شهريا."
           }
         },
         {
@@ -138,7 +138,7 @@
           "name": "هل هو مجاني فعلا؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "نعم، التطبيق مجاني. الكتابة تتم بحساب الذكاء الاصطناعي الخاص بك (ChatGPT أو Claude أو Gemini أو نموذج محلي مجاني)."
+            "text": "نعم، التطبيق مجاني. الكتابة تتم بمساعد ذكاء اصطناعي تجهزه أنت: Claude Code، أو مفتاح من مزود ذكاء اصطناعي (قد يطلب المزود رسوما)، أو نموذج محلي مجاني. اشتراك المحادثة في ChatGPT أو Claude ليس مفتاحا."
           }
         },
         {
@@ -146,7 +146,7 @@
           "name": "هل من الآمن ربطه بلينكدإن؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "يستخدم واجهة لينكدإن الرسمية (API) عبر تطبيق مطوّر مجاني خاص بك. لا يطلب كلمة مرورك ولا يقرأ رسائلك الخاصة، ولا يُنشر شيء إلا إذا ضغطت موافقة."
+            "text": "للنشر، يستخدم واجهة لينكدإن الرسمية (API) عبر تطبيق مطوّر مجاني خاص بك. لا يطلب كلمة مرورك ولا يقرأ رسائلك الخاصة، ولا يُنشر شيء إلا إذا ضغطت موافقة."
           }
         },
         {
@@ -162,7 +162,7 @@
           "name": "هل أحتاج إلى البرمجة؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "لا. ثبّت التطبيق، واطلب منشورات أسبوعك، ثم اضغط موافقة."
+            "text": "لن تكتب شيفرة، لكنك تجهز بعض الأشياء أولا. العرض التجريبي ووضع النسخ لا يحتاجان حساب لينكدإن. النشر من Profile-Wrap يحتاج تطبيق مطور مجانيا على لينكدإن وصفحة على لينكدإن. والكتابة تحتاج Claude Code أو مفتاح مزود ذكاء اصطناعي أو نموذجا محليا مجانيا. بعد التجهيز يصبح الاستخدام اليومي: اطلب، راجع، اضغط."
           }
         },
         {
@@ -170,7 +170,7 @@
           "name": "أي طريقة أختار: الإضافة أم المهارات أم خادم MCP أم تطبيق سطح المكتب؟",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "إن كنت تستخدم Claude Code أو Codex فاختر الإضافة. إن كنت تستخدم تطبيق ذكاء اصطناعي آخر فاختر خادم MCP. وإن لم يكن لديك شيء من ذلك فاختر تطبيق سطح المكتب."
+            "text": "إن كنت تستخدم Claude Code أو Codex فاختر الإضافة. إن كنت تستخدم تطبيق ذكاء اصطناعي آخر فاختر خادم MCP. وإن لم يكن لديك شيء من ذلك فاختر تطبيق سطح المكتب (مسودات نصية فقط)."
           }
         },
         {
@@ -461,8 +461,9 @@ table,caption{text-align:right}
           <div class="flags"><span class="flag">خطّط</span><span class="flag">اكتب</span><span class="flag">وافق</span></div>
         </div>
         <h1><span translate="no" dir="ltr">Profile-Wrap</span><span class="h1d">مدير منشورات لينكدإن مجاني ومفتوح المصدر</span></h1>
-        <p class="lead">لينكدإن الخاص بك يعمل تلقائيا، وأنت صاحب القرار.</p>
+        <p class="lead">أسبوعك على لينكدإن مكتوب ومفحوص. أنت توافق، وأنت صاحب القرار.</p>
         <p class="sub"><span translate="no" dir="ltr">Profile-Wrap</span> مدير منشورات لينكدإن مجاني ومفتوح المصدر. يخطط منشورات أسبوعك، ويكتبها بأسلوبك، ويفحص كل منشور. لا يُنشر شيء حتى تضغط <span dir="ltr">Allow</span> (موافقة).</p>
+        <p class="sub"><strong>ما تحتاجه أولا.</strong> العرض التجريبي ووضع النسخ لا يحتاجان حساب لينكدإن. تحتاج مساعد كتابة: Claude Code، أو مفتاحا مدفوعا من مزود ذكاء اصطناعي، أو نموذجا محليا مجانيا (اشتراك المحادثة في ChatGPT أو Claude ليس مفتاحا). النشر من <span translate="no" dir="ltr">Profile-Wrap</span> يحتاج تطبيق مطور مجانيا على لينكدإن وصفحة على لينكدإن تنشئها بنفسك، مع تسجيل دخول كل 60 يوما تقريبا. تطبيق سطح المكتب يكتب مسودات نصية فقط. الشرائح وصور GIF تحتاج سطر الأوامر وNode وChrome وffmpeg.</p>
         <div class="ctas">
           <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>حمّل التطبيق المجاني</a>
           <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">الشيفرة على GitHub <svg class="i" style="transform:scaleX(-1)" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -502,7 +503,7 @@ table,caption{text-align:right}
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>يخطط منشورات أسبوعك</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg>يكتبها بأسلوبك</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>يفحص كل منشور قبل نشره</li>
-        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>يستخدم حساب الذكاء الاصطناعي الخاص بك<small>ChatGPT أو Claude أو Gemini أو نموذج محلي مجاني</small></span></li>
+        <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg><span>يكتب بمساعد الذكاء الاصطناعي الخاص بك<small>Claude Code أو مفتاح مزود أو نموذج محلي مجاني</small></span></li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-eye"/></svg>يعرض لك كل منشور أولا</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>ينشر في وقت مناسب</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>يعمل بالعربية والإنجليزية</li>
@@ -565,14 +566,14 @@ table,caption{text-align:right}
       <h2>أسئلة</h2>
       <div class="paper faq">
         <details><summary>ما هو Profile-Wrap؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap مدير منشورات لينكدإن مجاني ومفتوح المصدر. يخطط منشورات أسبوعك، ويكتبها بأسلوبك، ويفحص كل منشور. أنت تضغط موافقة (Allow) على المنشورات التي تعجبك فقط. هو برنامج للينكدإن، ولا علاقة له بالآلات أو المنتجات الأخرى التي تحمل اسما مشابها.</p></details>
-        <details><summary>هل توجد أداة مجانية ومفتوحة المصدر لجدولة منشورات لينكدإن؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم. Profile-Wrap مجاني ومفتوح المصدر بترخيص MIT. يخطط منشوراتك على لينكدإن وينشر كل منشور في وقت مناسب، وذلك بعد أن تضغط موافقة فقط.</p></details>
-        <details><summary>ما الفرق بين Profile-Wrap وBuffer أو Taplio؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap لا يكلف شيئا وشيفرته مفتوحة. يعمل على حاسوبك أو داخل تطبيق الذكاء الاصطناعي الذي تستخدمه، والكتابة تتم بحساب الذكاء الاصطناعي الخاص بك. في 24 أكتوبر 2026 كانت خطط Buffer المدفوعة تبدأ من 5 دولارات شهريا، وخطط Taplio من 39 دولارا شهريا.</p></details>
+        <details><summary>هل توجد أداة مجانية ومفتوحة المصدر لجدولة منشورات لينكدإن؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم. Profile-Wrap مجاني ومفتوح المصدر بترخيص MIT. يخطط منشوراتك على لينكدإن ويقترح وقتا مناسبا لكل منشور، ولا ينشر شيئا قبل أن تضغط موافقة.</p></details>
+        <details><summary>ما الفرق بين Profile-Wrap وBuffer أو Taplio؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>Profile-Wrap لا يكلف شيئا وشيفرته مفتوحة. يعمل على حاسوبك أو داخل تطبيق الذكاء الاصطناعي الذي تستخدمه، والكتابة تتم بمساعد ذكاء اصطناعي تجهزه أنت (Claude Code أو مفتاح من مزود ذكاء اصطناعي أو نموذج محلي مجاني). في 24 أكتوبر 2026 كانت خطط Buffer المدفوعة تبدأ من 5 دولارات شهريا، وخطط Taplio من 39 دولارا شهريا.</p></details>
         <details><summary>من صنع Profile-Wrap؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نادر الزغول، مهندس أتمتة اختبارات جودة البرمجيات. الشيفرة على GitHub بترخيص MIT.</p></details>
-        <details><summary>هل هو مجاني فعلا؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم، التطبيق مجاني. الكتابة تتم بحساب الذكاء الاصطناعي الخاص بك (ChatGPT أو Claude أو Gemini أو نموذج محلي مجاني).</p></details>
-        <details><summary>هل من الآمن ربطه بلينكدإن؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>يستخدم واجهة لينكدإن الرسمية (API) عبر تطبيق مطوّر مجاني خاص بك. لا يطلب كلمة مرورك ولا يقرأ رسائلك الخاصة، ولا يُنشر شيء إلا إذا ضغطت موافقة.</p></details>
+        <details><summary>هل هو مجاني فعلا؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم، التطبيق مجاني. الكتابة تتم بمساعد ذكاء اصطناعي تجهزه أنت: Claude Code، أو مفتاح من مزود ذكاء اصطناعي (قد يطلب المزود رسوما)، أو نموذج محلي مجاني. اشتراك المحادثة في ChatGPT أو Claude ليس مفتاحا.</p></details>
+        <details><summary>هل من الآمن ربطه بلينكدإن؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>للنشر، يستخدم واجهة لينكدإن الرسمية (API) عبر تطبيق مطوّر مجاني خاص بك. لا يطلب كلمة مرورك ولا يقرأ رسائلك الخاصة، ولا يُنشر شيء إلا إذا ضغطت موافقة.</p></details>
         <details><summary>هل ينشر Profile-Wrap دون أن يسألني؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>لا. كل منشور ينتظر على لوحتك حتى تضغط موافقة. اضغط رفض أو اطلب نسخة أفضل ولن يُنشر شيء.</p></details>
-        <details><summary>هل أحتاج إلى البرمجة؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>لا. ثبّت التطبيق، واطلب منشورات أسبوعك، ثم اضغط موافقة.</p></details>
-        <details><summary>أي طريقة أختار: الإضافة أم المهارات أم خادم MCP أم تطبيق سطح المكتب؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>إن كنت تستخدم Claude Code أو Codex فاختر الإضافة. إن كنت تستخدم تطبيق ذكاء اصطناعي آخر فاختر خادم MCP. وإن لم يكن لديك شيء من ذلك فاختر تطبيق سطح المكتب.</p></details>
+        <details><summary>هل أحتاج إلى البرمجة؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>لن تكتب شيفرة، لكنك تجهز بعض الأشياء أولا. العرض التجريبي ووضع النسخ لا يحتاجان حساب لينكدإن. النشر من Profile-Wrap يحتاج تطبيق مطور مجانيا على لينكدإن وصفحة على لينكدإن. والكتابة تحتاج Claude Code أو مفتاح مزود ذكاء اصطناعي أو نموذجا محليا مجانيا. بعد التجهيز يصبح الاستخدام اليومي: اطلب، راجع، اضغط.</p></details>
+        <details><summary>أي طريقة أختار: الإضافة أم المهارات أم خادم MCP أم تطبيق سطح المكتب؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>إن كنت تستخدم Claude Code أو Codex فاختر الإضافة. إن كنت تستخدم تطبيق ذكاء اصطناعي آخر فاختر خادم MCP. وإن لم يكن لديك شيء من ذلك فاختر تطبيق سطح المكتب (مسودات نصية فقط).</p></details>
         <details><summary>هل يعمل على ويندوز وماك ولينكس؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم، على الثلاثة.</p></details>
         <details><summary>هل يعمل بالعربية؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>نعم. العربية والإنجليزية جنبا إلى جنب.</p></details>
         <details><summary>هل Profile-Wrap من لينكدإن أو معتمد منها؟<svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></summary><p>لا. هو مشروع مستقل، وليس تابعا للينكدإن ولا معتمدا منها.</p></details>

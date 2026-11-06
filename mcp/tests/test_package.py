@@ -28,10 +28,7 @@ def test_server_json_validates_against_the_registry_schema():
 
 
 def test_server_json_matches_pyproject_and_readme():
-    try:
-        import tomllib
-    except ModuleNotFoundError:  # Python 3.10
-        import tomli as tomllib
+    import tomllib
     proj = tomllib.loads((MCP / "pyproject.toml").read_text(encoding="utf-8"))["project"]
     doc = json.loads((MCP / "server.json").read_text(encoding="utf-8"))
     assert proj["name"] == doc["packages"][0]["identifier"] and proj["version"] == doc["version"]

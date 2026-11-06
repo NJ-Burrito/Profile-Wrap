@@ -112,10 +112,7 @@ def test_codex_doc_has_mcp_toml_and_agents_section():
     doc = (REPO / "docs" / "CODEX.md").read_text(encoding="utf-8")
     assert "codex plugin marketplace add" in doc and "## 4. AGENTS.md section" in doc
     toml = re.search(r"```toml\n(.*?)```", doc, re.DOTALL).group(1)
-    try:
-        import tomllib
-    except ImportError:  # python 3.10
-        import tomli as tomllib
+    import tomllib
     cfg = tomllib.loads(toml)
     server = cfg["mcp_servers"]["profile-wrap"]
     assert server["command"] == "uvx" and server["args"][0].startswith("profile-wrap-mcp==")

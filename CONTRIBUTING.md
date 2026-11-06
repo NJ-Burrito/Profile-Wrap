@@ -7,7 +7,7 @@ Thanks for helping. Small, tested changes are easiest to review.
 ```bash
 git clone https://github.com/NJ-Burrito/Profile-Wrap
 cd Profile-Wrap
-uv sync                                  # or: python -m venv .venv && pip install -e ".[dev]"
+uv sync                                  # or: uv venv && uv pip install -e ".[dev]"
 uv run --with tzdata python -m profile_wrap demo run     # the whole pipeline, offline
 ```
 
@@ -31,7 +31,7 @@ and `profile-wrap demo run`). All three must pass.
 - **No personal data.** Demo data is the fictional persona Maya Rivera: reserved domains (`example.com`,
   `example.invalid`), fake ids (`urn:li:person:DEMO000000`). Never add a real name, client, URL, token, font,
   photo or signature. `leaks scan` fails the build if you do.
-- **Standard library only in the core.** Python 3.10+. Extras (`media`, `xlsx`, `sig`) stay optional.
+- **Standard library only in the core.** Python 3.11+. Extras (`media`, `xlsx`, `sig`) stay optional.
 - **Cross-platform paths.** Use `pathlib`; test the Windows and POSIX branches.
 - **Arabic and English are both first-class.** A bilingual pair changes together.
 - **A test for every refusal.** If a change makes the tool refuse something, a test shows the refusal and its message.

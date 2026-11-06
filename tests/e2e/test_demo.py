@@ -232,10 +232,7 @@ def test_plain_docs_explain_the_os_warnings():
         assert "```" not in text, doc
 
 def test_release_metadata_agrees_on_the_version():
-    try:
-        import tomllib
-    except ImportError:          # Python 3.10
-        import tomli as tomllib
+    import tomllib
     from profile_wrap import __version__ as version
     meta = tomllib.loads((REPO / "pyproject.toml").read_text(encoding="utf-8"))
     assert meta["project"]["version"] == version and meta["project"]["readme"] == "README.md"

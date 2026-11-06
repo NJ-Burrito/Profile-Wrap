@@ -1,6 +1,6 @@
 # Platforms: Windows, macOS and Linux
 
-Profile-Wrap runs on all three. The core is Python 3.10 or newer with the standard library only. The
+Profile-Wrap runs on all three. The core is Python 3.11 or newer with the standard library only. The
 text and slides lane needs nothing else to start; the GIF lane needs Node 22 or newer, a browser and
 ffmpeg. `profile-wrap doctor` checks every item below and prints the install line for **your** OS.
 
@@ -8,7 +8,7 @@ ffmpeg. `profile-wrap doctor` checks every item below and prints the install lin
 
 | You want | You need |
 |---|---|
-| The demo, copy mode, drafting, the gate, the board | Python 3.10+ (and `tzdata` on Windows) |
+| The demo, copy mode, drafting, the gate, the board | Python 3.11+ (and `tzdata` on Windows) |
 | AI drafting and review | the `claude` CLI |
 | Slides to PNG or PDF | Node 22+, a Chrome or Chromium, `npx` |
 | Animated GIFs | the above plus ffmpeg and ffprobe |
@@ -37,7 +37,7 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 
 | Tool | Windows | macOS | Linux |
 |---|---|---|---|
-| Python 3.10+ | `winget install Python.Python.3.12` or `scoop install python` | `brew install python@3.12` | `sudo apt install python3.12` or `sudo dnf install python3.12` |
+| Python 3.11+ | `winget install Python.Python.3.12` or `scoop install python` | `brew install python@3.12` | `sudo apt install python3.12` or `sudo dnf install python3.12` |
 | git | `winget install Git.Git` | `brew install git` | `sudo apt install git` |
 | Node 22+ | `winget install OpenJS.NodeJS.LTS` | `brew install node@22` or `nvm install 22` | `nvm install 22`, or distro packages |
 | ffmpeg | `winget install Gyan.FFmpeg` or `scoop install ffmpeg` | `brew install ffmpeg` | `sudo apt install ffmpeg` |
@@ -48,10 +48,10 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 ## Starting profile-wrap
 
 - **Plugin:** `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap` (macOS, Linux, Git Bash) or `bin\profile-wrap.cmd` (Windows).
-  The launcher looks for Python 3.13, 3.12, 3.11, 3.10 and then `python3` and `python`. Set
+  The launcher looks for Python 3.13, 3.12 and 3.11 and then `python3` and `python`. Set
   `PROFILE_WRAP_PYTHON` to force one. On Python 3.9 or older it prints one message with the exact fix and
   stops.
-- **Source or wheel:** `uv tool install profile-wrap` or `pipx install profile-wrap`, then `profile-wrap`.
+- **Source or wheel:** `uv tool install profile-wrap`, then `profile-wrap`.
 - **Schedulers** never use the plugin directory. They call the stable copy that
   `profile-wrap runtime install` writes: `<python> <data>/runtime/current <arguments>`. The path is stable
   across plugin updates, so jobs keep working until you run `profile-wrap runtime sync`.

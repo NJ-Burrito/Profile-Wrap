@@ -7,6 +7,7 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- Python 3.11 or newer is required (3.10 reached end of life). The GitHub workflows now use `astral-sh/setup-uv` and uv instead of setup-python and pip, and Pillow is pinned to 13.0.0 or newer for every user, which closes the open Pillow security alerts.
 - The GitHub repository is now NJ-Burrito/Profile-Wrap and the site is https://nj-burrito.github.io/Profile-Wrap/. Every link and display name says Profile-Wrap. Package names, the command and the plugin and registry ids stay lowercase `profile-wrap`.
 
 ## [0.3.0] - 2026-10-20

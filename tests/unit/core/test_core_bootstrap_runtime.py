@@ -23,13 +23,13 @@ BIN = REPO / "bin"
 def test_python_39_prints_one_actionable_message(label, fix):
     message = find_python.version_message((3, 9, 18), label)
     assert message.count("\n") == 2                       # one message: headline, fix, uv option
-    assert "Python 3.9.18" in message and "3.10" in message
+    assert "Python 3.9.18" in message and "3.11" in message
     assert message.count("Fix:") == 1 and fix in message
     assert "uv run --python 3.12" in message
 
 
 def test_current_python_has_no_message():
-    assert find_python.version_message((3, 10, 0)) is None
+    assert find_python.version_message((3, 11, 0)) is None
     assert find_python.version_message((3, 13, 1)) is None
     assert find_python.version_message() is None
 
@@ -40,7 +40,7 @@ def test_find_prefers_override_and_skips_old(monkeypatch):
     assert cmd == [sys.executable] and ver[:2] == sys.version_info[:2]
     monkeypatch.setenv("PROFILE_WRAP_PYTHON", "definitely-not-a-python")
     cmd, ver = find_python.find()
-    assert cmd is None or find_python.probe(cmd)[:2] >= (3, 10)
+    assert cmd is None or find_python.probe(cmd)[:2] >= (3, 11)
 
     monkeypatch.delenv("PROFILE_WRAP_PYTHON")
     monkeypatch.setattr(find_python, "probe", lambda c: (3, 9, 1))
@@ -93,7 +93,7 @@ def test_python_shim_runs_the_cli():
 def test_python_shim_on_fake_39_prints_one_message_and_exits_1():
     result = run_shim(["--version"], {"PROFILE_WRAP_TEST": "1", "PROFILE_WRAP_FAKE_PYVER": "3.9.18"})
     assert result.returncode == 1 and result.stdout == ""
-    assert result.stderr.count("profile-wrap needs Python 3.10") == 1
+    assert result.stderr.count("profile-wrap needs Python 3.11") == 1
     assert result.stderr.count("Fix:") == 1
 
 

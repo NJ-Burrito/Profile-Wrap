@@ -108,7 +108,7 @@ ACK_DOCUMENTS = ("docs/references/compliance.md", "docs/TERMS-AND-RISK.md")
 PAUSE_FILE = "PAUSE"
 PAUSE_KINDS = ("posting", "comments")
 
-MIN_PYTHON = (3, 10)
+MIN_PYTHON = (3, 11)
 WORKER_ENV = "PROFILE_WRAP_WORKER"
 TEST_ENV = "PROFILE_WRAP_TEST"
 SCHEMA_VERSION = 1

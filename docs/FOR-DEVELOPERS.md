@@ -8,7 +8,7 @@ The plain-language front page is the [README](../README.md). This page is the te
 
 [![CI](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](../LICENSE)
-[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](../pyproject.toml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](../pyproject.toml)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](PLATFORMS.md)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](../.claude-plugin/plugin.json)
 [![Arabic and English](https://img.shields.io/badge/Arabic%20%2B%20English-first--class-0d9488.svg)](GATES.md)
@@ -47,12 +47,12 @@ and the board.
 
 ## Quickstart (5 minutes)
 
-You need Python 3.10 or newer. Nothing else.
+You need Python 3.11 or newer. Nothing else.
 
 **1. Install.**
 
 ```bash
-uv tool install profile-wrap        # or: pipx install profile-wrap
+uv tool install profile-wrap
 ```
 
 Not on PyPI for you yet? Use `uv tool install git+https://github.com/NJ-Burrito/Profile-Wrap`. As a Claude

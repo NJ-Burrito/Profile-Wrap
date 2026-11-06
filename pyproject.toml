@@ -7,7 +7,7 @@ name = "profile_wrap"
 version = "0.3.0"
 description = "A fact-gated, compliance-first LinkedIn content pipeline for Claude Code (official API only)."
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [{ name = "profile-wrap contributors" }]
 keywords = ["linkedin", "claude-code", "content", "automation", "official-api", "arabic", "bilingual"]
@@ -20,7 +20,7 @@ classifiers = [
   "Operating System :: MacOS",
   "Operating System :: POSIX :: Linux",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Topic :: Communications",
 ]
@@ -30,12 +30,12 @@ dependencies = [
 
 [project.optional-dependencies]
 tz = ["tzdata"]
-media = ["pillow>=13.0.0; python_version >= '3.11'", "pillow; python_version < '3.11'", "numpy", "scipy"]
+media = ["pillow>=13.0.0", "numpy", "scipy"]
 xlsx = ["openpyxl"]
 sig = ["fonttools", "scikit-image"]
 keys = ["keyring"]
 gui = ["pywebview", "keyring"]
-dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow>=13.0.0; python_version >= '3.11'", "pillow; python_version < '3.11'", "keyring", "pyyaml", "tomli; python_version < '3.11'"]
+dev = ["pytest>=8", "pytest-cov", "ruff", "mypy", "tzdata", "pillow>=13.0.0", "keyring", "pyyaml"]
 
 [project.urls]
 Homepage = "https://github.com/NJ-Burrito/Profile-Wrap"
@@ -76,8 +76,8 @@ show_missing = true
 
 [tool.ruff]
 line-length = 100
-target-version = "py310"
+target-version = "py311"
 
 [tool.mypy]
-python_version = "3.10"
+python_version = "3.11"
 ignore_missing_imports = true

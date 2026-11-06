@@ -57,7 +57,7 @@ def test_ci_skeleton_runs_tests_compliance_and_leak_scan():
     assert "profile_wrap.leakcheck scan --tree" in ci
     for osname in ("ubuntu-latest", "macos-latest", "windows-latest"):
         assert osname in ci
-    assert '"3.10"' in ci and '"3.12"' in ci
+    assert '"3.11"' in ci and '"3.12"' in ci
     assert not re.search(r"\bsecrets\.[A-Z_]+\s*\}\}.*\n.*run:.*echo", ci)  # secrets not echoed
 
 

@@ -6,7 +6,7 @@ Regenerated at each release by `tools/export_public.py` (maintainer step). Nothi
 
 | Component | Use | Licence | How it arrives |
 |---|---|---|---|
-| Python standard library | the whole core (stdlib only, Python 3.10+) | PSF-2.0 | the user's Python |
+| Python standard library | the whole core (stdlib only, Python 3.11+) | PSF-2.0 | the user's Python |
 
 ## Optional extras (installed on demand, never bundled)
 

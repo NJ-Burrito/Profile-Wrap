@@ -151,9 +151,9 @@ class Doctor:
     def check_python(self) -> None:
         ver = ".".join(str(p) for p in sys.version_info[:3])
         if sys.version_info[:2] >= policy.MIN_PYTHON:
-            self.add("python", "Python >= 3.10", "pass", f"Python {ver} at {sys.executable}")
+            self.add("python", "Python >= 3.11", "pass", f"Python {ver} at {sys.executable}")
         else:
-            self.add("python", "Python >= 3.10", "fail", f"Python {ver} is too old", "python")
+            self.add("python", "Python >= 3.11", "fail", f"Python {ver} is too old", "python")
 
     def check_tzdata(self) -> None:
         if tzutil.tzdata_available():
@@ -180,7 +180,7 @@ class Doctor:
         self.tool("npx", "npx", "npx", "warn", "installs the pinned renderers")
         uv = self.which("uv")
         self.add("uv", "uv (optional)", "pass" if uv else "skip",
-                 uv or "uv not found; optional, pip works too",
+                 uv or "uv not found; optional, the install lines in the docs use it",
                  hint="" if uv else HINTS["uv"][self.label])
         self.tool("ffmpeg", "ffmpeg", "ffmpeg", "warn", "needed to build GIFs")
         self.tool("ffprobe", "ffprobe", "ffprobe", "warn", "needed to verify GIFs")

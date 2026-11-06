@@ -1,4 +1,4 @@
-"""Find a Python >= 3.10 and print one actionable message when there is none.
+"""Find a Python >= 3.11 and print one actionable message when there is none.
 
 Keep this file parseable by Python 3.9: no ``match``, no ``X | Y`` annotations, no
 parenthesised context managers. The shims in ``bin/`` import it before anything else.
@@ -10,7 +10,7 @@ import shutil
 import subprocess
 import sys
 
-MIN_VERSION = (3, 10)
+MIN_VERSION = (3, 11)
 
 HINTS = {
     "windows": "winget install Python.Python.3.12   (or: scoop install python)",
@@ -35,7 +35,7 @@ def version_message(version_info=None, os_label=None):
     label = os_label or os_name()
     found = ".".join(str(p) for p in info[:3])
     return (
-        "profile-wrap needs Python 3.10 or newer, but this is Python %s.\n"
+        "profile-wrap needs Python 3.11 or newer, but this is Python %s.\n"
         "  Fix: %s\n"
         "  Or install uv (https://docs.astral.sh/uv/) and run:  uv run --python 3.12 profile-wrap ..."
         % (found, HINTS.get(label, HINTS["linux"]))
@@ -45,9 +45,9 @@ def version_message(version_info=None, os_label=None):
 def candidates():
     """Interpreter commands to try, most specific first."""
     if os_name() == "windows":
-        out = [["py", "-3.13"], ["py", "-3.12"], ["py", "-3.11"], ["py", "-3.10"], ["py", "-3"]]
+        out = [["py", "-3.13"], ["py", "-3.12"], ["py", "-3.11"], ["py", "-3"]]
     else:
-        out = [["python3.13"], ["python3.12"], ["python3.11"], ["python3.10"]]
+        out = [["python3.13"], ["python3.12"], ["python3.11"]]
     return out + [["python3"], ["python"]]
 
 
@@ -67,7 +67,7 @@ def probe(cmd):
 
 
 def find(env_override=True):
-    """Return (command_list, version) of the first Python >= 3.10, else (None, best_found)."""
+    """Return (command_list, version) of the first Python >= 3.11, else (None, best_found)."""
     forced = os.environ.get("PROFILE_WRAP_PYTHON") if env_override else None
     best = None
     tries = [[forced]] if forced else []

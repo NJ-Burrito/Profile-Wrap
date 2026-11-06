@@ -64,8 +64,8 @@ def test_pypi_trusted_publishing():
 
 def test_python_dist_builds_both_packages():
     block = _job_block("python-dist")
-    assert "build --outdir dist/profile-wrap ." in block
-    assert "build --outdir dist/profile-wrap-mcp mcp" in block
+    assert "uv build --out-dir dist/profile-wrap ." in block
+    assert "uv build --out-dir dist/profile-wrap-mcp mcp" in block
 
 
 def test_checksums_and_attestation():

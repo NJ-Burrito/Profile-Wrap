@@ -21,7 +21,7 @@ The skills and commands drive the `profile-wrap` command line tool, which does t
 
 ## Install
 
-1. Install the tool: `uv tool install profile_wrap` (Python 3.10 or newer).
+1. Install the tool: `uv tool install profile_wrap` (Python 3.11 or newer).
 2. In Claude Code: `/plugin marketplace add NJ-Burrito/Profile-Wrap`, then `/plugin install profile-wrap@profile-wrap`.
 3. Run `/profile-wrap:setup demo` for a no-account tour, then `/profile-wrap:doctor` to check your machine.
 

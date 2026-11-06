@@ -144,7 +144,7 @@ Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESK
 
 🌍 Works in English and Arabic
 
-🔎 Reads only through LinkedIn's official API. The old optional readers (third-party tools and public pages) were removed in 0.4.0.
+🔎 Reads only through LinkedIn's official way in. The old optional readers (third-party tools and public pages) were removed in 0.4.0.
 
 ## Is it safe?
 

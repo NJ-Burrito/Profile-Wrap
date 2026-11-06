@@ -5,6 +5,8 @@ and versions follow [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.1] - 2026-11-06
+
 ### Changed
 
 - Python 3.11 or newer is required (3.10 reached end of life). The GitHub workflows now use `astral-sh/setup-uv` and uv instead of setup-python and pip, and Pillow is pinned to 13.0.0 or newer for every user, which closes the open Pillow security alerts.

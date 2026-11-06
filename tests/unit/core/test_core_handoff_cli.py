@@ -114,7 +114,7 @@ def test_config_commands(make_workspace, capsys):
     assert call("config", "show", "posting.per_week", "--workspace", str(ws)) == 0
     assert capsys.readouterr().out.strip() == "3"
     assert call("config", "show", "posting", "--workspace", str(ws)) == 0
-    assert json.loads(capsys.readouterr().out)["mode"] == "api_click"
+    assert json.loads(capsys.readouterr().out)["mode"] == "copy"   # first run lands in copy mode
     assert call("config", "show", "--workspace", str(ws)) == 0
     shown = json.loads(capsys.readouterr().out)
     assert "effective" in shown and shown["config"]["profile_id"] == "en-only"

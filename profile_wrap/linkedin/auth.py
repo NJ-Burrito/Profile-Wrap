@@ -231,6 +231,27 @@ def prompt_client(cfg_dir: Path, input_fn: Callable[[str], str] = input,
     return cid, secret
 
 
+def complete_signin(cfg: Dict[str, Any], code: str, cid: str, secret: str, redirect: str, *,
+                    hp: Optional[HostPolicy] = None, version: Optional[str] = None) -> Dict[str, Any]:
+    """Trade the authorization code for a token, read who signed in, store the token. Shared by the
+    terminal flow and the desktop app so both end in the same file."""
+    from . import api  # local import: api imports this module's token helpers
+
+    li = cfg["linkedin"]
+    data = exchange_code(code, cid, secret, redirect, hp=hp)
+    expires_in = int(data.get("expires_in", DEFAULT_EXPIRES))
+    access = data["access_token"]
+    client = api.Client(access, version or api.default_version(cfg), hp=hp,
+                        timeout=float(li.get("timeout_s", 30)))
+    me = client.userinfo()
+    now = time.time()
+    record = {"access_token": access, "expires_at": now + expires_in,
+              "author": f"urn:li:person:{me['sub']}", "name": me.get("name"),
+              "scopes": data.get("scope", " ".join(li["scopes"])), "created": now}
+    save_token(secrets_dir(cfg), record)
+    return record
+
+
 def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
              open_browser: Callable[[str], Any] = webbrowser.open,
              input_fn: Callable[[str], str] = input,
@@ -239,8 +260,6 @@ def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
              callback_timeout: float = CALLBACK_TIMEOUT_S,
              out: Callable[[str], None] = print) -> Dict[str, Any]:
     """Run the whole sign-in and save the token. Returns the stored token record."""
-    from . import api  # local import: api imports this module's token helpers
-
     li = cfg["linkedin"]
     cfg_dir = secrets_dir(cfg)
     cid, secret = read_client(cfg_dir)
@@ -263,17 +282,9 @@ def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
             except Exception:  # a headless machine: the printed link is enough
                 pass
         code = wait_for_callback(redirect, state, callback_timeout, on_ready=announce)
-    data = exchange_code(code, cid, secret, redirect, hp=hp)
-    expires_in = int(data.get("expires_in", DEFAULT_EXPIRES))
-    access = data["access_token"]
-    client = api.Client(access, version or api.default_version(cfg), hp=hp,
-                        timeout=float(li.get("timeout_s", 30)))
-    me = client.userinfo()
-    record = {"access_token": access, "expires_at": time.time() + expires_in,
-              "author": f"urn:li:person:{me['sub']}", "name": me.get("name"),
-              "scopes": data.get("scope", " ".join(li["scopes"])), "created": time.time()}
-    save_token(cfg_dir, record)
-    out(f"Signed in as {me.get('name')}. The token is valid for {expires_in // 86400} days.")
+    record = complete_signin(cfg, code, cid, secret, redirect, hp=hp, version=version)
+    expires_in = int(record["expires_at"] - record["created"])
+    out(f"Signed in as {record.get('name')}. The token is valid for {expires_in // 86400} days.")
     return record
 
 

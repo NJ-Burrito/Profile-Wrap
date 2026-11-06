@@ -37,7 +37,7 @@ Profile-Wrap is free, but setup takes a few steps. This is the full list.
 
 **No account needed**
 - 👀 The offline demo: a made-up account, a real review board. Nothing leaves your computer.
-- 📋 Copy mode: Profile-Wrap writes the post and you paste it into LinkedIn yourself. No LinkedIn developer app. You still need a writing helper (below).
+- 📋 Copy mode is where every new workspace starts: Profile-Wrap drafts the post, the gate checks it, you copy it (`profile-wrap copy <draft>`, or the Copy button in the desktop app) and paste it into LinkedIn yourself. No LinkedIn developer app and no token. You still need a writing helper (below).
 
 **A writing helper (pick one)**
 - Claude Code, with its `claude` command installed
@@ -46,12 +46,15 @@ Profile-Wrap is free, but setup takes a few steps. This is the full list.
 
 A ChatGPT or Claude chat subscription is not a key and does not work on its own. [All providers](docs/PROVIDERS.md).
 
-**To post from Profile-Wrap (optional)**
+**To post from Profile-Wrap (optional, you opt in later)**
 - A free LinkedIn developer app that you create yourself, a LinkedIn Page you manage (LinkedIn's form may ask for one), and one redirect address. Plan for roughly 15 minutes. That time is a guess, not measured.
 - Sign in again about every 60 days. There is no refresh.
-- Step by step: [LinkedIn app setup](docs/linkedin-app-setup.md)
+- Guided, with a check at every step and your re-sign-in date: the **Connect LinkedIn** screen in the desktop app, or `profile-wrap auth connect` in a terminal (English or Arabic). It never asks for your LinkedIn password.
+- Written steps: [LinkedIn app setup](docs/linkedin-app-setup.md)
+- Existing workspaces keep the posting mode they already have; nothing is switched for you.
 
 **Good to know**
+- The desktop app has a Connect LinkedIn screen in English and Arabic (the new screens carry both; the older ones are English for now).
 - The desktop app writes **text drafts only**. Slides and GIFs need the command line (`build-week`) plus Node 22 or newer, Chrome and ffmpeg ([details](docs/GUI.md)).
 - The downloads are unsigned, so your computer will warn you once ([how to open them](docs/INSTALL-DESKTOP.md)).
 

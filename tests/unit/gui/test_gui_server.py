@@ -162,7 +162,7 @@ def test_assets_have_no_inline_code_no_external_origin_no_linkedin_logo():
         assert "innerHTML" not in text and "@import" not in text and "@font-face" not in text
     assert "linkedin" not in (html + js + css).lower().replace("not affiliated with linkedin", "")
     assert not list((REPO / "gui_assets").glob("*.woff*")) and not list((REPO / "gui_assets").glob("*.ttf"))
-    assert 'lang="en"' in html and 'aria-label="Screens"' in html and 'class="skip"' in html
+    assert 'lang="__LANG__" dir="__DIR__"' in html and 'aria-label="Screens"' in html and 'class="skip"' in html
 
 
 def test_selftest_passes_headless_and_only_touches_loopback(monkeypatch, capsys):

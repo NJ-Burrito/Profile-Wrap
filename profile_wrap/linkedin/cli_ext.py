@@ -50,6 +50,15 @@ def cmd_auth(args: argparse.Namespace) -> int:
         else:
             print(f"token: {status['state']} - {status['message']}")
         return policy.EXIT_OK if status["state"] in ("ok", "warn") else policy.EXIT_FAIL
+    if getattr(args, "what", None) == "connect":
+        from .. import i18n
+        from . import connect
+
+        lang = getattr(args, "lang", None) or connect.ui_language(cfg)
+        if not sys.stdin.isatty():
+            print("profile-wrap auth connect: " + i18n.t("cli.needs_tty", lang), file=sys.stderr)
+            return policy.EXIT_FAIL
+        return policy.EXIT_OK if connect.run_guided(cfg, lang=lang, ws=ws, hp=_hp(cfg)) == 0 else policy.EXIT_FAIL
     try:
         auth.run_auth(cfg, paste_redirect=bool(args.paste_redirect), hp=_hp(cfg))
     except Exception as exc:  # noqa: BLE001 - one actionable line, no traceback
@@ -274,7 +283,9 @@ def _common(p: argparse.ArgumentParser) -> None:
 
 def register(subparsers: Any) -> None:
     p = subparsers.add_parser("auth", help="sign in to your own LinkedIn app (3-legged OAuth)")
-    p.add_argument("what", nargs="?", choices=["check"], help="'check' shows the token state")
+    p.add_argument("what", nargs="?", choices=["check", "connect"],
+                   help="'check' shows the token state; 'connect' is the guided five-step setup (en or ar)")
+    p.add_argument("--lang", choices=["en", "ar"], default=None, help="language of 'auth connect' (default: board.ui_language)")
     p.add_argument("--paste-redirect", action="store_true",
                    help="print the link and paste the final address back (SSH, containers)")
     _common(p)

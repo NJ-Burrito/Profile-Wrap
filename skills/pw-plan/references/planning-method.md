@@ -57,3 +57,29 @@ Every strategy review ends with one thing to stop doing and the reason. A plan t
 - `profile-wrap calendar validate` passes.
 - The week fits the weekly ceiling and the gap.
 - The user has seen the dry run of the build.
+
+## 7. Series about a tool or project
+
+Works for a tool, a book, a course or any product the user keeps writing about.
+
+- One post per subject per part. Set `subject` on each calendar entry so the parts can be found together.
+- The first part answers "why I made it". Later parts take a different job each: how it works, one real use,
+  one limit, what changed in the latest release. A part that repeats an earlier angle is cut or reframed.
+- Before planning a part, list the earlier angles on the subject (`profile_wrap.plan.calendar.prior_angles(subject)`,
+  or the series file's "Angles used so far") and write the new angle against them. The draft's `meta.json` says
+  how it differs.
+- Before each part, re-read the source of every version or count (repository, release page, README) on the day,
+  say what you saw, and add a fact that supersedes the old one. The user verifies it. Sources can disagree
+  (a headline count and a README count): record each figure, and say which one a post may quote.
+- Give the parts a fixed number, and let the last part say it is the last.
+
+## 8. The weekly learnings loop
+
+1. `profile-wrap track week` writes `metrics/weekly/<YYYY-Www>.json` from the ledger and any snapshot in
+   `metrics/track.jsonl`. A metric nobody measured is `null` ("not measured"), never 0.
+2. `profile-wrap track prompt --week <week>` prints the weekly-read prompt; the reader writes
+   `research/analysis-kb/<week>.md` and updates `research/analysis-kb/LEARNINGS.md`.
+   `profile-wrap track check --week <week>` checks the headings and the 60-line cap.
+3. Planning reads `LEARNINGS.md` as a hint (SKILL step 6). It never overrides a fact or a slot rule, and a
+   learning counts as Confirmed only after two weeks support it.
+4. Under five measured posts there is no conclusion. State the spread before comparing two groups.

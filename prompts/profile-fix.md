@@ -37,6 +37,8 @@ DATA>>>
   date, a metric or a skill.
 - Wording for someone open to work appears only when the goal is `job_seeking`; then it is advice only.
 - For a bilingual profile, treat both sides as one unit and say which side you changed.
+- Text you cannot support from the user's own words or a verified fact is written as `PLACEHOLDER: <what the
+  user must write>`, never as finished prose. A `PLACEHOLDER` line is not a fact and is never reused in a post.
 
 ## Write `{{out_path}}`
 
@@ -50,5 +52,10 @@ After:  <the new line>
 
 Then the full new text of the section, under the heading `Result`, and its character count. If a rubric point
 cannot be fixed from the facts you have, list it under `Needs from you` with the question to answer.
+
+End the file with a section `Apply by hand` holding these checks, for the user to follow in their own browser:
+apply one section at a time; after saving any experience entry, re-read the headline at the top of the profile
+(a form may change it); Escape discards a form unsaved; skip any share or notify-your-network prompt; the skills
+section may have a cap; both sides of a bilingual pair in the same sitting.
 
 Report in at most 6 lines: the number of edits, the final length against the limit, and the path written.

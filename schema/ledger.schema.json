@@ -105,10 +105,31 @@
   },
   "then": {
     "required": [
-      "urn",
-      "url",
       "posted_at",
       "automation"
-    ]
+    ],
+    "if": {
+      "properties": {
+        "automation": {
+          "properties": {
+            "mode": {
+              "const": "copy"
+            }
+          },
+          "required": [
+            "mode"
+          ]
+        }
+      },
+      "required": [
+        "automation"
+      ]
+    },
+    "else": {
+      "required": [
+        "urn",
+        "url"
+      ]
+    }
   }
 }

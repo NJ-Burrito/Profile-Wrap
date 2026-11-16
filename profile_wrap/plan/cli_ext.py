@@ -70,7 +70,7 @@ def cmd_calendar_add(args: argparse.Namespace) -> int:
         return calmod.add_entry(cal, date=args.date, slug=args.slug, title=args.title, lang=lang, format=fmt,
                                 pillar=args.pillar, angle=args.angle, hook=args.hook, claims=claims,
                                 time=args.time, time_reason=args.time_reason, series=args.series,
-                                pair=args.pair)
+                                pair=args.pair, subject=args.subject)
 
     try:
         entry = calmod.update(ws, change)
@@ -123,6 +123,98 @@ def cmd_calendar_fill(args: argparse.Namespace) -> int:
           [f"{'would add' if args.dry_run else 'added'} {e['slug']} ({e.get('pillar') or 'no pillar'}, {e['format']})"
            for e in added] + [f"{len(added)} open slots"])
     return OK
+
+
+def _emit_reschedule(args: argparse.Namespace, plan: calmod.ReschedulePlan, cal_after: Dict[str, Any],
+                     cfg: Dict[str, Any], ws: Path, heading: str) -> int:
+    report = calmod.validate(cal_after, cfg, workspace=ws)
+    lines = ([heading] if heading else []) + plan.lines()
+    if not plan.changed:
+        lines.append("nothing to move")
+    lines += [f"WARN {m}" for m in report.warnings] + [f"FAIL {m}" for m in report.errors]
+    if args.dry_run:
+        lines.append("dry run: nothing was written")
+    _emit(args, {"dry_run": args.dry_run, **plan.as_dict(), "errors": report.errors,
+                 "warnings": plan.warnings + report.warnings}, lines)
+    return FAIL if report.errors and not args.dry_run else OK
+
+
+def cmd_calendar_insert(args: argparse.Namespace) -> int:
+    ws = _ws(args)
+    cfg = _cfg(ws)
+    holidays = hol.load(ws, cfg)
+    claims = [c.strip() for c in (args.claims or "").split(",") if c.strip()]
+    lang = args.lang or cfg["persona"].get("primary_language", "en")
+    fmt = args.format or (cfg["posting"].get("formats_enabled") or ["text"])[0]
+    box: Dict[str, Any] = {}
+
+    def build(cal: Dict[str, Any]) -> calmod.ReschedulePlan:
+        plan = calmod.insert_entry(
+            cal, cfg, date=args.date, slug=args.slug, title=args.title, lang=lang, format=fmt,
+            holidays=holidays, workspace=ws, pillar=args.pillar, angle=args.angle, hook=args.hook,
+            claims=claims, time=args.time, time_reason=args.time_reason, series=args.series,
+            pair=args.pair, subject=args.subject, pinned=True if args.pinned else None)
+        box["cal"] = cal
+        return plan
+
+    try:
+        plan = calmod.apply_reschedule(ws, build, what=f"insert {args.slug} on {args.date}", dry_run=args.dry_run)
+    except calmod.CalendarError as exc:
+        print(f"FAIL {exc}")
+        return FAIL
+    if not args.dry_run and plan.changed:
+        calmod.write_md(ws, calmod.load(ws))
+    return _emit_reschedule(args, plan, box.get("cal", calmod.load(ws)), cfg, ws, "")
+
+
+def cmd_calendar_shift(args: argparse.Namespace) -> int:
+    ws = _ws(args)
+    cfg = _cfg(ws)
+    holidays = hol.load(ws, cfg)
+    start = _dt.date.fromisoformat(args.from_date)
+    box: Dict[str, Any] = {}
+
+    def build(cal: Dict[str, Any]) -> calmod.ReschedulePlan:
+        plan = calmod.reschedule(cal, cfg, start=start, days=args.days, holidays=holidays, workspace=ws)
+        box["cal"] = cal
+        return plan
+
+    try:
+        plan = calmod.apply_reschedule(ws, build, what=f"shift from {args.from_date} by {args.days} days",
+                                       dry_run=args.dry_run)
+    except calmod.CalendarError as exc:
+        print(f"FAIL {exc}")
+        return FAIL
+    if not args.dry_run and plan.changed:
+        calmod.write_md(ws, calmod.load(ws))
+    return _emit_reschedule(args, plan, box.get("cal", calmod.load(ws)), cfg, ws, "")
+
+
+def _register_calendar_reschedule(csub: Any) -> None:
+    """``calendar insert`` and ``calendar shift`` (kept apart from the other calendar commands)."""
+    p = csub.add_parser("insert", help="insert an entry on a date and push later planned entries to the next free days")
+    _common(p, dry_run=True)
+    p.add_argument("date", help="YYYY-MM-DD")
+    p.add_argument("--slug", required=True)
+    p.add_argument("--title", required=True)
+    p.add_argument("--lang")
+    p.add_argument("--format")
+    p.add_argument("--pillar")
+    p.add_argument("--angle")
+    p.add_argument("--hook")
+    p.add_argument("--subject", help="the tool or topic this post is about (angle dedup)")
+    p.add_argument("--claims", help="comma-separated fact ids")
+    p.add_argument("--time", help="HH:MM")
+    p.add_argument("--time-reason")
+    p.add_argument("--series")
+    p.add_argument("--pair", help="slug (or pair id) of the other half of a bilingual pair")
+    p.add_argument("--pinned", action="store_true", help="the new entry never moves in later shifts")
+    p.set_defaults(func=_safe(cmd_calendar_insert))
+    p = csub.add_parser("shift", help="move planned entries from a date later by N days (pinned entries stay)")
+    _common(p, dry_run=True)
+    p.add_argument("--from", dest="from_date", required=True, metavar="DATE", help="first date to move, YYYY-MM-DD")
+    p.add_argument("--days", type=int, required=True, help="how many days later (1 or more)")
+    p.set_defaults(func=_safe(cmd_calendar_shift))
 
 
 # ------------------------------------------------------------------------ plan
@@ -282,6 +374,7 @@ def register(subparsers: Any) -> None:
     p.add_argument("--time-reason")
     p.add_argument("--series")
     p.add_argument("--pair", help="slug (or pair id) of the other half of a bilingual pair")
+    p.add_argument("--subject", help="the tool or topic this post is about (angle dedup)")
     p.set_defaults(func=_safe(cmd_calendar_add))
     p = csub.add_parser("validate", help="duplicates, window, holidays, claim ids")
     _common(p)
@@ -294,6 +387,7 @@ def register(subparsers: Any) -> None:
     p.add_argument("--weeks", type=int, default=1)
     p.add_argument("--start", help="first day, YYYY-MM-DD (default: today)")
     p.set_defaults(func=_safe(cmd_calendar_fill))
+    _register_calendar_reschedule(csub)
 
     plan = subparsers.add_parser("plan", help="posting windows, slots and holidays")
     psub = plan.add_subparsers(dest="plan_cmd", required=True)

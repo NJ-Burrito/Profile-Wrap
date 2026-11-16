@@ -18,7 +18,7 @@ from .numspec import NumSpec, parse_number_cell, unitless_entries
 from .table import Table, atomic_write_text, parse_table
 
 FACT_COLUMNS = ["id", "claim", "numbers", "source", "status", "verified_by", "verified_at", "evidence",
-                "usage", "supersedes", "demo", "added"]
+                "usage", "supersedes", "demo", "added", "volatile"]
 STAT_COLUMNS = ["id", "stat", "numbers", "source", "retrieved", "sample", "grade", "expires", "kind",
                 "status", "verified_by", "verified_at"]
 FACT_STATUSES = ("draft", "verified", "do_not_use", "superseded")
@@ -47,6 +47,11 @@ class Entry:
     @property
     def grade(self) -> str:
         return self.row.get("grade", "").strip().upper()
+
+    @property
+    def volatile(self) -> bool:
+        """A volatile fact (a version, count or price) goes stale; re-read its source and supersede it."""
+        return self.row.get("volatile", "").strip().casefold() in _TRUE
 
     @property
     def expires(self) -> _dt.date | None:
@@ -147,6 +152,9 @@ def lint_register(reg: Register) -> list[tuple[str, str]]:
         demo = e.row.get("demo", "").strip().casefold()
         if demo not in _TRUE and demo not in _FALSE:
             out.append(("WARN", f"{e.id}: demo column should be yes or no, got {demo!r}"))
+        vol = e.row.get("volatile", "").strip().casefold()
+        if vol not in _TRUE and vol not in _FALSE:
+            out.append(("WARN", f"{e.id}: volatile column should be yes or no, got {vol!r}"))
         if kind == "stat":
             if e.grade not in GRADES:
                 out.append(("FAIL", f"{e.id}: grade '{e.grade}' not one of {'/'.join(GRADES)}"))
@@ -317,6 +325,31 @@ def expire_stats(path: Path, *, on_date: _dt.date | None = None, dry_run: bool =
     if changed and not dry_run:
         _save(reg)
     return changed
+
+
+DEFAULT_STALE_DAYS = 14
+
+
+def fact_checked_on(e: Entry) -> _dt.date | None:
+    """The day the fact was last confirmed: its verified_at, else the day it was added."""
+    return parse_date(e.row.get("verified_at", "")) or parse_date(e.row.get("added", ""))
+
+
+def stale_facts(reg: Register, days: int = DEFAULT_STALE_DAYS, *, on_date: _dt.date | None = None) -> list[tuple[Entry, int | None]]:
+    """Volatile draft or verified facts last confirmed more than `days` days ago, as (entry, age in days).
+
+    A volatile fact with no readable date has age None and is always listed. Superseded and do_not_use rows are not.
+    """
+    when = on_date or today()
+    out: list[tuple[Entry, int | None]] = []
+    for e in reg.entries:
+        if not e.volatile or e.status not in ("draft", "verified"):
+            continue
+        d = fact_checked_on(e)
+        age = (when - d).days if d is not None else None
+        if age is None or age > days:
+            out.append((e, age))
+    return out
 
 
 def default_expiry(retrieved: _dt.date, days: int) -> _dt.date:

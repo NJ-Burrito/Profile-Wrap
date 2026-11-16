@@ -15,10 +15,13 @@ from .arabic import check_arabic, is_arabic_lang
 from .claims import load_registers, resolve_claims
 from .config import load_config, read_json, resolve_workspace
 from .findings import FAIL, OVERRIDDEN, WARN, finding
+from .pair import check_pair
+from .promise import check_first_comment_promise
 from .overrides import apply_overrides
 from .render import RenderChecker, derived_fonts, run_tool
 from .rules import TextContext, hook_findings, load_banned, scan_text
 from .textnorm import html_text
+from .versions import check_versions, check_volatile_age, cited_entries
 from .usergates import run_user_gates
 
 REQUIRED_META = ("slug", "lang", "format", "pillar", "status", "claims")
@@ -26,8 +29,8 @@ try:  # the enumeration lives in WP1's policy.py
     from profile_wrap.policy import FORMATS  # type: ignore
 except Exception:  # pragma: no cover - policy.py absent while WP2 is built alone
     FORMATS = ("text", "slides", "gif", "image", "document", "multi_image")
-STANDARD_CHECKS = ("meta", "facts", "claims", "caption", "hook", "slop", "private_terms", "numbers", "links",
-                   "hashtags", "arabic", "alt", "render")
+STANDARD_CHECKS = ("meta", "facts", "claims", "caption", "hook", "slop", "private_terms", "numbers", "versions",
+                   "links", "first_comment_promise", "hashtags", "arabic", "pair", "alt", "render")
 SCHEMA_VERSION = 1
 
 
@@ -226,6 +229,20 @@ def run_gate(slug: str | None, workspace: str | Path | None = None, *, write: bo
         scanned = {k: v for k, v in surfaces.items() if k in n_cfg.get("scan", [])}
         found.extend(nums.check_numbers(scanned, specs, min_bare=int(n_cfg.get("min_bare_digit", 10)),
                                         number_words=n_cfg.get("number_words", "warn")))
+
+    # ---- versions and stale volatile facts
+    cited = cited_entries(claims, facts, stats)
+    v_scan = {k: v for k, v in surfaces.items() if k in n_cfg.get("scan", [])}
+    found.extend(check_versions(v_scan, cited, str(g.get("versions", "warn"))))
+    found.extend(check_volatile_age(cited, g.get("volatile_max_age_days", 14), today))
+
+    # ---- a promised first comment must exist and hold a link
+    found.extend(check_first_comment_promise(cap, surfaces.get("first_comment"), banned.tlds,
+                                             str(g.get("first_comment_promise", "fail"))))
+
+    # ---- bilingual pair parity
+    found.extend(check_pair(draft.name, meta, draft.parent, hash_of=lambda d: inputs_hash(ws, d, cfg),
+                            mode=str(g.get("pair", "warn"))))
 
     # ---- alt text
     if g.get("require_alt_text", True) and fmt in ("slides", "gif") and not surfaces.get("alt", "").strip():

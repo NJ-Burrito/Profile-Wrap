@@ -51,11 +51,33 @@ def _lint(args, kind: str) -> int:
     return EXIT_FAIL if fails else EXIT_OK
 
 
+def _stale(args) -> int:
+    ws = _ws(args)
+    path = _facts_file(ws)
+    r = reg.load_register(path, "fact")
+    if not r.exists:
+        print("FAIL " + "; ".join(r.problems))
+        return EXIT_FAIL
+    when = reg.parse_date(args.today) if args.today else None
+    days = args.days
+    stale = reg.stale_facts(r, days, on_date=when)
+    lines = []
+    for e, age in stale:
+        how = "no date recorded" if age is None else f"{age} days old"
+        lines.append(f"STALE {e.id}: {how}: {e.text} (source: {e.source})")
+    lines.append(f"{len(stale)} volatile fact(s) older than {days} days. Re-read each source today, then add a new "
+                 "fact that supersedes the old one." if stale else f"no volatile fact is older than {days} days")
+    _emit(args, {"ok": True, "days": days, "stale": [
+        {"id": e.id, "claim": e.text, "source": e.source, "age_days": age} for e, age in stale]}, lines)
+    return EXIT_OK  # a listing, not a verdict: the gate warns on a cited stale fact
+
+
 def _add_fact(args) -> int:
     ws = _ws(args)
     try:
         e = reg.add_entry(_facts_file(ws), "fact", text=args.claim, numbers=args.numbers, source=args.source,
-                          ident=args.id)
+                          ident=args.id,
+                          extra={"volatile": "yes"} if getattr(args, "volatile", False) else None)
     except ValueError as exc:
         print(f"FAIL {exc}")
         return EXIT_FAIL
@@ -139,11 +161,18 @@ def register(subparsers) -> None:
     p.add_argument("--numbers", default="", help="e.g. '30%%; 180 hours'")
     p.add_argument("--source", required=True)
     p.add_argument("--id")
+    p.add_argument("--volatile", action="store_true",
+                   help="a version, count or price: it goes stale, so `facts stale` lists it when old")
     _common(p)
     p.set_defaults(func=_add_fact)
     p = fs.add_parser("lint", help="check ids, sources, supersedes chains, number units")
     _common(p)
     p.set_defaults(func=lambda a: _lint(a, "fact"))
+    p = fs.add_parser("stale", help="list volatile facts (versions, counts, prices) not re-checked for N days")
+    p.add_argument("--days", type=int, default=reg.DEFAULT_STALE_DAYS, help="age limit in days (default 14)")
+    p.add_argument("--today", help=argparse.SUPPRESS)
+    _common(p)
+    p.set_defaults(func=_stale)
     p = fs.add_parser("verify", help="mark a fact verified (terminal only, never from an agent)")
     p.add_argument("id")
     p.add_argument("--evidence", required=True, help="file path or http(s) URL that shows the record")

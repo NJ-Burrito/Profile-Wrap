@@ -34,7 +34,7 @@ never used.
 | "show me", "try it", no LinkedIn app yet | `profile-wrap init --demo` (zero questions; fictional persona; a temp workspace) |
 | "quick setup" | express path: the 7 questions of step 2, defaults for the rest |
 | "set me up" | full path: all steps below |
-| "doctor", "why did it fail" | `profile-wrap doctor` and explain each WARN or FAIL with its hint |
+| "doctor", "why did it fail" | `profile-wrap doctor` and explain each WARN or FAIL with its hint (`--notify` sends one desktop notice listing them; the weekly doctor job does) |
 | "pause" | `profile-wrap pause [--posting|--comments|--all]`; `profile-wrap resume` to undo |
 | "upgrade", "new version" | see Upgrade |
 
@@ -82,6 +82,13 @@ step on an existing workspace with `profile-wrap init --section <name> --answers
   unit and set the primary language.
 - Fonts: the default is an open-licence family. If the user owns licensed fonts, point at their
   files; the package never copies, bundles or uploads them.
+
+## Applying a profile edit by hand
+
+A profile rewrite is a diff the user applies in their own browser; Profile-Wrap never edits LinkedIn. When the
+user is about to apply one, give them `references/profile-apply.md`: re-read the headline after every
+experience save, Escape discards a form, skip the share and notify prompts, the skills section may have a cap,
+and `PLACEHOLDER` text is never reused in a post. Hand editing only; do not offer to drive the browser.
 
 ## Upgrade
 

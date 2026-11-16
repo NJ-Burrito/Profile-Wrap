@@ -132,6 +132,12 @@ class BoardStore:
                 "reject": not ro and status in REJECT_FROM,
                 "improve": not ro and status in IMPROVE_FROM}
 
+    def can_mark_posted(self, status: str, base: str) -> bool:
+        """The "I posted it" button: copy mode only, and only for a post that is still ours to send."""
+        if self.cfg.get("posting", {}).get("mode") != "copy":
+            return False
+        return base == "drafts" and status in ("draft", "queued", "hold", "missed")
+
     def gates_of(self, d: Path) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
         data, problem = read_json_safe(d / "gates.json", None)
         return (data if isinstance(data, dict) else None), problem
@@ -331,6 +337,7 @@ class BoardStore:
         replies_file = self.ws / "engage" / f"replies-{d.name}.md"
         return {
             "slug": d.name, "where": base, "status": status, "can": self.can(status, base),
+            "can_mark_posted": self.can_mark_posted(status, base),
             "read_only": base == "published" or status in policy.READ_ONLY_STATUSES,
             "title": str(meta.get("title") or d.name)[:200], "lang": str(meta.get("lang") or "en"),
             "rtl": str(meta.get("lang") or "en").split("-")[0].lower() in RTL_LANGS,

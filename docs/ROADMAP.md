@@ -13,6 +13,31 @@ Value is H, M or L. Effort is S (days), M (1 to 2 weeks), L (a month or more).
 - Docs made honest (this change): README, site and docs state the real setup and the real AI-helper options, say that the desktop app makes text drafts only, and drop "autopilot" and "your own ChatGPT account".
 - Measured baseline (devil, consultant): 1 star, 15 unique visitors in 14 days, about 30 PyPI downloads a week. No user feedback yet.
 
+## 0.4.0: reliability and method (this release)
+
+Scope of 0.4.0 is two sets of items, taken from the maintainer's backlog reviews: reliability R01 to R08 and
+method PW-01 to PW-08. Nothing else is promised for it.
+
+| Set | Item | Status in 0.4.0 |
+|---|---|---|
+| Reliability | R01 to R08: slot reminder, runway check, build catch-up, token check, heartbeat, logging that never hides a failure, one notify-once, doctor escalation | Done: `post_due` reminders in copy mode, the doctor horizon check, `build-week` catch-up and retry, `auth check --online`, the heartbeat and `schedule_health`, best-effort logging, `notify_once`, `doctor --notify` |
+| Method | PW-01 evidence references, PW-02 copy mode records "I posted it", PW-03 stale-fact guard | Done: `docs/references/evidence-scale.md` and `growth-evidence.md`; `profile-wrap copy <draft> --posted` and the board button; volatile facts, `facts stale` and the gate warning |
+| Method | PW-04 profile apply-by-hand checklist | Done: `skills/pw-setup/references/profile-apply.md`, and the `profile-fix` prompt ends with the checks. Hand editing only. Not done: running the text gate on a profile rewrite (`check_text` kind `profile`) |
+| Method | PW-05 angle dedup | Done: `subject` on calendar entries, `calendar validate` warns on a repeated angle, and the build prompt lists the angles already used |
+| Method | PW-06 weekly learnings loop | Done: `profile-wrap track week` (null stays "not measured"), the `weekly-read` prompt, `LEARNINGS.md` template, `track check`, and `pw-plan` reads `LEARNINGS.md` as a hint |
+| Method | PW-07 calendar insert and shift, PW-08 first-comment promise gate | Done: `calendar insert` and `calendar shift`, and the `first_comment_promise` gate check |
+
+What remains after 0.4.0:
+
+- PW-06: the weekly numbers come from the ledger and from `metrics/track.jsonl` when it exists. Nothing fills
+  `track.jsonl` yet; the analytics import (60 days, below) is what feeds it. Until then reactions, comments and
+  impressions read "not measured". `build-week` does not yet add the learnings note to its own prompt; only the
+  `pw-plan` skill reads `LEARNINGS.md`.
+- PW-04: a gated profile rewrite.
+- PW-09 (the bilingual pair parity gate) is done in 0.4.0. PW-10 to PW-15: `hook_id` stamp, tool-series template, hook preset, Arabic
+  hygiene additions, health-check gap review, guard rails for the skill copies.
+- Not in 0.4.0: everything under the 30, 60 and 90 day tables below, except the two rows marked partly done.
+
 ## Next 30 days: first run and proof
 
 | Item | Value | Effort | Backed by |
@@ -36,7 +61,7 @@ Target: 5 first drafts finished by people who are not the maintainer.
 | Item | Value | Effort | Backed by |
 |---|---|---|---|
 | Voice profile from 5 past posts, with a before and after on the board (proves "in your voice") | H | M | consultant 3 (#2) |
-| Analytics import and a weekly summary | H | M | consultant 3 (#3) |
+| Analytics import and a weekly summary. **Partly done in 0.4.0**: the weekly summary (`track week`, from the ledger); the import is open | H | M | consultant 3 (#3) |
 | ~~Guided "Connect LinkedIn" screen with a live check per step~~ **Done 2026-11-07**: desktop screen and `profile-wrap auth connect`, English and Arabic, shows the re-sign-in date, never asks for a password | H | M | consultant 3 (#4) |
 | LinkedIn preview card (mobile width, "see more" cut) | M | S | consultant 3 (#5) |
 | Start Windows code signing and Apple notarisation | H | M (cost) | consultant 3 (#9), risk 3 |
@@ -48,11 +73,11 @@ Target: 10 weekly users (self-reported) and one public quote.
 
 | Item | Value | Effort | Backed by |
 |---|---|---|---|
-| Post-mortem loop at 72 hours that feeds the next week plan | M | M | consultant 3 (#7) |
+| Post-mortem loop at 72 hours that feeds the next week plan. **Partly done in 0.4.0**: a weekly read feeds `LEARNINGS.md` and `pw-plan`; the 72-hour read is open | M | M | consultant 3 (#7) |
 | Idea inbox: paste a link or a bullet, get 3 angles | M | M | consultant 3 (#6) |
 | Show HN or Product Hunt, only once copy mode and signed builds are live | M | S | consultant 6.2 |
 | Decide with data: plugin-first, desktop-first or both. If the desktop app shows no uptake after 20 real tries, hold it at maintenance | H | S | devil #4, consultant 8 |
-| Release 0.4.0 | M | M | consultant 8 |
+| Release 0.4.0 (scope above) | M | M | consultant 8 |
 
 ## Proposed cuts (proposals only, nothing removed)
 

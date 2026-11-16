@@ -8,12 +8,13 @@ from __future__ import annotations
 
 import datetime as _dt
 import json
+import re
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence
 
 from profile_wrap import paths, policy, schemalite
-from profile_wrap.atomic import atomic_write_json, atomic_write_text
+from profile_wrap.atomic import atomic_write_bytes, atomic_write_json, atomic_write_text
 from profile_wrap.plan import holidays as hol
 from profile_wrap.plan.locking import guarded
 from profile_wrap.plan.spread import parse_hhmm
@@ -225,6 +226,9 @@ def validate(cal: Mapping[str, Any], cfg: Mapping[str, Any], *, workspace: Optio
         elif e.get("claims"):
             rep.warn(f"{slug}: claims not checked (no facts register)")
 
+    for msg in subject_warnings(entries, cfg):
+        rep.warn(msg)
+
     weeks: Dict[str, int] = {}
     for e in entries:
         day = _parse_date(e.get("date", ""))
@@ -237,6 +241,128 @@ def validate(cal: Mapping[str, Any], cfg: Mapping[str, Any], *, workspace: Optio
         elif n > per_week:
             rep.warn(f"{wk}: {n} posts is above posting.per_week={per_week}")
     return rep
+
+
+# ----------------------------------------------------------------------------- angle dedup (no model)
+
+ANGLE_OVERLAP_DEFAULT = 0.5
+_ANGLE_STATUSES = ("planned", "built", "posted")
+_WORD_RE = re.compile(r"\w+", re.UNICODE)
+_STOPWORDS = frozenset(
+    "a an and are as at be but by for from has have how i in into is it its my of on or our so that the "
+    "their then this to was we what when why with you your not new one "
+    "في من على الى إلى عن مع هذا هذه ذلك التي الذي هو هي ما لا أن ان كل او أو ثم".split())
+
+
+def _tokens(text: Any) -> set:
+    words = (w.lower() for w in _WORD_RE.findall(str(text or "")))
+    return {w for w in words if len(w) > 2 and w not in _STOPWORDS and not w.isdigit()}
+
+
+def angle_overlap(a: Any, b: Any) -> float:
+    """Share of words two angle texts have in common, 0.0 to 1.0 (Jaccard on lower-cased words, stopwords out)."""
+    ta, tb = _tokens(a), _tokens(b)
+    if not ta or not tb:
+        return 0.0
+    return len(ta & tb) / len(ta | tb)
+
+
+def _subject_key(subject: Any) -> str:
+    return " ".join(str(subject or "").lower().split())
+
+
+def _angle_text(entry: Mapping[str, Any]) -> str:
+    return " ".join(str(entry.get(k) or "") for k in ("angle", "hook"))
+
+
+def _partners(a: Mapping[str, Any], b: Mapping[str, Any]) -> bool:
+    """True when the two entries are the halves of one bilingual pair."""
+    return _is_pair([a, b]) if a is not b else False
+
+
+def subject_warnings(entries: Sequence[Mapping[str, Any]], cfg: Mapping[str, Any]) -> List[str]:
+    """Warnings for entries that repeat an earlier angle on the same ``subject``.
+
+    An entry is compared with the posted, built and planned entries dated before it (or the same day and
+    an earlier slug). Pair halves are not compared with each other. ``plan.angle_overlap_max`` (default
+    0.5) is the highest word overlap that passes; ``plan.subject_min_gap_days`` (default off) is an
+    optional minimum gap in days between two entries on one subject.
+    """
+    plan = cfg.get("plan", {}) if isinstance(cfg.get("plan", {}), Mapping) else {}
+    limit = float(plan.get("angle_overlap_max", ANGLE_OVERLAP_DEFAULT))
+    min_gap = int(plan.get("subject_min_gap_days", 0) or 0)
+    live = [e for e in entries if e.get("subject") and e.get("status") in _ANGLE_STATUSES]
+    live.sort(key=lambda e: (e.get("date", ""), e.get("slug", "")))
+    out: List[str] = []
+    for i, e in enumerate(live):
+        slug, key = e.get("slug", "?"), _subject_key(e["subject"])
+        if e.get("status") == "planned" and not is_open(e) and not str(e.get("angle") or "").strip():
+            out.append(f"{slug}: subject '{e['subject']}' is set but the entry has no angle")
+        for old in live[:i]:
+            if _subject_key(old["subject"]) != key or _partners(old, e):
+                continue
+            score = angle_overlap(_angle_text(old), _angle_text(e))
+            if score > limit:
+                out.append(f"{slug}: angle repeats {old.get('slug', '?')} ({old.get('date', '')}) on subject "
+                           f"'{e['subject']}' (word overlap {score:.0%}, limit {limit:.0%}); pick a new angle")
+            d_old, d_new = _parse_date(old.get("date", "")), _parse_date(e.get("date", ""))
+            if min_gap and d_old and d_new and 0 <= (d_new - d_old).days < min_gap:
+                out.append(f"{slug}: {(d_new - d_old).days} days after {old.get('slug', '?')} on subject "
+                           f"'{e['subject']}' (plan.subject_min_gap_days is {min_gap})")
+    return out
+
+
+def prior_angles(subject: str, workspace: Optional[Path] = None, *, exclude_slug: str = "",
+                 before: str = "") -> List[Dict[str, str]]:
+    """Angles already used or planned for ``subject``, most recent first.
+
+    Reads the calendar (posted, built and planned entries) and, for posted drafts that are in the ledger but
+    not in the calendar, their ``meta.json``. Each item has ``slug``, ``date``, ``status``, ``title`` and
+    ``angle``. ``exclude_slug`` leaves one entry out (the one being built); ``before`` (YYYY-MM-DD) keeps only
+    earlier dates. Deterministic, no model.
+    """
+    key = _subject_key(subject)
+    if not key:
+        return []
+    if workspace is None:
+        from profile_wrap import paths
+
+        workspace = paths.find_workspace() or paths.workspace_path("default")
+    ws = Path(workspace)
+    found: Dict[str, Dict[str, str]] = {}
+    for e in load(ws).get("entries", []):
+        if not isinstance(e, dict) or _subject_key(e.get("subject")) != key:
+            continue
+        if e.get("status") not in _ANGLE_STATUSES or e.get("slug") == exclude_slug:
+            continue
+        found[e["slug"]] = {"slug": e["slug"], "date": str(e.get("date", "")), "status": str(e["status"]),
+                            "title": str(e.get("title", "")), "angle": str(e.get("angle", ""))}
+    try:
+        from profile_wrap import ledger
+        from profile_wrap.fsutil import read_json
+
+        for row in ledger.entries(ws):
+            slug = row.get("slug")
+            if not slug or slug in found or slug == exclude_slug or row.get("state") not in ledger.LIVE_STATES:
+                continue
+            meta = read_json(ws / "drafts" / slug / "meta.json", {}) or {}
+            if not isinstance(meta, dict) or _subject_key(meta.get("subject")) != key:
+                continue
+            found[slug] = {"slug": slug, "date": str(row.get("posted_at") or row.get("started_at") or "")[:10],
+                           "status": "posted", "title": str(row.get("title") or meta.get("title") or ""),
+                           "angle": str(meta.get("angle", ""))}
+    except (ImportError, OSError, ValueError):
+        pass
+    items = [x for x in found.values() if not before or not x["date"] or x["date"] < before]
+    return sorted(items, key=lambda x: (x["date"], x["slug"]), reverse=True)
+
+
+def format_prior_angles(items: Sequence[Mapping[str, str]]) -> str:
+    """The text for ``{{prior_angles}}``: one ``- title | angle`` line each, or a plain 'none yet' line."""
+    if not items:
+        return "(none yet: this is the first post on this subject)"
+    lines = (f"- {x.get('title') or x.get('slug')} | {x.get('angle') or '(no angle recorded)'}" for x in items)
+    return "\n".join(lines)
 
 
 # ----------------------------------------------------------------------------- generated view
@@ -320,3 +446,233 @@ def fill(cal: Dict[str, Any], cfg: Mapping[str, Any], *, weeks: int, start: Opti
         taken.add(day.isoformat())
         added.append(entry)
     return added
+
+
+# ----------------------------------------------------------------------------- insert and shift
+
+_FIXED_STATUSES = ("posted", "skipped", "blocked")
+_MAX_SEARCH_DAYS = 800
+
+
+@dataclass
+class Move:
+    slug: str
+    old_date: str
+    new_date: str
+    draft_from: str = ""   # scheduled_at before, when the draft is re-dated
+    draft_to: str = ""
+
+    def line(self) -> str:
+        old, new = _dt.date.fromisoformat(self.old_date), _dt.date.fromisoformat(self.new_date)
+        out = f"{self.slug}: {self.old_date} ({_weekday_short(old)}) -> {self.new_date} ({_weekday_short(new)})"
+        if self.draft_to:
+            out += f"; draft scheduled_at {self.draft_from} -> {self.draft_to}"
+        return out
+
+
+@dataclass
+class ReschedulePlan:
+    moves: List[Move] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)
+    inserted: Optional[Dict[str, Any]] = None
+    draft_meta: Dict[str, Dict[str, Any]] = field(default_factory=dict)  # slug -> new meta.json content
+
+    @property
+    def changed(self) -> bool:
+        return bool(self.moves or self.inserted)
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {"moves": [m.__dict__ for m in self.moves], "warnings": self.warnings, "inserted": self.inserted}
+
+    def lines(self) -> List[str]:
+        out = [f"insert {self.inserted['slug']} on {self.inserted['date']}"] if self.inserted else []
+        out += [f"move {m.line()}" for m in self.moves]
+        out += [f"WARN {w}" for w in self.warnings]
+        return out
+
+
+def _draft_meta(workspace: Optional[Path], slug: str) -> Optional[Dict[str, Any]]:
+    if workspace is None:
+        return None
+    path = Path(workspace) / "drafts" / slug / "meta.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (OSError, ValueError):
+        return None
+    return data if isinstance(data, dict) else None
+
+
+def _units(entries: List[Dict[str, Any]]) -> List[List[Dict[str, Any]]]:
+    """Group entries into units that move together: a bilingual pair is one unit (any dates)."""
+    by_slug = {e.get("slug"): e for e in entries}
+    seen: set = set()
+    units: List[List[Dict[str, Any]]] = []
+    for e in sorted(entries, key=lambda x: (x.get("date", ""), x.get("slug", ""))):
+        if id(e) in seen:
+            continue
+        unit = [e]
+        seen.add(id(e))
+        partner = by_slug.get(e.get("pair")) if e.get("pair") else None
+        if partner is None and e.get("pair"):
+            partner = next((x for x in entries if x is not e and x.get("pair") == e["pair"]), None)
+        if partner is None:
+            partner = next((x for x in entries if x is not e and x.get("pair") == e.get("slug")), None)
+        if partner is not None and id(partner) not in seen:
+            unit.append(partner)
+            seen.add(id(partner))
+        units.append(unit)
+    return units
+
+
+def _local_redate(old: str, new_day: _dt.date, tz: str) -> str:
+    """``old`` (an ISO time with offset) moved to ``new_day`` keeping the local time of day."""
+    from profile_wrap import tzutil
+
+    local = tzutil.to_zone(tzutil.parse_aware(old), tz)
+    naive = _dt.datetime.combine(new_day, local.timetz().replace(tzinfo=None))
+    return tzutil.localize(naive, tz).isoformat(timespec="seconds")
+
+
+def reschedule(cal: Dict[str, Any], cfg: Mapping[str, Any], *, start: _dt.date, days: int = 1,
+               cascade_only: bool = False, reserved: Sequence[_dt.date] = (),
+               holidays: Optional[hol.Holidays] = None,
+               workspace: Optional[Path] = None) -> ReschedulePlan:
+    """Move entries dated ``start`` or later ``days`` days on, to the next free valid day. Mutates ``cal``.
+
+    * ``posted``, ``skipped``, ``blocked`` and ``pinned: true`` entries never move, and neither does a built
+      entry whose draft is no longer a ``draft`` (queued, held, posted): that is reported as a warning.
+    * A bilingual pair moves as one unit and keeps its offset between the halves.
+    * A new day must be in ``posting.weekdays`` (when set), not a blocked holiday, and free.
+    * Order is kept: a unit never lands before the one that was ahead of it.
+    * ``cascade_only`` moves a unit only when its day is taken (used by ``insert``).
+    * A built entry whose draft is still a ``draft`` gets its ``scheduled_at`` re-dated, same time of day.
+    """
+    if days < 1:
+        raise CalendarError("days must be at least 1")
+    holidays = holidays if holidays is not None else hol.Holidays()
+    weekdays = list(cfg.get("posting", {}).get("weekdays") or [])
+    tz = cfg.get("locale", {}).get("timezone") or "UTC"
+    plan = ReschedulePlan()
+    entries = [e for e in cal.get("entries", []) if isinstance(e, dict)]
+
+    def movable(e: Dict[str, Any]) -> bool:
+        if e.get("pinned") or e.get("status") in _FIXED_STATUSES:
+            return False
+        if e.get("status") == "built":
+            meta = _draft_meta(workspace, e.get("slug", ""))
+            if meta is not None and meta.get("status") != "draft":
+                plan.warnings.append(f"{e.get('slug')}: built and its draft is '{meta.get('status')}', not moved")
+                return False
+        return True
+
+    fixed: List[Dict[str, Any]] = []
+    moving: List[List[Dict[str, Any]]] = []
+    for unit in _units(entries):
+        dates = [_parse_date(m.get("date", "")) for m in unit]
+        if any(d is None for d in dates) or min(d for d in dates if d) < start:
+            fixed.extend(unit)
+            continue
+        ok = [movable(m) for m in unit]
+        if all(ok):
+            moving.append(unit)
+        else:
+            if any(ok) and len(unit) == 2:
+                plan.warnings.append(f"{unit[0].get('slug')} and {unit[1].get('slug')} are a pair and one half "
+                                     "cannot move, so neither moves")
+            fixed.extend(unit)
+    occupied = {m.get("date") for m in fixed} | {d.isoformat() for d in reserved}
+    last: Optional[_dt.date] = None
+    for unit in moving:
+        base = _parse_date(unit[0]["date"])
+        assert base is not None
+        offsets = [(_parse_date(m["date"]) - base).days for m in unit]  # type: ignore[operator]
+        own = {m["date"] for m in unit}
+        if cascade_only and not (own & occupied):
+            occupied |= own
+            last = base
+            continue
+        target = base + _dt.timedelta(days=days)
+        if last is not None and target <= last:
+            target = last + _dt.timedelta(days=1)
+        for step in range(_MAX_SEARCH_DAYS):
+            cand = target + _dt.timedelta(days=step)
+            spots = [cand + _dt.timedelta(days=o) for o in offsets]
+            if all(s.isoformat() not in occupied and not holidays.blocked(s)
+                   and (not weekdays or _weekday_short(s) in weekdays) for s in spots):
+                break
+        else:
+            raise CalendarError(f"no free day found for {unit[0].get('slug')} within {_MAX_SEARCH_DAYS} days")
+        for m, spot in zip(unit, spots):
+            move = Move(m["slug"], m["date"], spot.isoformat())
+            m["date"] = spot.isoformat()
+            occupied.add(m["date"])
+            if m.get("status") == "built":
+                meta = _draft_meta(workspace, m["slug"])
+                if meta is not None and meta.get("scheduled_at"):
+                    try:
+                        new_at = _local_redate(str(meta["scheduled_at"]), spot, tz)
+                    except ValueError:
+                        plan.warnings.append(f"{m['slug']}: draft scheduled_at is not a valid time, left as is")
+                    else:
+                        move.draft_from, move.draft_to = str(meta["scheduled_at"]), new_at
+                        plan.draft_meta[m["slug"]] = {**meta, "scheduled_at": new_at}
+            plan.moves.append(move)
+        last = cand
+    return plan
+
+
+def insert_entry(cal: Dict[str, Any], cfg: Mapping[str, Any], *, date: str, slug: str, title: str, lang: str,
+                 format: str, status: str = "planned", holidays: Optional[hol.Holidays] = None,
+                 workspace: Optional[Path] = None, **extra: Any) -> ReschedulePlan:
+    """Add an entry on ``date``; if movable entries hold that day, push them (and what they bump) to the next
+    free valid days. Refuses when the day is a blocked holiday or taken by an entry that cannot move."""
+    holidays = holidays if holidays is not None else hol.Holidays()
+    day = _parse_date(date)
+    if day is None:
+        raise CalendarError(f"bad date {date!r}: use YYYY-MM-DD")
+    name = holidays.blocked(day)
+    if name:
+        raise CalendarError(f"{date} is a blocked holiday ({name})")
+    entry = add_entry(cal, date=date, slug=slug, title=title, lang=lang, format=format, status=status, **extra)
+    cal["entries"].remove(entry)  # placed below, after the others have moved
+    holders = [e for e in cal["entries"] if e.get("date") == date and not _is_pair([e, entry])]
+    plan = ReschedulePlan()
+    if holders:
+        plan = reschedule(cal, cfg, start=day, days=1, cascade_only=True, reserved=[day],
+                          holidays=holidays, workspace=workspace)
+        still = [e for e in cal["entries"] if e.get("date") == date and not _is_pair([e, entry])]
+        if still:
+            raise CalendarError(f"{date} is taken by {', '.join(e['slug'] for e in still)}, which cannot move "
+                                "(posted, skipped, blocked, pinned or already queued)")
+    cal["entries"].append(entry)
+    plan.inserted = entry
+    return plan
+
+
+def apply_reschedule(workspace: Path, build: Callable[[Dict[str, Any]], ReschedulePlan], *, what: str,
+                     dry_run: bool = False, wait: float = 30.0) -> ReschedulePlan:
+    """Run ``build(cal)`` on the calendar and write the result: draft meta files, then the calendar, as one
+    change under the calendar lock. If the calendar write fails the draft files are put back."""
+    ws = Path(workspace)
+    if dry_run:
+        return build(load(ws))
+    with guarded(ws, "calendar", stale_after=600, wait=wait):
+        cal = load(ws)
+        plan = build(cal)
+        if not plan.changed:
+            return plan
+        done: Dict[str, bytes] = {}
+        try:
+            for slug, meta in plan.draft_meta.items():
+                path = ws / "drafts" / slug / "meta.json"
+                old = path.read_bytes()
+                atomic_write_json(path, meta)
+                done[slug] = old
+            note = f"{what}: {len(plan.moves)} moved" + (f", inserted {plan.inserted['slug']}" if plan.inserted else "")
+            cal.setdefault("changes", []).append({"date": _dt.date.today().isoformat(), "what": note})
+            save(ws, cal)
+        except BaseException:
+            for slug, old in done.items():
+                atomic_write_bytes(ws / "drafts" / slug / "meta.json", old)
+            raise
+    return plan

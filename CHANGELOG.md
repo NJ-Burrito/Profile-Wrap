@@ -3,13 +3,39 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.4.0] - 2026-11-17
 
 ### Added
 
 - Copy mode is the first-run default: `init` and the desktop app start new workspaces in copy mode (draft, gate, copy, paste by hand), with no LinkedIn developer app needed. Existing workspaces keep their mode. New `profile-wrap copy <draft>`.
+- `profile-wrap copy <draft> --posted [--url URL]` records a post you pasted by hand: one ledger row, and the draft and its calendar entry become `posted`. A second call refuses. The review board has the same step as an "I posted it" button on copy-mode drafts.
 - A guided Connect LinkedIn screen in the desktop app (Alt+6) and `profile-wrap auth connect [--lang ar]`: five checked steps for the developer app, products, redirect URL, client id and secret, and sign-in, with the re-sign-in date. Posting through the API stays opt-in.
+- Copy mode gets due reminders. The `post_due` job is on by default and, unless `posting.mode` is an acknowledged `api_scheduled`, only reminds you: "a post is due" (again every 3 hours) and "post missed". It never posts and never calls LinkedIn. Turn it off with `schedule.jobs.post_due.enabled = false`.
+- `profile-wrap auth check --online` asks LinkedIn once whether it still accepts your token. A 401 is remembered as "rejected" (also when it happens while posting) until you sign in again; a network error is "unknown", never a failure. `auth check --notify` raises one desktop notice a day when the token is expiring, rejected, expired or missing, and the daily `token_check` job now does both.
+- `doctor` checks the plan: every planned day in the next 7 days needs a draft, a queued post or a posted row. A gap today or tomorrow is a FAIL, a farther one a WARN; an empty calendar is a WARN. The review board shows the same result as a banner on every tab. Set the window with `schedule.horizon_days` and `schedule.horizon_fail_days`.
+- `doctor` also reports whether the scheduler is really working: jobs that should have run and did not, jobs that started and never finished, failed last runs, and the live registration on your system (Task Scheduler, systemd, cron, launchd). Every scheduled run records a heartbeat in `data/state/heartbeat.json`.
+- `profile-wrap doctor --notify` sends one notification that lists the WARN and FAIL checks; the weekly `doctor_weekly` job uses it. Notifications are sent once per `schedule.notify_ttl_hours` (default 12) for the same problem, and a success clears the notice.
+- `build-week` catches up: besides entries 8 to 14 days out it builds briefed entries 1 to 7 days out that have no draft (`--no-catchup` turns it off). A failed entry is retried on the next run and stops after 3 attempts (`schedule.build_max_attempts`) with the fix command. It checks that the render browser starts before it makes any model call.
+- `calendar insert <date> ...` and `calendar shift --from DATE --days N`, both with `--dry-run`. Posted, skipped, blocked and `pinned` entries never move, a bilingual pair moves as one, and moves land on the next free posting day that is not a blocked holiday.
+- Angle check for series: a calendar entry can carry a `subject`. `calendar validate` warns when a later post on the same subject repeats an earlier angle (`plan.angle_overlap_max`, default 0.5) or has no angle, and `plan.subject_min_gap_days` adds a minimum gap. The build prompt and the editor seat list the angles already used.
+- Stale-fact guard: mark a fact `volatile` (a version, count or price; `facts add --volatile`). `profile-wrap facts stale [--days N]` lists volatile facts not re-read in the last 14 days, and the gate warns when a post cites one older than `gate.volatile_max_age_days`.
+- New gate checks: `versions` (a version-like string must appear in a cited verified fact; `gate.versions`, warns by default), `first_comment_promise` (a caption that promises a link "in the first comment" fails when there is no first comment with a URL; `gate.first_comment_promise`) and `pair` (a bilingual pair must cite the same claims and stay in step; `gate.pair`, warns by default). See `docs/GATES.md`.
+- `profile-wrap track week [--week 2026-W46]` writes the weekly numbers from your ledger (offline; a metric nobody measured says "not measured", never 0), with a weekly-read prompt (`track prompt`) and a `LEARNINGS.md` check (`track check`, `track init`). `pw-plan` reads `LEARNINGS.md` as a hint, and `/profile-wrap:week learn` runs the loop. The existing `track_daily` job now does something.
+- A profile apply-by-hand checklist (`pw-setup`), a planning method for series about a tool or project, and the evidence references (`docs/references/evidence-scale.md`, `growth-evidence.md`).
 - The new screens and messages are in English and Arabic (`gui_assets/i18n/`).
+
+### Changed
+
+- `post_due` is no longer refused outside `api_scheduled`; `schedule install --only post_due` needs only the job enabled in the config.
+- Scheduler failure notices (failed, timed out, tool missing, crashed) are sent once per problem instead of on every run. An uncaught crash in a job writes its traceback to `data/logs/crash.log`.
+- The write skill tells the writer to re-read the source on the day before citing a product, version, count, price or release fact, and to set `meta.pair` on both halves of a bilingual pair.
+- `docs/SCHEDULING.md` and `docs/PLATFORMS.md` describe the reminders, the Windows sign-in and wake trade-off, and how to tell the scheduler is really working.
+
+### Fixed
+
+- A log file that cannot be written (locked or read-only) no longer fails or hides a job or a `build-week` run: it falls back to stderr and a separate log file.
+- Windows scheduled tasks start `pythonw.exe` directly, and a test now forbids a `cmd` or `conhost` wrapper that hides the exit code.
+- The growth council seat and the planning skill cited two reference files that did not exist; they do now, and a test checks that every reference an agent, skill, prompt or command cites exists.
 
 ### Removed
 

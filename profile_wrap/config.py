@@ -94,6 +94,7 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
         "research": {"trends_file": "config/trends.json", "weekly": True,
                      "stats_expiry_days": 90, "contact": "",
                      "evidence_scale": list(policy.EVIDENCE_GRADES)},
+        "plan": {"angle_overlap_max": 0.5, "subject_min_gap_days": 0},
         "gate": {
             "caption_max": 3000, "hook_max": 210, "hook_target": 40,
             "hashtags_max": 3, "links_in_body": "fail", "em_dash": "fail", "en_dash": "warn",
@@ -107,6 +108,8 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
             "gif": {"max_frames": 250, "max_mb": 40, "max_still_pct": 8, "flash_max_per_s": 3},
             "tools_missing": "skip_with_warning",
             "required_font_substrings": [],
+            "versions": "warn", "first_comment_promise": "fail", "pair": "warn",
+            "volatile_max_age_days": 14,
         },
         "brand": {
             "font_source": "google_ofl",
@@ -135,8 +138,9 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
         },
         "schedule": {
             "backend": "auto", "log_rotate_mb": 5, "notify": "auto", "catchup": "missed_rule",
+            "notify_ttl_hours": 12, "horizon_days": 7, "horizon_fail_days": 2, "build_max_attempts": 3,
             "jobs": {
-                "post_due": {"enabled": False, "every_min": 15},
+                "post_due": {"enabled": True, "every_min": 15},
                 "build_week": {"enabled": True, "when": "THU 10:00", "jitter_min": 20},
                 "research_weekly": {"enabled": True, "when": "FRI 09:00"},
                 "token_check": {"enabled": True, "when": "DAILY 09:30"},

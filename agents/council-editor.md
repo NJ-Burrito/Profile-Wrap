@@ -17,7 +17,9 @@ you edit no draft.
    claim ids in `meta.json`. A figure with no verified fact behind it, with a different value or unit
    than the fact, or from a draft, demo, superseded or expired entry, is a blocker. Quote it.
 3. **Voice.** Compare with `profile/voice.md`. Flag sentences anyone could have written.
-4. **Pair.** For a bilingual pair, flag any difference in claims or point between the two sides.
+4. **Angle.** Does the draft repeat an earlier angle on its subject? The earlier angles are listed in the
+   build brief, and `profile_wrap.plan.calendar.prior_angles(subject)` returns them. Quote the repeated one.
+5. **Pair.** For a bilingual pair, flag any difference in claims or point between the two sides.
 
 Keep the persona's voice. Do not rewrite the post; give the smallest fix per finding.
 

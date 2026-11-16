@@ -16,10 +16,12 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from . import config as config_mod
-from . import i18n, policy
+from . import i18n, ledger, policy
 
 SLUG_RE = re.compile(r"^[a-z0-9][a-z0-9-]{0,99}$")
 LINKEDIN_FEED_URL = "https://www.linkedin.com/feed/"
+POST_URL_RE = re.compile(r"^https://www\.linkedin\.com/\S+$")
+URN_IN_URL_RE = re.compile(r"(share|ugcPost|activity)[-:](\d+)")
 GateFn = Callable[[str, Path, bool], Dict[str, Any]]
 
 
@@ -64,6 +66,90 @@ def prepare(ws: Path, slug: Any, cfg: Optional[Dict[str, Any]] = None,
             "asset_names": [a.name for a in draft.assets], "open_url": LINKEDIN_FEED_URL}
 
 
+POSTABLE_STATUSES = ("draft", "queued", "hold", "missed")  # same set as the board button
+
+
+class PostedRefused(ValueError):
+    """``mark_posted`` refused; nothing was written. The message says why in plain words."""
+
+
+def _default_workspace() -> Path:
+    from . import paths
+
+    return paths.find_workspace() or paths.workspace_path("default")
+
+
+def mark_posted(slug: str, url: Optional[str] = None, ws: Optional[Path] = None) -> Dict[str, Any]:
+    """Record that the user pasted this draft on LinkedIn by hand. Returns the ledger row.
+
+    Writes the same kind of row API posting writes (``state: posted``, ``automation.mode: copy``,
+    ``by: user``), sets the draft's ``meta.status`` to ``posted`` and the calendar entry to ``posted``.
+    No network call, no LinkedIn login. Raises ``PostedRefused`` (nothing written) when the slug is not a
+    draft, is already in the ledger, or ``url`` is not a linkedin.com address. The desktop board's
+    "I posted it" button calls this.
+    """
+    from .linkedin import post
+    from .locks import FileLock
+    from .plan import calendar as calmod
+
+    ws = Path(ws) if ws is not None else _default_workspace()
+    if not isinstance(slug, str) or not SLUG_RE.match(slug):
+        raise PostedRefused(i18n.t("copy.refused.slug", "en"))
+    url = (url or "").strip() or None
+    if url is not None and not POST_URL_RE.match(url):
+        raise PostedRefused(f"the address must start with https://www.linkedin.com/ (got {url[:60]!r})")
+    folder = ws / "drafts" / slug
+    try:
+        draft = post.load_draft(ws, slug)
+        fmt, first_comment = draft.kind, draft.first_comment
+        meta = draft.meta
+    except FileNotFoundError:
+        if not (folder / "meta.json").is_file():
+            raise PostedRefused(i18n.t("copy.refused.nodraft", "en", slug=slug)) from None
+        meta = post.read_json(folder / "meta.json")  # a missing asset must not stop "I posted it"
+        fmt, first_comment = str(meta.get("format", "text")), str(meta.get("first_comment") or "")
+    except (OSError, ValueError) as exc:
+        raise PostedRefused(i18n.t("copy.refused.unreadable", "en", detail=str(exc)[:160])) from None
+    try:
+        mode = str(config_mod.load(ws).get("posting", {}).get("mode"))
+    except Exception:  # an unreadable config must not let a post be recorded
+        mode = ""
+    if mode != "copy":
+        raise PostedRefused("'I posted it' is for copy mode only; posting.mode is not 'copy' in this workspace.")
+    with FileLock(ws / post.LOCK_REL, stale_after=1800):
+        have = ledger.find_slug(ws, slug)
+        if have is not None and have.get("state") in ledger.LIVE_STATES:
+            hint = (" Confirm it with 'profile-wrap post %s --resolve --posted'." % slug
+                    if have.get("state") == "needs_check" else "")
+            raise PostedRefused(f"'{slug}' is already in the ledger ({have.get('state')}); "
+                                f"one draft, one post.{hint}")
+        if str(meta.get("status")) not in POSTABLE_STATUSES:
+            raise PostedRefused(f"'{slug}' has status '{meta.get('status')}'; only a draft, queued, hold or missed "
+                                "post can be recorded as posted.")
+        now = ledger.now_iso()
+        row: Dict[str, Any] = {
+            "slug": slug, "state": "posted", "idempotency_key": ledger.new_key(slug),
+            "started_at": now, "posted_at": now, "format": fmt, "lang": meta.get("lang", "en"),
+            "pillar": str(meta.get("pillar", "")), "title": str(meta.get("title", slug)),
+            "automation": {"mode": "copy", "by": "user"}}
+        if url:
+            row["url"] = url
+            found = URN_IN_URL_RE.search(url)
+            if found:
+                row["urn"] = f"urn:li:{found.group(1)}:{found.group(2)}"
+        if first_comment:
+            row["first_comment"] = first_comment
+            row["first_comment_state"] = "none"
+        try:
+            row = ledger.append(ws, row)
+        except ledger.LedgerError as exc:
+            raise PostedRefused(str(exc)) from exc
+        post._meta_set(folder, status="posted", **({"url": url} if url else {}))
+        if calmod.calendar_path(ws).is_file():
+            calmod.set_status(ws, slug, "posted", posted_at=now, **({"url": url} if url else {}))
+    return row
+
+
 def clipboard_command(platform: Optional[str] = None,
                       which: Callable[[str], Optional[str]] = shutil.which) -> Optional[List[str]]:
     """The command that reads UTF-8 text on stdin and sets the clipboard, or None when there is none."""
@@ -106,6 +192,17 @@ def cmd_copy(args: argparse.Namespace, *, copier: Callable[[str], bool] = to_cli
     from .cli import resolve_workspace
 
     ws = resolve_workspace(args)
+    if getattr(args, "posted", False):
+        try:
+            row = mark_posted(args.slug, getattr(args, "url", None), ws)
+        except (PostedRefused, ValueError) as exc:
+            print("profile-wrap copy: " + str(exc), file=sys.stderr)
+            return policy.EXIT_FAIL
+        print(f"recorded {row['slug']} as posted by hand (ledger row {row['idempotency_key']})")
+        return policy.EXIT_OK
+    if getattr(args, "url", None):
+        print("profile-wrap copy: --url goes with --posted", file=sys.stderr)
+        return policy.EXIT_USAGE
     cfg = config_mod.load(ws)
     lang = i18n.normalize(getattr(args, "lang", None) or _lang(cfg))
     try:
@@ -137,6 +234,9 @@ def register(subparsers: Any) -> None:
     p.add_argument("--part", choices=["caption", "first-comment", "alt"], default="caption",
                    help="what to copy (default: the post text)")
     p.add_argument("--print", dest="print_only", action="store_true", help="print the text instead of copying it")
+    p.add_argument("--posted", action="store_true",
+                   help="record that you pasted this draft on LinkedIn (ledger row, draft and calendar become posted)")
+    p.add_argument("--url", help="with --posted: the address of your post (https://www.linkedin.com/...)")
     p.add_argument("--lang", choices=list(i18n.LANGS), help="message language (default: board.ui_language)")
     p.add_argument("--workspace", default=argparse.SUPPRESS, help="workspace folder")
     p.add_argument("--profile", default=argparse.SUPPRESS, help="profile id")

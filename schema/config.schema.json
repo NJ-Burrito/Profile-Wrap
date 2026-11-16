@@ -660,6 +660,24 @@
         "evidence_scale"
       ]
     },
+    "plan": {
+      "type": "object",
+      "description": "Calendar planning limits (profile_wrap/plan/calendar.py).",
+      "properties": {
+        "angle_overlap_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Highest word overlap with an earlier angle on the same subject that still passes."
+        },
+        "subject_min_gap_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum days between posts on one subject; 0 is off."
+        }
+      },
+      "additionalProperties": false
+    },
     "gate": {
       "type": "object",
       "properties": {
@@ -826,6 +844,31 @@
           "items": {
             "type": "string"
           }
+        },
+        "versions": {
+          "enum": [
+            "warn",
+            "fail",
+            "off"
+          ]
+        },
+        "first_comment_promise": {
+          "enum": [
+            "fail",
+            "warn",
+            "off"
+          ]
+        },
+        "pair": {
+          "enum": [
+            "warn",
+            "fail",
+            "off"
+          ]
+        },
+        "volatile_max_age_days": {
+          "type": "integer",
+          "minimum": 0
         }
       },
       "additionalProperties": false,
@@ -1387,6 +1430,22 @@
             "connect_weekly",
             "track_daily"
           ]
+        },
+        "notify_ttl_hours": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "horizon_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "horizon_fail_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "build_max_attempts": {
+          "type": "integer",
+          "minimum": 1
         }
       },
       "additionalProperties": false,

@@ -42,6 +42,10 @@ the rules below.
 `first_comment.txt` holds the link, a short source line, or an extra detail. It passes the same gate as
 the caption, except that a link is allowed. Keep it to one or two lines.
 
+If the caption says the link or the details are "in the first comment" (or "الرابط في التعليق الأول"), the
+first comment must exist and hold a URL: the gate fails the post otherwise (`first_comment_promise`). Do not
+promise a first comment you will not write.
+
 ## Alt text
 
 `alt.txt` is required for `slides` and `gif` posts. Describe what a reader would miss without seeing

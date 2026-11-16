@@ -7,4 +7,5 @@ copy-ready block and every check and sends nothing. Only run it with `--now` whe
 asked to post this exact draft, and only if the draft is `queued` (Allow on the board sets that).
 Show the output as it is. If it says `REFUSED`, give the reason and the one next step from the
 pw-ship skill (`references/posting.md`). If the draft is `needs_check`, never retry: ask the user to
-look at LinkedIn, then use `--resolve --posted` or `--not-posted`.
+look at LinkedIn, then use `--resolve --posted` or `--not-posted`. For a draft the user pasted by hand in copy
+mode, the record is `"${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap" copy <slug> --posted [--url URL]` (nothing is sent).

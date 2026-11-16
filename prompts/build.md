@@ -39,10 +39,18 @@ DATA>>>
 
 Format `{{format}}`, language `{{lang}}`, scheduled for `{{scheduled_at}}`.
 
+## Angles already used on this subject
+
+{{prior_angles}}
+
+Your angle must differ from each of these. If the list shows an angle, do not repeat it in other words. Say in
+`meta.json`, as `angle_note`, in one sentence how this post's angle differs.
+
 ## Write
 
 1. `{{draft_dir}}/meta.json`: `slug`, `title`, `lang`, `format`, `pillar`, `audience`, `claims` (the fact ids
-   you used, from the list above, nothing else), `alt`, `status` set to exactly `"draft"` (never `queued`),
+   you used, from the list above, nothing else), `angle_note` (only when the list above shows earlier angles),
+   `alt`, `status` set to exactly `"draft"` (never `queued`),
    `scheduled_at` `"{{scheduled_at}}"`. The orchestrator re-checks these fields after you.
 2. `{{draft_dir}}/caption.txt`: exactly what will be posted, in `{{lang}}`.
    - The first line is the hook: aim for under {{hook_target}} characters and never over {{hook_max}}; it must

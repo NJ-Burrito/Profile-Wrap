@@ -39,11 +39,36 @@ def _outcome(args: argparse.Namespace, out: post.Outcome) -> int:
 
 # ----------------------------------------------------------------- handlers
 
+def _notify_token(ws: Path, cfg: Dict[str, Any], status: Dict[str, Any]) -> None:
+    """The scheduled token check: one notice per state per day on warn, rejected, expired or missing; ok clears them."""
+    from .. import notify as notify_mod
+
+    state = status["state"]
+    if state == "ok":
+        notify_mod.clear_notice(ws, "token:", prefix=True)
+        return
+    titles = {"warn": "Profile-Wrap: LinkedIn sign-in expires soon", "rejected": "Profile-Wrap: LinkedIn rejected the token",
+              "expired": "Profile-Wrap: LinkedIn sign-in expired", "missing": "Profile-Wrap: not signed in to LinkedIn"}
+    sched = cfg.get("schedule", {}) or {}
+    notify_mod.notify_once(f"token:{state}", titles.get(state, "Profile-Wrap: LinkedIn token"),
+                           status["message"], ws, ttl_hours=24.0, mode=sched.get("notify", "auto"))
+
+
 def cmd_auth(args: argparse.Namespace) -> int:
     ws = _ws(args)
     cfg = config_mod.load(ws)
     if getattr(args, "what", None) == "check":
         status = auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"]))
+        if getattr(args, "online", False) and status["state"] in ("ok", "warn", "rejected"):
+            probe = auth.online_check(cfg, hp=_hp(cfg))  # one cheap authenticated GET; a 401 is remembered
+            status["online"] = probe["online"]
+            if probe["online"] in ("rejected", "ok"):  # a success clears an old rejection: re-read the state
+                status = {**auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"])),
+                          "online": probe["online"]}
+            elif probe["online"] == "unknown":
+                status["message"] += f" ({probe['message']})"
+        if getattr(args, "notify", False):
+            _notify_token(ws, cfg, status)
         if getattr(args, "json", False):
             _emit(args, status)
         else:
@@ -249,6 +274,10 @@ def register(subparsers: Any) -> None:
     p.add_argument("--lang", choices=["en", "ar"], default=None, help="language of 'auth connect' (default: board.ui_language)")
     p.add_argument("--paste-redirect", action="store_true",
                    help="print the link and paste the final address back (SSH, containers)")
+    p.add_argument("--online", action="store_true",
+                   help="with 'check': also ask LinkedIn once (a cheap read) whether it still accepts the token")
+    p.add_argument("--notify", action="store_true",
+                   help="with 'check': raise one desktop notice (per day) when the token is expiring, rejected or gone")
     _common(p)
     p.set_defaults(func=cmd_auth)
 

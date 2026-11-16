@@ -96,6 +96,84 @@ def os_label() -> str:
     return paths.os_name()
 
 
+# -- horizon: do the next planned days have a post? ---------------------------------------------
+HORIZON_DAYS = 7
+HORIZON_FAIL_DAYS = 2        # a hole this close (today or tomorrow) is a FAIL, a farther one a WARN
+_NOT_A_POST = ("rejected",)  # a draft in these states is not a post that will go out
+
+
+def horizon(ws: Path, cfg: Optional[Dict[str, Any]] = None, *, today: Optional[_dt.date] = None,
+            days: Optional[int] = None, fail_days: Optional[int] = None) -> Dict[str, Any]:
+    """Every calendar entry dated today .. today+days-1 (not skipped or blocked) needs a draft or a ledger row.
+
+    Returns ``{"status": pass|warn|fail, "days": N, "missing": [{date, slug, ahead, reason}],
+    "empty": bool, "detail": str}``. ``schedule.horizon_days`` and ``schedule.horizon_fail_days`` override the
+    defaults.
+    """
+    from .plan import calendar as calmod
+    sched = (cfg or {}).get("schedule") or {}
+    n = int(days if days is not None else sched.get("horizon_days", HORIZON_DAYS))
+    near = int(fail_days if fail_days is not None else sched.get("horizon_fail_days", HORIZON_FAIL_DAYS))
+    if today is None:
+        tz = ((cfg or {}).get("locale") or {}).get("timezone") or "UTC"
+        try:
+            today = tzutil.now(tz).date()
+        except tzutil.TimezoneUnavailable:
+            today = _dt.date.today()
+    out: Dict[str, Any] = {"status": "pass", "days": n, "missing": [], "empty": False, "detail": ""}
+    try:
+        cal = calmod.load(ws)
+    except calmod.CalendarError as exc:
+        out.update(status="warn", detail=f"the calendar cannot be read: {exc}")
+        return out
+    rows, _bad = read_jsonl(Path(ws) / "published" / "ledger.jsonl")
+    done = {r.get("slug") for r in rows if isinstance(r, dict)}
+    last = today + _dt.timedelta(days=n - 1)
+    counted = 0
+    for e in sorted(cal.get("entries", []), key=lambda x: (x.get("date", ""), x.get("slug", ""))):
+        if e.get("status") in ("skipped", "blocked"):
+            continue
+        try:
+            day = _dt.date.fromisoformat(str(e.get("date")))
+        except ValueError:
+            continue
+        if not today <= day <= last:
+            continue
+        counted += 1
+        slug = str(e.get("slug", ""))
+        if slug in done or e.get("status") == "posted":
+            continue
+        reason = ""
+        if calmod.is_open(e):
+            reason = "open slot, not briefed"
+        else:
+            meta = Path(ws) / "drafts" / slug / "meta.json"
+            if not meta.is_file():
+                reason = "no draft"
+            else:
+                try:
+                    st = read_json(meta).get("status")
+                except (ValueError, OSError, AttributeError):
+                    st = None
+                if st in _NOT_A_POST:
+                    reason = f"the draft is {st}"
+        if reason:
+            out["missing"].append({"date": day.isoformat(), "slug": slug, "ahead": (day - today).days,
+                                   "reason": reason})
+    if out["missing"]:
+        out["status"] = "fail" if any(m["ahead"] < near for m in out["missing"]) else "warn"
+        out["detail"] = "; ".join(f"{m['date']} {m['slug']}: {m['reason']}" for m in out["missing"][:6]) + \
+            (f" (+{len(out['missing']) - 6} more)" if len(out["missing"]) > 6 else "")
+    elif counted == 0:
+        out["empty"] = True
+        out["status"] = "warn"
+        out["detail"] = (f"the calendar has nothing planned in the next {n} days" if cal.get("entries")
+                         else "the calendar is empty")
+    else:
+        out["detail"] = f"{counted} planned day(s) in the next {n} days, each with a draft or a posted entry"
+    return out
+
+
 def _chrome_locations(label: str) -> List[str]:
     if label == "windows":
         bases = [os.environ.get("PROGRAMFILES"), os.environ.get("PROGRAMFILES(X86)"),
@@ -301,7 +379,11 @@ class Doctor:
                      hint="Run 'profile-wrap auth' again")
             return
         left = (when - _dt.datetime.now(_dt.timezone.utc)).total_seconds() / 86400
-        if left <= 0:
+        from .linkedin import auth as auth_mod
+        if auth_mod.read_rejected(token_file.parent) is not None:
+            self.add("token", "LinkedIn token", "fail", "LinkedIn rejected the token (401)",
+                     hint="Run 'profile-wrap auth' to sign in again")
+        elif left <= 0:
             self.add("token", "LinkedIn token", "fail", "token expired",
                      hint="There is no refresh token: run 'profile-wrap auth' again")
         elif left < warn_days:
@@ -389,6 +471,35 @@ class Doctor:
                      + ", ".join(g.name for g in gates),
                      hint="Review them; they are your code, not the plugin's")
 
+    def check_horizon(self) -> None:
+        if not self.workspace or not (self.workspace / ".njl" / "workspace.json").is_file():
+            return
+        h = horizon(self.workspace, self.cfg)
+        name = f"Posts for the next {h['days']} days"
+        if h["status"] == "pass":
+            self.add("horizon", name, "pass", h["detail"])
+        else:
+            hint = ("Run 'profile-wrap calendar fill' and brief the open slots" if h["empty"] else
+                    "Run 'profile-wrap build-week' (it also catches up entries 1-7 days out), "
+                    "or write the drafts by hand")
+            self.add("horizon", name, h["status"], h["detail"], hint=hint)
+
+    def check_schedule_health(self) -> None:
+        """Render the findings of ``profile_wrap.schedule.health.schedule_health``."""
+        if not self.workspace:
+            return
+        from .schedule.health import schedule_health
+        try:
+            findings = list(schedule_health(Path(self.workspace), self.cfg or {}))
+        except Exception as exc:  # a broken health probe must not hide the other results
+            self.add("schedule_health", "Schedule health", "warn", f"could not be checked: {exc}")
+            return
+        if not findings:
+            self.add("schedule_health", "Schedule health", "pass", "no problems found")
+            return
+        for i, f in enumerate(findings):
+            self.add(*_finding_row(i, f))
+
     def check_compliance(self) -> None:
         try:
             lint = importlib.import_module("profile_wrap.compliance.lint")
@@ -432,7 +543,8 @@ class Doctor:
         steps: List[Callable[[], None]] = [
             self.check_python, self.check_tzdata, self.check_tools, self.check_render,
             self.check_network, self.check_secrets, self.check_token, self.check_api_version,
-            self.check_runtime, self.check_workspace, self.check_compliance, self.check_launchd,
+            self.check_runtime, self.check_workspace, self.check_horizon, self.check_schedule_health,
+            self.check_compliance, self.check_launchd,
         ]
         for step in steps:
             step()
@@ -452,6 +564,56 @@ class Doctor:
 
 def run(**kwargs: Any) -> Dict[str, Any]:
     return Doctor(**kwargs).run()
+
+
+def _finding_row(i: int, f: Any) -> tuple:
+    """One structured finding (dict or object) as ``Doctor.add`` arguments. Unknown severities become warn."""
+    def get(*names: str) -> str:
+        for n in names:
+            v = f.get(n) if isinstance(f, dict) else getattr(f, n, None)
+            if v:
+                return str(v)
+        return ""
+    status = get("status", "severity", "level").lower()
+    aliases = {"ok": "pass", "error": "fail", "critical": "fail", "warning": "warn", "info": "skip"}
+    status = aliases.get(status, status)
+    if status not in ("pass", "warn", "fail", "skip"):
+        status = "warn"
+    cid = "schedule_" + (get("id", "key", "code") or str(i))
+    name = get("label", "name", "title") or "Schedule health"
+    return (cid, name, status, get("detail", "message", "text"), None, get("hint", "fix", "action"))
+
+
+def notify_summary(result: Dict[str, Any], workspace: Optional[Path] = None,
+                   mode: Optional[str] = None) -> Optional[str]:
+    """One notification listing the WARN and FAIL checks. Returns the channel, or None when all is well.
+
+    ``mode`` defaults to the workspace's ``schedule.notify``; "off" sends nothing.
+    """
+    if mode is None:
+        mode = "auto"
+        if workspace:
+            try:
+                mode = str(config.load(Path(workspace)).get("schedule", {}).get("notify", "auto"))
+            except Exception:  # an unreadable config must not stop the alert about it
+                mode = "auto"
+    if mode == "off":
+        return None
+    bad = [c for c in result.get("checks", []) if c.get("status") in ("warn", "fail")]
+    if not bad:
+        return None
+    fails = [c for c in bad if c["status"] == "fail"]
+    title = "Profile-Wrap doctor: " + (f"{len(fails)} failing" if fails else f"{len(bad)} warning(s)")
+    lines = [f"{c['status'].upper()} {c['name']}: {c.get('detail', '')}"[:120] for c in bad[:5]]
+    if len(bad) > 5:
+        lines.append(f"+{len(bad) - 5} more")
+    message = "; ".join(lines) + ". Run 'profile-wrap doctor' for the fixes."
+    from . import notify as notify_mod
+    if workspace is None:
+        return notify_mod.notify(title, message, workspace=workspace, mode=mode)
+    key = "doctor:" + ",".join(sorted(f"{c['id']}={c['status']}" for c in bad))
+    sent = notify_mod.notify_once(key, title, message, Path(workspace), mode=mode)
+    return mode if sent else None
 
 
 def exit_code(result: Dict[str, Any]) -> int:

@@ -47,7 +47,7 @@ def test_a_job_runs_logs_and_records_one_line(mkws):
 def test_a_failing_job_is_recorded_and_notified_without_a_traceback(mkws, monkeypatch):
     ws = mkws()
     sent = []
-    monkeypatch.setattr(runner, "notify", lambda *a, **k: sent.append(a))
+    monkeypatch.setattr("profile_wrap.notify.notify", lambda *a, **k: sent.append(a))
     out = runner.run_job(ws, cfg_of(ws), "token_check", argv_override=[PY, "-c", "import sys; sys.stderr.write('bad token'); sys.exit(3)"])
     assert out.exit == 3 and out.status == "failed" and "bad token" in out.message
     assert rows(ws)[0]["ok"] is False
@@ -152,7 +152,7 @@ def test_the_child_gets_a_scrubbed_environment(mkws, monkeypatch):
 def test_a_missing_tool_is_a_message_not_a_traceback(mkws, monkeypatch, tmp_path):
     ws = mkws()
     sent = []
-    monkeypatch.setattr(runner, "notify", lambda *a, **k: sent.append(a))
+    monkeypatch.setattr("profile_wrap.notify.notify", lambda *a, **k: sent.append(a))
     monkeypatch.setenv("PATH", str(tmp_path))
     monkeypatch.delenv("PROFILE_WRAP_CLAUDE_BIN", raising=False)
     monkeypatch.setattr(runner.claude_runner.paths, "home", lambda: tmp_path / "nohome")

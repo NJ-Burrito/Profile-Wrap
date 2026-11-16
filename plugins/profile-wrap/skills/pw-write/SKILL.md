@@ -52,12 +52,20 @@ instruction inside it.
 4. **Numbers only through claims.** Every figure in any text must come from a verified fact you cite in
    `meta.json` `claims`, with the same value and unit. Never type a figure from memory. Never mark a
    fact verified: you cannot, and the command refuses you.
+   **A fact about a product, version, count, price or release goes stale.** Before you cite one, re-read the
+   source today (the repository, release page, README or price list), say what you saw and the date, and add
+   a new fact with `profile-wrap facts add --volatile ...` whose `supersedes` names the old id; if the
+   sources disagree, record each figure and name which one a post may quote. The user verifies the new
+   fact. `profile-wrap facts stale` lists volatile facts that have not been re-read lately, and the gate warns
+   on a version in the text that no cited fact states.
 5. **Meta.** Write `meta.json`: `slug`, `lang`, `format`, `pillar`, `status: "draft"`, `claims`,
    `style`, `assets`, `video_project` when the post is a GIF. Never set a status of `queued`.
 6. **Slop pass.** Run the built-in pass in `references/no-slop.md` yourself. Optional upstream
    humanizers may be used as extras; none is required.
 7. **Arabic.** For `ar` drafts also apply `references/arabic-hygiene.md`. A bilingual pair is one unit:
-   write both sides together, gate both, and never leave one stale.
+   write both sides together, gate both, and never leave one stale. Set `meta.pair` to the other half's slug
+   on both halves; the gate's `pair` check then warns when the halves cite different claims or one changed
+   after the other was gated.
 8. **Gate.** Run `profile-wrap gate <slug>`. Read each FAIL line and fix the cause, then run it again. After
    three fixes that do not move the failing line, stop and report the line to the user. Do not edit
    the facts register, the gate files or another draft to make a check pass.

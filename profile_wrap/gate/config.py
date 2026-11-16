@@ -26,6 +26,7 @@ DEFAULTS: dict[str, Any] = {
         "first_comment_gated": True, "require_alt_text": True, "require_council_pass": False,
         "gif": {"max_frames": 250, "max_mb": 40, "max_still_pct": 8, "flash_max_per_s": 3},
         "tools_missing": "skip_with_warning", "required_font_substrings": [],
+        "versions": "warn", "first_comment_promise": "fail", "pair": "warn", "volatile_max_age_days": 14,
     },
 }
 

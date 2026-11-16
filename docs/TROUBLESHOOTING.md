@@ -1,7 +1,7 @@
 # Troubleshooting
 
 Start with `profile-wrap doctor`. It prints PASS, WARN or FAIL for each item, with the fix for your OS. Add
-`--json` for machine-readable output and `--online` to test the network. Exit codes for every
+`--json` for machine-readable output, `--online` to test the network and `--notify` to send one desktop notice that lists the WARN and FAIL items. Exit codes for every
 command: 0 ok, 1 fail, 2 usage, 3 conflicts to resolve, 4 paused.
 
 | Symptom | Cause | Fix |
@@ -17,6 +17,7 @@ command: 0 ok, 1 fail, 2 usage, 3 conflicts to resolve, 4 paused.
 | `init` refuses the folder | it is inside the plugin directory, or not empty | choose a folder under your home directory |
 | `upgrade --apply` exits 3 | a file was edited by you and changed in the new release | merge the `<file>.new` files, delete them, then `profile-wrap upgrade --resolve` (or `--mine` / `--theirs`) |
 | "runtime/current is 0.1.0, plugin is 0.2.0" | the plugin was updated | `profile-wrap runtime sync` (jobs kept running on the old copy meanwhile) |
+| `auth check` says the token was rejected | LinkedIn answered 401 (the token was revoked, or the app changed) | `profile-wrap auth` to sign in again; `profile-wrap auth check --online` confirms |
 | a scheduled job did nothing, exit 4 | the pause flag is set | `profile-wrap resume` |
 | `handoff check` fails | headings differ from the six required | the headings are exactly: `# goals`, `## current state`, `## files in flight`, `## changed`, `## failed attempts`, `## next step` |
 | macOS job cannot find `node` or `claude` | launchd has a minimal PATH | re-run `profile-wrap schedule install` so absolute paths are captured; test with `profile-wrap doctor --launchd-dryrun` |

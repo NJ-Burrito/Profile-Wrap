@@ -89,37 +89,27 @@ def test_posted_calls_copymode_mark_posted_through_the_csrf_path(serve, monkeypa
     ws, srv, c = serve(posting={"mode": "copy"})
     make_draft(ws, "d1", "draft")
     calls = []
-    monkeypatch.setattr(copymode, "mark_posted", lambda w, slug: calls.append((w, slug)) or {"status": "posted"},
-                        raising=False)
+    monkeypatch.setattr(copymode, "mark_posted",
+                        lambda slug, url=None, ws=None: calls.append((ws, slug, url)) or {"state": "posted"})
     code, body = c.post("/api/posted", {"slug": "d1"})
-    assert code == 200 and body["ok"] is True and body["status"] == "posted"
-    assert calls == [(ws, "d1")]
+    assert code == 200 and body["ok"] is True and body["state"] == "posted"
+    assert calls == [(ws, "d1", None)]
     # the same security rules as every POST: Origin and token
     assert c.post("/api/posted", {"slug": "d1"}, origin=None)[0] == 403
     assert c.post("/api/posted", {"slug": "d1"}, token="wrong")[0] == 403
     assert len(calls) == 1
 
 
-def test_posted_accepts_a_slug_only_function_and_rejects_a_bad_slug(serve, monkeypatch):
+def test_posted_rejects_a_bad_slug(serve):
     ws, srv, c = serve(posting={"mode": "copy"})
-    seen = []
-    monkeypatch.setattr(copymode, "mark_posted", lambda slug: seen.append(slug), raising=False)
-    assert c.post("/api/posted", {"slug": "d1"})[0] == 200 and seen == ["d1"]
     assert c.post("/api/posted", {"slug": "../etc"})[0] == 400
-
-
-def test_posted_when_the_function_does_not_exist_yet_says_so(serve, monkeypatch):
-    ws, srv, c = serve(posting={"mode": "copy"})
-    monkeypatch.delattr(copymode, "mark_posted", raising=False)
-    code, body = c.post("/api/posted", {"slug": "d1"})
-    assert code == 501 and body["error"] == "unavailable"
 
 
 def test_posted_refusal_is_a_422_with_the_reason(serve, monkeypatch):
     ws, srv, c = serve(posting={"mode": "copy"})
 
-    def refuse(w, slug):
-        raise copymode.CopyRefused("copy.refused.empty")
-    monkeypatch.setattr(copymode, "mark_posted", refuse, raising=False)
+    def refuse(slug, url=None, ws=None):
+        raise copymode.PostedRefused("d1 is already in the ledger")
+    monkeypatch.setattr(copymode, "mark_posted", refuse)
     code, body = c.post("/api/posted", {"slug": "d1"})
-    assert code == 422 and body["error"] == "refused" and body["message"]
+    assert code == 422 and body["error"] == "refused" and "already" in body["message"]

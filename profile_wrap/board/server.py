@@ -124,21 +124,13 @@ class BoardApp:
         return out
 
     def mark_posted(self, slug: str) -> Tuple[int, Dict[str, Any]]:
-        """The "I posted it" button for copy-mode drafts. The work is ``copymode.mark_posted`` (another change)."""
-        import inspect
+        """The "I posted it" button for copy-mode drafts: ``copymode.mark_posted`` writes the ledger row."""
         from .. import copymode
         if not security.SLUG_RE.match(slug or ""):
             return 400, {"error": "bad_slug", "message": "That is not a post name."}
-        fn = getattr(copymode, "mark_posted", None)
-        if not callable(fn):
-            return 501, {"error": "unavailable", "message": "This version cannot mark a post as posted yet."}
         try:
-            names = list(inspect.signature(fn).parameters)
-        except (TypeError, ValueError):
-            names = []
-        try:
-            out = fn(self.ws, slug) if len(names) >= 2 else fn(slug)
-        except copymode.CopyRefused as exc:
+            out = copymode.mark_posted(slug, None, ws=self.ws)
+        except copymode.PostedRefused as exc:
             return 422, {"error": "refused", "message": str(exc)}
         except Exception as exc:
             return 500, {"error": "internal", "message": str(exc)[:200]}

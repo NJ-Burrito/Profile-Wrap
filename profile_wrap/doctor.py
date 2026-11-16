@@ -379,7 +379,11 @@ class Doctor:
                      hint="Run 'profile-wrap auth' again")
             return
         left = (when - _dt.datetime.now(_dt.timezone.utc)).total_seconds() / 86400
-        if left <= 0:
+        from .linkedin import auth as auth_mod
+        if auth_mod.read_rejected(token_file.parent) is not None:
+            self.add("token", "LinkedIn token", "fail", "LinkedIn rejected the token (401)",
+                     hint="Run 'profile-wrap auth' to sign in again")
+        elif left <= 0:
             self.add("token", "LinkedIn token", "fail", "token expired",
                      hint="There is no refresh token: run 'profile-wrap auth' again")
         elif left < warn_days:
@@ -481,16 +485,12 @@ class Doctor:
             self.add("horizon", name, h["status"], h["detail"], hint=hint)
 
     def check_schedule_health(self) -> None:
-        """Render ``profile_wrap.schedule.schedule_health()`` when that function exists (added elsewhere)."""
-        try:
-            sched = importlib.import_module("profile_wrap.schedule")
-        except ImportError:
+        """Render the findings of ``profile_wrap.schedule.health.schedule_health``."""
+        if not self.workspace:
             return
-        fn = getattr(sched, "schedule_health", None)
-        if not callable(fn) or not self.workspace:
-            return
+        from .schedule.health import schedule_health
         try:
-            findings = _call_schedule_health(fn, self.workspace, self.cfg)
+            findings = list(schedule_health(Path(self.workspace), self.cfg or {}))
         except Exception as exc:  # a broken health probe must not hide the other results
             self.add("schedule_health", "Schedule health", "warn", f"could not be checked: {exc}")
             return
@@ -566,23 +566,6 @@ def run(**kwargs: Any) -> Dict[str, Any]:
     return Doctor(**kwargs).run()
 
 
-def _call_schedule_health(fn: Callable[..., Any], ws: Path, cfg: Optional[Dict[str, Any]]) -> List[Any]:
-    import inspect
-    try:
-        params = list(inspect.signature(fn).parameters)
-    except (TypeError, ValueError):
-        params = []
-    if not params:
-        out = fn()
-    elif len(params) == 1:
-        out = fn(ws)
-    else:
-        out = fn(ws, cfg)
-    if isinstance(out, dict):
-        out = out.get("findings", [])
-    return list(out or [])
-
-
 def _finding_row(i: int, f: Any) -> tuple:
     """One structured finding (dict or object) as ``Doctor.add`` arguments. Unknown severities become warn."""
     def get(*names: str) -> str:
@@ -597,7 +580,7 @@ def _finding_row(i: int, f: Any) -> tuple:
     if status not in ("pass", "warn", "fail", "skip"):
         status = "warn"
     cid = "schedule_" + (get("id", "key", "code") or str(i))
-    name = get("name", "title") or "Schedule health"
+    name = get("label", "name", "title") or "Schedule health"
     return (cid, name, status, get("detail", "message", "text"), None, get("hint", "fix", "action"))
 
 
@@ -626,14 +609,11 @@ def notify_summary(result: Dict[str, Any], workspace: Optional[Path] = None,
         lines.append(f"+{len(bad) - 5} more")
     message = "; ".join(lines) + ". Run 'profile-wrap doctor' for the fixes."
     from . import notify as notify_mod
-    once = getattr(notify_mod, "notify_once", None)   # added by another change; swap this one call when it lands
-    if once is not None:
-        key = "doctor:" + ",".join(sorted(f"{c['id']}={c['status']}" for c in bad))
-        try:
-            return once(key, title, message, workspace, mode=mode)
-        except TypeError:
-            pass
-    return notify_mod.notify(title, message, workspace=workspace, mode=mode)
+    if workspace is None:
+        return notify_mod.notify(title, message, workspace=workspace, mode=mode)
+    key = "doctor:" + ",".join(sorted(f"{c['id']}={c['status']}" for c in bad))
+    sent = notify_mod.notify_once(key, title, message, Path(workspace), mode=mode)
+    return mode if sent else None
 
 
 def exit_code(result: Dict[str, Any]) -> int:

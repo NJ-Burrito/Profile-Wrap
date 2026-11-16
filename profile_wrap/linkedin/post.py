@@ -398,6 +398,8 @@ def _publish_locked(ws: Path, slug: str, cfg: Dict[str, Any], by: str, mode: str
     except (HttpError, api.ApiError) as exc:
         if getattr(exc, "status", None) == 429:
             write_stop(ws, "429", 3600)
+        if getattr(exc, "status", None) == 401:
+            auth.mark_rejected(cfg_dir, 401, str(exc))
         return _fail(ws, key, slug, f"upload failed before posting: {exc}", exc, hold=False)
     body = build_body(d, author, cfg, media)
 
@@ -412,6 +414,8 @@ def _publish_locked(ws: Path, slug: str, cfg: Dict[str, Any], by: str, mode: str
         if _not_sent(exc):
             return _fail(ws, key, slug, f"the request never left: {exc}", exc, hold=False)
         return _needs_check(ws, key, slug, d, f"no answer was read after sending ({exc})")
+    if resp.status == 401:  # remember it: doctor, the board and the reminders then say "sign in again"
+        auth.mark_rejected(cfg_dir, 401, resp.text()[:200])
     if resp.status in (401, 403):
         write_stop(ws, str(resp.status), 24 * 3600 if resp.status == 403 else 3600)
         return _fail(ws, key, slug, f"LinkedIn refused the post ({resp.status}): "

@@ -203,8 +203,8 @@ def install(workspace: Path, cfg: Mapping[str, Any], *, backend: Optional[str] =
         if name not in all_known:
             res.errors.append(f"unknown job: {name}")
         elif name not in {j.name for j in jobs_from_config(cfg)}:
-            res.errors.append(f"job {name} is not enabled in config.schedule.jobs (and post_due also needs "
-                              "posting.mode=api_scheduled with a valid acknowledgement)")
+            res.errors.append(f"job {name} is not enabled in config.schedule.jobs "
+                              "(set schedule.jobs.<name>.enabled to true)")
     if res.errors:
         return res
     jobs = localised_jobs(cfg, only, local_tz)

@@ -63,7 +63,12 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 - `tzdata` is installed with the package because Windows has no IANA time zone database.
 - `runtime/current` is a symlink when allowed, otherwise a junction, otherwise a plain copy. All
   three run the same way.
-- Task Scheduler is used for jobs (installed by `profile-wrap schedule install`).
+- Task Scheduler is used for jobs (installed by `profile-wrap schedule install`). Each job starts
+  `pythonw.exe` directly, with no `cmd` or `conhost --headless` wrapper in between: a wrapper hides the
+  job's exit code from Task Scheduler. A job that crashes writes `data/logs/crash.log`.
+- Jobs run only while you are signed in (a locked screen is fine; signed out or shut down is not).
+  `StartWhenAvailable` runs a missed job at the next sign-in. A laptop asleep at a slot needs `wake: true`
+  on that job.
 
 ### macOS
 
@@ -81,7 +86,23 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
 
 - `systemctl --user` timers are used when available, otherwise a marked crontab block. On a server
   run `loginctl enable-linger <user>` so user timers run when you are logged out.
+- The reminder job (`post_due` in `copy` or `api_click` mode) needs a desktop notification channel
+  (`notify-send` and a session bus). Without one the reminder lands in `data/logs/notifications.jsonl`
+  and the review board banner only.
 - Headless machines can use `npx playwright install --with-deps chromium`.
+
+## How to tell the scheduler is really working
+
+Every scheduled run writes one row to `data/logs/runs.jsonl` and updates `data/state/heartbeat.json`
+(last start, last end, exit code). `profile-wrap doctor` compares them with each job's time rule and warns
+when a job should have run and did not, and it asks the operating system whether the entries still exist:
+
+| System | What is checked |
+|---|---|
+| Windows | the task exists, is not disabled, and its "Last Result" is not an error |
+| Linux (systemd) | the timer is enabled and active, nothing is in `systemctl --user --failed`, and linger is on |
+| Linux (cron) | the managed block is in `crontab -l`, and a `cron` process is running where `pidof` exists |
+| macOS | `launchctl print` finds the job and its last exit code is zero |
 
 ## Behind a proxy or offline
 

@@ -33,7 +33,7 @@ never used.
 | "show me", "try it", no LinkedIn app yet | `profile-wrap init --demo` (zero questions; fictional persona; a temp workspace) |
 | "quick setup" | express path: the 7 questions of step 2, defaults for the rest |
 | "set me up" | full path: all steps below |
-| "doctor", "why did it fail" | `profile-wrap doctor` and explain each WARN or FAIL with its hint |
+| "doctor", "why did it fail" | `profile-wrap doctor` and explain each WARN or FAIL with its hint (`--notify` sends one desktop notice listing them; the weekly doctor job does) |
 | "pause" | `profile-wrap pause [--posting|--comments|--all]`; `profile-wrap resume` to undo |
 | "upgrade", "new version" | see Upgrade |
 

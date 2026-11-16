@@ -238,6 +238,19 @@ def scheduled_at(day: str, hhmm: str, tz: str) -> str:
 
 # ----------------------------------------------------------------------------- prompt values
 
+def _prior_angles_text(workspace: Path, entry: Mapping[str, Any]) -> str:
+    """The earlier angles on this entry's subject, for ``{{prior_angles}}``. Never raises."""
+    subject = str(entry.get("subject") or "").strip()
+    if not subject:
+        return "(this entry has no subject, so there is nothing to compare with)"
+    try:
+        found = calmod.prior_angles(subject, workspace, exclude_slug=str(entry.get("slug", "")),
+                                    before=str(entry.get("date", "")))
+        return calmod.format_prior_angles(found)
+    except Exception:  # an unreadable calendar must not stop a build
+        return "(the earlier angles could not be read; compare with the posts on this subject yourself)"
+
+
 def prompt_values(workspace: Path, cfg: Mapping[str, Any], entry: Mapping[str, Any], sched: str) -> Dict[str, Any]:
     persona = cfg.get("persona", {})
     slug = entry["slug"]
@@ -260,6 +273,7 @@ def prompt_values(workspace: Path, cfg: Mapping[str, Any], entry: Mapping[str, A
         "persona_name": persona.get("name") or "the author",
         "claims": ", ".join(entry.get("claims") or []) or "none",
         "ai_disclosure": persona.get("ai_disclosure", {}).get("text", "") or "none",
+        "prior_angles": _prior_angles_text(workspace, entry),
     }
 
 

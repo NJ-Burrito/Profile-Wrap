@@ -21,7 +21,9 @@
       "time": "10:07",
       "time_reason": "",
       "series": "",
+      "subject": "",
       "pair": "",
+      "pinned": false,
       "open": false
     }
   ]
@@ -38,6 +40,8 @@
 | `claims` | fact ids; each must exist and be `verified` while the entry is live. |
 | `time` | optional `HH:MM`. Without it, `build-week` picks a stable minute (`time_auto: true`). A time outside the window needs `time_reason`. |
 | `pair` | the slug (or pair id) of the other half of a bilingual pair. Only a pair may share a date. |
+| `subject` | optional: the tool or topic the post is about. `calendar validate` warns when a later entry on the same subject repeats an earlier angle (word overlap above `plan.angle_overlap_max`, default 0.5) or has no angle; `plan.subject_min_gap_days` adds a minimum gap. |
+| `pinned` | optional, `true` keeps the entry where it is: `calendar shift` never moves it. |
 | `open` | `true` on a placeholder made by `profile-wrap calendar fill`. `build-week` skips open slots. |
 
 ## Commands
@@ -45,6 +49,8 @@
 | Command | Does |
 |---|---|
 | `profile-wrap calendar add --date D --slug S --title T ...` | adds one entry under a lock; refuses a duplicate slug |
+| `profile-wrap calendar insert <date> --slug S --title T ... [--dry-run]` | adds an entry on a date and pushes only the entries that collide to the next free posting day |
+| `profile-wrap calendar shift --from DATE --days N [--dry-run]` | moves every entry dated DATE or later by N days, then to the next free posting day that is not a blocked holiday; posted, skipped, blocked and `pinned` entries never move, a bilingual pair moves as one, a built draft is re-dated at the same time of day, a queued draft is left and reported |
 | `profile-wrap calendar validate [--json]` | unique slug and date, status, language, window, holidays, claim ids, weekly counts |
 | `profile-wrap calendar render-md` | writes `calendar.md` |
 | `profile-wrap calendar fill --weeks N [--dry-run]` | open slots on `posting.weekdays`, skipping holidays and filled days, rotating pillars |

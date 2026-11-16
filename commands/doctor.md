@@ -1,6 +1,6 @@
 ---
 description: Check this machine and the workspace; explains every WARN or FAIL with the fix for your OS.
-argument-hint: "[--online] [--fix]"
+argument-hint: "[--online] [--fix] [--notify]"
 ---
 Run `"${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap" doctor $ARGUMENTS` and show the PASS/WARN/FAIL table.
 For every WARN or FAIL, say in one line what it stops working and give the hint printed for this

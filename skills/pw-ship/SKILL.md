@@ -39,10 +39,11 @@ login secret, tell them it is never needed and never stored.
 |---|---|
 | "what is ready", "status" | `profile-wrap status`; summarise token, API version, mode, queue, `needs_check` |
 | "show me the post", "copy it" | `profile-wrap post <slug> --dry`: the copy-ready block (caption, first comment, alt text, media) and every check, nothing sent |
+| "I pasted it", "I posted it" | `profile-wrap copy <slug> --posted [--url URL]`: records the post in the ledger (nothing is sent; a second call refuses) |
 | "post it now" | confirm the draft is `queued`, then `profile-wrap post <slug> --now` (the user's call) |
 | "schedule", "automate" | explain the three modes below; unattended posting needs the typed acknowledgement |
 | "board", "allow", "reject" | `profile-wrap board`; decisions are made there (see `references/posting.md`) |
-| "token", "sign in", "expired" | `profile-wrap auth check`; `profile-wrap auth` (user runs it); `docs/linkedin-app-setup.md` |
+| "token", "sign in", "expired" | `profile-wrap auth check` (add `--online` to ask LinkedIn once whether it still accepts the token); `profile-wrap auth` (user runs it); `docs/linkedin-app-setup.md` |
 | "api version", "sunset" | `profile-wrap api-versions`; `--refresh` looks for newer ones; a human re-checks dates |
 | "did it go out?", "needs check" | see Needs check |
 | "what went out", "report" | read `published/REPORT.md` and the ledger; do not invent numbers |
@@ -55,7 +56,8 @@ login secret, tell them it is never needed and never stored.
   bound to the hash of the risk text; read `docs/TERMS-AND-RISK.md` to the user first. If the text
   changed since they accepted, the mode drops to `api_click` until they accept again.
 
-With `copy` or `api_click`, the scheduled `due` job only notifies when a slot arrives.
+With `copy` or `api_click`, the scheduled `due` job only notifies when a slot arrives (and again every 3 hours until the
+slot is marked missed); it never posts. In `copy` mode, after pasting by hand, record it with `profile-wrap copy <slug> --posted`.
 
 ## The flow, in the order it runs
 

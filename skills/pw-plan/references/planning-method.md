@@ -71,6 +71,9 @@ Works for a tool, a book, a course or any product the user keeps writing about.
 - Before each part, re-read the source of every version or count (repository, release page, README) on the day,
   say what you saw, and add a fact that supersedes the old one. The user verifies it. Sources can disagree
   (a headline count and a README count): record each figure, and say which one a post may quote.
+- Before each part of a series about one tool or product, re-read the source (repository, release page, README),
+  record what you saw and the date in a new fact that supersedes the old one, mark it `volatile`, and note the angle
+  used so the next part takes a different one. `profile-wrap facts stale` lists volatile facts that are due a re-read.
 - Give the parts a fixed number, and let the last part say it is the last.
 
 ## 8. The weekly learnings loop

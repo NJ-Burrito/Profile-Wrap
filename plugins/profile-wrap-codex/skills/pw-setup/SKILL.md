@@ -82,6 +82,13 @@ step on an existing workspace with `profile-wrap init --section <name> --answers
 - Fonts: the default is an open-licence family. If the user owns licensed fonts, point at their
   files; the package never copies, bundles or uploads them.
 
+## Applying a profile edit by hand
+
+A profile rewrite is a diff the user applies in their own browser; Profile-Wrap never edits LinkedIn. When the
+user is about to apply one, give them `references/profile-apply.md`: re-read the headline after every
+experience save, Escape discards a form, skip the share and notify prompts, the skills section may have a cap,
+and `PLACEHOLDER` text is never reused in a post. Hand editing only; do not offer to drive the browser.
+
 ## Upgrade
 
 1. `profile-wrap upgrade --check` previews. 2. `profile-wrap upgrade --apply` overwrites untouched managed files,

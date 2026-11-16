@@ -20,12 +20,12 @@ method PW-01 to PW-08. Nothing else is promised for it.
 
 | Set | Item | Status in 0.4.0 |
 |---|---|---|
-| Reliability | R01 to R08: slot reminder, runway check, build catch-up, token check, heartbeat, logging that never hides a failure, one notify-once, doctor escalation | In 0.4.0 scope, built on its own branch; mark it done here when it merges |
-| Method | PW-01 evidence references, PW-02 copy mode records "I posted it", PW-03 stale-fact guard | In 0.4.0 scope, built on its own branch; mark it done here when it merges |
+| Reliability | R01 to R08: slot reminder, runway check, build catch-up, token check, heartbeat, logging that never hides a failure, one notify-once, doctor escalation | Done: `post_due` reminders in copy mode, the doctor horizon check, `build-week` catch-up and retry, `auth check --online`, the heartbeat and `schedule_health`, best-effort logging, `notify_once`, `doctor --notify` |
+| Method | PW-01 evidence references, PW-02 copy mode records "I posted it", PW-03 stale-fact guard | Done: `docs/references/evidence-scale.md` and `growth-evidence.md`; `profile-wrap copy <draft> --posted` and the board button; volatile facts, `facts stale` and the gate warning |
 | Method | PW-04 profile apply-by-hand checklist | Done: `skills/pw-setup/references/profile-apply.md`, and the `profile-fix` prompt ends with the checks. Hand editing only. Not done: running the text gate on a profile rewrite (`check_text` kind `profile`) |
-| Method | PW-05 angle dedup | Planning side done here: tool-series method in `pw-plan` and `subject` with prior angles. Calendar validation of overlapping angles belongs to the calendar change |
+| Method | PW-05 angle dedup | Done: `subject` on calendar entries, `calendar validate` warns on a repeated angle, and the build prompt lists the angles already used |
 | Method | PW-06 weekly learnings loop | Done: `profile-wrap track week` (null stays "not measured"), the `weekly-read` prompt, `LEARNINGS.md` template, `track check`, and `pw-plan` reads `LEARNINGS.md` as a hint |
-| Method | PW-07 calendar insert and shift, PW-08 first-comment promise gate | In 0.4.0 scope, built on its own branch; mark it done here when it merges |
+| Method | PW-07 calendar insert and shift, PW-08 first-comment promise gate | Done: `calendar insert` and `calendar shift`, and the `first_comment_promise` gate check |
 
 What remains after 0.4.0:
 
@@ -34,7 +34,7 @@ What remains after 0.4.0:
   impressions read "not measured". `build-week` does not yet add the learnings note to its own prompt; only the
   `pw-plan` skill reads `LEARNINGS.md`.
 - PW-04: a gated profile rewrite.
-- PW-09 to PW-15: bilingual pair parity gate, `hook_id` stamp, tool-series template, hook preset, Arabic
+- PW-09 (the bilingual pair parity gate) is done in 0.4.0. PW-10 to PW-15: `hook_id` stamp, tool-series template, hook preset, Arabic
   hygiene additions, health-check gap review, guard rails for the skill copies.
 - Not in 0.4.0: everything under the 30, 60 and 90 day tables below, except the two rows marked partly done.
 

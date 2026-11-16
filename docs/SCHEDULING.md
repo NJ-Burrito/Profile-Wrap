@@ -22,19 +22,22 @@ shows them in the machine's timezone when the two differ, because the operating 
 
 | Job | Runs | Default | What it does |
 |---|---|---|---|
-| `build_week` | Thursday 10:00, up to 20 minutes of jitter | on | builds drafts for planned entries 8 to 14 days ahead; never queues |
+| `build_week` | Thursday 10:00, up to 20 minutes of jitter | on | builds drafts for planned entries 8 to 14 days ahead, and catches up briefed entries 1 to 7 days out that have no draft; a failed entry is retried on the next run (3 attempts by default); never queues |
 | `research_weekly` | Friday 09:00 | on | the trend scan and the researcher worker |
-| `token_check` | daily 09:30 | on | warns before the LinkedIn token expires |
-| `doctor_weekly` | Monday 08:00 | on | `profile-wrap doctor` and a notification if something broke |
+| `token_check` | daily 09:30 | on | `auth check --online --notify`: asks LinkedIn once whether the token still works and raises one notice a day when it is expiring, rejected, expired or missing |
+| `doctor_weekly` | Monday 08:00 | on | `profile-wrap doctor --notify`: one notification listing every WARN and FAIL |
 | `profile_review` | every 90 days (a daily check; the runner skips the days in between) | on | reminds you to re-score the profile |
 | `board` | at login, restarted if it stops | on | the local review board on 127.0.0.1 |
-| `post_due` | every 15 minutes | off | posts the queued draft whose slot has come; on only with `posting.mode = api_scheduled` and its acknowledgement |
+| `post_due` | every 15 minutes | on | a reminder in every mode: it tells you a queued draft is due (again every 3 hours) and when a slot was missed; it posts only with `posting.mode = api_scheduled` and its acknowledgement |
 | `engage_prepare` | daily 11:00, up to 30 minutes of jitter | off | drafts comments for you to post |
 | `replies_watch` | every 3 hours | off | drafts replies to comments on your own posts |
 | `connect_weekly` | Sunday 10:00 | off | shortlists people for you to connect with |
 | `track_daily` | daily 21:00 | off | imports your metrics export |
 
-With `copy` or `api_click` posting, `post_due` stays off: you post by hand, or press "Post now" on the board.
+With `copy` or `api_click` posting, `post_due` is a reminder and nothing more: it never posts and never calls
+LinkedIn, whatever else is configured (the runner sets `PROFILE_WRAP_DUE_REMINDER_ONLY=1` for it). You post by hand, or
+press "Post now" on the board, and in copy mode you record a pasted post with `profile-wrap copy <slug> --posted`
+(or the board's "I posted it"). Turn the reminders off with `schedule.jobs.post_due.enabled = false`.
 Engagement jobs only draft unless you switched on the experimental API comment mode and acknowledged it.
 
 Every entry is named `profile-wrap-<profile>-<job>` (macOS: `io.profile_wrap.<profile>.<job>`), so two profiles on one
@@ -141,6 +144,20 @@ A slot that was missed while the machine slept is not posted late by accident:
 `install` records every file and command it made in `.njl/workspace.json` (`created_schedule`). `remove` reads
 that list and deletes exactly those entries, leaving your own scheduled tasks, crontab lines and units alone.
 Running `install` again replaces entries, never duplicates them. Run `profile-wrap schedule remove` before you delete a workspace or uninstall, so no scheduler entry is left pointing at it.
+
+## Keeping watch
+
+- Every run records its start, end and exit code in `data/state/heartbeat.json`. `profile-wrap doctor` uses it, and the
+  live registration (Task Scheduler state and last result, the systemd timer and linger, the cron block and daemon,
+  the launchd load state), to report jobs that should have run and did not, jobs that never finished, and failed
+  last runs.
+- `doctor` also checks the plan: every planned day in the next `schedule.horizon_days` (default 7) needs a draft, a
+  queued post or a posted row. A gap today or tomorrow (`schedule.horizon_fail_days`, default 2) is a FAIL, a farther one
+  a WARN. The review board shows the same result as a banner.
+- A failure or a due reminder raises one notification per `schedule.notify_ttl_hours` (default 12), and a success clears
+  it so the next failure notifies at once.
+- A job that crashes before it can log writes its traceback to `data/logs/crash.log`.
+- A log that cannot be written never fails a job: the run falls back to stderr and a `fallback-<job>-*.log` file.
 
 ## Troubleshooting
 

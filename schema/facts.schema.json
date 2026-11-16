@@ -67,6 +67,9 @@
     },
     "demo": {
       "type": "boolean"
+    },
+    "volatile": {
+      "type": "boolean"
     }
   },
   "additionalProperties": true,

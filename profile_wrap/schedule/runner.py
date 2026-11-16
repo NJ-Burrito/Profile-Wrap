@@ -7,8 +7,13 @@ For one run it:
 * takes a per-job lock (``O_EXCL`` plus PID liveness, stale after the job's timeout);
 * applies jitter (a random sleep up to the job's ``jitter_min``, logged);
 * runs the job with a hard timeout and kills the whole process tree;
-* writes ``data/logs/<job>.log`` (size rotation) and one line to ``data/logs/runs.jsonl``;
-* notifies on a failure, a timeout or a missing tool, and never prints a traceback for those.
+* writes one line to ``data/logs/runs.jsonl`` and the job's heartbeat (``data/state/heartbeat.json``)
+  first, then ``data/logs/<job>.log`` (size rotation). Logging is best effort: a log that cannot be
+  written never stops or fails a job (it falls back to stderr and a ``fallback-<job>-*.log`` file);
+* notifies once (``notify_once``) on a failure, a timeout or a missing tool, and never prints a traceback
+  for those. A success clears the job's notices so the next failure notifies at once;
+* ``safe_run`` is the entry point for ``profile-wrap run``: an uncaught crash writes ``data/logs/crash.log``
+  with the traceback (``pythonw`` has no stderr to show it on) and exits 1.
 
 ``--dry-run`` prints what would happen. Only commands that are known to honour their own
 ``--dry-run`` (``build-week``) are started, and they spend no model tokens and write only to
@@ -17,21 +22,33 @@ For one run it:
 from __future__ import annotations
 
 import datetime as _dt
+import os
 import random
 import shutil
+import sys
 import threading
 import time
+import traceback
+import uuid
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional
 
 from profile_wrap import claude_runner, limits, policy, tzutil
-from profile_wrap.fsutil import append_jsonl
+from profile_wrap.atomic import atomic_write_json
+from profile_wrap.fsutil import append_jsonl, read_json
 from profile_wrap.locks import LockHeld, named_lock
-from profile_wrap.notify import notify
+from profile_wrap.notify import clear_notice, notify_once
 
 from . import install as inst
-from .jobs import JOB_TABLE, Job, jobs_from_config, profile_wrap_argv, profile_wrap_env
+from .jobs import (
+    JOB_TABLE,
+    Job,
+    jobs_from_config,
+    profile_wrap_argv,
+    profile_wrap_env,
+    reminder_only,
+)
 from .proctree import TreeResult, run_tree
 
 # Jobs whose command honours --dry-run itself; the others only print what they would run.
@@ -43,6 +60,8 @@ JOB_TOOLS: Dict[str, List[str]] = {
 }
 FATAL_TAIL = 1500
 MAX_LOG_APPEND = 200_000
+NOTIFY_TTL_HOURS = 12.0
+HEARTBEAT_REL = Path("data") / "state" / "heartbeat.json"
 
 
 @dataclass
@@ -108,13 +127,63 @@ def _log_path(ws: Path, job: str) -> Path:
 
 
 def _append_log(ws: Path, cfg: Mapping[str, Any], job: str, header: str, body: str) -> None:
-    path = _log_path(ws, job)
-    path.parent.mkdir(parents=True, exist_ok=True)
-    rotate_log(path, float(cfg.get("schedule", {}).get("log_rotate_mb", 5)))
-    with open(path, "a", encoding="utf-8") as fh:
-        fh.write(header + "\n")
-        if body:
-            fh.write(body[-MAX_LOG_APPEND:] + ("\n" if not body.endswith("\n") else ""))
+    """Append to the job's log. Best effort: never raises, never loses the text silently."""
+    text = header + "\n"
+    if body:
+        text += body[-MAX_LOG_APPEND:] + ("\n" if not body.endswith("\n") else "")
+    try:
+        path = _log_path(ws, job)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        rotate_log(path, float(cfg.get("schedule", {}).get("log_rotate_mb", 5)))
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(text)
+        return
+    except (OSError, ValueError):
+        pass
+    _fallback_log(ws, job, text)
+
+
+def _fallback_log(ws: Path, job: str, text: str) -> None:
+    """The log could not be written (locked, read-only, full): stderr plus a uniquely named file, never the same twice."""
+    try:
+        if sys.stderr is not None:
+            sys.stderr.write(text)
+    except (OSError, ValueError):
+        pass
+    try:
+        stamp = _dt.datetime.now().strftime("%Y%m%d-%H%M%S")
+        target = Path(ws) / "data" / "logs" / f"fallback-{job}-{stamp}-{uuid.uuid4().hex[:6]}.log"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_text(text, encoding="utf-8")
+    except OSError:
+        pass
+
+
+def heartbeat(ws: Path, job: str, **fields: Any) -> None:
+    """Merge ``fields`` into the job's heartbeat row (``last_start``, ``last_end``, ``exit``, ``status``, ``ok``). Never raises."""
+    try:
+        path = Path(ws) / HEARTBEAT_REL
+        try:
+            data = read_json(path, default={})
+        except (OSError, ValueError):
+            data = {}
+        if not isinstance(data, dict):
+            data = {}
+        row: Dict[str, Any] = dict(data.get(job) or {}) if isinstance(data.get(job), dict) else {}
+        row.update(fields)
+        data[job] = row
+        atomic_write_json(path, data)
+    except Exception:  # noqa: BLE001 - a heartbeat never fails a job
+        pass
+
+
+def read_heartbeats(ws: Path) -> Dict[str, Dict[str, Any]]:
+    """``{job: {last_start, last_end, exit, status, ok}}``; empty when the file is missing or corrupt."""
+    try:
+        data = read_json(Path(ws) / HEARTBEAT_REL, default={})
+    except (OSError, ValueError):
+        return {}
+    return {k: v for k, v in data.items() if isinstance(v, dict)} if isinstance(data, dict) else {}
 
 
 def _record(ws: Path, row: Dict[str, Any]) -> None:
@@ -122,12 +191,25 @@ def _record(ws: Path, row: Dict[str, Any]) -> None:
         append_jsonl(Path(ws) / "data" / "logs" / "runs.jsonl", row)
     except OSError:
         pass
+    if not row.get("dry_run") and row.get("status") != "busy":
+        heartbeat(ws, str(row.get("job")), last_end=row.get("at"), exit=row.get("exit"),
+                  status=row.get("status"), ok=bool(row.get("ok")))
 
 
-def _notify(ws: Path, cfg: Mapping[str, Any], title: str, message: str) -> None:
+def _notify(ws: Path, cfg: Mapping[str, Any], title: str, message: str, key: Optional[str] = None) -> None:
+    """Notify once per ``key`` (default: the title) within the notice TTL; never raises."""
+    sched = cfg.get("schedule", {}) or {}
     try:
-        notify(title, message, workspace=ws, mode=cfg.get("schedule", {}).get("notify", "auto"))
+        ttl = float(sched.get("notify_ttl_hours", NOTIFY_TTL_HOURS))
+        notify_once(key or title, title, message, ws, ttl_hours=ttl, mode=sched.get("notify", "auto"))
     except Exception:  # a notification can never fail a job
+        pass
+
+
+def _clear_notices(ws: Path, job: str) -> None:
+    try:
+        clear_notice(ws, f"job:{job}:", prefix=True)
+    except Exception:  # noqa: BLE001
         pass
 
 
@@ -190,10 +272,10 @@ def run_job(workspace: Path, cfg: Mapping[str, Any], name: str, *, dry_run: bool
     missing = [] if (dry_run or argv_override) else check_tools(name, cfg)
     if missing:
         msg = f"tool missing: {', '.join(missing)} (see `profile-wrap doctor`)"
-        _append_log(ws, cfg, name, f"[{stamp}] {msg}", "")
         _record(ws, {**base_row, "exit": 1, "ok": False, "status": "tool_missing", "missing": missing})
+        _append_log(ws, cfg, name, f"[{stamp}] {msg}", "")
         if notify_user:
-            _notify(ws, cfg, f"profile-wrap: {name} cannot run", msg)
+            _notify(ws, cfg, f"profile-wrap: {name} cannot run", msg, key=f"job:{name}:tool_missing")
         return Outcome(name, policy.EXIT_FAIL, "tool_missing", message=msg)
 
     lock = named_lock(ws, f"job-{name}", stale_after=max(job.timeout_s, 60) + 60, wait=0)
@@ -216,23 +298,61 @@ def run_job(workspace: Path, cfg: Mapping[str, Any], name: str, *, dry_run: bool
                                message="paused during the jitter wait")
         limit = timeout_override if timeout_override is not None else (job.timeout_s or 10 ** 9)
         started = time.monotonic()
-        res = run(cmd, timeout=limit, cwd=ws, env=child_env(cfg))
+        if not dry_run:
+            heartbeat(ws, name, last_start=stamp)
+        env = child_env(cfg)
+        if reminder_only(cfg, name):  # copy / api_click: the due job only reminds, whatever else happens
+            env["PROFILE_WRAP_DUE_REMINDER_ONLY"] = "1"
+        res = run(cmd, timeout=limit, cwd=ws, env=env)
         elapsed = round(time.monotonic() - started, 1)
         body = res.stdout + (("\n[stderr]\n" + res.stderr) if res.stderr.strip() else "")
         status = "timeout" if res.timed_out else "ok" if res.rc == 0 else "failed"
-        _append_log(ws, cfg, name, f"[{stamp}] {name} exit={res.rc} status={status} {elapsed}s", body)
         _record(ws, {**base_row, "exit": res.rc, "ok": res.rc == 0, "status": status, "seconds": elapsed,
                      "jitter_s": jitter_s, "timed_out": res.timed_out})
+        _append_log(ws, cfg, name, f"[{stamp}] {name} exit={res.rc} status={status} {elapsed}s", body)
         out = Outcome(name, res.rc, status, seconds=elapsed, jitter_s=jitter_s,
                       message=(res.stderr.strip() or res.stdout.strip())[-FATAL_TAIL:])
         if dry_run:
             out.lines = [ln for ln in res.stdout.splitlines()][-50:]
         if res.rc != 0 and notify_user:
             _notify(ws, cfg, f"profile-wrap: {name} {'timed out' if res.timed_out else 'failed'}",
-                    f"exit {res.rc}. See data/logs/{name}.log")
+                    f"exit {res.rc}. See data/logs/{name}.log", key=f"job:{name}:{status}")
+        elif res.rc == 0 and not dry_run:
+            _clear_notices(ws, name)
         return out
     finally:
         lock.release()
+
+
+def write_crash_log(ws: Path, job: str, exc: BaseException) -> Optional[Path]:
+    """Write ``data/logs/crash.log`` with the traceback (pythonw shows none). Never raises; None when it fell back."""
+    text = (f"[{_dt.datetime.now().isoformat(timespec='seconds')}] profile-wrap run {job} crashed "
+            f"(python {sys.version.split()[0]}, {os.path.basename(sys.executable)})\n"
+            + "".join(traceback.format_exception(type(exc), exc, exc.__traceback__)) + "\n")
+    try:
+        path = Path(ws) / "data" / "logs" / "crash.log"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        rotate_log(path, 1.0, keep=1)
+        with open(path, "a", encoding="utf-8") as fh:
+            fh.write(text)
+        return path
+    except OSError:
+        _fallback_log(ws, "crash", text)
+        return None
+
+
+def safe_run(workspace: Path, cfg: Mapping[str, Any], name: str, **kw: Any) -> Outcome:
+    """``run_job`` that cannot crash the entry point: any exception becomes ``crash.log``, one notice and exit 1."""
+    try:
+        return run_job(workspace, cfg, name, **kw)
+    except Exception as exc:  # noqa: BLE001 - the whole point
+        path = write_crash_log(workspace, name, exc)
+        msg = f"{type(exc).__name__}: {exc}"
+        _record(Path(workspace), {"at": _dt.datetime.now().isoformat(timespec="seconds"), "job": name,
+                                  "dry_run": False, "exit": 1, "ok": False, "status": "crashed"})
+        _notify(Path(workspace), cfg, f"profile-wrap: {name} crashed", f"{msg}. See data/logs/crash.log",
+                key=f"job:{name}:crashed")
+        return Outcome(name, policy.EXIT_FAIL, "crashed", message=msg + (f" (traceback in {path})" if path else ""))
 
 
 def inst_default_rule():

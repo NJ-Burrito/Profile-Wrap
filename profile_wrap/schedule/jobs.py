@@ -24,8 +24,8 @@ JOB_TABLE: Dict[str, Dict[str, Any]] = {
     "post_due":        {"argv": ["due"], "pause": "posting", "timeout": 600, "model": False},
     "build_week":      {"argv": ["build-week"], "pause": None, "timeout": 3 * 3600, "model": True},
     "research_weekly": {"argv": ["research", "trends"], "pause": None, "timeout": 1800, "model": True},
-    "token_check":     {"argv": ["auth", "check"], "pause": None, "timeout": 120, "model": False},
-    "doctor_weekly":   {"argv": ["doctor", "--json"], "pause": None, "timeout": 300, "model": False},
+    "token_check":     {"argv": ["auth", "check", "--online", "--notify"], "pause": None, "timeout": 120, "model": False},
+    "doctor_weekly":   {"argv": ["doctor", "--json", "--notify"], "pause": None, "timeout": 300, "model": False},
     "profile_review":  {"argv": ["profile", "remind"], "pause": None, "timeout": 300, "model": False},
     "board":           {"argv": ["board"], "pause": None, "timeout": 0, "model": False},
     "engage_prepare":  {"argv": ["engage", "prepare"], "pause": "comments", "timeout": 1800, "model": True},
@@ -113,16 +113,23 @@ def rule_for(name: str, spec: Mapping[str, Any]) -> Rule:
     raise ScheduleError(f"{name}: needs one of when, every_min, every_days or at_login")
 
 
-def wanted(cfg: Mapping[str, Any], name: str) -> bool:
-    """Is the job enabled, by config and by the mode rules (post_due needs api_scheduled and its ack)?"""
-    spec = (cfg.get("schedule", {}).get("jobs", {}) or {}).get(name, {})
-    if not spec.get("enabled"):
+def reminder_only(cfg: Mapping[str, Any], name: str) -> bool:
+    """Is ``post_due`` a reminder-only job here (copy, api_click or an unacknowledged api_scheduled)?"""
+    if name != "post_due":
         return False
-    if name == "post_due":
-        from profile_wrap import config as cfgmod
-        modes = cfgmod.effective_modes(dict(cfg))
-        return modes.get("posting") == "api_scheduled"
-    return True
+    from profile_wrap import config as cfgmod
+    return cfgmod.effective_modes(dict(cfg)).get("posting") != "api_scheduled"
+
+
+def wanted(cfg: Mapping[str, Any], name: str) -> bool:
+    """Is the job enabled in the config?
+
+    ``post_due`` is enabled like any other job. Outside ``api_scheduled`` with a valid acknowledgement it
+    is the reminder-only job: it tells you a slot has come or was missed and never posts (``reminder_only``;
+    the runner enforces it).
+    """
+    spec = (cfg.get("schedule", {}).get("jobs", {}) or {}).get(name, {})
+    return bool(spec.get("enabled"))
 
 
 def jobs_from_config(cfg: Mapping[str, Any], only: Optional[Sequence[str]] = None,

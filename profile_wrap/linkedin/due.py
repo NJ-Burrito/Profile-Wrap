@@ -4,12 +4,15 @@
 * A slot later than ``posting.missed_after_hours`` becomes ``missed`` and notifies; a human
   reschedules. Late posts are never sent at a random hour.
 * With ``copy`` or ``api_click`` (or an unacknowledged ``api_scheduled``) the run only notifies
-  that a slot has arrived.
+  that a slot has arrived. That is the reminder-only job: it never posts and never calls LinkedIn.
+  ``PROFILE_WRAP_DUE_REMINDER_ONLY=1`` (set by the scheduler runner for those modes) forces the same
+  behaviour whatever the config says.
 * A refused gap guard is a logged skip with exit 0, not log spam: a reason is logged once.
 """
 from __future__ import annotations
 
 import datetime as _dt
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -18,11 +21,12 @@ from .. import ledger, limits
 from ..atomic import atomic_write_json
 from ..fsutil import append_jsonl, read_json, read_jsonl
 from ..locks import FileLock, LockHeld
-from ..notify import notify
+from ..notify import notify, notify_once
 from . import post
 
-NOTIFIED_REL = Path("work") / "due-notified.json"
 LOG_REL = Path("data") / "logs" / "post-due.jsonl"
+REMINDER_ENV = "PROFILE_WRAP_DUE_REMINDER_ONLY"
+REMIND_AGAIN_HOURS = 3.0  # a still-unposted slot reminds again after this long (until it becomes "missed")
 
 
 def _log_once(ws: Path, slug: str, reason: str) -> bool:
@@ -86,23 +90,14 @@ def _set_status(ws: Path, folder: Path, **changes: Any) -> bool:
         lock.release()
 
 
-def _notify_once(ws: Path, slug: str, title: str, message: str) -> None:
-    try:
-        seen = read_json(Path(ws) / NOTIFIED_REL, default={})
-    except ValueError:
-        seen = {}
-    if seen.get(slug) == title:
-        return
-    notify(title, message, ws)
-    seen[slug] = title
-    try:
-        atomic_write_json(Path(ws) / NOTIFIED_REL, seen)
-    except OSError:
-        pass
+def _notify_once(ws: Path, slug: str, title: str, message: str, now: _dt.datetime,
+                 ttl_hours: float = REMIND_AGAIN_HOURS) -> None:
+    notify_once(f"due:{slug}:{title}", title, message, ws, ttl_hours=ttl_hours, now=now.timestamp())
 
 
 def run_due(ws: Path, cfg: Dict[str, Any], *, now: Optional[_dt.datetime] = None,
-            client: Any = None, gate_fn: Any = None) -> post.Outcome:
+            client: Any = None, gate_fn: Any = None,
+            reminder_only: Optional[bool] = None) -> post.Outcome:
     ws = Path(ws)
     now = now or _dt.datetime.now(_dt.timezone.utc)
     if limits.is_paused(ws, "posting"):
@@ -112,6 +107,10 @@ def run_due(ws: Path, cfg: Dict[str, Any], *, now: Optional[_dt.datetime] = None
         _log_once(ws, "", stopped)
         return post.Outcome("skipped", stopped, "", "guard")
     mode = config_mod.effective_modes(cfg, ws)["posting"]
+    if reminder_only is None:
+        reminder_only = os.environ.get(REMINDER_ENV) == "1"
+    if reminder_only:
+        mode = "reminder_only"
     missed_after = float(cfg["posting"].get("missed_after_hours", 6))
     items, bad = queued(ws)
     for note in bad:
@@ -123,15 +122,15 @@ def run_due(ws: Path, cfg: Dict[str, Any], *, now: Optional[_dt.datetime] = None
             continue
         if (now - slot).total_seconds() > missed_after * 3600:
             if _set_status(ws, folder, status="missed"):
-                notify("Profile-Wrap: post missed",
-                       f"'{slug}' was due {slot.isoformat()} and is more than {missed_after:g} h late. "
-                       "Reschedule it on the board.", ws)
+                notify_once(f"due:{slug}:missed", "Profile-Wrap: post missed",
+                            f"'{slug}' was due {slot.isoformat()} and is more than {missed_after:g} h late. "
+                            "Reschedule it on the board.", ws, ttl_hours=24 * 365, now=now.timestamp())
             continue
         if slot > now:
             continue
         if mode != "api_scheduled":
             _notify_once(ws, slug, "Profile-Wrap: a post is due",
-                         f"'{slug}' is due now. Open the board and press Post now.")
+                         f"'{slug}' is due now. Open the board and press Post now.", now)
             return post.Outcome("skipped", f"'{slug}' is due; notified (posting.mode is {mode})",
                                 slug, "guard")
         result = post.publish(ws, slug, cfg, by="due", client=client, gate_fn=gate_fn, now=now)

@@ -175,9 +175,14 @@ def cmd_next(args: argparse.Namespace) -> int:
 
 
 def cmd_run(args: argparse.Namespace) -> int:
-    ws = _ws(args)
-    cfg = _cfg(ws)
-    out = runner.run_job(ws, cfg, args.job, dry_run=args.dry_run, force=args.force, no_jitter=args.no_jitter)
+    try:
+        ws = _ws(args)
+        cfg = _cfg(ws)
+    except Exception as exc:  # noqa: BLE001 - a scheduled run must leave a trace, not vanish under pythonw
+        runner.write_crash_log(Path.cwd(), args.job, exc)
+        print(f"FAIL {exc}")
+        return FAIL
+    out = runner.safe_run(ws, cfg, args.job, dry_run=args.dry_run, force=args.force, no_jitter=args.no_jitter)
     if getattr(args, "json", False):
         print(json.dumps({"job": out.job, "exit": out.exit, "status": out.status, "seconds": out.seconds,
                           "jitter_s": out.jitter_s, "message": out.message}, indent=2))

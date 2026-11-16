@@ -116,6 +116,8 @@
     if (S.state && S.state.pause && S.state.pause.length) items.push(h("div", { class: "banner bad" }, t("banner.paused", { kinds: S.state.pause.join(", ") })));
     if (S.state && S.state.degraded) items.push(h("div", { class: "banner warn" }, t("banner.degraded", { n: S.state.problems.length })));
     if (S.state && S.state.config_problem) items.push(h("div", { class: "banner warn" }, t("banner.config", { problem: S.state.config_problem })));
+    const hz = S.horizon;
+    if (hz && (hz.status === "warn" || hz.status === "fail")) items.push(h("div", { class: "banner sticky " + (hz.status === "fail" ? "bad" : "warn"), role: "alert" }, h("strong", { text: t(hz.empty ? "banner.horizon.empty" : "banner.horizon", { days: hz.days }) }), " ", hz.empty ? "" : hz.missing.map((m) => m.date + " " + m.slug).join(", ")));
     const tk = S.data.settings && S.data.settings.token;
     if (tk && (tk.status === "warn" || tk.status === "fail")) items.push(h("div", { class: "banner " + (tk.status === "fail" ? "bad" : "warn") }, t("banner.token", { detail: tk.detail }), tk.hint ? h("code", { text: tk.hint }) : null));
     if (S.update && S.update.notify && !S.updateHidden) items.push(updateBanner(S.update));
@@ -200,7 +202,8 @@
     const allow = h("button", { class: "btn primary", disabled: !d.can.allow || S.busy.has("allow"), title: d.can.allow ? "" : t("actions.allow.no", { status: t("status." + d.status) }), onclick: () => act(d, "allow") }, t("actions.allow"));
     const reject = h("button", { class: "btn danger" + (armed ? " on" : ""), disabled: !d.can.reject, onclick: () => { if (!armed) { S.rejectArmed = d.slug; refreshDetailBox(); } else act(d, "reject"); } }, armed ? t("actions.reject.confirm") : t("actions.reject"));
     const improve = h("button", { class: "btn", disabled: !d.can.improve || !state_worker(), title: state_worker() ? "" : t("actions.improve.noworker"), onclick: () => act(d, "improve") }, t("actions.improve"));
-    return h("section", { class: "card" }, h("h3", { text: t("actions.title") }), note, h("div", { class: "actions" }, allow, reject, improve),
+    const posted = d.can_mark_posted ? h("button", { class: "btn", disabled: S.busy.has("posted"), title: t("actions.posted.hint"), onclick: () => markPosted(d) }, t("actions.posted")) : null;
+    return h("section", { class: "card" }, h("h3", { text: t("actions.title") }), note, h("div", { class: "actions" }, allow, reject, improve, posted),
       armed ? h("div", { class: "sub", text: t("actions.reject.hint") }) : null);
   }
   function state_worker() { return !(S.state && S.state.worker === false); }
@@ -213,6 +216,14 @@
     S.busy.delete(action);
     if (r.code === 200) { delete S.notes[d.slug]; S.rejectArmed = null; }
     if (r.code === 422 && r.body.fails) toast(r.body.fails[0]);
+    await loadDetail(); refreshDetailBox();
+  }
+
+  async function markPosted(d) {
+    S.busy.add("posted");
+    const r = await post("/api/posted", { slug: d.slug }, "msg.posted");
+    if (r.code === 422 && r.body.message) toast(r.body.message);
+    S.busy.delete("posted");
     await loadDetail(); refreshDetailBox();
   }
 
@@ -302,6 +313,7 @@
       const r = await api("/api/state", { etag: force ? null : S.etag });
       if (r.code === 200) { S.state = r.body; S.etag = r.etag; if (!S.slug && S.state.posts.length) { /* keep the list neutral until the user picks one */ } }
       if (r.code === 200 || force) render(); else renderBanners();
+      try { const hr = await api("/api/horizon"); if (hr.code === 200) { S.horizon = hr.body; renderBanners(); } } catch (e) { /* the banner is optional */ }
       await loadTab();
     } catch (e) { /* offline banner already shown */ }
   }

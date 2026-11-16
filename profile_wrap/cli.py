@@ -188,6 +188,8 @@ def cmd_doctor(args: argparse.Namespace) -> int:
         print(doctor.render_table(result))
         for line in result.get("fixed", []):
             print("fixed: " + line)
+    if getattr(args, "notify", False):
+        doctor.notify_summary(result, ws)
     return doctor.exit_code(result)
 
 
@@ -376,6 +378,8 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--fix", action="store_true", help="repair what lives in the data dir (asks first)")
     p.add_argument("--yes", action="store_true", help="answer yes to --fix questions")
     p.add_argument("--online", action="store_true", help="also test network reach to LinkedIn")
+    p.add_argument("--notify", action="store_true",
+                   help="send one notification listing the WARN and FAIL checks (exit code unchanged)")
     p.add_argument("--launchd-dryrun", action="store_true", help="macOS: check the PATH a plist would capture")
     p.add_argument("--os", dest="os_label", choices=doctor.OS_LABELS,
                    help="print hints for another OS (for documentation and tests)")

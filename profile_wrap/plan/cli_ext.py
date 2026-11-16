@@ -338,7 +338,8 @@ def cmd_build_week(args: argparse.Namespace) -> int:
         if not args.dry_run and limits.is_paused(ws):
             print("paused: work/PAUSE exists; `profile-wrap resume` to build again")
             return policy.EXIT_PAUSED
-        report = bw.build_week(ws, cfg, days=(lo, hi), slug=args.slug, dry_run=args.dry_run)
+        report = bw.build_week(ws, cfg, days=(lo, hi), slug=args.slug, dry_run=args.dry_run,
+                                catchup=not getattr(args, "no_catchup", False))
     except (bw.BuildError, calmod.CalendarError, hol.HolidayError) as exc:
         print(f"FAIL {exc}")
         return FAIL
@@ -418,5 +419,7 @@ def register(subparsers: Any) -> None:
     _common(p, dry_run=True)
     p.add_argument("--days", default="8-14", help="build entries this many days ahead (default 8-14)")
     p.add_argument("--slug", help="build one entry")
+    p.add_argument("--no-catchup", action="store_true",
+                   help="do not also build briefed entries 1 to 7 days out that have no draft")
     p.add_argument("--cleanup", metavar="SLUG", help="move a failed build's folders to work/trash/")
     p.set_defaults(func=_safe(cmd_build_week))

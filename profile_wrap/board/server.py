@@ -32,6 +32,7 @@ STATIC = {"/app/board.js": ("board.js", "text/javascript; charset=utf-8"),
           "/app/board.css": ("board.css", "text/css; charset=utf-8")}
 FAMILY_RE = re.compile(r"^[A-Za-z0-9 ._-]{1,60}$")
 DOCTOR_TTL = 30.0
+HORIZON_TTL = 20.0
 DRAIN_LIMIT = 1 << 20  # bodies up to this size are read before we answer, even when we refuse them
 
 
@@ -69,6 +70,7 @@ class BoardApp:
         self.start_worker = start_worker
         self.update_enabled = False   # set by `profile-wrap board` and the desktop app, never by tests
         self._doctor: Optional[Tuple[float, Dict[str, Any]]] = None
+        self._horizon: Optional[Tuple[float, Dict[str, Any]]] = None
         self.started = time.time()
 
     def _default_notify(self, title: str, message: str) -> None:
@@ -105,6 +107,44 @@ class BoardApp:
                           "ui_language": cfg.get("board", {}).get("ui_language", "en")},
                 "workspace": self.ws.name, "config_problem": self.store.config_problem,
                 "notifications": self.store.notifications(10)}
+
+    def horizon(self) -> Dict[str, Any]:
+        """Do the next planned days have a draft? Cached briefly; a failure is a degraded answer, never a 500."""
+        now = time.time()
+        if self._horizon and now - self._horizon[0] < HORIZON_TTL:
+            return self._horizon[1]
+        try:
+            from .. import doctor as doctor_mod
+            h = doctor_mod.horizon(self.ws, self.store.cfg)
+            out = {"status": h["status"], "days": h["days"], "empty": h["empty"], "detail": h["detail"],
+                   "missing": h["missing"][:6]}
+        except Exception as exc:
+            out = {"status": "skip", "days": 0, "empty": False, "missing": [], "detail": str(exc)[:200]}
+        self._horizon = (now, out)
+        return out
+
+    def mark_posted(self, slug: str) -> Tuple[int, Dict[str, Any]]:
+        """The "I posted it" button for copy-mode drafts. The work is ``copymode.mark_posted`` (another change)."""
+        import inspect
+        from .. import copymode
+        if not security.SLUG_RE.match(slug or ""):
+            return 400, {"error": "bad_slug", "message": "That is not a post name."}
+        fn = getattr(copymode, "mark_posted", None)
+        if not callable(fn):
+            return 501, {"error": "unavailable", "message": "This version cannot mark a post as posted yet."}
+        try:
+            names = list(inspect.signature(fn).parameters)
+        except (TypeError, ValueError):
+            names = []
+        try:
+            out = fn(self.ws, slug) if len(names) >= 2 else fn(slug)
+        except copymode.CopyRefused as exc:
+            return 422, {"error": "refused", "message": str(exc)}
+        except Exception as exc:
+            return 500, {"error": "internal", "message": str(exc)[:200]}
+        self._horizon = None
+        extra = out if isinstance(out, dict) else {}
+        return 200, {"ok": True, "slug": slug, **{k: v for k, v in extra.items() if k not in ("ok", "slug")}}
 
     def doctor(self) -> Dict[str, Any]:
         now = time.time()
@@ -319,6 +359,8 @@ def _make_handler(app: BoardApp):
                 return self.send_json(200, store.profile_view())
             if raw == "/api/metrics":
                 return self.send_json(200, store.metrics())
+            if raw == "/api/horizon":
+                return self.send_json(200, app.horizon())
             if raw == "/api/settings":
                 return self.send_json(200, app.settings())
             if raw == "/api/update":
@@ -371,6 +413,8 @@ def _make_handler(app: BoardApp):
 
             if path == "/api/decision":
                 code, resp = app.decider.decide(text("slug"), text("action"), text("note"), body.get("confirm") is True)
+            elif path == "/api/posted":
+                code, resp = app.mark_posted(text("slug"))
             elif path == "/api/connect-done":
                 code, resp = app.decider.connect_done(text("id"), text("action"))
             elif path == "/api/pending-done":

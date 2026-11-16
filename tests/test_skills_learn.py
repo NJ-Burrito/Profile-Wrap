@@ -60,8 +60,18 @@ def test_edited_files_are_lf_only():
     files = [t / n / "SKILL.md" for t in TREES for n in ("pw-plan", "pw-setup")]
     files += [PROMPTS / "weekly-read.md", PROMPTS / "learnings.template.md", PROMPTS / "profile-fix.md",
               ROOT / "docs" / "ROADMAP.md", ROOT / "commands" / "week.md"]
-    for p in files:
-        assert b"\r" not in p.read_bytes(), p
+    # Check what the repository stores (index), not the checkout: Windows CI checks out with autocrlf.
+    import shutil
+    import subprocess
+
+    if not shutil.which("git"):
+        pytest.skip("git not available")
+    rels = [str(p.relative_to(ROOT)).replace("\\", "/") for p in files]
+    out = subprocess.run(["git", "ls-files", "--eol", "--", *rels], cwd=ROOT, capture_output=True, text=True)
+    if out.returncode != 0 or not out.stdout.strip():
+        pytest.skip("not a git checkout")
+    for line in out.stdout.splitlines():
+        assert line.split()[0] in ("i/lf", "i/none"), line
 
 
 def test_profile_fix_prompt_carries_placeholder_rule_and_apply_checks():

@@ -103,6 +103,8 @@ def cli_ws(tmp_path, monkeypatch, entries):
     monkeypatch.setenv("PROFILE_WRAP_CONFIG_DIR", str(tmp_path / "cfg"))
     monkeypatch.setenv("PROFILE_WRAP_DATA_DIR", str(tmp_path / "data"))
     monkeypatch.delenv("PROFILE_WRAP_WORKSPACE", raising=False)
+    # the CLI's default config takes the machine's zone (UTC on CI); pin it so the expected +03:00 holds anywhere
+    monkeypatch.setattr("profile_wrap.tzutil.detect_timezone", lambda: "Asia/Amman")
     ws = tmp_path / "ws"
     ws.mkdir()
     calmod.save(ws, make(*entries))

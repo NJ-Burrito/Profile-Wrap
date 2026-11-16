@@ -41,11 +41,11 @@ def make_calendar(root, slug="d1"):
 def test_posted_writes_one_ledger_row_like_api_posting(ws):
     folder = make_draft(ws)
     make_calendar(ws)
-    row = copymode.mark_posted("d1", "https://www.linkedin.com/feed/update/urn:li:activity:7123456789/", ws=ws)
+    row = copymode.mark_posted("d1", "https://www.linkedin.com/feed/update/demo/urn:li:activity:0000000000/", ws=ws)
     rows = ledger.entries(ws)
     assert len(rows) == 1 and rows[0]["slug"] == "d1"
     assert row["state"] == "posted" and row["automation"] == {"mode": "copy", "by": "user"}
-    assert row["urn"] == "urn:li:activity:7123456789"
+    assert row["urn"] == "urn:li:activity:0000000000"
     assert (row["format"], row["lang"], row["pillar"], row["title"]) == ("text", "en", "P1", "A title")
     assert row["first_comment_state"] == "none"
     assert schemalite.validate(row, schemalite.load_schema(
@@ -88,7 +88,7 @@ def test_posted_after_needs_check_points_to_resolve(ws):
 
 def test_cli_posted_flag(ws, capsys):
     make_draft(ws)
-    assert cli.main(["copy", "d1", "--posted", "--url", "https://www.linkedin.com/posts/x-1", "--workspace", str(ws)]) == 0
+    assert cli.main(["copy", "d1", "--posted", "--url", "https://www.linkedin.com/posts/demo-1", "--workspace", str(ws)]) == 0
     assert "recorded d1 as posted" in capsys.readouterr().out
     assert cli.main(["copy", "d1", "--posted", "--workspace", str(ws)]) == 1
     assert "already in the ledger" in capsys.readouterr().err

@@ -24,7 +24,7 @@ def test_defaults_are_valid_and_match_the_spec():
     assert c["engagement"]["comments"]["like"] is False
     assert c["models"]["lead"] == {"alias": "opus", "effort": "medium"}
     assert c["posting"]["mode"] == "api_click"
-    assert c["schedule"]["jobs"]["post_due"]["enabled"] is False
+    assert c["schedule"]["jobs"]["post_due"]["enabled"] is True  # reminders only outside api_scheduled
 
 
 def test_unknown_keys_fail_at_every_depth():

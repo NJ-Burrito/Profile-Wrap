@@ -43,9 +43,24 @@ def test_post_due_is_wanted_in_every_posting_mode_when_enabled(mkws, mode):
     assert "post_due" in {j.name for j in jobs_from_config(cfg_of(ws))}
 
 
-def test_post_due_stays_off_unless_enabled(mkws):
-    ws = mkws(posting__mode="copy")
+def test_post_due_is_enabled_by_default_and_can_be_turned_off(mkws):
+    from profile_wrap import config as cfgmod
+    assert cfgmod.defaults()["schedule"]["jobs"]["post_due"]["enabled"] is True
+    ws = mkws(posting__mode="copy", schedule__jobs__post_due={"enabled": False, "every_min": 15})
     assert not wanted(cfg_of(ws), "post_due")
+
+
+@pytest.mark.parametrize("mode", ["copy", "api_click", "api_scheduled"])
+def test_nothing_posts_unless_the_mode_is_an_acknowledged_api_scheduled(mkws, toasts, never_posts, mode):
+    """The default config runs post_due everywhere, so only an acknowledged api_scheduled may reach post.publish.
+
+    ``api_scheduled`` here has no acknowledgement, so it is downgraded and only reminds.
+    """
+    ws = mkws(posting__mode=mode)
+    draft(ws, "monday-post", hours_ago=1)
+    out = due.run_due(ws, cfg_of(ws), now=NOW)          # no reminder_only argument, no environment flag
+    assert out.status == "skipped" and "notified" in out.reason
+    assert [t for t, _ in toasts] == ["Profile-Wrap: a post is due"]
 
 
 def test_reminder_only_follows_the_effective_mode(mkws):

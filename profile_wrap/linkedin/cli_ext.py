@@ -59,12 +59,12 @@ def cmd_auth(args: argparse.Namespace) -> int:
     cfg = config_mod.load(ws)
     if getattr(args, "what", None) == "check":
         status = auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"]))
-        if getattr(args, "online", False) and status["state"] in ("ok", "warn"):
+        if getattr(args, "online", False) and status["state"] in ("ok", "warn", "rejected"):
             probe = auth.online_check(cfg, hp=_hp(cfg))  # one cheap authenticated GET; a 401 is remembered
             status["online"] = probe["online"]
-            if probe["online"] == "rejected":
+            if probe["online"] in ("rejected", "ok"):  # a success clears an old rejection: re-read the state
                 status = {**auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"])),
-                          "online": "rejected"}
+                          "online": probe["online"]}
             elif probe["online"] == "unknown":
                 status["message"] += f" ({probe['message']})"
         if getattr(args, "notify", False):

@@ -6,9 +6,9 @@ import re
 from .findings import FAIL, WARN, finding
 from .rules import find_links
 
-_EN_THING = r"(?:links?|urls?|details|sources?|repo|code|template|demo|download|full\s+(?:post|guide|write-?up)|more)"
+_EN_THING = r"(?:links?|urls?|details)"
 _EN_FIRST = r"(?:first|1st)\s+comment"
-_EN_PLACE = rf"(?:the\s+|my\s+|a\s+)?(?:{_EN_FIRST}|comments?(?:\s+(?:below|section))?)"
+_EN_PLACE = rf"(?:the\s+|my\s+|a\s+)?{_EN_FIRST}"
 _EN = [
     re.compile(rf"\b{_EN_THING}\b[^.!?\n]{{0,45}}\b(?:in|on|under|at)\s+{_EN_PLACE}\b", re.IGNORECASE),
     re.compile(rf"\b(?:in|on|under)\s+(?:the\s+|my\s+)?{_EN_FIRST}\b[^.!?\n]{{0,25}}\b{_EN_THING}\b", re.IGNORECASE),
@@ -16,8 +16,8 @@ _EN = [
     re.compile(rf"\b{_EN_THING}\b[^.!?\n]{{0,20}}\b{_EN_FIRST}\b", re.IGNORECASE),
 ]
 _AL = "[أاإآ]"  # alef with or without hamza
-_AR_THING = r"(?:ال)?(?:رابط|روابط|تفاصيل|مصدر|مصادر|كود)"
-_AR_PLACE = (rf"(?:في|فى|ب|بـ|تحت)\s*(?:{_AL}ول\s+تعليق|(?:ال)?تعليق(?:\s+(?:ال){_AL}ول)?|(?:ال)?تعليقات)")
+_AR_THING = r"(?:ال)?(?:رابط|روابط|تفاصيل)"
+_AR_PLACE = (rf"(?:في|فى|ب|بـ|تحت)\s*(?:{_AL}ول\s+تعليق|(?:ال)?تعليق\s+(?:ال){_AL}ول|التعليق\s+(?:ال){_AL}ول)")
 _AR = [
     re.compile(rf"{_AR_THING}[^.!?\n؟]{{0,40}}{_AR_PLACE}"),
     re.compile(rf"{_AR_PLACE}[^.!?\n؟]{{0,25}}{_AR_THING}"),

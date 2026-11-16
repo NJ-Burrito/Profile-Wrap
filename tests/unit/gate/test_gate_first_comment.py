@@ -28,7 +28,7 @@ def test_promise_with_a_first_comment_without_url_fails(ws):
 
 
 def test_empty_first_comment_fails(ws):
-    make_draft(ws, "d1", "A plain claim.\nThe link is in the comments.\n", first_comment="   \n")
+    make_draft(ws, "d1", "A plain claim.\nThe link is in the first comment.\n", first_comment="   \n")
     assert "empty" in _promise(run_gate("d1", ws))[0]["message"]
 
 
@@ -47,7 +47,7 @@ def test_no_promise_needs_no_first_comment(ws):
 @pytest.mark.parametrize("caption", [
     "جملة بسيطة عن المراجعة.\nالرابط في التعليق الأول.\n",
     "جملة بسيطة.\nالتفاصيل في أول تعليق 👇\n",
-    "جملة بسيطة.\nرابط المصدر في التعليقات.\n",
+    "جملة بسيطة.\nالرابط في أول تعليق.\n",
 ])
 def test_arabic_promise_fails_without_first_comment_and_passes_with_url(ws, caption):
     make_draft(ws, "d1", caption, lang="ar")
@@ -67,6 +67,18 @@ def test_mode_off_and_warn(ws):
 
 def test_phrase_list_english_and_arabic():
     assert promise_phrases("Full guide: link in the first comment.")
-    assert promise_phrases("Source in the 1st comment")
+    assert promise_phrases("Link in the 1st comment")
     assert promise_phrases("التفاصيل في التعليق الاول")
     assert not promise_phrases("A comment on the code review.")
+
+
+@pytest.mark.parametrize("cta", ["Tell me more in the comments.", "Drop your code in the comments.",
+                                 "Share your favourite template in the comments below.",
+                                 "Which demo do you want? Say so in the comments.",
+                                 "اكتبوا رأيكم في التعليقات."])
+def test_ordinary_calls_to_comment_are_not_promises(cta):
+    assert not promise_phrases(cta)
+
+
+def test_an_explicit_arabic_first_comment_promise_still_matches():
+    assert promise_phrases("الرابط في أول تعليق")

@@ -115,3 +115,15 @@ def test_the_scheduled_check_notifies_on_rejected_and_ok_clears(mkws, toasts, mo
     monkeypatch.setattr(api, "Client", lambda *a, **k: FakeClient(api.ApiError("nope", 401)))
     assert cli_ext.cmd_auth(args) == 1
     assert len(toasts) == 2
+
+
+def test_a_rejected_token_is_probed_again_and_a_success_heals_it(mkws, monkeypatch, capsys):
+    ws = mkws()
+    token(cfg_of(ws))
+    auth.mark_rejected(auth.secrets_dir(cfg_of(ws)), 401, "transient")
+    args = argparse.Namespace(workspace=str(ws), profile=None, what="check", json=True, online=True, notify=False)
+    monkeypatch.setattr(api, "Client", lambda *a, **k: FakeClient(None))
+    assert cli_ext.cmd_auth(args) == 0
+    out = json.loads(capsys.readouterr().out)
+    assert out["state"] == "ok" and out["online"] == "ok"
+    assert auth.read_rejected(auth.secrets_dir(cfg_of(ws))) is None

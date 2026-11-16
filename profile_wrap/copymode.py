@@ -66,6 +66,9 @@ def prepare(ws: Path, slug: Any, cfg: Optional[Dict[str, Any]] = None,
             "asset_names": [a.name for a in draft.assets], "open_url": LINKEDIN_FEED_URL}
 
 
+POSTABLE_STATUSES = ("draft", "queued", "hold", "missed")  # same set as the board button
+
+
 class PostedRefused(ValueError):
     """``mark_posted`` refused; nothing was written. The message says why in plain words."""
 
@@ -107,6 +110,12 @@ def mark_posted(slug: str, url: Optional[str] = None, ws: Optional[Path] = None)
         fmt, first_comment = str(meta.get("format", "text")), str(meta.get("first_comment") or "")
     except (OSError, ValueError) as exc:
         raise PostedRefused(i18n.t("copy.refused.unreadable", "en", detail=str(exc)[:160])) from None
+    try:
+        mode = str(config_mod.load(ws).get("posting", {}).get("mode"))
+    except Exception:  # an unreadable config must not let a post be recorded
+        mode = ""
+    if mode != "copy":
+        raise PostedRefused("'I posted it' is for copy mode only; posting.mode is not 'copy' in this workspace.")
     with FileLock(ws / post.LOCK_REL, stale_after=1800):
         have = ledger.find_slug(ws, slug)
         if have is not None and have.get("state") in ledger.LIVE_STATES:
@@ -114,6 +123,9 @@ def mark_posted(slug: str, url: Optional[str] = None, ws: Optional[Path] = None)
                     if have.get("state") == "needs_check" else "")
             raise PostedRefused(f"'{slug}' is already in the ledger ({have.get('state')}); "
                                 f"one draft, one post.{hint}")
+        if str(meta.get("status")) not in POSTABLE_STATUSES:
+            raise PostedRefused(f"'{slug}' has status '{meta.get('status')}'; only a draft, queued, hold or missed "
+                                "post can be recorded as posted.")
         now = ledger.now_iso()
         row: Dict[str, Any] = {
             "slug": slug, "state": "posted", "idempotency_key": ledger.new_key(slug),

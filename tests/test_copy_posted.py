@@ -18,7 +18,13 @@ def ws(tmp_path, monkeypatch):
     monkeypatch.setenv("PYTHONUTF8", "1")
     root = tmp_path / "ws"
     (root / "drafts").mkdir(parents=True)
+    set_mode(root, "copy")
     return root
+
+
+def set_mode(root, mode):
+    (root / "config").mkdir(exist_ok=True)
+    (root / "config" / "profile-wrap.json").write_text(json.dumps({"posting": {"mode": mode}}), encoding="utf-8")
 
 
 def make_draft(root, slug="d1", status="draft", first_comment="Notes here."):
@@ -94,3 +100,18 @@ def test_cli_posted_flag(ws, capsys):
     assert "already in the ledger" in capsys.readouterr().err
     assert cli.main(["copy", "d1", "--url", "https://www.linkedin.com/x", "--workspace", str(ws)]) == 2
     assert len(ledger.entries(ws)) == 1
+
+
+def test_posted_is_refused_outside_copy_mode_and_for_a_wrong_status(ws):
+    make_draft(ws, "d1", status="draft")
+    set_mode(ws, "api_click")
+    with pytest.raises(copymode.PostedRefused, match="copy mode only"):
+        copymode.mark_posted("d1", ws=ws)
+    assert cli.main(["copy", "d1", "--posted", "--workspace", str(ws)]) != 0
+    set_mode(ws, "copy")
+    for status in ("posted", "rejected", "needs_check"):
+        make_draft(ws, "s-" + status.replace("_", "-"), status=status)
+        with pytest.raises(copymode.PostedRefused, match="status"):
+            copymode.mark_posted("s-" + status.replace("_", "-"), ws=ws)
+    assert ledger.entries(ws) == []
+    assert copymode.mark_posted("d1", ws=ws)["state"] == "posted"

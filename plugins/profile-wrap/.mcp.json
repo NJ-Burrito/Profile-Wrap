@@ -2,7 +2,13 @@
   "mcpServers": {
     "profile-wrap": {
       "command": "uvx",
-      "args": ["profile-wrap-mcp==0.4.1"]
+      "args": [
+        "--from",
+        "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl",
+        "--with",
+        "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl",
+        "profile-wrap-mcp"
+      ]
     }
   }
 }

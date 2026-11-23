@@ -20,7 +20,6 @@
 
 [![CI](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml/badge.svg)](https://github.com/NJ-Burrito/Profile-Wrap/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![PyPI](https://img.shields.io/pypi/v/profile-wrap.svg)](https://pypi.org/project/profile-wrap/)
 [![Platforms](https://img.shields.io/badge/platforms-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)](docs/PLATFORMS.md)
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-d97757.svg)](.claude-plugin/plugin.json)
 [![Arabic and English](https://img.shields.io/badge/Arabic%20%2B%20English-first--class-0d9488.svg)](docs/GATES.md)
@@ -29,7 +28,7 @@
 
 **Profile-Wrap is a free, open-source LinkedIn post manager, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
 It plans your week of posts, writes them in your voice and checks each one.
-[🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [📦 PyPI](https://pypi.org/project/profile-wrap/)
+[🌐 Website](https://nj-burrito.github.io/Profile-Wrap/)
 
 ### What you need first
 
@@ -97,7 +96,7 @@ Get them on [Smithery](https://smithery.ai/skills), or copy the [`.agents/skills
 8 tools: check your setup, see your calendar, draft a post, check facts, read your board, and post only what you allowed. Needs [uv](https://docs.astral.sh/uv/).
 
 ```
-claude mcp add profile-wrap -- uvx profile-wrap-mcp
+claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp
 ```
 
 Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registry.modelcontextprotocol.io) and graded A on mcprush:

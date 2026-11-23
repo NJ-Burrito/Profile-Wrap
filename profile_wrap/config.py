@@ -153,6 +153,7 @@ def defaults(timezone: Optional[str] = None) -> Dict[str, Any]:
                 "track_daily": {"enabled": False, "when": "DAILY 21:00"},
             },
         },
+        "visuals": {"default_style": ""},
         "board": {"host": "127.0.0.1", "port": 8770, "ui_language": "en"},
         "updates": {"check": True, "prereleases": False},
         "ack": {"terms_read": None, "comments_api": None},

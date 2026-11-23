@@ -1,0 +1,12 @@
+{
+  "style": "console-stage",
+  "canvas": { "w": {{canvas.w}}, "h": {{canvas.h}}, "fps": 30 },
+  "duration_s": 12,
+  "note": "Rehearsal length; a full film is 60 to 90 s. Scene times live in T in index.html; set them from the voice track cue times (or the picture, for a silent film). Length lives in data-duration (stage and the sfx audio).",
+  "theme": "theme.json holds the palette, glows, canvas and motif. It is derived from the post's subject: profile-wrap new-gif <slug> --style console-stage --theme-from <logo-or-screenshot>. theme.css is generated from it.",
+  "transition": { "type": "linear cross-dissolve", "frames": 8, "seconds": 0.2667 },
+  "vfx": "fx.js: ripple, burst, bubbles, pulse, shine, shake, count, sparkles, drain (seeded, on the paused timeline)",
+  "sfx": "sfx/*.wav computed in code by sfx/make_sfx.py; the composition logs cues in window.__probe.sfx and profile-wrap mixes assets/sfx-mix.wav",
+  "narration": { "voice": null, "captions": "off until real cues exist; never caption unspoken text" },
+  "spec": "skills/pw-visuals/references/styles/console-stage.md"
+}

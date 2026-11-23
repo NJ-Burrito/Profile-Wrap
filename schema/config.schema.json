@@ -378,6 +378,7 @@
               "text",
               "slides",
               "gif",
+              "video",
               "image",
               "document",
               "multi_image"
@@ -1456,6 +1457,16 @@
         "catchup",
         "jobs"
       ]
+    },
+    "visuals": {
+      "type": "object",
+      "description": "Visual pipeline choices. default_style names a narrated video style folder in brand-kit/templates/styles (empty = the plain GIF template).",
+      "properties": {
+        "default_style": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "updates": {
       "type": "object",

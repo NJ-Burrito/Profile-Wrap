@@ -38,8 +38,8 @@ from profile_wrap.plan import holidays as hol
 from profile_wrap.plan import spread
 from profile_wrap.schedule.jobs import profile_wrap_argv, profile_wrap_env
 
-NEEDS_PROJECT = ("gif",)
-NEEDS_RENDER = ("slides", "gif", "image", "document", "multi_image")
+NEEDS_PROJECT = ("gif", "video")
+NEEDS_RENDER = ("slides", "gif", "video", "image", "document", "multi_image")
 SEAT = "council-editor"
 DEFAULT_MAX_ATTEMPTS = 3          # a failed entry is retried on the next runs, then left for a human
 CATCHUP_MIN_DAYS = 1              # catch-up looks at entries CATCHUP_MIN_DAYS .. (window start - 1) days out

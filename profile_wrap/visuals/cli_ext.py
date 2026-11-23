@@ -2,7 +2,8 @@
 
     profile-wrap render <slug>                      slides -> 2x PNG + PDF, or HyperFrames -> GIF
     profile-wrap new-gif <slug> [--title T]         copy the GIF project template into videos/<slug>
-    profile-wrap visuals metrics <slug>             still-frame %, loop seam, flashes, contrast pairs
+    profile-wrap visuals theme --from <img>         derive a contrast-checked theme from the subject's logo or screenshot
+    profile-wrap visuals metrics <slug>            still-frame %, loop seam, flashes, contrast pairs
     profile-wrap visuals banner --headline H ...    render the profile banner at 1x and 2x
     profile-wrap fonts fetch | check                OFL fonts into brand/fonts, or verify the configured fonts
     profile-wrap icons add <name>                   fetch one Lucide icon (ISC) into brand/icons
@@ -67,7 +68,7 @@ def _render(args: argparse.Namespace) -> int:
     from . import render
     ws = _workspace(args)
     data = render.render(args.slug, ws, _config(ws))
-    _emit(args, data, lambda: print(f"OK {args.slug}: {data['format']} rendered ({data.get('slides') or data.get('gif', {}).get('frames')})"))
+    _emit(args, data, lambda: print(f"OK {args.slug}: {data['format']} rendered ({data.get('slides') or data.get('gif', {}).get('frames') or str(data.get('video', {}).get('duration_s')) + ' s'})"))
     return EXIT_OK
 
 
@@ -75,9 +76,33 @@ def _render(args: argparse.Namespace) -> int:
 def _new_gif(args: argparse.Namespace) -> int:
     from . import gif
     ws = _workspace(args)
-    project = gif.new_gif(args.slug, ws, _config(ws), title=args.title or "", lang=args.lang, force=args.force)
-    _emit(args, {"project": str(project)}, lambda: print(f"created {project}\nnext: profile-wrap assets fetch (once), edit index.html, then profile-wrap render {args.slug}"))
+    project = gif.new_gif(args.slug, ws, _config(ws), title=args.title or "", lang=args.lang, force=args.force,
+                           style=args.style, theme_from=Path(args.theme_from) if args.theme_from else None,
+                           theme_file=Path(args.theme) if args.theme else None, canvas=args.canvas,
+                           subject=args.subject or "", motif=args.motif or "")
+    _emit(args, {"project": str(project)}, lambda: print(f"created {project} (and drafts/{args.slug}/meta.json)\nnext: profile-wrap assets fetch (once), edit index.html, then profile-wrap render {args.slug}"))
     return EXIT_OK
+
+
+@_guard
+def _theme(args: argparse.Namespace) -> int:
+    from . import theme
+    t = theme.derive(Path(args.source), name=args.name or "", subject=args.subject or "", motif=args.motif or "",
+                     canvas=theme.parse_canvas(args.canvas) if args.canvas else None)
+    rep = theme.check(t)
+    out = Path(args.out) if args.out else None
+    if out:
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(json.dumps(t, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+    def show() -> None:
+        for k, v in t["palette"].items():
+            print(f"{k:7} {v}")
+        print(f"contrast: {rep['pairs']} pairs, {len(rep['failures'])} failure(s)" + (f" ({out})" if out else ""))
+        for f in rep["failures"]:
+            print(f"FAIL {f}")
+    _emit(args, {"theme": t, "contrast": rep}, show)
+    return EXIT_FAIL if rep["failures"] else EXIT_OK
 
 
 @_guard
@@ -192,10 +217,19 @@ def register(subparsers) -> None:
     _common(p)
     p.set_defaults(func=_render)
 
-    p = subparsers.add_parser("new-gif", help="create videos/<slug> from the GIF project template")
+    p = subparsers.add_parser("new-gif", help="create videos/<slug> from the GIF project template or a video style (--style)")
     p.add_argument("slug")
     p.add_argument("--title", help="page title (default: the slug)")
     p.add_argument("--lang", choices=("en", "ar"), default="en")
+    p.add_argument("--style", default=None, metavar="STYLE",
+                   help="a narrated video style (console-stage; see brand-kit/templates/styles) that renders "
+                        "to out/<slug>.mp4; default: visuals.default_style, else the plain GIF template")
+    p.add_argument("--theme-from", dest="theme_from", metavar="IMAGE",
+                   help="style only: derive the palette from a logo or screenshot of the post's subject (contrast-checked)")
+    p.add_argument("--theme", metavar="THEME_JSON", help="style only: use a theme.json (from 'visuals theme')")
+    p.add_argument("--canvas", metavar="WxH", help="style only: canvas size, for example 1080x1350 (default 1280x720)")
+    p.add_argument("--subject", help="style only: what the post is about (recorded in theme.json)")
+    p.add_argument("--motif", help="style only: the subject's motif, for example water-drain (recorded in theme.json)")
     p.add_argument("--force", action="store_true", help="overwrite template files in an existing project")
     _common(p)
     p.set_defaults(func=_new_gif)
@@ -206,6 +240,15 @@ def register(subparsers) -> None:
     m.add_argument("slug")
     _common(m)
     m.set_defaults(func=_metrics)
+    th = vs.add_parser("theme", help="derive a contrast-checked video theme from the subject's logo or screenshot")
+    th.add_argument("--from", dest="source", required=True, metavar="IMAGE")
+    th.add_argument("--name")
+    th.add_argument("--subject")
+    th.add_argument("--motif")
+    th.add_argument("--canvas", metavar="WxH")
+    th.add_argument("--out", metavar="FILE", help="write theme.json here (pass it to new-gif --theme)")
+    _common(th)
+    th.set_defaults(func=_theme)
     b = vs.add_parser("banner", help="render the 1584x396 profile banner at 1x and 2x")
     b.add_argument("--headline", required=True)
     b.add_argument("--subline")

@@ -28,7 +28,7 @@ REQUIRED_META = ("slug", "lang", "format", "pillar", "status", "claims")
 try:  # the enumeration lives in WP1's policy.py
     from profile_wrap.policy import FORMATS  # type: ignore
 except Exception:  # pragma: no cover - policy.py absent while WP2 is built alone
-    FORMATS = ("text", "slides", "gif", "image", "document", "multi_image")
+    FORMATS = ("text", "slides", "gif", "video", "image", "document", "multi_image")
 STANDARD_CHECKS = ("meta", "facts", "claims", "caption", "hook", "slop", "private_terms", "numbers", "versions",
                    "links", "first_comment_promise", "hashtags", "arabic", "pair", "alt", "render")
 SCHEMA_VERSION = 1
@@ -245,11 +245,11 @@ def run_gate(slug: str | None, workspace: str | Path | None = None, *, write: bo
                             mode=str(g.get("pair", "warn"))))
 
     # ---- alt text
-    if g.get("require_alt_text", True) and fmt in ("slides", "gif") and not surfaces.get("alt", "").strip():
+    if g.get("require_alt_text", True) and fmt in ("slides", "gif", "video") and not surfaces.get("alt", "").strip():
         found.append(finding("alt", FAIL, f"alt text is required for a {fmt} post: write alt.txt", surface="alt"))
 
     # ---- render
-    if fmt in ("slides", "gif") or meta.get("assets"):
+    if fmt in ("slides", "gif", "video") or meta.get("assets"):
         cfg_r = dict(cfg)
         cfg_r["gate"] = dict(g)
         if not g.get("required_font_substrings"):

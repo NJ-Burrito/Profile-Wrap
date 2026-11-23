@@ -52,7 +52,7 @@ You need Python 3.11 or newer. Nothing else.
 **1. Install.**
 
 ```bash
-uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl
+uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl
 ```
 
 Not on PyPI for you yet? Use `uv tool install git+https://github.com/NJ-Burrito/Profile-Wrap`. As a Claude

@@ -33,7 +33,7 @@ RTL = RTL_LANGS
 def item_id(row: Dict[str, Any]) -> str:
     """A stable id for a pending/connect row (rows have no required id field)."""
     basis = "|".join(str(row.get(k, "")) for k in ("kind", "urn", "parent", "profile_url", "text", "name"))
-    return hashlib.sha1(basis.encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha1(basis.encode("utf-8"), usedforsecurity=False).hexdigest()[:12]
 
 
 def read_json_safe(path: Path, default: Any = None) -> Tuple[Any, Optional[str]]:

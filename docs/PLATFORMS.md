@@ -51,7 +51,7 @@ user only; `doctor` cannot inspect ACLs, so it says so instead of passing silent
   The launcher looks for Python 3.13, 3.12 and 3.11 and then `python3` and `python`. Set
   `PROFILE_WRAP_PYTHON` to force one. On Python 3.9 or older it prints one message with the exact fix and
   stops.
-- **Source or wheel:** `uv tool install profile-wrap`, then `profile-wrap`.
+- **Source or wheel:** `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl`, then `profile-wrap`.
 - **Schedulers** never use the plugin directory. They call the stable copy that
   `profile-wrap runtime install` writes: `<python> <data>/runtime/current <arguments>`. The path is stable
   across plugin updates, so jobs keep working until you run `profile-wrap runtime sync`.

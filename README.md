@@ -68,7 +68,7 @@ A ChatGPT or Claude chat subscription is not a key and does not work on its own.
 
 ## 🧩 Plugin
 
-Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install profile-wrap`
+Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl`
 
 Claude Code, type these two lines:
 

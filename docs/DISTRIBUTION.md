@@ -90,7 +90,7 @@ claim were not verified.
 ## 5. Smithery
 
 Needs: Smithery account; a stdio server is published as an MCPB bundle (a URL publish needs a public HTTPS server, which
-Profile-Wrap does not run). Files: `mcp/smithery.yaml` (metadata, launches `uvx profile-wrap-mcp`).
+Profile-Wrap does not run). Files: `mcp/smithery.yaml` (metadata, launches `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp`).
 **Lead**: build `profile-wrap-mcp.mcpb` (`npx @anthropic-ai/mcpb pack`, from `mcp/` with a `manifest.json`; package E owns
 the manifest). **The maintainer**: `smithery auth login`, then `smithery mcp publish ./profile-wrap-mcp.mcpb -n NJ-Burrito/profile-wrap-mcp`
 (exact namespace per his Smithery account; command from https://smithery.ai/docs/build/publish ). Paste text from

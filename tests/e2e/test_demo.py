@@ -203,7 +203,8 @@ def test_readme_has_the_required_parts():
     assert anchors == sorted(anchors)
     for needle in ("/plugin marketplace add NJ-Burrito/Profile-Wrap", "/plugin install profile-wrap@profile-wrap",
                    "codex plugin marketplace add NJ-Burrito/Profile-Wrap", ".agents/skills",
-                   "claude mcp add profile-wrap -- uvx profile-wrap-mcp", "uv tool install profile-wrap"):
+                   "claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/",
+                   "uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/"):
         assert needle in text, needle
     # below the install sections the page stays plain language: no code, no commands, no jargon
     rest = text[text.index("## 3 steps"):]
@@ -219,7 +220,7 @@ def test_readme_has_the_required_parts():
 def test_developer_page_keeps_the_technical_and_safety_content():
     text = (REPO / "docs" / "FOR-DEVELOPERS.md").read_text(encoding="utf-8")
     for needle in ("profile-wrap init --demo --yes", "profile-wrap demo run", "## Quickstart", "## FAQ", "## Roadmap",
-                   "## Licence", "MIT", "v0.2", "uv tool install profile-wrap", "profile-wrap-mcp", "CODEX.md"):
+                   "## Licence", "MIT", "v0.2", "uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/", "profile-wrap-mcp", "CODEX.md"):
         assert needle in text, needle
     for needle in ("official api", "no dms", "own developer app", "no invites", "caps that config cannot raise", "kill switch"):
         assert needle in text.lower(), needle

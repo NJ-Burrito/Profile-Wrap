@@ -9,7 +9,7 @@ eligible for OpenAI's public plugin directory.
 ## 1. Install the command line
 
 ```
-uv tool install profile-wrap
+uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl
 profile-wrap --version
 ```
 

@@ -8,7 +8,7 @@ Not related to woodworking machines or other products with a similar name.
 - [الموقع بالعربية](https://nj-burrito.github.io/Profile-Wrap/ar/): Arabic version of the website, with its own FAQ
 - [Source code](https://github.com/NJ-Burrito/Profile-Wrap): README, issues, MIT licence
 - [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.4.0 at the time of writing
-- [PyPI package](https://pypi.org/project/profile-wrap/)
+- [Download (GitHub release)](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
 
 ## Four ways to use it (all free)
 

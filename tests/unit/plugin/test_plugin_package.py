@@ -91,7 +91,9 @@ def test_no_unresolvable_plugin_root_paths():
 def test_mcp_launcher_is_pinned_and_https_only():
     cfg = load(PLUGIN / ".mcp.json")["mcpServers"]["profile-wrap"]
     assert cfg["command"] == "uvx"
-    assert cfg["args"] == ["profile-wrap-mcp==0.4.1"]
+    assert cfg["args"][-1] == "profile-wrap-mcp"  # installed from the pinned GitHub release wheels, not PyPI
+    assert all("/releases/download/v" in a for a in cfg["args"] if a.startswith("https://"))
+    assert sum(a.startswith("https://") for a in cfg["args"]) == 2
     assert not any(str(a).startswith("http://") for a in cfg["args"])
 
 

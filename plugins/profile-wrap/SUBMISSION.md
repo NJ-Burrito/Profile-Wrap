@@ -9,9 +9,8 @@ submitted automatically.
 - [ ] You have a paid claude.ai plan and can sign in at https://claude.ai.
 - [ ] The repository https://github.com/NJ-Burrito/Profile-Wrap is public and `main` contains the folder
       `plugins/profile-wrap/` at version 0.2.0 (tag `v0.2.0` exists).
-- [ ] `profile-wrap-mcp` 0.2.0 is published on PyPI. The plugin starts it with `uvx profile-wrap-mcp==0.4.1`, and a
-      pinned launcher whose version does not exist makes the plugin fail. Check: `uvx profile-wrap-mcp==0.4.1 --help`.
-- [ ] `profile_wrap` is on PyPI, or the README install line is changed to install from GitHub.
+- [ ] The GitHub release named in `.mcp.json` carries both wheels. The plugin installs them with `uvx`, no PyPI.
+      Check: `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp --help`.
 - [ ] These URLs open in a private browser window (they are in `plugin.json`):
       `docs/PRIVACY.md`, `LICENSE`, `README.md` and the issues page on GitHub, and the raw `assets/icon.svg` link.
 - [ ] In the repo folder, run `claude plugin validate --strict plugins/profile-wrap`. It must say "Validation passed".
@@ -57,7 +56,7 @@ not be mistakable for a known brand.
       and has no posting path except through the user's own developer app.
 - [ ] Once approved, record the directory link in `docs/DISTRIBUTION.md` and the date.
 - [ ] Each later release: bump `version` in `plugins/profile-wrap/.claude-plugin/plugin.json` and in the root
-      `.claude-plugin/marketplace.json`, publish the new `profile-wrap-mcp` first, update the pin in `.mcp.json`, then resubmit.
+      `.claude-plugin/marketplace.json`, point the two wheel URLs in `.mcp.json` at the new release tag, then resubmit.
 
 ## E. If you want to publish without waiting (no review)
 

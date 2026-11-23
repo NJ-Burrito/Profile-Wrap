@@ -9,7 +9,7 @@ Set up the Profile-Wrap workspace, check the machine, and keep it healthy. Work 
 analyse the ask, look up before improvising, plan with file checkpoints, run, review against the
 request. Every stage leaves a file the next stage reads, so a stop resumes where it left off.
 
-The command is `profile-wrap` (install with `uv tool install profile-wrap`, or from the release; check with `profile-wrap --version`).
+The command is `profile-wrap` (install with `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl`, or from the release; check with `profile-wrap --version`).
 
 ## First step: update check
 

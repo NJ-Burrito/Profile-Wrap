@@ -115,4 +115,4 @@ def test_codex_doc_has_mcp_toml_and_agents_section():
     import tomllib
     cfg = tomllib.loads(toml)
     server = cfg["mcp_servers"]["profile-wrap"]
-    assert server["command"] == "uvx" and server["args"][0].startswith("profile-wrap-mcp==")
+    assert server["command"] == "uvx" and server["args"][-1] == "profile-wrap-mcp" and "/releases/download/v" in server["args"][1]

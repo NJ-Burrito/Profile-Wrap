@@ -3,6 +3,13 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.4.1] - 2026-11-23
+
+### Security
+
+- A signature SVG with a DOCTYPE or ENTITY declaration is refused before it is parsed (stdlib ElementTree expands internal entities; found by the nj-whitehat scan).
+- The board item id hash is marked `usedforsecurity=False` (it is an id, not a credential check).
+
 ## [0.4.0] - 2026-11-17
 
 ### Added

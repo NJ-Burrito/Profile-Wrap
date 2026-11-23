@@ -381,6 +381,9 @@ def test_svg_signature_and_path_length():
     assert data["viewBox"] == [0, 0, 100, 50] and data["strokes"][0][1] == 50 and data["strokes"][1][1] == 20
     with pytest.raises(VisualsError):
         signature_trace.from_svg("<svg/>")
+    bomb = '<!DOCTYPE s [<!ENTITY a "aaaaaaaaaa"><!ENTITY b "&a;&a;&a;&a;&a;">]><svg><path d="&b;"/></svg>'
+    with pytest.raises(VisualsError, match="DOCTYPE or ENTITY"):
+        signature_trace.from_svg(bomb)
 
 
 def test_trace_png_with_the_sig_extra(tmp_path):

@@ -9,7 +9,7 @@ eligible for OpenAI's public plugin directory.
 ## 1. Install the command line
 
 ```
-uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl
+uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl
 profile-wrap --version
 ```
 
@@ -41,12 +41,12 @@ in the CLI. Add it to `~/.codex/config.toml`, or to `.codex/config.toml` in a tr
 ```toml
 [mcp_servers.profile-wrap]
 command = "uvx"
-args = ["--from", "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl", "--with", "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl", "profile-wrap-mcp"]
+args = ["--from", "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl", "--with", "https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl", "profile-wrap-mcp"]
 startup_timeout_sec = 30
 tool_timeout_sec = 60
 ```
 
-Or add it from the command line: `codex mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp`. It installs from the GitHub release; pin the version.
+Or add it from the command line: `codex mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp`. It installs from the GitHub release; pin the version.
 The server is a local stdio process, so it is not part of the plugin that goes to a public directory.
 
 ## 4. AGENTS.md section for your workspace

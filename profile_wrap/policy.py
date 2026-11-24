@@ -67,7 +67,7 @@ FONT_SOURCES = ("google_ofl", "system", "user_files")
 EVIDENCE_GRADES = ("A", "B", "C", "X")
 FACT_STATUSES = ("draft", "verified", "do_not_use", "superseded")
 WEEKDAYS = ("mon", "tue", "wed", "thu", "fri", "sat", "sun")
-FORMATS = ("text", "slides", "gif", "image", "document", "multi_image")
+FORMATS = ("text", "slides", "gif", "video", "image", "document", "multi_image")
 MODEL_TIERS = ("lead", "standard", "economy")
 
 # Acknowledgements (section 13, layer 3). action -> config paths it writes.

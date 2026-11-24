@@ -7,7 +7,7 @@ Independent, not affiliated with LinkedIn.
 
 ```bash
 # Claude Code
-claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp --workspace "<workspace folder>"
+claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp --workspace "<workspace folder>"
 # Codex (config.toml)  [mcp_servers.profile-wrap]  command = "uvx"  args = ["profile-wrap-mcp", "--workspace", "<folder>"]
 ```
 

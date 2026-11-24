@@ -25,6 +25,7 @@
         "text",
         "slides",
         "gif",
+        "video",
         "image",
         "document",
         "multi_image"

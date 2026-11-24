@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width={{canvas.w}}, height={{canvas.h}}" />
+    <title>{{title}}</title>
+    <script src="./vendor/gsap.min.js"></script>
+    <script src="./fx.js"></script>
+    <link rel="stylesheet" href="./assets/fonts.css" />
+    <link rel="stylesheet" href="./theme.css" />
+    <style>
+      /* CONSOLE STAGE: a product film whose look comes from its SUBJECT. Colours, glows, canvas size and the motif are tokens in
+         theme.css (generated from theme.json at scaffold: `new-gif --theme-from <logo or screenshot of the subject>`); this file
+         holds no colour of its own. Grammar kept from the reference: a dark tinted field with two glows, a two-line headline with
+         one accent word, a device slot, a typed terminal panel, a motif layer, kicker labels, measured dissolves. VFX (fx.js) and
+         SFX cues are slots driven by the same tokens. Spec: skills/pw-visuals/references/styles/console-stage.md.
+         Type families are the workspace brand fonts. Replace copy, motif and brand slot for every post. */
+      :root {
+        --sans: var(--brand-sans, system-ui, sans-serif);
+        --display: var(--brand-display, var(--brand-sans, system-ui, sans-serif));
+        --mono: var(--brand-mono, var(--brand-sans, system-ui, sans-serif));  /* a brand mono family if one is set, else the brand sans */
+      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      html, body { width: var(--w); height: var(--h); overflow: hidden; background: var(--c-bg); }
+      #stage { position: relative; width: var(--w); height: var(--h); overflow: hidden; color: var(--c-ink); font-family: var(--sans);
+        background:
+          radial-gradient(ellipse 70% 86% at 100% 0%, var(--c-glow-a) 0%, var(--c-glow-a-0) 100%),
+          radial-gradient(ellipse 64% 83% at 0% 100%, var(--c-glow-b) 0%, var(--c-glow-b-0) 100%),
+          var(--c-bg); }
+      #cam { position: absolute; inset: 0; }                 /* the camera: the shake effect moves this wrapper */
+      #fx { position: absolute; inset: 0; pointer-events: none; z-index: 30; }
+      .fxp { position: absolute; pointer-events: none; }
+      #motif { position: absolute; inset: 0; color: var(--c-accent); }   /* the subject's motif: replace the rings for each post */
+      .shine { background: linear-gradient(100deg, var(--c-ink) 0 42%, #fff 50%, var(--c-ink) 58% 100%); background-size: 260% 100%;
+        background-position: 100% 0%; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+      .shine .hot, .shine .ok { -webkit-text-fill-color: currentColor; }
+      #dots { position: absolute; inset: 0; background-image: radial-gradient(circle, rgba(255,255,255,0.07) 0 1px, transparent 1.6px); background-size: 32px 32px; background-position: 16px 16px; }
+      .scene { position: absolute; inset: 0; opacity: 0; }
+      .abs { position: absolute; }
+
+      /* ---- type roles (px at 1280 wide) ---- */
+      .hook { font-weight: 700; font-size: 64px; line-height: 80px; letter-spacing: -0.005em; white-space: nowrap; }
+      .h2   { font-weight: 700; font-size: 56px; line-height: 64px; letter-spacing: -0.005em; white-space: nowrap; }
+      .sub  { font-weight: 400; font-size: 20px; line-height: 28px; color: var(--c-muted); white-space: nowrap; }
+      .kick { font-weight: 700; font-size: 16px; line-height: 20px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--c-accent); white-space: nowrap; }
+      .hot { color: var(--c-accent); display: inline-block; } .ok { color: var(--c-ok); display: inline-block; }
+      .ln { display: block; }
+
+      /* ---- device slot (brand-neutral phone frame) ---- */
+      .phone { position: absolute; border-radius: 46px; background: var(--c-bg); border: 3px solid var(--c-line); box-shadow: 0 14px 40px rgba(0,0,0,0.55); overflow: hidden; }
+      .phone .scr { position: absolute; inset: 6px; border-radius: 40px; background: var(--c-panel); overflow: hidden; }
+      .phone .island { position: absolute; left: 50%; top: 14px; width: 92px; height: 26px; margin-left: -46px; border-radius: 14px; background: var(--c-bg); }
+      .phone .bar { position: absolute; left: 22px; right: 22px; top: 18px; font-size: 13px; font-weight: 700; color: var(--c-ink); display: flex; justify-content: space-between; }
+      .phone .ttl { position: absolute; left: 18px; top: 62px; font-size: 14px; font-weight: 700; color: var(--c-ink); }
+      .card { position: absolute; left: 14px; right: 14px; border-radius: 14px; background: var(--c-bg); border: 1px solid var(--c-line); }
+      .card b { position: absolute; left: 0; right: 0; top: 50%; margin-top: 6px; text-align: center; font-size: 19px; color: var(--c-ink); }
+      .card i { position: absolute; left: 50%; top: 38%; width: 18px; height: 18px; margin: -9px 0 0 -9px; border-radius: 50%; background: var(--c-ink); }
+      .urlbar { position: absolute; left: 18px; right: 18px; bottom: 22px; height: 30px; border-radius: 15px; background: var(--c-line); }
+      #glowO, #glowG { position: absolute; border-radius: 52px; opacity: 0; }
+      #glowO { box-shadow: 0 0 44px 12px var(--glow-hot); }
+      #glowG { box-shadow: 0 0 44px 12px var(--glow-ok); }
+      .pbar { position: absolute; top: 0; bottom: 0; width: 5px; margin-left: -2px; border-radius: 3px; background: var(--c-accent); transform-origin: 50% 50%; }
+      #phHead { position: absolute; width: 1px; top: 0; bottom: 0; background: rgba(255,255,255,0.85); }
+
+      /* ---- terminal panel ---- */
+      .panel { position: absolute; border-radius: 12px; background: var(--c-panel); border: 2px solid var(--c-line); box-shadow: 0 10px 30px rgba(0,0,0,0.35); overflow: hidden; }
+      .tl { position: absolute; left: 17px; height: 28px; font-family: var(--mono); font-size: 19px; line-height: 28px; white-space: pre; color: var(--c-ink); }
+      .tl .p { color: var(--c-accent); }
+      .tl.out { color: var(--c-ok); }
+      .tl.miss { color: var(--c-accent); }            /* a failing or warning line */
+      .tl .c { display: none; }
+      .caret { display: inline-block; width: 10px; height: 20px; margin-left: 1px; vertical-align: -3px; background: var(--c-muted); opacity: 0; }
+      .dts { color: var(--c-accent); opacity: 0; }
+      /* Lucide icon slot: paste the icon's inner paths into an inline <svg viewBox="0 0 24 24">; it takes the slot's colour */
+      .ic { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 16px; border: 2px solid var(--c-line); background: var(--c-panel); color: var(--c-accent); }
+      .ic svg { width: 60%; height: 60%; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
+      /* ---- wave strip ---- */
+      .wave { position: absolute; display: flex; align-items: center; justify-content: space-between; }
+      .wave i { display: block; width: 6px; border-radius: 3px; background: var(--c-accent); }
+
+      /* ---- brand slot + progress ---- */
+      #mark { position: absolute; right: 48px; top: 26px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 500; color: var(--c-mark); opacity: 0; }
+      #mark svg { width: 17px; height: 17px; }
+      #prog { position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; background: var(--c-accent); transform-origin: 0 50%; transform: scaleX(0); z-index: 50; }
+
+      /* ---- title card + end card ---- */
+      .chip { display: inline-block; padding: 4px 14px; border-radius: 15px; border: 1.5px solid var(--c-accent); font-family: var(--mono); font-size: 14px; line-height: 20px; color: var(--c-accent); }
+      .chip.fill { background: var(--c-accent); color: var(--c-on-accent); }
+      .cmd { position: absolute; left: 50%; top: 347px; width: 446px; height: 70px; margin-left: -223px; border-radius: 14px; border: 2px solid var(--c-accent); background: var(--c-panel); font-family: var(--mono); font-size: 28px; line-height: 66px; text-align: center; color: var(--c-ink); white-space: nowrap; }
+      .cmd .p { color: var(--c-accent); }
+      .ctr { position: absolute; left: 0; width: 100%; text-align: center; white-space: nowrap; }
+
+      /* ---- captions (off unless NARRATION.cues is filled from a real voice track; never caption unspoken text) ---- */
+      #cap { position: absolute; left: 120px; width: 1040px; bottom: 36px; text-align: center; font-size: 26px; line-height: 36px; font-weight: 500; color: var(--c-ink); opacity: 0; z-index: 45; text-shadow: 0 2px 12px rgba(0,0,0,0.8); }
+    </style>
+  </head>
+  <body>
+    <div id="stage" data-composition-id="{{slug}}" data-start="0" data-duration="12" data-fps="30" data-width="{{canvas.w}}" data-height="{{canvas.h}}">
+      <div id="cam">
+      <div id="dots"></div>
+      <!-- MOTIF SLOT: the subject's own visual idea (water swirl for a RAM flusher, a ring for a timer, a waveform for a recorder).
+           The default is three rings; replace it per post and drive it from the timeline (fx.drain, fx.ripple, fx.bubbles). -->
+      <div id="motif"><svg viewBox="0 0 {{canvas.w}} {{canvas.h}}" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" opacity="0.18"><g id="rings"><circle cx="50%" cy="50%" r="180"/><circle cx="50%" cy="50%" r="280"/><circle cx="50%" cy="50%" r="380"/></g></svg></div>
+
+      <!-- SCENE A: hook. Frame 0 is already readable: line 1 and the device are on screen. -->
+      <div class="scene" data-layout-allow-overlap="true" id="sA" style="opacity:1">
+        <div class="abs hook" style="left:88px;top:200px">
+          <span class="ln" id="a1">What if your product</span>
+          <span class="ln" id="a2">could <span class="hot">ship</span> on its own?</span>
+        </div>
+        <div class="abs hook" style="left:88px;top:392px"><span class="ln" id="a3">And <span class="ok">show</span> the proof?</span></div>
+        <div id="glowO" style="left:906px;top:49px;width:298px;height:622px"></div>
+        <div id="glowG" style="left:906px;top:49px;width:298px;height:622px"></div>
+        <div class="phone" id="phA" style="left:906px;top:49px;width:298px;height:622px">
+          <div class="scr">
+            <div class="island"></div><div class="bar"><span>9:41</span><span>5G</span></div><div class="ttl">Device title</div>
+            <div class="card" style="top:96px;height:198px"><b>Output</b></div>
+            <div class="card" style="top:306px;height:198px"><i></i><b>Input</b></div>
+            <div class="abs" id="phWave" style="left:14px;right:14px;top:96px;height:408px;display:flex;align-items:center;justify-content:space-between;padding:0 70px"></div>
+            <div class="abs" style="left:14px;right:14px;top:300px;height:5px;background:repeating-linear-gradient(90deg,var(--c-accent) 0 4px,transparent 4px 8px);opacity:.8"></div>
+            <div class="urlbar"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE B: title card (brand name, tagline, command chips) -->
+      <div class="scene" data-layout-allow-overlap="true" id="sB">
+        <div class="ctr" style="top:224px;font-size:56px;line-height:64px;font-weight:700;letter-spacing:0.01em;text-transform:uppercase" id="bT">
+          <span id="bLogo" style="color:var(--c-accent);display:inline-block;vertical-align:-6px;margin-right:14px"><svg width="44" height="44" viewBox="0 0 44 44"><rect x="3" y="3" width="38" height="38" rx="11" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="22" cy="22" r="6" fill="currentColor"/></svg></span>Product 1.0
+        </div>
+        <div class="ctr sub" id="bS" style="top:346px;font-size:16px;color:var(--c-muted)">One line that says what it is, in plain words.</div>
+        <div class="ctr" id="bC" style="top:452px;display:flex;justify-content:center;gap:12px"><span class="chip" id="c1">run</span><span class="chip" id="c2">check</span><span class="chip" id="c3">find</span><span class="chip" id="c4">say</span><span class="chip" id="c5">listen</span></div>
+      </div>
+
+      <!-- SCENE C: section (kicker, two-line headline, sub, typed terminal, device on the left) -->
+      <div class="scene" data-layout-allow-overlap="true" id="sC">
+        <div class="phone" id="phC" style="left:160px;top:31px;width:306px;height:646px">
+          <div class="scr">
+            <div class="island"></div><div class="bar"><span>9:41</span><span>5G</span></div><div class="ttl">Device title</div>
+            <div class="card" style="top:104px;height:206px"><b>Output</b></div>
+            <div class="card" style="top:322px;height:206px"><i></i><b>Input</b></div>
+            <div class="urlbar"></div>
+          </div>
+        </div>
+        <!-- step one -->
+        <div id="c1g">
+          <div class="abs kick" id="k1" style="left:600px;top:68px">Step one</div>
+          <div class="abs h2" style="left:600px;top:92px"><span class="ln" id="h11">It finds the target</span><span class="ln" id="h12">by <span class="hot">looking</span> at the screen.</span></div>
+          <div class="abs sub" id="s1" style="left:600px;top:236px">One line of context sits here.</div>
+        </div>
+        <!-- step two (replaces step one on a hard swap) -->
+        <div id="c2g" style="opacity:0">
+          <div class="abs kick" id="k2" style="left:600px;top:68px">Step two</div>
+          <div class="abs h2" style="left:600px;top:92px"><span class="ln" id="h21">It <span class="hot">speaks</span> into the</span><span class="ln" id="h22">device&#8217;s microphone.</span></div>
+          <div class="abs sub" id="s2" style="left:600px;top:236px">One command turns text into speech.</div>
+        </div>
+        <div class="panel" id="term" style="left:600px;top:315px;width:600px;height:212px">
+          <div class="tl" id="L1" style="top:9px"><span class="p">$</span> <span id="L1t"></span><span class="caret" id="car1"></span><span class="dts" id="dts"> . . .</span></div>
+          <div class="tl out" id="L2" style="top:37px;opacity:0">@e1 [button] &quot;Target&quot;</div>
+          <div class="tl" id="L3" style="top:65px;opacity:0"><span class="p">$</span> <span id="L3t"></span><span class="caret" id="car3"></span></div>
+          <div class="tl" id="L4" style="top:93px;opacity:0"><span class="p">$</span> <span id="L4t"></span><span class="caret" id="car4"></span></div>
+        </div>
+        <div class="abs kick ok" id="wl" style="left:600px;top:550px;color:var(--c-ok);opacity:0">Into the device&#8217;s microphone</div>
+        <div class="wave" id="wv" style="left:600px;top:582px;width:600px;height:44px"></div>
+      </div>
+
+      <!-- SCENE D: end card -->
+      <div class="scene" data-layout-allow-overlap="true" id="sD">
+        <div class="ctr" id="dT" style="top:180px;font-size:56px;line-height:64px;font-weight:700"><span style="color:var(--c-accent);display:inline-block;vertical-align:-6px;margin-right:14px"><svg width="44" height="44" viewBox="0 0 44 44"><rect x="3" y="3" width="38" height="38" rx="11" fill="none" stroke="currentColor" stroke-width="4"/><circle cx="22" cy="22" r="6" fill="currentColor"/></svg></span>Product 1.0</div>
+        <div class="ctr sub" id="dS" style="top:274px;font-size:22px">Out now. Open source.</div>
+        <div class="cmd" id="dC"><span class="p">$</span> install-command</div>
+        <div class="ctr" id="dU" style="top:462px;font-size:22px;line-height:30px;color:#fff">example.com/your-link</div>
+        <div class="ctr" id="dF" style="top:628px;font-size:15px;line-height:22px;font-weight:500;color:var(--c-faint)">One honest footnote line  &#183;  how it was made</div>
+      </div>
+
+      <div id="fx"></div>
+      </div>
+
+      <div id="mark"><svg style="color:var(--c-accent)" viewBox="0 0 17 17"><rect x="1.5" y="1.5" width="14" height="14" rx="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="8.5" cy="8.5" r="2.4" fill="currentColor"/></svg><span>Product 1.0</span></div>
+      <div id="cap"></div>
+      <div id="prog"></div>
+      <!-- SOUND: the cue-synced effects mix (profile-wrap builds assets/sfx-mix.wav from window.__probe.sfx at render); it fades out
+           at the end. Duck it under any owner-supplied sound with a lane on its own data-automation. -->
+      <audio id="sfx" src="./assets/sfx-mix.wav" data-start="0" data-duration="12" data-track-index="2" data-volume="1"
+        data-automation='{"version":1,"lanes":[{"target":"volume","points":[{"t":0,"v":1},{"t":11,"v":1},{"t":12,"v":0}]}]}'></audio>
+    </div>
+
+    <script>
+      /* ===== deterministic: one paused timeline, seeded noise, no Math.random / Date / performance.now, no repeat:-1 ===== */
+      const ID = "{{slug}}";
+      const FPS = 30;
+      const D = Number(document.getElementById("stage").getAttribute("data-duration"));   // one source of truth: change the length in the data-duration attribute only
+      const DISS = 8 / FPS;                       // every scene change is a linear cross-dissolve of 8 frames (0.267 s)
+      const $ = (s) => document.querySelector(s);
+      const tl = gsap.timeline({ paused: true });
+      const cssv = (n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+      const ACC = cssv("--c-accent"), ONACC = cssv("--c-on-accent");      // theme colours for tweens that need a literal value
+      const seeded = (seed) => () => { seed |= 0; seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+
+      const fx = PWFX({ tl, seeded, layer: document.getElementById("fx") });   // VFX + sound cue log (fx.js)
+
+      /* ---- the narration clock: scene times live here; with a real voice track, set them from its cue times ---- */
+      const T = { hookEnd: 3.0, titleEnd: 4.9, swap: 7.4, secEnd: 9.4 };
+      /* the voice slot: no TTS is called by this template. Fill cues from a real recording only; each cue starts where the previous ends. */
+      const NARRATION = { audio: null, cues: [ /* { t0: 0.15, t1: 2.9, text: "spoken words" }, ... */ ] };
+
+      /* ---- builders ---- */
+      const rise = (sel, at, dur = 0.2, dy = 6) => tl.fromTo(sel, { opacity: 0, y: dy }, { opacity: 1, y: 0, duration: dur, ease: "power2.out", immediateRender: false }, at);
+      const xfade = (from, to, at) => { fx.cue("whoosh", at - 0.05, -6); tl.fromTo(from, { opacity: 1 }, { opacity: 0, duration: DISS, ease: "none", immediateRender: false }, at); tl.fromTo(to, { opacity: 0 }, { opacity: 1, duration: DISS, ease: "none", immediateRender: false }, at); };
+      const bars = (host, n, w, hMax, seed, pad) => {                      // seeded waveform bars; returns the elements
+        const r = seeded(seed), out = [];
+        for (let i = 0; i < n; i++) { const e = document.createElement("i"); const env = Math.sin((i + 0.5) / n * Math.PI); e.style.height = Math.max(4, Math.round(hMax * (0.18 + 0.82 * r()) * (0.35 + 0.65 * env))) + "px"; if (w) e.style.width = w + "px"; host.appendChild(e); out.push(e); }
+        return out;
+      };
+      const typeLine = (spanSel, caretSel, text, at, cps) => {             // one character per 1/cps s; the caret follows and blinks at 0.5 s
+        const host = $(spanSel); host.textContent = "";
+        const chars = Array.from(text).map((ch) => { const s = document.createElement("span"); s.className = "c"; s.textContent = ch; host.appendChild(s); return s; });
+        chars.forEach((s, i) => { tl.set(s, { display: "inline" }, at + i / cps); if (i % 4 === 0 && s.textContent.trim()) fx.cue("key", at + i / cps, -10 - (i % 8 === 0 ? 0 : 2)); });
+        const end = at + chars.length / cps;
+        tl.set(caretSel, { opacity: 1 }, at);
+        for (let b = end; b < end + 1.0; b += 0.5) { tl.set(caretSel, { opacity: 0 }, b + 0.25); tl.set(caretSel, { opacity: 1 }, b + 0.5); }
+        tl.set(caretSel, { opacity: 0 }, end + 1.0);
+        return end;
+      };
+
+      /* ---- resting states ---- */
+      gsap.set(["#a2", "#a3", "#bLogo", "#bS", "#bC .chip", "#dT", "#dS", "#dC", "#dU", "#dF", "#k1", "#h11", "#h12", "#s1", "#term", "#k2", "#h21", "#h22", "#s2", "#wl"], { opacity: 0 });
+
+      /* ---- always on: progress bar (linear, equals t / duration) and the corner mark ---- */
+      tl.fromTo("#prog", { scaleX: 0 }, { scaleX: 1, duration: D, ease: "none", immediateRender: false }, 0);
+      tl.fromTo("#mark", { opacity: 0 }, { opacity: 1, duration: 0.2, ease: "none", immediateRender: false }, T.titleEnd + DISS);
+
+      /* ===== A. hook (0 to 3.0 s): lines rise in on a 0.1 to 1.2 s rhythm, the device glows orange then green ===== */
+      const wf = bars($("#phWave"), 19, 5, 250, 7).map((e) => { e.style.background = "var(--c-accent)"; e.style.width = "5px"; e.style.borderRadius = "3px"; return e; });
+      gsap.set(wf, { scaleY: 0, opacity: 0 });
+      tl.to(wf, { scaleY: 1, opacity: 1, duration: 0.25, ease: "power2.out", stagger: 0.035, immediateRender: false }, 0.55);
+      tl.fromTo("#glowO", { opacity: 0 }, { opacity: 1, duration: 0.4, ease: "none", immediateRender: false }, 0.45);
+      tl.to("#glowO", { opacity: 0, duration: 0.5, ease: "none", immediateRender: false }, 1.9);
+      tl.fromTo("#glowG", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "none", immediateRender: false }, 1.9);
+      /* VFX + SFX slots (all deterministic): a light sweep through line 1, a ripple and click when the device lights, a glow pulse on the accent word */
+      fx.shine("#a1", 0.3, 1.0);
+      fx.ripple(1055, 360, 0.45, { r: 200 }); fx.cue("click", 0.45, -4);
+      fx.pulse("#a2 .hot", 1.1);
+      rise("#a2", 0.6, 0.27, 6);
+      rise("#a3", 1.7, 0.27, 6);
+
+      /* ===== A to B: 8-frame dissolve ===== */
+      xfade("#sA", "#sB", T.hookEnd);
+      rise("#bLogo", T.hookEnd + 0.05, 0.27, 0);
+      rise("#bS", T.hookEnd + 0.35, 0.27, 6);
+      ["#c1", "#c2", "#c3", "#c4", "#c5"].forEach((c, i) => rise(c, T.hookEnd + 0.55 + i * 0.1, 0.2, 6));
+      tl.to("#c4", { backgroundColor: ACC, color: ONACC, duration: 0.2, ease: "none", immediateRender: false }, T.hookEnd + 1.45);
+      ["#c4", "#c5"].forEach((c, i) => fx.cue("tick", T.hookEnd + 1.45 + i * 0.25, -8));
+      tl.to("#c5", { backgroundColor: ACC, color: ONACC, duration: 0.2, ease: "none", immediateRender: false }, T.hookEnd + 1.7);
+
+      /* ===== B to C: 8-frame dissolve; the section assembles: kicker, headline (two lines 0.1 s apart), sub, then the panel types ===== */
+      const C0 = T.titleEnd;
+      xfade("#sB", "#sC", C0);
+      rise("#k1", C0 + 0.2, 0.2, 0);
+      rise("#h11", C0 + 0.25, 0.27, 6);
+      rise("#h12", C0 + 0.35, 0.27, 6);
+      rise("#s1", C0 + 0.6, 0.27, 4);
+      tl.fromTo("#term", { opacity: 0 }, { opacity: 1, duration: 0.27, ease: "none", immediateRender: false }, C0 + 0.65);
+      const t1 = typeLine("#L1t", "#car1", "tool find \"the target\"", C0 + 1.0, 40);
+      tl.set("#dts", { opacity: 1 }, t1 + 0.1);
+      tl.set("#dts", { opacity: 0 }, t1 + 0.9);
+      tl.fromTo("#L2", { opacity: 0 }, { opacity: 1, duration: 0.1, ease: "none", immediateRender: false }, t1 + 0.9);
+      tl.set("#L3", { opacity: 1 }, t1 + 1.2);
+      const t3 = typeLine("#L3t", "#car3", "tool tap @e1", t1 + 1.2, 40);
+
+      /* hard swap of the headline block (1 frame out, then rise in again); the kicker snaps */
+      const SW = T.swap;
+      tl.set("#c1g", { opacity: 0 }, SW);
+      tl.set("#c2g", { opacity: 1 }, SW);
+      tl.set("#k2", { opacity: 1 }, SW + 0.03);
+      rise("#h21", SW + 0.1, 0.27, 6);
+      rise("#h22", SW + 0.2, 0.27, 6);
+      rise("#s2", SW + 0.45, 0.27, 4);
+      tl.set("#L4", { opacity: 1 }, SW + 0.7);
+      const t4 = typeLine("#L4t", "#car4", "tool say \"Hello there\"", SW + 0.7, 40);
+
+      /* the wave strip draws left to right under the panel, its green label arrives with it */
+      const wv = bars($("#wv"), 64, 6, 40, 11);
+      gsap.set("#wv", { clipPath: "inset(0 100% 0 0)" });
+      tl.fromTo("#wl", { opacity: 0, y: 6 }, { opacity: 1, y: 0, duration: 0.27, ease: "power2.out", immediateRender: false }, t4 + 0.2);
+      tl.fromTo("#wv", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 0% 0 0)", duration: 1.5, ease: "none", immediateRender: false }, t4 + 0.2);
+
+      /* ===== C to D: 8-frame dissolve; end card: brand, sub, the command box, link, footnote ===== */
+      const E0 = T.secEnd;
+      xfade("#sC", "#sD", E0);
+      tl.fromTo("#mark", { opacity: 1 }, { opacity: 0, duration: DISS, ease: "none", immediateRender: false }, E0);
+      rise("#dT", E0 + 0.05, 0.27, 6);
+      rise("#dS", E0 + 0.3, 0.27, 6);
+      rise("#dC", E0 + 0.5, 0.27, 6);
+      rise("#dU", E0 + 0.75, 0.27, 6);
+      rise("#dF", E0 + 1.0, 0.27, 0);
+      fx.sparkles(640, 212, E0 + 0.3, { n: 8, radius: 120 }); fx.shake("#cam", E0 + 0.3, { dur: 0.3, amp: 5 });
+
+      /* ===== captions: only from real cues, continuous, each cue ends where the next begins ===== */
+      NARRATION.cues.forEach((c, i) => {
+        const end = NARRATION.cues[i + 1] ? NARRATION.cues[i + 1].t0 : c.t1;
+        tl.set("#cap", { opacity: 1 }, c.t0);
+        tl.call(() => { $("#cap").textContent = c.text; }, null, c.t0);
+        if (!NARRATION.cues[i + 1]) tl.set("#cap", { opacity: 0 }, end);
+      });
+
+      window.__timelines = window.__timelines || {};
+      window.__timelines[ID] = tl;
+      window.__probe = { fps: FPS, duration: D, scenes: T, dissolveFrames: 8, cues: NARRATION.cues.length, sfx: fx.cues };
+      document.body.setAttribute("data-probe", JSON.stringify(window.__probe));
+      tl.seek(0);
+    </script>
+  </body>
+</html>

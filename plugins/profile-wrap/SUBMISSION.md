@@ -10,7 +10,7 @@ submitted automatically.
 - [ ] The repository https://github.com/NJ-Burrito/Profile-Wrap is public and `main` contains the folder
       `plugins/profile-wrap/` at version 0.2.0 (tag `v0.2.0` exists).
 - [ ] The GitHub release named in `.mcp.json` carries both wheels. The plugin installs them with `uvx`, no PyPI.
-      Check: `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap_mcp-0.4.1-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl profile-wrap-mcp --help`.
+      Check: `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp --help`.
 - [ ] These URLs open in a private browser window (they are in `plugin.json`):
       `docs/PRIVACY.md`, `LICENSE`, `README.md` and the issues page on GitHub, and the raw `assets/icon.svg` link.
 - [ ] In the repo folder, run `claude plugin validate --strict plugins/profile-wrap`. It must say "Validation passed".

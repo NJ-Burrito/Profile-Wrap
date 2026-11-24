@@ -3,6 +3,16 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.5.0] - 2026-11-23
+
+### Added
+
+- Narrated video styles: `profile-wrap new-gif <slug> --style console-stage` scaffolds a styled HyperFrames project from `brand-kit/templates/styles/*` (styles are discovered from that folder; an unknown style is refused with the list). `profile-wrap render <slug>` then delivers `drafts/<slug>/out/<slug>.mp4` (ffprobe-checked, atomic) and records `format: "video"` and the style in `render.json`. The GIF-only rules (loop seam, 250 frames, still-frame share, 4:5) do not apply to it. Set `visuals.default_style` to make a style the default for `new-gif` (empty by default: the plain GIF template).
+- Console-stage is subject-driven: `new-gif --style console-stage --theme-from <logo or screenshot> [--theme theme.json] [--canvas WxH] [--subject ...] [--motif ...]` derives a contrast-checked theme (`profile-wrap visuals theme --from <img> [--out theme.json]`; Python standard library plus ffmpeg) and writes `theme.json` and `theme.css` into the project. The template reads only those tokens (no fixed navy or orange), takes any canvas, and has a motif slot.
+- Console-stage VFX and SFX slots: `fx.js` (ripple, burst, bubbles, pulse, shine, shake, count, sparkles, drain; seeded, on the paused timeline) and a cue-synced sound kit (`sfx/make_sfx.py` computes the WAVs into the project at scaffold; no audio binary is stored in the template). `render` mixes the cues the composition logs into `assets/sfx-mix.wav` (-16 LUFS target, peak limited) and records the loudness in `render.json`.
+- `new-gif` writes `drafts/<slug>/meta.json` (kept if it exists; `--force` rewrites it), so a fresh scaffold renders without hand-made metadata.
+- `video` is a known draft format (meta, gate, build-week). It is not in `posting.formats_enabled` by default, and posting an MP4 through the LinkedIn API is not built yet. No voice engine is wired: narration timing is set by hand in the template.
+
 ## [0.4.1] - 2026-11-23
 
 ### Security

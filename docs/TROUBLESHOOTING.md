@@ -7,7 +7,7 @@ command: 0 ok, 1 fail, 2 usage, 3 conflicts to resolve, 4 paused.
 | Symptom | Cause | Fix |
 |---|---|---|
 | "profile-wrap needs Python 3.11 or newer" | the first Python on PATH is 3.9 or older | install Python 3.12 (the message prints the line for your OS), or set `PROFILE_WRAP_PYTHON` |
-| `profile-wrap: command not found` | the plugin `bin/` is not on PATH | call `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap`, or install with `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.4.1/profile_wrap-0.4.1-py3-none-any.whl` |
+| `profile-wrap: command not found` | the plugin `bin/` is not on PATH | call `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap`, or install with `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl` |
 | "time zone ... cannot be loaded" | Windows without `tzdata` | `uv pip install tzdata` |
 | `config validate` says "unknown key" | a typo, or a key from another version | remove or fix the key; `profile-wrap config show` lists the real ones |
 | "above the ceiling of ..." | a value beyond a locked limit | lower it; ceilings live in the code and cannot be raised by config |

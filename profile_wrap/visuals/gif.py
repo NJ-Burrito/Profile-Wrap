@@ -17,7 +17,7 @@ from typing import Callable, Dict, List, Optional
 
 from profile_wrap import atomic, policy
 
-from . import MAX_FRAMES, VisualsError, assets, browser, fonts, kit_dir, probe, proc
+from . import MAX_FRAMES, VisualsError, assets, browser, fonts, kit_dir, probe, proc, sfx, theme as theme_mod
 from .render import _canvas, draft_dir, now_iso, read_meta
 
 MOTION_FILES = ("core.js", "identity.js", "motion.css", "objects.data.js", "VERSION")
@@ -108,17 +108,84 @@ def prepare_project(project: Path, workspace: Path, cfg: dict, *, need_gsap: boo
     return {"motion_copied": copied, "families": plan.family_names, "gsap": str(gsap_src) if gsap_src else None}
 
 
-def new_gif(slug: str, workspace: Path, cfg: dict, *, title: str = "", lang: str = "en", force: bool = False) -> Path:
+STYLE_MARKER = "pw-style.json"
+
+
+def styles_dir() -> Path:
+    return kit_dir() / "templates" / "styles"
+
+
+def list_styles() -> List[str]:
+    """Narrated video styles shipped in ``brand-kit/templates/styles/*`` (a folder with an index.html is a style)."""
+    root = styles_dir()
+    if not root.is_dir():
+        return []
+    return sorted(d.name for d in root.iterdir() if (d / "index.html").is_file())
+
+
+def resolve_style(style: Optional[str], cfg: dict) -> str:
+    """The style to use: the flag, else ``visuals.default_style`` (empty by default = the plain GIF template)."""
+    name = (style if style is not None else ((cfg.get("visuals") or {}).get("default_style") or "")).strip()
+    if name and name not in list_styles():
+        raise VisualsError(f"unknown style {name!r}; styles: {', '.join(list_styles()) or '(none shipped)'}")
+    return name
+
+
+def project_style(project: Path) -> str:
+    """The style a project was scaffolded with ('' for a plain GIF project)."""
+    try:
+        return str(json.loads((Path(project) / STYLE_MARKER).read_text(encoding="utf-8")).get("style") or "")
+    except (OSError, ValueError):
+        return ""
+
+
+def write_meta(workspace: Path, slug: str, lang: str, fmt: str, asset: str, force: bool = False) -> Optional[Path]:
+    """drafts/<slug>/meta.json: what ``render`` reads to find the video project. An existing one is kept unless ``force``."""
+    meta = Path(workspace) / "drafts" / slug / "meta.json"
+    if meta.is_file() and not force:
+        return None
+    atomic.atomic_write_json(meta, {"slug": slug, "lang": lang, "format": fmt, "status": "draft", "claims": [],
+                                    "video_project": f"videos/{slug}", "assets": [asset]})
+    return meta
+
+
+def new_gif(slug: str, workspace: Path, cfg: dict, *, title: str = "", lang: str = "en", force: bool = False,
+            style: Optional[str] = None, theme_from: Optional[Path] = None, theme_file: Optional[Path] = None,
+            canvas: Optional[str] = None, subject: str = "", motif: str = "") -> Path:
     if not re.match(r"^[a-z0-9][a-z0-9-]*$", slug):
         raise VisualsError("a slug is lowercase letters, digits and hyphens")
+    style = resolve_style(style, cfg)
     project = project_dir(workspace, slug)
     if project.exists() and not force:
         raise VisualsError(f"{project} already exists (use --force to overwrite the template files)")
-    tpl = kit_dir() / "templates" / "gif-project"
+    tpl = styles_dir() / style if style else kit_dir() / "templates" / "gif-project"
     if not tpl.is_dir():
         raise VisualsError(f"template missing: {tpl}")
     pins = assets.pins().get("npm") or {}
-    values = {"slug": slug, "title": title or slug.replace("-", " "), "lang": "ar" if lang == "ar" else "en",
+    chosen = None
+    cv = theme_mod.parse_canvas(canvas) if canvas else None
+    if style:
+        if theme_from and theme_file:
+            raise VisualsError("pass --theme-from (an image of the subject) or --theme (a theme.json), not both")
+        if theme_file:
+            chosen = theme_mod.load(Path(theme_file))
+        elif theme_from:
+            chosen = theme_mod.derive(Path(theme_from), subject=subject, motif=motif)
+        else:
+            chosen = json.loads((tpl / "theme.json").read_text(encoding="utf-8")) if (tpl / "theme.json").is_file()                 else theme_mod.default_theme()
+        if cv:
+            chosen["canvas"] = cv
+        if subject:
+            chosen["subject"] = subject
+        if motif:
+            chosen["motif"] = motif
+        bad = theme_mod.check(chosen)["failures"]
+        if bad:
+            raise VisualsError("the theme fails contrast: " + "; ".join(bad))
+    elif theme_from or theme_file or cv:
+        raise VisualsError("--theme, --theme-from and --canvas apply to a video style (--style)")
+    cw = (chosen or {}).get("canvas") or {"w": 1280, "h": 720}
+    values = {"canvas.w": str(cw["w"]), "canvas.h": str(cw["h"]), "slug": slug, "title": title or slug.replace("-", " "), "lang": "ar" if lang == "ar" else "en",
               "pin.hyperframes": pins.get("hyperframes", ""), "pin.gsap": pins.get("gsap", "")}
     project.mkdir(parents=True, exist_ok=True)
     for item in sorted(tpl.rglob("*")):
@@ -131,7 +198,12 @@ def new_gif(slug: str, workspace: Path, cfg: dict, *, title: str = "", lang: str
         else:
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(item, target)
+    if style:
+        atomic.atomic_write_json(project / STYLE_MARKER, {"style": style})
+        theme_mod.write(project, chosen)
+        sfx.generate_kit(project / "sfx")
     sync_motion(project, workspace, cfg)
+    write_meta(workspace, slug, values["lang"], "video" if style else "gif", f"{slug}.mp4" if style else f"{slug}.gif", force)
     return project
 
 
@@ -251,8 +323,43 @@ def versions(chrome: Optional[browser.Browser] = None) -> dict:
             "ffmpeg": ff, "motion": mv, "browser": chrome.source if chrome else None}
 
 
-def asset_name(meta: dict, slug: str) -> str:
-    return next((a for a in (meta.get("assets") or []) if str(a).endswith(".gif")), f"{slug}.gif")
+def asset_name(meta: dict, slug: str, ext: str = ".gif") -> str:
+    return next((a for a in (meta.get("assets") or []) if str(a).endswith(ext)), f"{slug}{ext}")
+
+
+def probe_video(mp4: Path, runner: Callable = proc.run) -> dict:
+    """ffprobe a delivered video: it must decode and have a video stream and a positive duration."""
+    ffprobe = shutil.which("ffprobe")
+    if not ffprobe:
+        raise VisualsError("ffprobe not found: install ffmpeg (winget install Gyan.FFmpeg / brew install ffmpeg / apt install ffmpeg)")
+    res = runner([ffprobe, "-v", "error", "-select_streams", "v:0", "-show_entries",
+                  "stream=codec_name,width,height,r_frame_rate:format=duration", "-of", "json", str(mp4)], timeout=120)
+    try:
+        info = json.loads(res.stdout or "{}")
+        st = (info.get("streams") or [{}])[0]
+        dur = float((info.get("format") or {}).get("duration") or 0)
+    except (ValueError, IndexError, TypeError):
+        info, st, dur = {}, {}, 0.0
+    if not res.ok or res.stderr.strip() or not st.get("width") or dur <= 0:
+        raise VisualsError(f"{mp4.name} does not decode: {(res.stderr or 'no video stream or duration').strip()[:160]}")
+    return {"codec": st.get("codec_name"), "w": int(st["width"]), "h": int(st["height"]),
+            "fps": st.get("r_frame_rate"), "duration_s": round(dur, 3), "bytes": mp4.stat().st_size}
+
+
+def deliver_video(mp4: Path, out: Path, runner: Callable = proc.run) -> dict:
+    """Copy renders/video.mp4 to out/<slug>.mp4 through a temp file, ffprobe it, then swap atomically."""
+    out.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out.with_suffix(".tmp.mp4")
+    try:
+        shutil.copyfile(mp4, tmp)
+        info = probe_video(tmp, runner)
+        os.replace(tmp, out)
+        return info
+    finally:
+        try:
+            tmp.unlink()
+        except OSError:
+            pass
 
 
 def render_gif(slug: str, workspace: Path, cfg: dict, *, runner: Callable = proc.run,
@@ -268,16 +375,33 @@ def render_gif(slug: str, workspace: Path, cfg: dict, *, runner: Callable = proc
     assets.require_node()
     chrome = chrome or browser.require(cfg, pin=assets.npm_pin("hyperframes"))
     prep = prepare_project(project, workspace, cfg)
-    found = probe.problems(probe.run_probe(project, chrome, runner=runner))
+    style = project_style(project)
+    result = probe.run_probe(project, chrome, runner=runner)
+    found = probe.style_problems(result) if style else probe.problems(result)
     if found:
         raise VisualsError("the composition failed its own probe: " + "; ".join(found))
+    sound = sfx.build(project, result) if style else None
     mp4 = project / "renders" / "video.mp4"
     mp4.parent.mkdir(parents=True, exist_ok=True)
     hyperframes_steps(project, mp4, chrome, runner=runner, timeout=float((cfg.get("render") or {}).get("timeout_s", 1800)))
     if not mp4.is_file() or mp4.stat().st_size == 0:
         raise VisualsError("hyperframes finished but renders/video.mp4 is missing")
-    name = asset_name(meta, slug)
     out_dir = draft / "out"
+    if style:
+        name = asset_name(meta, slug, ".mp4")
+        info = deliver_video(mp4, out_dir / name, runner)
+        data = {"slug": slug, "format": "video", "style": style, "rendered": now_iso(), "from": str(vp), "asset": name,
+                "canvas": {"w": info["w"], "h": info["h"]}, "video": info, "fonts": prep["families"],
+                "versions": versions(chrome)}
+        if sound:
+            data["sfx"] = sound
+            try:
+                data["audio"] = sfx.loudness(out_dir / name)    # the delivered MP4's own integrated loudness and true peak
+            except VisualsError:
+                data["audio"] = None
+        atomic.atomic_write_json(out_dir / "render.json", data)
+        return data
+    name = asset_name(meta, slug)
     info = encode_with_trim(mp4, out_dir / name, cfg, runner=runner)
     dims = probe_dims(out_dir / name, runner) or dict(zip(("w", "h"), _canvas(cfg)))
     data = {"slug": slug, "format": "gif", "rendered": now_iso(), "from": str(vp), "asset": name,

@@ -37,7 +37,11 @@
     }
     return fetch(path, opts).then(function (r) {
       return r.json().then(function (j) {
-        if (!r.ok) throw new Error(j.error || ("request failed (" + r.status + ")"));
+        if (!r.ok) {
+          var err = new Error(j.error || ("request failed (" + r.status + ")"));
+          err.code = j.code || null; err.params = j.params || {};
+          throw err;
+        }
         return j;
       });
     });
@@ -46,11 +50,32 @@
     btn.disabled = true;
     say("Working");
     return promise.then(function (r) { if (okMsg) say(okMsg, "ok"); return r; })
-      .catch(function (e) { say(e.message, "bad"); throw e; })
+      .catch(function (e) { say(errMsg(e), "bad"); throw e; })
       .then(function (r) { btn.disabled = false; return r; }, function (e) { btn.disabled = false; });
   }
+  function errMsg(e) { return e && e.code ? t(e.code, e.params) : (e && e.message) || ""; }
   function badge(text, kind) { return h("span", { class: "badge " + (kind || "") }, text); }
   function mount(node) { view.replaceChildren(node); view.setAttribute("aria-busy", "false"); }
+
+  // ---- i18n: the same two JSON files the terminal flows read (gui_assets/i18n/en.json and ar.json)
+  var LANG = document.documentElement.lang === "ar" ? "ar" : "en";
+  var STR = { en: {}, ar: {} };
+  function t(key, params) {
+    var s = STR[LANG][key];
+    if (s === undefined) s = STR.en[key];
+    if (s === undefined) return key;
+    return s.replace(/\{([A-Za-z_][A-Za-z0-9_]*)\}/g, function (m, name) {
+      return params && params[name] !== undefined ? String(params[name]) : m;
+    });
+  }
+  function loadStrings() {
+    function get(l) { return fetch("/assets/i18n/" + l + ".json").then(function (r) { return r.json(); }).catch(function () { return {}; }); }
+    return Promise.all([get("en"), LANG === "ar" ? get("ar") : Promise.resolve({})]).then(function (r) { STR.en = r[0]; STR.ar = r[1]; });
+  }
+  function applyI18n() {
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.textContent = t(el.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-label]").forEach(function (el) { el.setAttribute("aria-label", t(el.dataset.i18nLabel)); });
+  }
 
   // ---- shell: current page, theme, keys
   document.querySelectorAll("#nav a").forEach(function (a) {
@@ -65,10 +90,14 @@
     root.dataset.theme = dark ? "light" : "dark";
     try { localStorage.setItem("pw-theme", root.dataset.theme); } catch (e) { /* private mode */ }
   });
-  var paths = ["/", "/board", "/providers", "/build", "/settings"];
+  document.getElementById("lang").addEventListener("click", function (ev) {
+    var next = LANG === "ar" ? "en" : "ar";
+    busy(ev.target, api("/api/settings/language", { lang: next }).then(function () { location.reload(); })).catch(function () {});
+  });
+  var paths = ["/", "/board", "/providers", "/build", "/settings", "/connect"];
   document.addEventListener("keydown", function (e) {
     if (!e.altKey || e.ctrlKey || e.metaKey) return;
-    var i = "12345".indexOf(e.key);
+    var i = "123456".indexOf(e.key);
     if (i >= 0) { e.preventDefault(); location.href = paths[i] + "?t=" + encodeURIComponent(TOKEN); }
   });
   document.getElementById("main").focus();
@@ -92,7 +121,16 @@
         h("div", { class: "row" }, h("button", { type: "button", class: "ghost", onclick: function (ev) {
           busy(ev.target, api("/api/doctor", {}).then(function () { home(); }), "Checked again");
         } }, "Run the doctor again")));
+      var first = d.posting_mode === "copy" ? h("section", { class: "card", "aria-labelledby": "h-cm" },
+        h("h2", { id: "h-cm" }, t("home.copy.title")),
+        h("ul", { class: "plain" }, h("li", null, t("home.copy.s1")), h("li", null, t("home.copy.s2")),
+          h("li", null, t("home.copy.s3")), h("li", null, t("home.copy.s4"))),
+        h("p", { class: "muted small" }, t("home.copy.noapp")),
+        h("div", { class: "row" },
+          h("a", { href: "/build?t=" + encodeURIComponent(TOKEN) }, t("home.copy.link_build")),
+          h("a", { href: "/connect?t=" + encodeURIComponent(TOKEN) }, t("home.copy.link_connect")))) : null;
       mount(h("div", { class: "grid" },
+        first,
         h("section", { class: "card", "aria-labelledby": "h-st" }, h("h2", { id: "h-st" }, "Status"),
           h("p", { class: "big" }, d.workspace),
           h("p", { class: "muted small" }, d.workspace_path),
@@ -189,8 +227,34 @@
         h("p", { class: "draft", dir: "auto" }, d.caption || "(no caption yet)"),
         d.alt ? h("p", { class: "muted small", dir: "auto" }, "Alt text: " + d.alt) : null));
     }
+    function copyBtn(label, text) {
+      return h("button", { type: "button", class: "ghost", onclick: function () {
+        if (!navigator.clipboard) { say(t("copy.failed"), "bad"); return; }
+        navigator.clipboard.writeText(text).then(function () { say(t("copy.copied"), "ok"); },
+          function () { say(t("copy.failed"), "bad"); });
+      } }, label);
+    }
+    function showCopy(c) {
+      out.appendChild(h("section", { class: "card", "aria-labelledby": "h-c" }, h("h2", { id: "h-c" }, t("copy.title")),
+        h("p", { class: "muted small" }, t("copy.intro")),
+        h("p", { class: "copybox", dir: "auto" }, c.caption),
+        h("div", { class: "row" },
+          copyBtn(t("copy.caption"), c.caption),
+          c.first_comment ? copyBtn(t("copy.first_comment"), c.first_comment) : null,
+          c.alt ? copyBtn(t("copy.alt"), c.alt) : null,
+          h("a", { href: c.open_url, target: "_blank", rel: "noopener noreferrer" }, t("copy.open"))),
+        c.asset_names.length ? h("p", { class: "muted small" }, t("copy.media", { files: c.assets.join(", ") })) : null,
+        h("p", { class: "muted small" }, t("copy.after"))));
+    }
+    function offerCopy(g) {
+      if (g.summary !== "PASS") {
+        out.appendChild(h("p", { class: "card muted" }, t("copy.blocked")));
+        return;
+      }
+      api("/api/build/copy", { slug: current() }).then(showCopy).catch(function (e) { say(errMsg(e), "bad"); });
+    }
     function runGate(btn) {
-      return busy(btn, api("/api/build/gate", { slug: current() }).then(function (g) { showGate(g); return g; }));
+      return busy(btn, api("/api/build/gate", { slug: current() }).then(function (g) { showGate(g); offerCopy(g); return g; }));
     }
     api("/api/calendar").then(function (d) {
       rows = d.entries;
@@ -252,7 +316,93 @@
     api("/api/settings").then(render).catch(fail);
   }
 
-  function fail(e) { mount(h("p", { class: "card" }, "Could not load this screen: " + e.message)); say(e.message, "bad"); }
+  // ---- Connect screen (optional): five steps, each with its own check
+  function connect() {
+    var wrap = h("div");
+    var timer = null;
+    function stateBadge(s) { return badge(t("state." + s), s === "done" ? "ok" : (s === "fix" ? "bad" : (s === "wait" ? "" : "warn"))); }
+    function clip(text) {
+      if (!navigator.clipboard) { say(t("copy.failed"), "bad"); return; }
+      navigator.clipboard.writeText(text).then(function () { say(t("copy.copied"), "ok"); }, function () { say(t("copy.failed"), "bad"); });
+    }
+    function reload() { return api("/api/connect").then(render); }
+    function poll() {
+      clearTimeout(timer);
+      api("/api/connect/signin").then(function (s) {
+        if (s.state === "waiting") { timer = setTimeout(poll, 1500); return; }
+        reload().then(function () {
+          if (s.state === "done") say(t(s.code, s.params), "ok");
+          else if (s.state === "error") say(t(s.code, s.params), "bad");
+        });
+      }).catch(function (e) { say(errMsg(e), "bad"); });
+    }
+    function render(d) {
+      var rows = {};
+      d.steps.forEach(function (r) { rows[r.id] = r; });
+      function result(id) {
+        var r = rows[id];
+        return h("p", { class: "step-result", role: "status" }, stateBadge(r.state), " ", t(r.code, r.params));
+      }
+      function card(n, id, body) {
+        return h("section", { class: "card", "aria-labelledby": "h-s-" + id },
+          h("h2", { id: "h-s-" + id }, t("connect.step_n", { n: n, total: 5 }) + " - " + t("step." + id + ".title")),
+          h("p", null, t("step." + id + ".how")), body, result(id));
+      }
+      var cid = h("input", { id: "cid", autocomplete: "off", spellcheck: "false", inputmode: "text" });
+      var sec = h("input", { id: "csec", type: "password", autocomplete: "off", spellcheck: "false" });
+      var s = d.signin || { state: "idle" };
+      var waiting = s.state === "waiting";
+      var signBtn = h("button", { type: "button", disabled: waiting || rows.credentials.state !== "done", onclick: function (ev) {
+        busy(ev.target, api("/api/connect/signin/start", {}).then(function (snap) { render(Object.assign({}, d, { signin: snap })); poll(); })).catch(function () {});
+      } }, t("connect.signin"));
+      var enabled = d.posting_mode !== "copy";
+      var canEnable = rows.signin.state === "done" || rows.signin.code === "res.signin.soon";
+      var reauth = d.reauth && d.reauth.expires_on
+        ? t("reauth.text", { date: d.reauth.expires_on, warn: d.reauth.warn_from }) : t("reauth.none");
+      wrap.replaceChildren(
+        h("section", { class: "card" },
+          h("p", null, t("connect.intro")),
+          h("p", { class: "muted" }, t("connect.nopassword")),
+          h("p", { class: "muted small" }, t("connect.copy_first"))),
+        card(1, "app", h("div", { class: "row" },
+          h("a", { href: d.portal_url, target: "_blank", rel: "noopener noreferrer" }, t("connect.open_portal")))),
+        card(2, "products", h("ul", { class: "plain" }, d.products.map(function (p) { return h("li", null, p); }))),
+        card(3, "redirect", h("div", { class: "row" },
+          h("code", { class: "redirect" }, d.redirect_uri),
+          h("button", { type: "button", class: "ghost", onclick: function () { clip(d.redirect_uri); } }, t("connect.copy_address")))),
+        card(4, "credentials", h("div", { class: "field" },
+          h("label", { for: "cid" }, t("connect.field_id"), cid),
+          h("label", { for: "csec" }, t("connect.field_secret"), sec),
+          h("div", { class: "row" }, h("button", { type: "button", onclick: function (ev) {
+            var id = cid.value, key = sec.value; sec.value = "";
+            busy(ev.target, api("/api/connect/credentials", { client_id: id, key: key }).then(render), t("connect.saved")).catch(function () {});
+          } }, t("connect.save"))))),
+        card(5, "signin", h("div", null,
+          h("div", { class: "row" }, signBtn,
+            h("button", { type: "button", class: "ghost", onclick: function () { reload().catch(function (e) { say(errMsg(e), "bad"); }); } }, t("connect.recheck"))),
+          waiting ? h("p", { class: "muted" }, t(s.code, s.params), " ",
+            s.url ? h("a", { href: s.url, target: "_blank", rel: "noopener noreferrer" }, t("connect.open_signin")) : null) : null,
+          s.state === "error" ? h("p", { class: "status bad" }, t(s.code, s.params)) : null)),
+        h("section", { class: "card", "aria-labelledby": "h-re" }, h("h2", { id: "h-re" }, t("reauth.title")),
+          h("p", null, reauth)),
+        h("section", { class: "card", "aria-labelledby": "h-api" }, h("h2", { id: "h-api" }, t("api.title")),
+          h("p", null, t("api.mode", { mode: d.posting_mode })),
+          h("p", { class: "muted small" }, t("api.text")),
+          h("div", { class: "row" },
+            !enabled ? h("button", { type: "button", disabled: !canEnable, onclick: function (ev) {
+              busy(ev.target, api("/api/connect/enable-api", {}).then(render), t("api.done")).catch(function () {});
+            } }, t("api.enable")) : null,
+            enabled ? h("button", { type: "button", class: "ghost", onclick: function (ev) {
+              busy(ev.target, api("/api/connect/copy-mode", {}).then(render), t("api.back_done")).catch(function () {});
+            } }, t("api.back")) : null),
+          !enabled && !canEnable ? h("p", { class: "muted small" }, t("api.needs_signin")) : null));
+      if (waiting) { clearTimeout(timer); timer = setTimeout(poll, 1500); }
+    }
+    mount(wrap);
+    reload().catch(fail);
+  }
+
+  function fail(e) { mount(h("p", { class: "card" }, t("fail.load") + " " + errMsg(e))); say(errMsg(e), "bad"); }
 
   // ---- Optional update notice: asked first thing on load; never installs anything by itself
   function updateBanner() {
@@ -282,7 +432,10 @@
       box.hidden = false;
     }).catch(function () { /* offline or off: no banner, nothing to say */ });
   }
-  updateBanner();
-
-  ({ home: home, board: board, providers: providers, build: build, settings: settings })[SCREEN]();
+  loadStrings().then(function () {
+    applyI18n();
+    if (SCREEN === "connect") { document.getElementById("title").textContent = t("connect.title"); document.title = t("connect.title") + " - Profile-Wrap"; }
+    updateBanner();
+    ({ home: home, board: board, providers: providers, build: build, settings: settings, connect: connect })[SCREEN]();
+  });
 })();

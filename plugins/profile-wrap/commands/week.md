@@ -1,6 +1,6 @@
 ---
 description: Plan the week on LinkedIn: strategy, calendar, posting slots, and (on your yes) the weekly draft build. Drafts only; nothing is posted or queued.
-argument-hint: "[weeks ahead | build | dry-run]"
+argument-hint: "[weeks ahead | build | dry-run | learn]"
 ---
 Use the `pw-plan` skill. Read `${CLAUDE_PLUGIN_ROOT}/references/compliance.md` first.
 
@@ -11,6 +11,8 @@ Arguments: `$ARGUMENTS`
 - A number: plan that many weeks ahead (`profile-wrap calendar fill --weeks N`, then fill the open slots with the user).
 - `dry-run`: run `profile-wrap build-week --dry-run` and show what it would build. This spends
   no model tokens.
+- `learn`: run `profile-wrap track week`, then `track prompt` and do the weekly read it
+  describes, then `track check`. Numbers that were not measured stay "not measured"; nothing is guessed.
 - `build`: show the dry run first. On the user's yes, run `profile-wrap build-week`.
 
 Report what was built, what failed and why, and point the user at the review board

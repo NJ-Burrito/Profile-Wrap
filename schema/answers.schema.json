@@ -391,9 +391,6 @@
         "comments_api": {
           "type": "string"
         },
-        "apify": {
-          "type": "string"
-        },
         "likes": {
           "type": "string"
         }

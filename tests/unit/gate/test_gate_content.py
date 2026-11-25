@@ -38,7 +38,7 @@ def test_every_owned_file_exists_and_is_text():
 FORBIDDEN = [
     (re.compile(r"[A-Za-z]:\\\\?(?:Users|VScode)", re.IGNORECASE), "local absolute path"),
     (re.compile(r"/(?:Users|home)/[a-z0-9_.-]+/", re.IGNORECASE), "local absolute path"),
-    (re.compile(r"(?:sk-ant-|apify_api_|ghp_|AQ[A-Za-z0-9_-]{30,}|xox[bp]-)"), "token shape"),
+    (re.compile(r"(?:sk-ant-|ghp_|AQ[A-Za-z0-9_-]{30,}|xox[bp]-)"), "token shape"),
     (re.compile(r"(?<![\w-])\+\d[\d\s().-]{8,}\d|\(\d{2,4}\)\s?\d{3}[\d\s.-]{4,}|\b\d{10,}\b"), "phone-like number"),
     (re.compile(r"urn:li:(?:person|share|ugcPost|activity):(?!DEMO000000)\w+"), "real-looking LinkedIn urn"),
     (re.compile(r"linkedin\.com/(?:in|posts|feed)/"), "real LinkedIn URL"),

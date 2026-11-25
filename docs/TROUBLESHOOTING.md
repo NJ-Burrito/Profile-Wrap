@@ -1,22 +1,23 @@
 # Troubleshooting
 
 Start with `profile-wrap doctor`. It prints PASS, WARN or FAIL for each item, with the fix for your OS. Add
-`--json` for machine-readable output and `--online` to test the network. Exit codes for every
+`--json` for machine-readable output, `--online` to test the network and `--notify` to send one desktop notice that lists the WARN and FAIL items. Exit codes for every
 command: 0 ok, 1 fail, 2 usage, 3 conflicts to resolve, 4 paused.
 
 | Symptom | Cause | Fix |
 |---|---|---|
 | "profile-wrap needs Python 3.11 or newer" | the first Python on PATH is 3.9 or older | install Python 3.12 (the message prints the line for your OS), or set `PROFILE_WRAP_PYTHON` |
-| `profile-wrap: command not found` | the plugin `bin/` is not on PATH | call `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap`, or install with `uv tool install profile-wrap` |
+| `profile-wrap: command not found` | the plugin `bin/` is not on PATH | call `${CLAUDE_PLUGIN_ROOT}/bin/profile-wrap`, or install with `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl` |
 | "time zone ... cannot be loaded" | Windows without `tzdata` | `uv pip install tzdata` |
 | `config validate` says "unknown key" | a typo, or a key from another version | remove or fix the key; `profile-wrap config show` lists the real ones |
 | "above the ceiling of ..." | a value beyond a locked limit | lower it; ceilings live in the code and cannot be raised by config |
 | "posting.window ... minutes wide" | the window plus the gap leaves no room for consecutive days | shorten the window or lower `min_gap_hours` (never below 12) |
-| `needs an acknowledgement` | `api_scheduled`, API comments or Apify without the typed acknowledgement | run `profile-wrap config ack <action>` in a terminal, or switch the mode back |
+| `needs an acknowledgement` | `api_scheduled` or API comments without the typed acknowledgement | run `profile-wrap config ack <action>` in a terminal, or switch the mode back |
 | "downgraded until you accept again" | the shipped risk text changed in an update | read the new text and run `profile-wrap config ack <action>` again |
 | `init` refuses the folder | it is inside the plugin directory, or not empty | choose a folder under your home directory |
 | `upgrade --apply` exits 3 | a file was edited by you and changed in the new release | merge the `<file>.new` files, delete them, then `profile-wrap upgrade --resolve` (or `--mine` / `--theirs`) |
 | "runtime/current is 0.1.0, plugin is 0.2.0" | the plugin was updated | `profile-wrap runtime sync` (jobs kept running on the old copy meanwhile) |
+| `auth check` says the token was rejected | LinkedIn answered 401 (the token was revoked, or the app changed) | `profile-wrap auth` to sign in again; `profile-wrap auth check --online` confirms |
 | a scheduled job did nothing, exit 4 | the pause flag is set | `profile-wrap resume` |
 | `handoff check` fails | headings differ from the six required | the headings are exactly: `# goals`, `## current state`, `## files in flight`, `## changed`, `## failed attempts`, `## next step` |
 | macOS job cannot find `node` or `claude` | launchd has a minimal PATH | re-run `profile-wrap schedule install` so absolute paths are captured; test with `profile-wrap doctor --launchd-dryrun` |

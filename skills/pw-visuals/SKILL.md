@@ -26,6 +26,7 @@ The user approves the visual by eye on the board before anything is allowed to p
 |---|---|---|
 | `slides` / `document` | write `drafts/<slug>/slides.html` from `brand-kit/templates/slides.html`, then `profile-wrap render <slug>` | `out/slide-NN.png` at 2x, `out/<slug>.pdf` (more than one slide), `out/render.json` |
 | `gif` | `profile-wrap new-gif <slug>`, edit `videos/<slug>/index.html`, set `video_project` in `meta.json`, `profile-wrap render <slug>`, `profile-wrap visuals metrics <slug>` | `out/<slug>.gif`, `out/render.json`, `out/metrics.json` |
+| `video` | `profile-wrap new-gif <slug> --style console-stage --theme-from <logo-or-screenshot-of-the-subject> [--canvas 1080x1350]` (the theme, colours and motif come from the subject, never a fixed palette; `new-gif` also writes `drafts/<slug>/meta.json`), edit `videos/<slug>/index.html` (VFX in `fx.js`, SFX through `fx.cue`), `profile-wrap render <slug>` | `out/<slug>.mp4`, `out/render.json` (records `style`). No GIF encode, no `visuals metrics`. Posting an MP4 to LinkedIn is not wired yet |
 | `banner` | `profile-wrap visuals banner --headline "..."` | `brand/banner/out/banner@1x.png`, `@2x.png`, `banner-safezone.png` |
 | `text` | nothing to render | |
 
@@ -52,6 +53,7 @@ The user approves the visual by eye on the board before anything is allowed to p
 | Need | Read |
 |---|---|
 | GIF rules, arc, hold log, metrics, size | `references/gif-standard.md` and `docs/MOTION.md` |
+| Narrated video style `console-stage` (dark product console, 16:9, cross-dissolve scenes) | `references/styles/console-stage.md` and `docs/MOTION.md` "Narrated video styles" |
 | Slides: template, gates, icons, PDF | `references/slides.md` |
 | Banner: size, safe zone, fonts | `references/banner.md` |
 | Identity card and signature (opt-in) | `references/identity-card.md` |

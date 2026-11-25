@@ -1,6 +1,7 @@
 """``profile-wrap build-week``: turn the next planned calendar entries into drafts, and never queue one.
 
-For every ``planned`` entry 8 to 14 days ahead (``--days``), the orchestrator:
+For every ``planned`` entry 8 to 14 days ahead (``--days``), and, as catch-up, every briefed ``planned``
+entry 1 to 7 days out that still has no draft (a missed or failed week leaves no hole), the orchestrator:
 
 1. picks a stable per-slug posting time (:func:`profile_wrap.plan.spread.spread_time`) and records it;
 2. scaffolds the visual project when the format needs one (``profile-wrap new-gif``);
@@ -17,8 +18,11 @@ from __future__ import annotations
 
 import datetime as _dt
 import json
+import os
 import shutil
 import subprocess
+import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Mapping, Optional, Sequence, Tuple
@@ -34,9 +38,11 @@ from profile_wrap.plan import holidays as hol
 from profile_wrap.plan import spread
 from profile_wrap.schedule.jobs import profile_wrap_argv, profile_wrap_env
 
-NEEDS_PROJECT = ("gif",)
-NEEDS_RENDER = ("slides", "gif", "image", "document", "multi_image")
+NEEDS_PROJECT = ("gif", "video")
+NEEDS_RENDER = ("slides", "gif", "video", "image", "document", "multi_image")
 SEAT = "council-editor"
+DEFAULT_MAX_ATTEMPTS = 3          # a failed entry is retried on the next runs, then left for a human
+CATCHUP_MIN_DAYS = 1              # catch-up looks at entries CATCHUP_MIN_DAYS .. (window start - 1) days out
 
 
 class BuildError(RuntimeError):
@@ -111,9 +117,23 @@ def ledger_slugs(workspace: Path) -> set:
     return {r["slug"] for r in rows if isinstance(r, dict) and r.get("slug")}
 
 
+def _draft_status(workspace: Path, slug: str) -> str:
+    try:
+        meta = json.loads((Path(workspace) / "drafts" / slug / "meta.json").read_text(encoding="utf-8-sig"))
+        return str(meta.get("status", "")) if isinstance(meta, dict) else ""
+    except (OSError, ValueError):
+        return ""
+
+
 def select(cal: Mapping[str, Any], workspace: Path, *, today: _dt.date, lo: int, hi: int,
-           only: Optional[str] = None) -> Tuple[List[Dict[str, Any]], List[Item]]:
-    """Planned, briefed entries inside the window whose folders and ledger rows do not exist."""
+           only: Optional[str] = None, catchup_lo: Optional[int] = None,
+           max_attempts: int = DEFAULT_MAX_ATTEMPTS) -> Tuple[List[Dict[str, Any]], List[Item]]:
+    """Planned, briefed entries inside the window whose folders and ledger rows do not exist.
+
+    ``catchup_lo`` also picks entries ``catchup_lo`` to ``lo - 1`` days out. An entry whose last build
+    failed (``build_failed_at``) is retried even though the failed run left a draft folder, until it has
+    failed ``max_attempts`` times.
+    """
     done = ledger_slugs(workspace)
     chosen: List[Dict[str, Any]] = []
     skipped: List[Item] = []
@@ -135,14 +155,28 @@ def select(cal: Mapping[str, Any], workspace: Path, *, today: _dt.date, lo: int,
         except (KeyError, ValueError):
             skipped.append(Item(slug, e.get("date", ""), status="skipped", detail="bad date"))
             continue
-        if not only and not (lo <= ahead <= hi):
+        in_window = lo <= ahead <= hi
+        in_catchup = catchup_lo is not None and catchup_lo <= ahead < lo
+        if not only and not (in_window or in_catchup):
             continue
-        if (Path(workspace) / "drafts" / slug).exists() or (Path(workspace) / "videos" / slug).exists() \
-                or slug in done:
+        try:
+            attempts = int(e.get("build_attempts") or 0)
+        except (TypeError, ValueError):
+            attempts = 0
+        retry = bool(e.get("build_failed_at"))
+        if retry and attempts >= max_attempts and not only:
+            skipped.append(Item(slug, e["date"], status="skipped",
+                                detail=f"the build failed {attempts} times; fix the cause, then "
+                                       f"`profile-wrap build-week --slug {slug}`"))
+            continue
+        exists = (Path(workspace) / "drafts" / slug).exists() or (Path(workspace) / "videos" / slug).exists()
+        retryable = retry and slug not in done and _draft_status(workspace, slug) not in (
+            "queued", "posted", "needs_check")
+        if (exists and not retryable) or slug in done:
             skipped.append(Item(slug, e["date"], status="skipped",
                                 detail="a draft folder, video project or ledger row already exists"))
             continue
-        chosen.append(e)
+        chosen.append(dict(e, _catchup=True) if (in_catchup and not in_window) else e)
     return chosen, skipped
 
 
@@ -204,6 +238,19 @@ def scheduled_at(day: str, hhmm: str, tz: str) -> str:
 
 # ----------------------------------------------------------------------------- prompt values
 
+def _prior_angles_text(workspace: Path, entry: Mapping[str, Any]) -> str:
+    """The earlier angles on this entry's subject, for ``{{prior_angles}}``. Never raises."""
+    subject = str(entry.get("subject") or "").strip()
+    if not subject:
+        return "(this entry has no subject, so there is nothing to compare with)"
+    try:
+        found = calmod.prior_angles(subject, workspace, exclude_slug=str(entry.get("slug", "")),
+                                    before=str(entry.get("date", "")))
+        return calmod.format_prior_angles(found)
+    except Exception:  # an unreadable calendar must not stop a build
+        return "(the earlier angles could not be read; compare with the posts on this subject yourself)"
+
+
 def prompt_values(workspace: Path, cfg: Mapping[str, Any], entry: Mapping[str, Any], sched: str) -> Dict[str, Any]:
     persona = cfg.get("persona", {})
     slug = entry["slug"]
@@ -226,6 +273,7 @@ def prompt_values(workspace: Path, cfg: Mapping[str, Any], entry: Mapping[str, A
         "persona_name": persona.get("name") or "the author",
         "claims": ", ".join(entry.get("claims") or []) or "none",
         "ai_disclosure": persona.get("ai_disclosure", {}).get("text", "") or "none",
+        "prior_angles": _prior_angles_text(workspace, entry),
     }
 
 
@@ -248,11 +296,99 @@ def _expect_for(entry: Mapping[str, Any]) -> List[str]:
 # ----------------------------------------------------------------------------- one entry
 
 def _log(workspace: Path, msg: str) -> None:
+    """Best effort: a log that cannot be written (lock, full disk, permissions) never stops a build."""
     line = f"{_dt.datetime.now().astimezone():%Y-%m-%d %H:%M:%S} {msg}"
-    p = Path(workspace) / "work" / "build.log"
-    p.parent.mkdir(parents=True, exist_ok=True)
-    with p.open("a", encoding="utf-8") as fh:
-        fh.write(line + "\n")
+    try:
+        p = Path(workspace) / "work" / "build.log"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        with p.open("a", encoding="utf-8") as fh:
+            fh.write(line + "\n")
+        return
+    except OSError:
+        pass
+    try:
+        stamp = f"{_dt.datetime.now():%Y%m%dT%H%M%S}-{os.getpid()}"
+        with (Path(workspace) / "work" / f"build-fallback-{stamp}.log").open("a", encoding="utf-8") as fh:
+            fh.write(line + "\n")
+        return
+    except OSError:
+        pass
+    try:
+        sys.stderr.write(line + "\n")
+    except (OSError, ValueError, AttributeError):
+        pass
+
+
+def _mark_build(ws: Path, slug: str, *, failed: bool, reason: str = "") -> int:
+    """Set or clear the retry marker on a calendar entry. Returns the attempt count. Never raises."""
+    box = {"n": 0}
+
+    def change(cal: Dict[str, Any]) -> None:
+        for e in cal["entries"]:
+            if e.get("slug") == slug:
+                if failed:
+                    box["n"] = int(e.get("build_attempts") or 0) + 1
+                    e["build_attempts"] = box["n"]
+                    e["build_failed_at"] = _dt.datetime.now().astimezone().isoformat(timespec="seconds")
+                    e["build_error"] = reason[:300]
+                else:
+                    for k in ("build_attempts", "build_failed_at", "build_error"):
+                        e.pop(k, None)
+                return
+
+    try:
+        calmod.update(ws, change)
+    except Exception as exc:  # the marker is a convenience; the build result stands without it
+        _log(ws, f"could not update the retry marker for {slug}: {exc}")
+    return box["n"]
+
+
+def _fail_marker(ws: Path, slug: str, item: Item, cap: int) -> None:
+    n = _mark_build(ws, slug, failed=True, reason=item.detail)
+    if n >= cap:
+        item.detail += f" (attempt {n}: giving up until you run build-week --slug {slug})"
+        _log(ws, f"{slug}: giving up after {n} failed builds")
+    elif n:
+        item.detail += f" (attempt {n} of {cap}; the next run retries)"
+
+
+# ----------------------------------------------------------------------------- browser preflight
+
+def _launch_smoke(path: Path, ws: Path, timeout: float = 45.0) -> Tuple[bool, str]:
+    """Launch the browser headless on about:blank with a throwaway profile. (ok, reason)."""
+    from profile_wrap.visuals import proc
+    work = Path(ws) / "work"
+    work.mkdir(parents=True, exist_ok=True)
+    prof = Path(tempfile.mkdtemp(prefix=".preflight-", dir=str(work)))
+    try:
+        res = proc.run([str(path), "--headless=new", "--disable-gpu", "--no-first-run",
+                        f"--user-data-dir={prof}", "--dump-dom", "about:blank"], timeout=timeout)
+        if res.ok:
+            return True, ""
+        return False, res.tail(300) or f"exit {res.returncode}"
+    finally:
+        shutil.rmtree(prof, ignore_errors=True)
+
+
+def browser_preflight(ws: Path, cfg: Mapping[str, Any], *, require: Optional[Callable[..., Any]] = None,
+                      smoke: Callable[[Path, Path], Tuple[bool, str]] = _launch_smoke) -> str:
+    """Prove the render browser exists and starts, before any model call. Raises BuildError with the fix."""
+    from profile_wrap import doctor
+    from profile_wrap.visuals import VisualsError, assets
+    from profile_wrap.visuals import browser as browser_mod
+    fix = doctor.HINTS["chrome"][doctor.os_label()]
+    try:
+        if require is not None:
+            found = require(cfg)
+        else:
+            found = browser_mod.require(dict(cfg), pin=assets.npm_pin("hyperframes"))
+    except VisualsError as exc:
+        raise BuildError(f"cannot render: {exc} Fix: {fix}") from exc
+    ok, reason = smoke(Path(found.path), Path(ws))
+    if not ok:
+        raise BuildError(f"cannot render: the browser {found.path} ({found.source}) did not start: {reason}. "
+                         f"Fix: {fix}")
+    return str(found.path)
 
 
 def _render_and_gate(steps: Steps, entry: Mapping[str, Any]) -> Tuple[bool, str]:
@@ -392,17 +528,27 @@ def parse_days(text: str) -> Tuple[int, int]:
 def build_week(workspace: Path, cfg: Mapping[str, Any], *, days: Tuple[int, int] = (8, 14),
                slug: Optional[str] = None, dry_run: bool = False, today: Optional[_dt.date] = None,
                steps: Optional[Steps] = None, exe: Optional[Sequence[str]] = None,
-               runner: Callable[..., cr.WorkerResult] = cr.run_worker, notify_user: bool = True) -> Report:
+               runner: Callable[..., cr.WorkerResult] = cr.run_worker, notify_user: bool = True,
+               catchup: bool = False, max_attempts: Optional[int] = None,
+               preflight: Optional[Callable[[Path, Mapping[str, Any]], Any]] = None) -> Report:
+    """``catchup`` also builds briefed entries 1 to ``days[0] - 1`` days out. ``preflight`` defaults to the real
+    browser check, used only when the real render steps are in play (``steps`` is None)."""
     ws = Path(workspace)
     tz = cfg.get("locale", {}).get("timezone") or "UTC"
     today = today or tzutil.now(tz).date()
     report = Report(dry_run=dry_run)
     cal = calmod.load(ws)
     holidays = hol.load(ws, dict(cfg))
-    todo, report.skipped = select(cal, ws, today=today, lo=days[0], hi=days[1], only=slug)
+    cap = max_attempts if max_attempts is not None else int(
+        (cfg.get("schedule") or {}).get("build_max_attempts", DEFAULT_MAX_ATTEMPTS))
+    todo, report.skipped = select(cal, ws, today=today, lo=days[0], hi=days[1], only=slug,
+                                  catchup_lo=CATCHUP_MIN_DAYS if catchup else None, max_attempts=cap)
     plan: List[Tuple[Dict[str, Any], str, str, List[str], str]] = []
     for e in todo:
+        catch = bool(e.pop("_catchup", False))
         hhmm, relaxed, note = assign_time(e, ws, cfg, cal, holidays)
+        if catch:
+            note = (note + "; " if note else "") + "catch-up (closer than the usual window)"
         plan.append((e, hhmm, scheduled_at(e["date"], hhmm, tz), relaxed, note))
         # later entries in this run must see this one's minute
         e = dict(e, time=hhmm)
@@ -418,6 +564,16 @@ def build_week(workspace: Path, cfg: Mapping[str, Any], *, days: Tuple[int, int]
     if not plan:
         _log(ws, "nothing to build")
         return report
+    check = preflight if preflight is not None else (browser_preflight if steps is None else None)
+    if check is not None and any(e.get("format") in NEEDS_RENDER for e, *_ in plan):
+        try:
+            check(ws, cfg)
+        except BuildError as exc:
+            _log(ws, f"preflight failed, no model call made: {exc}")
+            if notify_user:
+                notify("Weekly build cannot render", str(exc)[:300], workspace=ws,
+                       mode=cfg.get("schedule", {}).get("notify", "auto"))
+            raise
     lock = named_lock(ws, "build-week", stale_after=4 * 3600, wait=0)
     try:
         lock.acquire()
@@ -433,14 +589,17 @@ def build_week(workspace: Path, cfg: Mapping[str, Any], *, days: Tuple[int, int]
                 item.verdict = build_one(ws, cfg, dict(e, time=hhmm), hhmm, sched, steps, report, exe=exe,
                                          runner=runner)
                 calmod.set_status(ws, e["slug"], "built")
+                _mark_build(ws, e["slug"], failed=False)
                 item.status = "built"
                 _log(ws, f"built {e['slug']} (review: {item.verdict})")
             except BuildError as exc:
                 item.status, item.detail = "failed", str(exc)
                 _log(ws, f"FAILED {e['slug']}: {exc}")
+                _fail_marker(ws, e["slug"], item, cap)
             except Exception as exc:  # one bad entry never stops the next
                 item.status, item.detail = "failed", f"{type(exc).__name__}: {exc}"
                 _log(ws, f"FAILED {e['slug']}: {item.detail}")
+                _fail_marker(ws, e["slug"], item, cap)
     finally:
         lock.release()
     if notify_user:
@@ -472,4 +631,5 @@ def cleanup(workspace: Path, slug: str) -> List[str]:
             shutil.move(str(src), str(dst))
             moved.append(f"{base}/{slug} -> work/trash/{stamp}/{base}/{slug}")
     calmod.set_status(ws, slug, "planned")
+    _mark_build(ws, slug, failed=False)
     return moved

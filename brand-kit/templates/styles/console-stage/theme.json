@@ -1,0 +1,23 @@
+{
+  "name": "neutral",
+  "subject": "",
+  "source": "default seed colour: replace per post",
+  "motif": "rings",
+  "canvas": {
+    "w": 1280,
+    "h": 720
+  },
+  "palette": {
+    "bg": "#0a0d13",
+    "glow_a": "#1d2f4c",
+    "glow_b": "#1e423a",
+    "ink": "#ebf0f7",
+    "muted": "#a2acbd",
+    "faint": "#a3aab6",
+    "accent": "#70a6ff",
+    "ok": "#59ebcb",
+    "panel": "#12161d",
+    "line": "#2e3642",
+    "mark": "#9daac0"
+  }
+}

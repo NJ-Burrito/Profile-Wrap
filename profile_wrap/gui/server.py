@@ -20,18 +20,25 @@ from urllib.parse import parse_qs, urlsplit
 
 from .. import __version__
 from .. import config as config_mod
-from .. import paths, updates
+from .. import i18n, paths, updates
 from ..board.security import CSP, host_allowed, origin_allowed, token_ok
 from . import logic
 from .logic import GuiError
 
 SCREENS: Dict[str, str] = {"/": "home", "/board": "board", "/providers": "providers", "/build": "build",
-                           "/settings": "settings"}
-TITLES = {"home": "Home", "board": "Board", "providers": "Providers", "build": "Build", "settings": "Settings"}
+                           "/settings": "settings", "/connect": "connect"}
+TITLES = {"home": "Home", "board": "Board", "providers": "Providers", "build": "Build", "settings": "Settings",
+          "connect": "Connect LinkedIn"}
 ASSET_TYPES = {"gui.css": "text/css; charset=utf-8", "gui.js": "text/javascript; charset=utf-8",
-               "mark.svg": "image/svg+xml"}
+               "mark.svg": "image/svg+xml", "i18n/en.json": "application/json; charset=utf-8",
+               "i18n/ar.json": "application/json; charset=utf-8"}
 MAX_BODY = 20000
 DOCTOR_TTL = 60.0
+
+
+def _open_browser(url: str) -> None:
+    import webbrowser
+    webbrowser.open(url)
 
 
 def assets_dir() -> Path:
@@ -43,7 +50,9 @@ class GuiApp:
 
     def __init__(self, ws: Path, *, token: Optional[str] = None,
                  provider_factory: Optional[Callable[..., Any]] = None,
-                 doctor_fn: Optional[Callable[[Path], Dict[str, Any]]] = None):
+                 doctor_fn: Optional[Callable[[Path], Dict[str, Any]]] = None,
+                 signin_factory: Optional[Callable[..., Any]] = None,
+                 open_browser: Optional[Callable[[str], Any]] = None):
         self.ws = Path(ws)
         self.token = token or secrets.token_urlsafe(24)
         self.port = 0
@@ -51,6 +60,9 @@ class GuiApp:
         self.doctor_fn = doctor_fn or self._doctor
         self._doctor_cache: Optional[Tuple[float, Path, Dict[str, Any]]] = None
         self.board: Any = None
+        self.signin_factory = signin_factory
+        self.open_browser = open_browser if open_browser is not None else _open_browser
+        self.signin: Any = None
         self.update_enabled = False   # set by window.run: only a real app window asks GitHub
         self.quit = threading.Event()
         self.lock = threading.Lock()
@@ -85,10 +97,32 @@ class GuiApp:
     def health(self) -> Dict[str, Any]:
         return {"ok": True, "app": "profile-wrap-gui", "version": __version__, "api": 1}
 
+    def lang(self) -> str:
+        try:
+            return i18n.normalize(config_mod.load(self.ws).get("board", {}).get("ui_language", "en"))
+        except Exception:  # a broken config still gets a page, in English
+            return i18n.DEFAULT_LANG
+
     def page(self, screen: str) -> bytes:
         html = (assets_dir() / "index.html").read_text(encoding="utf-8")
+        lang = self.lang()
         return (html.replace("__TOKEN__", self.token).replace("__SCREEN__", screen)
-                .replace("__TITLE__", TITLES[screen]).replace("__VERSION__", __version__)).encode("utf-8")
+                .replace("__TITLE__", TITLES[screen]).replace("__VERSION__", __version__)
+                .replace("__LANG__", lang).replace("__DIR__", i18n.dir_of(lang))).encode("utf-8")
+
+    def start_signin(self) -> Dict[str, Any]:
+        from ..linkedin import connect
+        with self.lock:
+            cfg = self.cfg()
+            if self.signin is not None and self.signin.waiting:
+                raise GuiError(i18n.t("res.signin.busy"), 409, "res.signin.busy")
+            factory = self.signin_factory or connect.SignIn
+            self.signin = factory(cfg, open_browser=self.open_browser)
+            session = self.signin
+        try:
+            return session.start()
+        except connect.ConnectError as exc:
+            raise GuiError(str(exc), 422, exc.code, exc.params) from None
 
     def start_board(self) -> Dict[str, Any]:
         from ..board.server import BoardServer
@@ -128,6 +162,10 @@ class GuiApp:
             return logic.settings_view(self.ws, self.cfg())
         if path == "/api/update":
             return updates.web_status(self.ws, self.update_enabled)
+        if path == "/api/connect":
+            return logic.connect_view(self.ws, self.cfg(), self.signin)
+        if path == "/api/connect/signin":
+            return self.signin.snapshot() if self.signin is not None else {"state": "idle", "code": "", "params": {}, "url": ""}
         raise GuiError("not found", 404)
 
     def api_post(self, path: str, body: Dict[str, Any]) -> Any:
@@ -153,6 +191,23 @@ class GuiApp:
             return logic.run_gate_for(ws, body.get("slug"))
         if path == "/api/build/text":
             return logic.draft_text(ws, body.get("slug"))
+        if path == "/api/build/copy":
+            return logic.copy_block(ws, body.get("slug"))
+        if path == "/api/connect/credentials":
+            logic.connect_save(ws, self.cfg(), body)
+            return logic.connect_view(ws, self.cfg(), self.signin)
+        if path == "/api/connect/signin/start":
+            logic.connect_refuse_password(body)
+            return self.start_signin()
+        if path == "/api/connect/enable-api":
+            logic.connect_enable_api(ws)
+            return logic.connect_view(ws, self.cfg(), self.signin)
+        if path == "/api/connect/copy-mode":
+            logic.connect_back_to_copy(ws)
+            return logic.connect_view(ws, self.cfg(), self.signin)
+        if path == "/api/settings/language":
+            logic.set_language(ws, body.get("lang"))
+            return {"lang": self.lang()}
         if path == "/api/settings/posting-mode":
             logic.set_posting_mode(ws, body.get("mode"))
             return logic.settings_view(ws, self.cfg())
@@ -249,8 +304,12 @@ def _make_handler(app: GuiApp):
             self.send_bytes(code, json.dumps(obj, ensure_ascii=False).encode("utf-8"),
                             "application/json; charset=utf-8")
 
-        def fail(self, code: int, message: str) -> None:
-            self.send_json(code, {"error": message})
+        def fail(self, code: int, message: str, i18n_code: Optional[str] = None,
+                 params: Optional[Dict[str, Any]] = None) -> None:
+            body: Dict[str, Any] = {"error": message}
+            if i18n_code:
+                body["code"], body["params"] = i18n_code, params or {}
+            self.send_json(code, body)
 
         # ------------------------------------------------ checks
         def _host_ok(self) -> bool:
@@ -319,7 +378,7 @@ def _make_handler(app: GuiApp):
             try:
                 return self.send_json(200, app.api_post(self.path.split("?")[0], body))
             except GuiError as exc:
-                return self.fail(exc.status, logic.redact(str(exc), secret))
+                return self.fail(exc.status, logic.redact(str(exc), secret), exc.code, exc.params)
             except Exception as exc:
                 return self.fail(500, f"internal error ({type(exc).__name__})")
 

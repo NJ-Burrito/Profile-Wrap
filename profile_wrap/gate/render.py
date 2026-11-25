@@ -91,6 +91,8 @@ class RenderChecker:
                 self._pdf(p)
             elif suf == ".gif":
                 self._gif(p)
+            elif suf == ".mp4":
+                self._video(p)
         return self.findings
 
     def _freshness(self, out_dir: Path) -> None:
@@ -139,6 +141,20 @@ class RenderChecker:
                 self._add(FAIL, "render", f"pdfinfo failed on {p.name}: {(err or out).strip()[:120]}")
             elif int(pages) != int(n_slides):
                 self._add(FAIL, "render", f"{p.name} has {pages} pages but {n_slides} slides were rendered")
+
+    def _video(self, p: Path) -> None:
+        """A narrated video style's MP4 must decode and have a positive duration (the GIF-only rules do not apply)."""
+        probe = self._tool("ffprobe", f"decode check of {p.name}")
+        if not probe:
+            return
+        rc, out, err = self.run([probe, "-v", "error", "-select_streams", "v:0", "-show_entries", "format=duration",
+                                 "-of", "csv=p=0", str(p)])
+        try:
+            dur = float(out.strip().splitlines()[0]) if out.strip() else 0.0
+        except ValueError:
+            dur = 0.0
+        if rc != 0 or err.strip() or dur <= 0:
+            self._add(FAIL, "render", f"{p.name} does not decode cleanly ({(err or out or 'no duration').strip()[:100]})")
 
     def _gif(self, p: Path) -> None:
         gif = self.g["gif"]

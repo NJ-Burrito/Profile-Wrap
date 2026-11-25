@@ -38,6 +38,17 @@ def run_probe(project: Path, chrome: browser.Browser, *, runner: Callable = proc
         shutil.rmtree(profile, ignore_errors=True)
 
 
+def style_problems(probe: Dict) -> List[str]:
+    """Probe check for a narrated video style: GIF-only checks (poster, loop, hold) do not apply. The probe must show it
+    looked: a positive timeline ``duration`` is the known-true sample; anything it reports under ``problems`` is surfaced."""
+    out: List[str] = []
+    dur = probe.get("duration")
+    if not isinstance(dur, (int, float)) or isinstance(dur, bool) or dur <= 0:
+        out.append("probe has no positive timeline duration: the composition did not boot")
+    out += [f"style probe: {p}" for p in probe.get("problems") or []]
+    return out
+
+
 def problems(probe: Dict) -> List[str]:
     """Readable problems from one probe result. Absent keys are reported, never assumed fine (a probe must show it looked)."""
     out: List[str] = []

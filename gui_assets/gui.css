@@ -79,3 +79,9 @@ main a:hover { text-decoration-thickness: 2px; }
 .update .row { display: flex; flex-wrap: wrap; gap: 8px; }
 .update pre { white-space: pre-wrap; max-height: 16em; overflow: auto; font: 13px/1.5 var(--mono); }
 .update code { font-family: var(--mono); user-select: all; }
+
+.steps { counter-reset: none; display: grid; gap: 16px; }
+.step-result { margin: 8px 0 0; }
+.copybox { white-space: pre-wrap; background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 12px; font-family: var(--font); user-select: all; }
+.redirect { font-family: var(--mono); user-select: all; overflow-wrap: anywhere; }
+ol.how { padding-inline-start: 22px; margin: 6px 0; display: grid; gap: 6px; }

@@ -8,6 +8,25 @@
       "type": "integer",
       "minimum": 1
     },
+    "changes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "what": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "date",
+          "what"
+        ]
+      }
+    },
     "entries": {
       "type": "array",
       "items": {
@@ -30,6 +49,7 @@
               "text",
               "slides",
               "gif",
+              "video",
               "image",
               "document",
               "multi_image"
@@ -76,6 +96,12 @@
           },
           "pair": {
             "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          },
+          "pinned": {
+            "type": "boolean"
           },
           "fictional": {
             "type": "boolean"

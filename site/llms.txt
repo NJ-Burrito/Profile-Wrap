@@ -7,19 +7,26 @@ Not related to woodworking machines or other products with a similar name.
 - [Website](https://nj-burrito.github.io/Profile-Wrap/): what it does, the 3 steps, the review board, a price comparison, FAQ, a short Arabic summary
 - [الموقع بالعربية](https://nj-burrito.github.io/Profile-Wrap/ar/): Arabic version of the website, with its own FAQ
 - [Source code](https://github.com/NJ-Burrito/Profile-Wrap): README, issues, MIT licence
-- [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.3.0 at the time of writing
-- [PyPI package](https://pypi.org/project/profile-wrap/)
+- [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.5.0 at the time of writing
+- [Download (GitHub release)](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
 
 ## Four ways to use it (all free)
 
-- Desktop app: Windows, Mac and Linux, for people with no AI app.
+- Desktop app: Windows, Mac and Linux. It writes text drafts only; slides and GIFs need the command line.
 - Claude Code and Codex plugin: `/plugin marketplace add NJ-Burrito/Profile-Wrap`, then `/plugin install profile-wrap@profile-wrap`.
 - Skills: setup, plan, write, visuals, ship, for any AI agent that reads skills.
 - MCP server: `claude mcp add profile-wrap -- uvx profile-wrap-mcp`, for any app that speaks MCP.
 
+## What you need first
+
+- No account: the offline demo, and copy mode (you paste the post into LinkedIn yourself).
+- A writing helper: Claude Code, a paid key from an AI provider (Anthropic, OpenAI, OpenRouter, Gemini), or Ollama (free, local). A ChatGPT or Claude chat subscription is not a key.
+- To post from Profile-Wrap: a free LinkedIn developer app you create, a LinkedIn Page you manage, and a sign-in about every 60 days.
+- For slides and GIFs: the command line, Node 22 or newer, Chrome and ffmpeg.
+
 ## How it compares (prices checked 24 October 2026 on each tool's own pricing page)
 
-- Profile-Wrap: $0, free and open source (MIT); writing uses your own AI account.
+- Profile-Wrap: $0, free and open source (MIT); writing uses an AI helper you set up (Claude Code, a provider key or a free local model).
 - Buffer: paid plans from $5 a month; free plan (https://buffer.com/pricing).
 - AuthoredUp: $16.63 a month, billed yearly; free trial (https://authoredup.com/pricing).
 - Taplio: $39 a month; free trial (https://taplio.com/pricing).
@@ -30,18 +37,19 @@ Not related to woodworking machines or other products with a similar name.
 - [Nader Alzghoul, QA Automation Engineer](https://nj-burrito.github.io/): the author
 - [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/): a working method and 40 skills for Claude Code
 - [QA-Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report
+- [NJ-Whip](https://nj-burrito.github.io/NJ-Whip/): an on-screen whip that steers Claude Code
 
 ## Answers
 
 - What is Profile-Wrap? Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. You tap Allow on the posts you like. It is software for LinkedIn, not related to woodworking machines or other products with a similar name.
-- Is there a free, open-source LinkedIn post scheduler? Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, posts each one at a good time, and only after you tap Allow.
-- How is Profile-Wrap different from Buffer or Taplio? Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses your own AI account. On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month.
+- Is there a free, open-source LinkedIn post scheduler? Yes. Profile-Wrap is free and open source under the MIT licence. It plans your LinkedIn posts, suggests a good time for each one, and nothing goes out until you tap Allow.
+- How is Profile-Wrap different from Buffer or Taplio? Profile-Wrap costs nothing and its code is open. It runs on your own computer or inside your AI app, and writing uses an AI helper you set up (Claude Code, a provider key or a free local model). On 24 October 2026, Buffer's paid plans started at $5 a month and Taplio's at $39 a month.
 - Who makes Profile-Wrap? Nader Alzghoul, a QA automation engineer. The code is on GitHub under the MIT licence.
-- Is it free? Yes. The app is free. Writing uses your own AI account (ChatGPT, Claude, Gemini, or a free local one).
-- Is it safe to connect to LinkedIn? It uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.
+- Is it free? Yes. The app is free. Writing uses an AI helper you set up: Claude Code, a key from an AI provider (the provider may charge you), or a free local model. A ChatGPT or Claude chat subscription is not a key.
+- Is it safe to connect to LinkedIn? For posting, it uses LinkedIn's official API through your own free developer app. It never asks for your LinkedIn password, it never reads your private messages, and nothing goes out unless you tap Allow.
 - Does Profile-Wrap post without asking me? No. Every post waits on your board until you tap Allow. Tap Reject, or ask for a better one, and nothing posts.
-- Do I need to code? No. Install, ask, tap. That is it.
-- Which one should I pick: plugin, skills, MCP server or desktop app? Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app.
+- Do I need to code? You do not write code, but you do set up a few things first. Copy mode and the demo need no LinkedIn account. Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page. Writing needs Claude Code, an AI provider key or a free local model. After setup, daily use is: ask, check, tap.
+- Which one should I pick: plugin, skills, MCP server or desktop app? Use Claude Code or Codex? Take the plugin. Another AI app? The MCP server. None? The desktop app (text drafts only).
 - Does it work on Mac, Windows and Linux? Yes, all three.
 - Does it work in Arabic? Yes. Arabic and English, side by side.
 - Is Profile-Wrap made or endorsed by LinkedIn? No. It is an independent project, not affiliated with or endorsed by LinkedIn.

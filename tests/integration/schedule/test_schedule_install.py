@@ -20,7 +20,7 @@ from profile_wrap import cli
 from profile_wrap.schedule import backends as bk
 from profile_wrap.schedule import install as inst
 
-ENABLED = {"build_week", "research_weekly", "token_check", "doctor_weekly", "profile_review", "board"}
+ENABLED = {"build_week", "research_weekly", "token_check", "doctor_weekly", "profile_review", "board", "post_due"}
 
 
 class Recorder:
@@ -147,17 +147,17 @@ def test_only_selects_jobs_and_refuses_disabled_or_unknown_ones(mkws, tmp_path):
     ctx = ctx_for(ws, tmp_path)
     res = inst.install(ws, cfg_of(ws), backend="windows", only=["board"], dry_run=True, ctx=ctx, local_tz="UTC")
     assert [e["job"] for e in res.entries] == ["board"]
-    off = inst.install(ws, cfg_of(ws), backend="windows", only=["post_due"], dry_run=True, ctx=ctx, local_tz="UTC")
+    off = inst.install(ws, cfg_of(ws), backend="windows", only=["engage_prepare"], dry_run=True, ctx=ctx, local_tz="UTC")
     assert not off.ok and "not enabled" in off.errors[0]
     nope = inst.install(ws, cfg_of(ws), backend="windows", only=["nope"], dry_run=True, ctx=ctx, local_tz="UTC")
     assert "unknown job" in nope.errors[0]
 
 
-def test_post_due_is_installed_only_for_api_scheduled_with_a_valid_acknowledgement(mkws, tmp_path):
+def test_post_due_in_copy_or_api_click_mode_is_installed_as_the_reminder_job(mkws, tmp_path):
     ws = mkws(schedule__jobs__post_due={"enabled": True, "every_min": 15})
     ctx = ctx_for(ws, tmp_path)
     res = inst.install(ws, cfg_of(ws), backend="windows", dry_run=True, ctx=ctx, local_tz="UTC")
-    assert "post_due" not in {e["job"] for e in res.entries}, "the default posting.mode is api_click"
+    assert "post_due" in {e["job"] for e in res.entries}, "reminder only: the runner never lets it post"
 
 
 def test_the_installer_refuses_when_there_is_no_stable_runtime(mkws):

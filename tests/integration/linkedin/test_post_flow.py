@@ -127,6 +127,25 @@ def test_rejected_post_holds_the_draft(env):
     assert env.ledger_rows()[-1]["state"] == "failed"
 
 
+def test_a_401_while_posting_is_remembered_as_a_rejected_token(env):
+    from profile_wrap.linkedin import auth
+    env.draft("a")
+    assert auth.read_rejected(env.cfg_dir) is None
+    env.fake.script("posts", {"status": 401, "body": {"message": "invalid token"}})
+    out = run(env, "a")
+    assert out.status == "failed" and env.ledger_rows()[-1]["state"] == "failed"
+    assert auth.read_rejected(env.cfg_dir)["status"] == 401
+    assert auth.token_status(env.cfg_dir)["state"] == "rejected"
+
+
+def test_a_403_while_posting_does_not_mark_the_token_rejected(env):
+    from profile_wrap.linkedin import auth
+    env.draft("a")
+    env.fake.script("posts", {"status": 403, "body": {"message": "no permission"}})
+    run(env, "a")
+    assert auth.read_rejected(env.cfg_dir) is None
+
+
 def test_nothing_reachable_is_failed_not_needs_check(env, monkeypatch):
     import urllib.error
 

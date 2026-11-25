@@ -90,4 +90,4 @@ until you run `profile-wrap config ack <action>` again. Upgrades never silently 
 ## Going back
 
 Restore the files from `.njl/backup/<timestamp>/`, or `git checkout` them: your workspace is its own
-git repository. Reinstall an older package version with `uv tool install profile-wrap==<version>`.
+git repository. Reinstall an older package version with `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl==<version>`.

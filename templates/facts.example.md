@@ -19,12 +19,15 @@ Columns:
 - `status`: `draft`, `verified`, `do_not_use` or `superseded`.
 - `supersedes`: the id this row replaces. Mark the old row `superseded`.
 - `demo`: `yes` for fictional rows like these. A demo fact never passes the gate in a live workspace.
+- `volatile`: `yes` for a fact that goes stale (a version, a count, a price, a release), `no` or empty for the rest.
+  `profile-wrap facts stale` lists volatile facts not re-read in the last 14 days, and the gate warns when a post
+  cites one. Re-read the source, then add a new fact that `supersedes` the old one.
 
 Delete these example rows when you start your own register (`profile-wrap init` does this for you).
 
-| id | claim | numbers | source | status | verified_by | verified_at | evidence | usage | supersedes | demo | added |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| F01 | Maya shortened the weekly status review for the fictional Lantern Data Co-op | 30 minutes | examples/notes/review-time.md | verified | demo | 2026-01-05 | examples/notes/review-time.md |  |  | yes | 2026-01-05 |
-| F02 | A dashboard audit at the co-op found dashboards nobody opened | 7 dashboards | examples/notes/audit.md | verified | demo | 2026-01-05 | examples/notes/audit.md |  |  | yes | 2026-01-05 |
-| F03 | The reminder template was tried by partner clinics | 3 clinics | examples/notes/pilot.md | draft |  |  |  |  |  | yes | 2026-01-06 |
-| F04 | Maya's availability for new projects in spring | 1 project | examples/notes/availability.md | verified | demo | 2026-01-07 | examples/notes/availability.md |  |  | yes | 2026-01-07 |
+| id | claim | numbers | source | status | verified_by | verified_at | evidence | usage | supersedes | demo | added | volatile |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| F01 | Maya shortened the weekly status review for the fictional Lantern Data Co-op | 30 minutes | examples/notes/review-time.md | verified | demo | 2026-01-05 | examples/notes/review-time.md |  |  | yes | 2026-01-05 | no |
+| F02 | A dashboard audit at the co-op found dashboards nobody opened | 7 dashboards | examples/notes/audit.md | verified | demo | 2026-01-05 | examples/notes/audit.md |  |  | yes | 2026-01-05 | no |
+| F03 | The reminder template was tried by partner clinics | 3 clinics | examples/notes/pilot.md | draft |  |  |  |  |  | yes | 2026-01-06 | no |
+| F04 | Maya's availability for new projects in spring | 1 project | examples/notes/availability.md | verified | demo | 2026-01-07 | examples/notes/availability.md |  |  | yes | 2026-01-07 | no |

@@ -215,8 +215,11 @@ def typed(text: str, font_path: Path, *, height: float = 300.0, stroke: Optional
 
 def from_svg(svg_text: str) -> dict:
     """A user-supplied SVG: each <path> is one stroke, in document order."""
+    if "<!DOCTYPE" in svg_text or "<!ENTITY" in svg_text:
+        # stdlib ElementTree expands internal entities (billion laughs); a signature never needs a DTD
+        raise VisualsError("the signature SVG has a DOCTYPE or ENTITY declaration; remove it and try again")
     try:
-        root = ET.fromstring(svg_text)
+        root = ET.fromstring(svg_text)  # nosemgrep: use-defused-xml -- DTD/entity input refused above
     except ET.ParseError as exc:
         raise VisualsError(f"the signature SVG is not valid XML: {exc}")
     paths = [e for e in root.iter() if e.tag.split("}")[-1] == "path" and e.get("d")]

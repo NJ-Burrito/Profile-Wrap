@@ -1,0 +1,14 @@
+{
+  "name": "{{slug}}",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "npx --yes hyperframes@{{pin.hyperframes}} check",
+    "preview": "npx --yes hyperframes@{{pin.hyperframes}} preview",
+    "render": "npx --yes hyperframes@{{pin.hyperframes}} render"
+  },
+  "dependencies": {
+    "gsap": "{{pin.gsap}}",
+    "hyperframes": "{{pin.hyperframes}}"
+  }
+}

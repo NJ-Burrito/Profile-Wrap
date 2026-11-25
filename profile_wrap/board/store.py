@@ -33,7 +33,7 @@ RTL = RTL_LANGS
 def item_id(row: Dict[str, Any]) -> str:
     """A stable id for a pending/connect row (rows have no required id field)."""
     basis = "|".join(str(row.get(k, "")) for k in ("kind", "urn", "parent", "profile_url", "text", "name"))
-    return hashlib.sha1(basis.encode("utf-8")).hexdigest()[:12]
+    return hashlib.sha1(basis.encode("utf-8"), usedforsecurity=False).hexdigest()[:12]
 
 
 def read_json_safe(path: Path, default: Any = None) -> Tuple[Any, Optional[str]]:
@@ -131,6 +131,12 @@ class BoardStore:
         return {"allow": not ro and status in ALLOW_FROM,
                 "reject": not ro and status in REJECT_FROM,
                 "improve": not ro and status in IMPROVE_FROM}
+
+    def can_mark_posted(self, status: str, base: str) -> bool:
+        """The "I posted it" button: copy mode only, and only for a post that is still ours to send."""
+        if self.cfg.get("posting", {}).get("mode") != "copy":
+            return False
+        return base == "drafts" and status in ("draft", "queued", "hold", "missed")
 
     def gates_of(self, d: Path) -> Tuple[Optional[Dict[str, Any]], Optional[str]]:
         data, problem = read_json_safe(d / "gates.json", None)
@@ -331,6 +337,7 @@ class BoardStore:
         replies_file = self.ws / "engage" / f"replies-{d.name}.md"
         return {
             "slug": d.name, "where": base, "status": status, "can": self.can(status, base),
+            "can_mark_posted": self.can_mark_posted(status, base),
             "read_only": base == "published" or status in policy.READ_ONLY_STATUSES,
             "title": str(meta.get("title") or d.name)[:200], "lang": str(meta.get("lang") or "en"),
             "rtl": str(meta.get("lang") or "en").split("-")[0].lower() in RTL_LANGS,

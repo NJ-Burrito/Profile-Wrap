@@ -26,6 +26,7 @@ from ..http import HostPolicy, HttpError, request
 
 CLIENT_FILE = "linkedin.env"
 TOKEN_FILE = "token.json"
+REJECTED_FILE = "token-rejected.json"  # next to the token: written on a 401, removed when a new token is saved
 OAUTH_BASE = "https://www.linkedin.com"
 AUTHORIZE_PATH = "/oauth/v2/authorization"  # profile-wrap-compliance-allow: api-endpoint
 TOKEN_PATH = "/oauth/v2/accessToken"  # profile-wrap-compliance-allow: api-endpoint
@@ -79,15 +80,58 @@ def load_token(cfg_dir: Path) -> Dict[str, Any]:
 
 
 def save_token(cfg_dir: Path, tok: Dict[str, Any]) -> Path:
-    return write_secret(Path(cfg_dir) / TOKEN_FILE, json.dumps(tok, indent=2) + "\n")
+    path = write_secret(Path(cfg_dir) / TOKEN_FILE, json.dumps(tok, indent=2) + "\n")
+    clear_rejected(cfg_dir)  # a new token (re-auth, `auth connect`, the desktop app) ends the "rejected" state
+    return path
+
+
+def mark_rejected(cfg_dir: Path, status: int = 401, message: str = "") -> None:
+    """Remember that LinkedIn refused the token. ``token_status`` says ``rejected`` until a new token is saved."""
+    import datetime as _dt
+
+    row = {"at": _dt.datetime.now(_dt.timezone.utc).isoformat(timespec="seconds"), "status": status,
+           "message": message[:200]}
+    try:
+        Path(cfg_dir).mkdir(parents=True, exist_ok=True)
+        (Path(cfg_dir) / REJECTED_FILE).write_text(json.dumps(row) + "\n", encoding="utf-8")
+    except OSError:
+        pass
+
+
+def clear_rejected(cfg_dir: Path) -> None:
+    try:
+        (Path(cfg_dir) / REJECTED_FILE).unlink()
+    except OSError:
+        pass
+
+
+def read_rejected(cfg_dir: Path) -> Optional[Dict[str, Any]]:
+    file = Path(cfg_dir) / REJECTED_FILE
+    if not file.is_file():
+        return None
+    fallback: Dict[str, Any] = {"at": "", "status": 401, "message": ""}  # unreadable marker: still rejected
+    try:
+        data = json.loads(file.read_text(encoding="utf-8-sig"))
+    except (OSError, ValueError):
+        return fallback
+    return data if isinstance(data, dict) else fallback
 
 
 def token_status(cfg_dir: Path, warn_days: int = 10, now: Optional[float] = None) -> Dict[str, Any]:
-    """{state: missing|ok|warn|expired, days_left, name, message}. Never raises."""
+    """{state: missing|rejected|ok|warn|expired, days_left, name, message}. Never raises.
+
+    ``rejected`` means LinkedIn answered 401 to this token (see ``online_check``); it stays until a new token is saved.
+    """
     try:
         tok = load_token(cfg_dir)
     except AuthError as exc:
         return {"state": "missing", "days_left": None, "name": None, "message": str(exc)}
+    rejected = read_rejected(cfg_dir)
+    if rejected is not None:
+        left = (float(tok.get("expires_at", 0)) - (now if now is not None else time.time())) / 86400
+        return {"state": "rejected", "days_left": round(left, 1), "name": tok.get("name"),
+                "rejected_at": rejected.get("at", ""),
+                "message": "LinkedIn rejected the access token (401): run 'profile-wrap auth' to sign in again"}
     left = (float(tok.get("expires_at", 0)) - (now if now is not None else time.time())) / 86400
     if left <= 0:
         return {"state": "expired", "days_left": round(left, 1), "name": tok.get("name"),
@@ -97,6 +141,35 @@ def token_status(cfg_dir: Path, warn_days: int = 10, now: Optional[float] = None
                 "message": f"the access token expires in {left:.1f} days: run 'profile-wrap auth' soon"}
     return {"state": "ok", "days_left": round(left, 1), "name": tok.get("name"),
             "message": f"token valid for {left:.0f} more days"}
+
+
+def online_check(cfg: Dict[str, Any], *, client: Any = None, hp: Optional[HostPolicy] = None) -> Dict[str, Any]:
+    """One cheap authenticated GET (``userinfo``) to learn whether LinkedIn still accepts the token.
+
+    Returns ``{"online": "ok"|"rejected"|"unknown"|"skipped", "message": ...}``. A 401 writes the durable
+    "rejected" state (``token_status`` then says ``rejected`` until re-auth); a network or server error is
+    "unknown", never a failure, and changes nothing. No token or an expired one: "skipped".
+    """
+    from . import api  # local import: api imports this module's token helpers
+
+    cfg_dir = secrets_dir(cfg)
+    try:
+        tok = require_token(cfg_dir)
+    except AuthError as exc:
+        return {"online": "skipped", "message": str(exc)}
+    try:
+        cl = client or api.Client(tok["access_token"], api.default_version(cfg), hp=hp,
+                                  timeout=float(cfg.get("linkedin", {}).get("timeout_s", 30)))
+        cl.userinfo()
+    except api.ApiError as exc:
+        if exc.status == 401:
+            mark_rejected(cfg_dir, 401, str(exc))
+            return {"online": "rejected", "message": str(exc)}
+        return {"online": "unknown", "message": f"could not confirm the token ({exc})"}
+    except (HttpError, OSError, ValueError) as exc:
+        return {"online": "unknown", "message": f"could not reach LinkedIn ({exc})"}
+    clear_rejected(cfg_dir)
+    return {"online": "ok", "message": "LinkedIn accepted the token"}
 
 
 def require_token(cfg_dir: Path) -> Dict[str, Any]:
@@ -231,6 +304,27 @@ def prompt_client(cfg_dir: Path, input_fn: Callable[[str], str] = input,
     return cid, secret
 
 
+def complete_signin(cfg: Dict[str, Any], code: str, cid: str, secret: str, redirect: str, *,
+                    hp: Optional[HostPolicy] = None, version: Optional[str] = None) -> Dict[str, Any]:
+    """Trade the authorization code for a token, read who signed in, store the token. Shared by the
+    terminal flow and the desktop app so both end in the same file."""
+    from . import api  # local import: api imports this module's token helpers
+
+    li = cfg["linkedin"]
+    data = exchange_code(code, cid, secret, redirect, hp=hp)
+    expires_in = int(data.get("expires_in", DEFAULT_EXPIRES))
+    access = data["access_token"]
+    client = api.Client(access, version or api.default_version(cfg), hp=hp,
+                        timeout=float(li.get("timeout_s", 30)))
+    me = client.userinfo()
+    now = time.time()
+    record = {"access_token": access, "expires_at": now + expires_in,
+              "author": f"urn:li:person:{me['sub']}", "name": me.get("name"),
+              "scopes": data.get("scope", " ".join(li["scopes"])), "created": now}
+    save_token(secrets_dir(cfg), record)
+    return record
+
+
 def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
              open_browser: Callable[[str], Any] = webbrowser.open,
              input_fn: Callable[[str], str] = input,
@@ -239,8 +333,6 @@ def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
              callback_timeout: float = CALLBACK_TIMEOUT_S,
              out: Callable[[str], None] = print) -> Dict[str, Any]:
     """Run the whole sign-in and save the token. Returns the stored token record."""
-    from . import api  # local import: api imports this module's token helpers
-
     li = cfg["linkedin"]
     cfg_dir = secrets_dir(cfg)
     cid, secret = read_client(cfg_dir)
@@ -263,19 +355,11 @@ def run_auth(cfg: Dict[str, Any], *, paste_redirect: bool = False,
             except Exception:  # a headless machine: the printed link is enough
                 pass
         code = wait_for_callback(redirect, state, callback_timeout, on_ready=announce)
-    data = exchange_code(code, cid, secret, redirect, hp=hp)
-    expires_in = int(data.get("expires_in", DEFAULT_EXPIRES))
-    access = data["access_token"]
-    client = api.Client(access, version or api.default_version(cfg), hp=hp,
-                        timeout=float(li.get("timeout_s", 30)))
-    me = client.userinfo()
-    record = {"access_token": access, "expires_at": time.time() + expires_in,
-              "author": f"urn:li:person:{me['sub']}", "name": me.get("name"),
-              "scopes": data.get("scope", " ".join(li["scopes"])), "created": time.time()}
-    save_token(cfg_dir, record)
-    out(f"Signed in as {me.get('name')}. The token is valid for {expires_in // 86400} days.")
+    record = complete_signin(cfg, code, cid, secret, redirect, hp=hp, version=version)
+    expires_in = int(record["expires_at"] - record["created"])
+    out(f"Signed in as {record.get('name')}. The token is valid for {expires_in // 86400} days.")
     return record
 
 
-__all__ = ["AuthError", "run_auth", "token_status", "load_token", "require_token", "secrets_dir",
+__all__ = ["AuthError", "run_auth", "token_status", "online_check", "mark_rejected", "clear_rejected", "load_token", "require_token", "secrets_dir",
            "authorize_url", "parse_redirect", "wait_for_callback"]

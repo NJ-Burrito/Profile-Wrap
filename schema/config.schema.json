@@ -378,6 +378,7 @@
               "text",
               "slides",
               "gif",
+              "video",
               "image",
               "document",
               "multi_image"
@@ -530,146 +531,6 @@
             "mode"
           ]
         },
-        "reading": {
-          "type": "object",
-          "properties": {
-            "provider": {
-              "enum": [
-                "manual",
-                "export",
-                "apify",
-                "public"
-              ]
-            },
-            "public_ack": {
-              "anyOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "$ref": "#/definitions/ack"
-                }
-              ]
-            },
-            "public": {
-              "type": "object",
-              "properties": {
-                "max_pages_per_day": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 100
-                },
-                "gap_seconds": {
-                  "type": "number",
-                  "minimum": 3
-                },
-                "profile_max_per_run": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 24
-                },
-                "profile_max_per_day": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "maximum": 24
-                },
-                "profile_gap_minutes": {
-                  "type": "number",
-                  "minimum": 20
-                }
-              },
-              "additionalProperties": false
-            },
-            "apify_ack": {
-              "anyOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "$ref": "#/definitions/ack"
-                }
-              ]
-            },
-            "apify": {
-              "type": "object",
-              "properties": {
-                "token_env": {
-                  "type": "string"
-                },
-                "max_calls_per_day": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "actor": {
-                  "type": "string"
-                },
-                "cost_per_call_usd": {
-                  "type": "number",
-                  "exclusiveMinimum": 0
-                },
-                "reserve_usd": {
-                  "type": "number",
-                  "minimum": 0
-                }
-              },
-              "additionalProperties": false,
-              "required": [
-                "token_env",
-                "max_calls_per_day"
-              ]
-            },
-            "providers": {
-              "type": "array",
-              "items": {
-                "enum": [
-                  "apify",
-                  "tavily",
-                  "public"
-                ]
-              }
-            },
-            "tavily_ack": {
-              "anyOf": [
-                {
-                  "type": "null"
-                },
-                {
-                  "$ref": "#/definitions/ack"
-                }
-              ]
-            },
-            "tavily": {
-              "type": "object",
-              "properties": {
-                "key_env": {
-                  "type": "string"
-                },
-                "month_credits": {
-                  "type": "integer",
-                  "minimum": 1
-                },
-                "reserve_credits": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "cache_days": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "topic": {
-                  "type": "string"
-                }
-              },
-              "additionalProperties": false
-            }
-          },
-          "additionalProperties": false,
-          "required": [
-            "provider",
-            "apify_ack",
-            "apify"
-          ]
-        },
         "connect": {
           "type": "object",
           "properties": {
@@ -753,7 +614,6 @@
       "required": [
         "comments",
         "replies",
-        "reading",
         "connect",
         "targets_file",
         "max_post_age_hours",
@@ -800,6 +660,24 @@
         "contact",
         "evidence_scale"
       ]
+    },
+    "plan": {
+      "type": "object",
+      "description": "Calendar planning limits (profile_wrap/plan/calendar.py).",
+      "properties": {
+        "angle_overlap_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Highest word overlap with an earlier angle on the same subject that still passes."
+        },
+        "subject_min_gap_days": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Minimum days between posts on one subject; 0 is off."
+        }
+      },
+      "additionalProperties": false
     },
     "gate": {
       "type": "object",
@@ -967,6 +845,31 @@
           "items": {
             "type": "string"
           }
+        },
+        "versions": {
+          "enum": [
+            "warn",
+            "fail",
+            "off"
+          ]
+        },
+        "first_comment_promise": {
+          "enum": [
+            "fail",
+            "warn",
+            "off"
+          ]
+        },
+        "pair": {
+          "enum": [
+            "warn",
+            "fail",
+            "off"
+          ]
+        },
+        "volatile_max_age_days": {
+          "type": "integer",
+          "minimum": 0
         }
       },
       "additionalProperties": false,
@@ -1528,6 +1431,22 @@
             "connect_weekly",
             "track_daily"
           ]
+        },
+        "notify_ttl_hours": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "horizon_days": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "horizon_fail_days": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "build_max_attempts": {
+          "type": "integer",
+          "minimum": 1
         }
       },
       "additionalProperties": false,
@@ -1538,6 +1457,16 @@
         "catchup",
         "jobs"
       ]
+    },
+    "visuals": {
+      "type": "object",
+      "description": "Visual pipeline choices. default_style names a narrated video style folder in brand-kit/templates/styles (empty = the plain GIF template).",
+      "properties": {
+        "default_style": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
     },
     "updates": {
       "type": "object",
@@ -1601,43 +1530,12 @@
               "$ref": "#/definitions/ack"
             }
           ]
-        },
-        "scraping_risk": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/ack"
-            }
-          ]
-        },
-        "public_reading": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/ack"
-            }
-          ]
-        },
-        "tavily_reading": {
-          "anyOf": [
-            {
-              "type": "null"
-            },
-            {
-              "$ref": "#/definitions/ack"
-            }
-          ]
         }
       },
       "additionalProperties": false,
       "required": [
         "terms_read",
-        "comments_api",
-        "scraping_risk"
+        "comments_api"
       ]
     }
   }

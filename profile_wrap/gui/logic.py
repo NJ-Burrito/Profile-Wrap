@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
 from .. import config as config_mod
-from .. import limits, policy
+from .. import i18n, limits, policy
 from ..atomic import atomic_write_json, atomic_write_text
 from ..fsutil import read_json
 from ..plan import calendar as cal_mod
@@ -27,9 +27,12 @@ MAX_KEY = 512
 class GuiError(Exception):
     """A refusal the user can act on. ``status`` is the HTTP status to answer with."""
 
-    def __init__(self, message: str, status: int = 400):
+    def __init__(self, message: str, status: int = 400, code: Optional[str] = None,
+                 params: Optional[Dict[str, Any]] = None):
         super().__init__(message)
         self.status = status
+        self.code = code            # an i18n key: the page shows the message in the user's language
+        self.params = params or {}
 
 
 def redact(text: str, *secrets: str) -> str:
@@ -87,6 +90,7 @@ def home(ws: Path, cfg: Dict[str, Any], doctor: Dict[str, Any], version: str) ->
     chosen = prov_settings.load(ws)
     return {"version": version, "workspace": ws.name, "workspace_path": str(ws),
             "posting_mode": cfg.get("posting", {}).get("mode"), "paused": limits.pause_flags(ws),
+            "ui_language": i18n.normalize(cfg.get("board", {}).get("ui_language", "en")),
             "provider": chosen.get("provider"), "model": chosen.get("model"),
             "next_post": next_post(ws), "doctor": doctor}
 
@@ -312,12 +316,24 @@ def draft_text(ws: Path, slug: Any) -> Dict[str, Any]:
     return {"slug": slug, "caption": _clip(d / "caption.txt", 6000), "alt": _clip(d / "alt.txt", 1000)}
 
 
+# ------------------------------------------------------------------ copy mode
+
+def copy_block(ws: Path, slug: Any) -> Dict[str, Any]:
+    """Gate the draft and return the text to paste. Refuses unless the gate passes."""
+    from .. import copymode
+    try:
+        return copymode.prepare(ws, slug)
+    except copymode.CopyRefused as exc:
+        raise GuiError(str(exc), 422, exc.code, exc.params) from None
+
+
 # ------------------------------------------------------------------ settings
 
 def settings_view(ws: Path, cfg: Dict[str, Any]) -> Dict[str, Any]:
     jobs = cfg.get("schedule", {}).get("jobs", {})
     return {"workspace_path": str(ws), "posting_mode": cfg.get("posting", {}).get("mode"),
-            "posting_modes": list(policy.POSTING_MODES),
+            "posting_modes": list(policy.POSTING_MODES), "ui_language": i18n.normalize(
+                cfg.get("board", {}).get("ui_language", "en")),
             "jobs": [{"name": n, "enabled": bool(j.get("enabled"))} for n, j in sorted(jobs.items())],
             "note": "Turning a job on here edits the config. Install it in the OS scheduler with "
                     "`profile-wrap schedule install`."}
@@ -333,6 +349,12 @@ def set_posting_mode(ws: Path, mode: Any) -> None:
     if mode not in policy.POSTING_MODES:
         raise GuiError("unknown posting mode")
     _set(ws, "posting.mode", json.dumps(mode))
+
+
+def set_language(ws: Path, lang: Any) -> None:
+    if lang not in i18n.LANGS:
+        raise GuiError("unknown language")
+    _set(ws, "board.ui_language", json.dumps(lang))
 
 
 def set_job(ws: Path, name: Any, enabled: Any) -> None:
@@ -351,3 +373,52 @@ def check_workspace(path: Any) -> Path:
     if not config_mod.config_path(p).is_file():
         raise GuiError("that folder is not a Profile-Wrap workspace (no config/profile-wrap.json)", 422)
     return p.resolve()
+
+
+# ------------------------------------------------------------------ connect LinkedIn (optional)
+
+def _connect_error(exc: Any) -> GuiError:
+    return GuiError(str(exc), 422, exc.code, exc.params)
+
+
+def connect_view(ws: Path, cfg: Dict[str, Any], signin: Any = None) -> Dict[str, Any]:
+    """Every step's own result, the redirect address, the re-auth date. No secret in it."""
+    from ..linkedin import connect
+    listening = bool(signin is not None and signin.waiting)
+    view = connect.overview(cfg, listening=listening)
+    view["signin"] = signin.snapshot() if signin is not None else {"state": "idle", "code": "", "params": {}, "url": ""}
+    return view
+
+
+def connect_refuse_password(body: Dict[str, Any]) -> None:
+    from ..linkedin import connect
+    try:
+        connect.refuse_password(body)
+    except connect.ConnectError as exc:
+        raise _connect_error(exc) from None
+
+
+def connect_save(ws: Path, cfg: Dict[str, Any], body: Dict[str, Any]) -> None:
+    """Store the client id and secret. The secret arrives as ``key`` so the server's redaction covers it."""
+    from ..linkedin import connect
+    connect_refuse_password(body)
+    try:
+        connect.save_credentials(cfg, body.get("client_id"), body.get("key"))
+    except connect.ConnectError as exc:
+        raise _connect_error(exc) from None
+
+
+def connect_enable_api(ws: Path) -> str:
+    from ..linkedin import connect
+    try:
+        return connect.enable_api_posting(ws)
+    except connect.ConnectError as exc:
+        raise _connect_error(exc) from None
+
+
+def connect_back_to_copy(ws: Path) -> str:
+    from ..linkedin import connect
+    try:
+        return connect.back_to_copy_mode(ws)
+    except connect.ConnectError as exc:
+        raise _connect_error(exc) from None

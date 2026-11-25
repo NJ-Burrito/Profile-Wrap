@@ -6,7 +6,6 @@ import json
 import re
 import sys
 from pathlib import Path
-from urllib.parse import unquote
 from typing import Any, Dict, List
 
 from .. import config as config_mod
@@ -40,16 +39,50 @@ def _outcome(args: argparse.Namespace, out: post.Outcome) -> int:
 
 # ----------------------------------------------------------------- handlers
 
+def _notify_token(ws: Path, cfg: Dict[str, Any], status: Dict[str, Any]) -> None:
+    """The scheduled token check: one notice per state per day on warn, rejected, expired or missing; ok clears them."""
+    from .. import notify as notify_mod
+
+    state = status["state"]
+    if state == "ok":
+        notify_mod.clear_notice(ws, "token:", prefix=True)
+        return
+    titles = {"warn": "Profile-Wrap: LinkedIn sign-in expires soon", "rejected": "Profile-Wrap: LinkedIn rejected the token",
+              "expired": "Profile-Wrap: LinkedIn sign-in expired", "missing": "Profile-Wrap: not signed in to LinkedIn"}
+    sched = cfg.get("schedule", {}) or {}
+    notify_mod.notify_once(f"token:{state}", titles.get(state, "Profile-Wrap: LinkedIn token"),
+                           status["message"], ws, ttl_hours=24.0, mode=sched.get("notify", "auto"))
+
+
 def cmd_auth(args: argparse.Namespace) -> int:
     ws = _ws(args)
     cfg = config_mod.load(ws)
     if getattr(args, "what", None) == "check":
         status = auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"]))
+        if getattr(args, "online", False) and status["state"] in ("ok", "warn", "rejected"):
+            probe = auth.online_check(cfg, hp=_hp(cfg))  # one cheap authenticated GET; a 401 is remembered
+            status["online"] = probe["online"]
+            if probe["online"] in ("rejected", "ok"):  # a success clears an old rejection: re-read the state
+                status = {**auth.token_status(auth.secrets_dir(cfg), int(cfg["linkedin"]["token_warn_days"])),
+                          "online": probe["online"]}
+            elif probe["online"] == "unknown":
+                status["message"] += f" ({probe['message']})"
+        if getattr(args, "notify", False):
+            _notify_token(ws, cfg, status)
         if getattr(args, "json", False):
             _emit(args, status)
         else:
             print(f"token: {status['state']} - {status['message']}")
         return policy.EXIT_OK if status["state"] in ("ok", "warn") else policy.EXIT_FAIL
+    if getattr(args, "what", None) == "connect":
+        from .. import i18n
+        from . import connect
+
+        lang = getattr(args, "lang", None) or connect.ui_language(cfg)
+        if not sys.stdin.isatty():
+            print("profile-wrap auth connect: " + i18n.t("cli.needs_tty", lang), file=sys.stderr)
+            return policy.EXIT_FAIL
+        return policy.EXIT_OK if connect.run_guided(cfg, lang=lang, ws=ws, hp=_hp(cfg)) == 0 else policy.EXIT_FAIL
     try:
         auth.run_auth(cfg, paste_redirect=bool(args.paste_redirect), hp=_hp(cfg))
     except Exception as exc:  # noqa: BLE001 - one actionable line, no traceback
@@ -58,48 +91,10 @@ def cmd_auth(args: argparse.Namespace) -> int:
     return policy.EXIT_OK
 
 
-PROFILE_URL = re.compile(r"^https://www\.linkedin\.com/in/([\w%.\-]{1,100})/?$")
-
-
-def name_from_slug(slug: str) -> str:
-    """'alex-example-1a2b3c4d' -> 'Alex Example': drop a trailing id-like token, dashes to spaces, title case."""
-    parts = [x for x in unquote(slug).replace("_", "-").split("-") if x]
-    if len(parts) > 1 and re.fullmatch(r"(?=.*\d)[0-9a-fA-F]{5,}|\d{3,}", parts[-1]):
-        parts.pop()
-    return " ".join(parts).title() if parts and not any(x.isdigit() for x in parts) else ""
-
-
 def cmd_read(args: argparse.Namespace) -> int:
-    """``read posts <profile-url>``: recent public posts of one person through the reading providers you switched on."""
-    from . import readers
-
-    m = PROFILE_URL.match(args.url or "")
-    if not m:
-        print("profile-wrap read: give a profile address like https://www.linkedin.com/in/<name>/", file=sys.stderr)
-        return policy.EXIT_USAGE
-    ws = _ws(args)
-    cfg = config_mod.load(ws)
-    name = (getattr(args, "name", None) or "").strip() or name_from_slug(m.group(1))
-    chain = readers.build_chain(cfg, ws)
-    if not chain.order:
-        print("profile-wrap read: no reader is switched on. Readers are optional and off by default; "
-              "see docs/PROVIDERS.md (set engagement.reading.providers, then run 'profile-wrap config ack <name>').",
-              file=sys.stderr)
-        return policy.EXIT_FAIL
-    res = chain.profile_posts({"profile_url": args.url, "name": name})
-    posts = list(res["posts"])
-    if getattr(args, "text", False):
-        chain.fill_text(posts)
-    out = {"source": res["source"], "clean_empty": res["clean_empty"], "notes": res["notes"], "posts": posts}
-    if getattr(args, "json", False):
-        _emit(args, out)
-    else:
-        for note in res["notes"]:
-            print(f"note: {note}", file=sys.stderr)
-        print(f"{len(posts)} post(s) via {res['source'] or 'no reader'}")
-        for p in posts:
-            print(f"- {p.get('url', '')}")
-    return policy.EXIT_OK if (posts or res["clean_empty"]) else policy.EXIT_FAIL
+    """``read ...`` was removed in 0.4.0: one line, exit 2."""
+    print(policy.REMOVED_READERS_MSG, file=sys.stderr)
+    return policy.EXIT_USAGE
 
 
 def _hp(cfg: Dict[str, Any]):
@@ -274,9 +269,15 @@ def _common(p: argparse.ArgumentParser) -> None:
 
 def register(subparsers: Any) -> None:
     p = subparsers.add_parser("auth", help="sign in to your own LinkedIn app (3-legged OAuth)")
-    p.add_argument("what", nargs="?", choices=["check"], help="'check' shows the token state")
+    p.add_argument("what", nargs="?", choices=["check", "connect"],
+                   help="'check' shows the token state; 'connect' is the guided five-step setup (en or ar)")
+    p.add_argument("--lang", choices=["en", "ar"], default=None, help="language of 'auth connect' (default: board.ui_language)")
     p.add_argument("--paste-redirect", action="store_true",
                    help="print the link and paste the final address back (SSH, containers)")
+    p.add_argument("--online", action="store_true",
+                   help="with 'check': also ask LinkedIn once (a cheap read) whether it still accepts the token")
+    p.add_argument("--notify", action="store_true",
+                   help="with 'check': raise one desktop notice (per day) when the token is expiring, rejected or gone")
     _common(p)
     p.set_defaults(func=cmd_auth)
 
@@ -297,11 +298,10 @@ def register(subparsers: Any) -> None:
     _common(p)
     p.set_defaults(func=cmd_post)
 
-    p = subparsers.add_parser("read", help="recent posts of one person through your optional readers (off by default)")
-    p.add_argument("what", choices=["posts"], help="'posts' lists recent public posts")
-    p.add_argument("url", help="profile address, https://www.linkedin.com/in/<name>/")
-    p.add_argument("--name", help="the name to search for, First Last (default: taken from the address)")
-    p.add_argument("--text", action="store_true", help="also fetch full text where the reader needs a paid call")
+    p = subparsers.add_parser("read", help=argparse.SUPPRESS)  # removed in 0.4.0; answers with one line
+    p.add_argument("rest", nargs="*", help=argparse.SUPPRESS)
+    p.add_argument("--name", help=argparse.SUPPRESS)
+    p.add_argument("--text", action="store_true", help=argparse.SUPPRESS)
     _common(p)
     p.set_defaults(func=cmd_read)
 

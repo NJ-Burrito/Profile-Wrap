@@ -1,4 +1,4 @@
-"""``profile-wrap read posts`` with a fake chain, and the copies of the risk text. No network."""
+"""The reading providers were removed in 0.4.0: the old commands and config keys say so. No network."""
 from __future__ import annotations
 
 import json
@@ -6,70 +6,68 @@ from pathlib import Path
 
 import pytest
 
-from profile_wrap import cli
-from profile_wrap.linkedin import readers
+from profile_wrap import cli, config, policy
 
 REPO = Path(__file__).resolve().parents[3]
 URL = "https://www.linkedin.com/in/alex-example/"
+LINE = "removed in 0.4.0: profile-wrap reads only through the official API"
 
 
-class FakeChain:
-    def __init__(self, order, result):
-        self.order, self.result, self.seen, self.filled = order, result, [], 0
-
-    def profile_posts(self, target):
-        self.seen.append(target)
-        return self.result
-
-    def fill_text(self, posts):
-        self.filled += 1
-        return 0
-
-
-def run(monkeypatch, capsys, ws, chain, *extra):
-    monkeypatch.setattr(readers, "build_chain", lambda cfg, workspace, **kw: chain)
-    code = cli.main(["read", "posts", URL, "--workspace", str(ws), *extra])
+@pytest.mark.parametrize("argv", [
+    ["read", "posts", URL],
+    ["read", "posts", URL, "--name", "Alex Example", "--text"],
+    ["read"],
+])
+def test_read_is_removed_one_line_exit_2(capsys, make_workspace, argv):
+    ws = make_workspace()
+    code = cli.main([*argv, "--workspace", str(ws)])
     out = capsys.readouterr()
-    return code, out.out, out.err
-
-
-def test_read_posts_json_uses_the_chain(monkeypatch, capsys, make_workspace):
-    ws = make_workspace()
-    res = readers.ReadResult(posts=[{"url": "https://www.linkedin.com/posts/alex-example_x-activity-1-AAAA",
-                                     "source": "apify"}], source="apify", notes=[], clean_empty=False)
-    chain = FakeChain(["apify"], res)
-    code, out, _ = run(monkeypatch, capsys, ws, chain, "--json")
-    assert code == 0 and chain.seen[0]["profile_url"] == URL
-    data = json.loads(out)
-    assert data["source"] == "apify" and data["posts"][0]["source"] == "apify" and chain.filled == 0
-
-
-def test_read_posts_text_flag_fills_text(monkeypatch, capsys, make_workspace):
-    ws = make_workspace()
-    res = readers.ReadResult(posts=[{"url": "u", "source": "tavily"}], source="tavily", notes=[], clean_empty=False)
-    chain = FakeChain(["tavily"], res)
-    code, out, _ = run(monkeypatch, capsys, ws, chain, "--text")
-    assert code == 0 and chain.filled == 1 and "1 post(s) via tavily" in out
-
-
-def test_read_posts_with_no_reader_on_fails_with_a_plain_message(monkeypatch, capsys, make_workspace):
-    ws = make_workspace()
-    chain = FakeChain([], readers.ReadResult(posts=[], source=None, notes=[], clean_empty=False))
-    code, _, err = run(monkeypatch, capsys, ws, chain)
-    assert code == 1 and "off by default" in err and chain.seen == []
-
-
-def test_read_posts_refuses_a_bad_address(monkeypatch, capsys, make_workspace):
-    ws = make_workspace()
-    monkeypatch.setattr(readers, "build_chain", lambda *a, **k: pytest.fail("must not be built"))
-    code = cli.main(["read", "posts", "https://www.linkedin.com/messaging/", "--workspace", str(ws)])
     assert code == 2
+    assert out.err.strip() == LINE and out.out == ""
 
 
-def test_default_config_builds_an_empty_chain(make_workspace):
-    from profile_wrap import config
+@pytest.mark.parametrize("action", ["public", "scraper"])
+def test_reader_acknowledgements_are_removed(capsys, make_workspace, action):
     ws = make_workspace()
-    assert readers.build_chain(config.load(ws), ws).order == []
+    code = cli.main(["config", "ack", action, "--phrase", policy.ACK_PHRASE, "--workspace", str(ws)])
+    out = capsys.readouterr()
+    assert code == 2 and LINE in out.err
+    assert action not in policy.ACK_ACTIONS
+
+
+def test_a_new_config_has_no_reading_section(make_workspace):
+    ws = make_workspace()
+    cfg = config.load(ws)
+    assert "reading" not in cfg["engagement"]
+    assert set(cfg["ack"]) == {"terms_read", "comments_api"}
+    assert config.validate(cfg).ok
+    assert "reading" not in config.effective_modes(cfg, ws)
+
+
+def test_an_old_config_with_reader_keys_loads_and_validate_names_the_removal(make_workspace):
+    ws = make_workspace()
+    path = config.config_path(ws)
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw["engagement"]["reading"] = {"provider": "manual", "providers": []}
+    raw.setdefault("ack", {})["scraping_risk"] = None
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    cfg = config.load(ws)                       # must not crash
+    report = config.validate(cfg)
+    assert not report.ok and len(report.errors) == 1
+    msg = report.errors[0]
+    assert "removed in 0.4.0" in msg and "engagement.reading" in msg and "ack.scraping_risk" in msg
+    assert "reads only through the official API" in msg
+
+
+def test_config_validate_command_fails_on_an_old_config(capsys, make_workspace):
+    ws = make_workspace()
+    path = config.config_path(ws)
+    raw = json.loads(path.read_text(encoding="utf-8"))
+    raw["engagement"]["reading"] = {"provider": "manual"}
+    path.write_text(json.dumps(raw), encoding="utf-8")
+    code = cli.main(["config", "validate", "--workspace", str(ws)])
+    out = capsys.readouterr()
+    assert code != 0 and "removed in 0.4.0" in (out.out + out.err)
 
 
 def test_every_copy_of_the_compliance_text_is_identical():
@@ -79,20 +77,3 @@ def test_every_copy_of_the_compliance_text_is_identical():
     assert len(copies) >= 10
     stale = [str(p.relative_to(REPO)) for p in copies if p.read_bytes() != master]
     assert not stale, f"copy docs/references/compliance.md over: {stale}"
-
-
-def test_name_from_slug():
-    from profile_wrap.linkedin.cli_ext import name_from_slug
-    assert name_from_slug("alex-example") == "Alex Example"
-    assert name_from_slug("alex-example-1a2b3c4d") == "Alex Example"
-    assert name_from_slug("alex-example-123456") == "Alex Example"
-    assert name_from_slug("12345678") == ""
-
-
-def test_read_passes_the_name(monkeypatch, capsys, make_workspace):
-    ws = make_workspace()
-    chain = FakeChain(["apify"], readers.ReadResult(posts=[], source="apify", notes=[], clean_empty=True))
-    run(monkeypatch, capsys, ws, chain)
-    assert chain.seen[0]["name"] == "Alex Example"
-    run(monkeypatch, capsys, ws, chain, "--name", "Alexandra Example")
-    assert chain.seen[1]["name"] == "Alexandra Example"

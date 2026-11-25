@@ -39,8 +39,8 @@ Resources: `pw://calendar`, `pw://drafts`, `pw://drafts/{slug}`.
 ## Install
 
 ```bash
-uvx profile-wrap-mcp --workspace /path/to/your/workspace
-claude mcp add profile-wrap -- uvx profile-wrap-mcp --workspace /path/to/your/workspace
+uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp --workspace /path/to/your/workspace
+claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp --workspace /path/to/your/workspace
 ```
 
 Without `--workspace` the server uses `PROFILE_WRAP_WORKSPACE`, then the usual Profile-Wrap lookup.

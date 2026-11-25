@@ -16,7 +16,7 @@ portable Agent Skills (`SKILL.md` with `name` and `description`):
 | `pw-visuals` | slides, GIF and banner, with the visual checks |
 | `pw-ship` | review, Allow, queue, post and report; every refusal explained |
 
-The skills call the `profile-wrap` command line, so install it first (`uv tool install profile-wrap`).
+The skills call the `profile-wrap` command line, so install it first (`uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl`).
 There are no hooks in this plugin. The optional read-only MCP server (`profile-wrap-mcp`) is configured
 in `config.toml`; see `docs/CODEX.md` in the repository.
 

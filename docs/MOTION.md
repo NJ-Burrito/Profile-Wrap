@@ -56,6 +56,34 @@ empirical default, not a LinkedIn guarantee). One paused GSAP timeline, rendered
 | `late-hit` | about 6.6 s | dim 1.6 s | `signoff` |
 | `no-dim` | about 4.1 s | dead stop 0.3 to 0.8 s, logged | `signoff` |
 
+## Narrated video styles
+
+`profile-wrap new-gif <slug> --style console-stage` (1280x720, 30 fps, cross-dissolved scenes) scaffolds a narrated film instead of a loop. The styles are the folders in `brand-kit/templates/styles/`; the look is
+specified in `skills/pw-visuals/references/styles/<style>.md`. `visuals.default_style` (empty by default) picks one when `--style` is not given.
+The project carries `pw-style.json`; `profile-wrap render <slug>` sees it, runs the same lint, check and HyperFrames render, and copies
+`renders/video.mp4` to `drafts/<slug>/out/<slug>.mp4` after an ffprobe decode check. `meta.json` uses `format: "video"` and lists the `.mp4` in `assets`.
+
+The look of a narrated film comes from its subject: `profile-wrap new-gif <slug> --style console-stage --theme-from <logo or screenshot>` derives the palette, glows and
+motif colour (`profile-wrap visuals theme --from` does it alone), contrast-checked (text 4.5, UI 3); the template holds no fixed colours. Effects (`fx.js`: ripple, burst,
+bubbles, pulse, shine, shake, count, sparkles, drain) and sound cues (`fx.cue`, mixed from `sfx/` to -16 LUFS under a -1.5 dB peak limit) are template slots. They follow
+this page's rules: seeded, finite, on the one timeline, at most one flash a film, never red, a camera shake only on a heavy hit.
+
+| Rule | GIF post | Narrated video style |
+|---|---|---|
+| Length, canvas | 8 to 10 s loop, 1080x1350, at most 250 frames | the style's canvas, any length the narration needs |
+| Loop seam, onsets, poster frame 0, still-frame share | enforced by the probe and `visuals metrics` | do not apply (it is not a loop) |
+| Output | `out/<slug>.gif`, size limit `gate.gif.max_mb` | `out/<slug>.mp4`, must decode with a positive duration (probe and gate) |
+| One paused timeline, no `Math.random`/`Date`, determinism | applies | applies |
+| Contrast, type floors, claim-bound numbers, alt text | applies | applies |
+
+The composition's probe must show it looked: `window.__probe` needs a positive `duration`, and any `problems` it lists stop the render.
+`visuals metrics` is GIF-only.
+
+**Narration.** The narrator speaks every caption word and more besides, continuously: captions follow the voice and change while it keeps going.
+Never pause or cut the voice at a caption's last word, and never caption text that is not spoken. No voice engine is wired into profile-wrap:
+the templates carry placeholder timing (`script#narration` or the `T` scene table) that you set from your own voice track, and the clip length
+follows that track. Posting an MP4 to LinkedIn is not built yet, so a video draft is posted by hand.
+
 ## Wiring
 
 `profile-wrap new-gif <slug>` copies `brand-kit/templates/gif-project` into `videos/<slug>/` and syncs `core.js`, `identity.js`,

@@ -4,4 +4,4 @@ Independent open-source tool, not affiliated with LinkedIn. It reads and drafts;
 can reach LinkedIn is ``post_allowed``, and it refuses every draft a person has not Allowed on the
 review board.
 """
-__version__ = "0.1.0"
+__version__ = "0.5.0"

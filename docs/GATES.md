@@ -2,7 +2,9 @@
 
 `profile-wrap gate <slug>` runs deterministic checks on `drafts/<slug>/` and writes `drafts/<slug>/gates.json`.
 No model is called. Exit code 0 is PASS, 1 is FAIL. A gate guarantees that a number can be traced to
-your register of facts. It does not prove the register is true.
+your register of facts. It does not prove the register is true, and it cannot prove the register is current:
+the gate runs offline and never fetches a repository, a release page or a price list. Re-reading the source is
+a step for you (see "Stale facts" below).
 
 ```text
 profile-wrap gate my-post            # human output: PASS/FAIL line, then one FAIL or WARN line per finding
@@ -31,6 +33,9 @@ can never set a post to `queued` on its own.
 | facts | the facts file is missing, unreadable or has no table (a BOM is a warning) | `persona.facts_file` |
 | claims | a cited id does not exist, is not `verified`, is a demo fact in a live workspace, or is a stat that is not grade A, is expired or not verified | |
 | numbers | a number in any scanned surface is not proven by a cited claim (below) | `gate.numbers` |
+| versions | a version-like string (`v1.2`, `version 3`, `release 1.2.0`, a bare `1.2.3`) in a scanned surface is not found in any cited verified fact. A warning by default. Python, Node, Chrome and similar platform versions, URLs and "v2" labels are not checked | `gate.versions`: `warn` (default), `fail`, `off` |
+| first_comment_promise | the caption promises a link or details "in the first comment" (English and Arabic phrasings, for example "link in the first comment", "الرابط في التعليق الأول") and `first_comment.txt` is missing, empty or has no URL | `gate.first_comment_promise`: `fail` (default), `warn`, `off` |
+| pair | only when `meta.pair` names another draft: the partner folder is missing, does not name this draft back, cites different claims, was never gated, or changed since its last gate (checked with its `input_sha256`). A warning by default | `gate.pair`: `warn` (default), `fail`, `off` |
 | caption / hook | the caption is empty or longer than `caption_max`; the first line is longer than `hook_max` (warn above `hook_target`) | `gate.caption_max`, `hook_max`, `hook_target` |
 | slop | a banned word or phrase, a "it's not X, it's Y" contrast, a `never_say` term, or invisible characters | `data/banned-words/*.json`, `gate.extra_banned`, `persona.never_say` |
 | private_terms | a `persona.private_terms` entry appears on any text surface (case, spacing and zero-width characters do not hide it) | `persona.private_terms` |
@@ -112,6 +117,23 @@ profile-wrap stats verify S01 --evidence https://...
 and scheduled job runs with. It asks you to type the id back. The verifier name and date are recorded.
 "Verifier is not author" is a convention here, not something the software can enforce for one user.
 Third-party stats must be grade A, verified and unexpired before a post may quote them.
+
+## Stale facts
+
+A fact about a version, a count, a price or a release goes stale. Mark it `volatile` (add `--volatile` to
+`facts add`, or write `yes` in the `volatile` column). Then:
+
+```text
+profile-wrap facts stale [--days N] [--json]     # volatile facts last confirmed more than N days ago (default 14)
+```
+
+The list is for you; the command exits 0. The gate adds a `claims` warning when a post cites a volatile fact
+older than `gate.volatile_max_age_days` (default 14, `0` turns it off), and the `versions` check compares
+version strings in the text with the cited facts. An entry's age counts from `verified_at`, else `added`.
+
+The fix is the same each time: re-read the source today (repository, release page, README, price list), write
+a new fact that says what you saw, set its `supersedes` to the old id, mark the old row `superseded`, and
+verify the new one yourself in a terminal. If sources disagree, record each figure and say which a post may quote.
 
 ## Comments, replies and connection notes
 

@@ -257,5 +257,6 @@ def test_task_names_are_profile_scoped():
 def test_job_table_from_the_default_config(mkws):
     ws = mkws()
     names = {j.name for j in jobs_from_config(cfg_of(ws))}
-    assert names == {"build_week", "research_weekly", "token_check", "doctor_weekly", "profile_review", "board"}, \
-        "the default install enables exactly these six; post_due and the engagement jobs stay off"
+    assert names == {"build_week", "research_weekly", "token_check", "doctor_weekly", "profile_review", "board",
+                     "post_due"}, \
+        "the default install enables exactly these seven (post_due only reminds outside api_scheduled); engagement jobs stay off"

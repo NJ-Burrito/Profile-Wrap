@@ -48,6 +48,6 @@ replies per day (3, ceiling 10), connection slots per week (3, ceiling 5), posti
   Store only the **name** of the environment variable.
 
 ## Step 10: Mode consent (one card per action class)
-Posting unattended, API comments and replies, the Apify reader, likes. Show the plain risk text
+Posting unattended, API comments and replies, likes. Show the plain risk text
 from `docs/TERMS-AND-RISK.md`. The user types the acknowledgement in a terminal with
 `profile-wrap config ack <action>`. Never record it for them.

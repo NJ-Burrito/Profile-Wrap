@@ -49,8 +49,8 @@
     },
     {
       "rule": "media-unlisted",
-      "sha256": "ccf8b76116acd35ea599e6ce43d3c0db8ecf26157b52cf03d7dee7a12021b732",
-      "reason": "site still frame cut from the README hero animation, shown when reduced motion is on; synthetic demo content"
+      "sha256": "4914616be975f9355622283e0acca729415ebdead24645695df69cd39f35721c",
+      "reason": "site still frame cut from the README hero animation, shown when reduced motion is on; synthetic demo content (re-encoded smaller in the 2026-11-27 design pass)"
     },
     {
       "rule": "media-unlisted",
@@ -74,8 +74,8 @@
     },
     {
       "rule": "media-unlisted",
-      "sha256": "3f2cc24d9a46ccf4ddb227151d908213ced84cdfe0917dd22a6787004adec696",
-      "reason": "Open Graph card for the site (paper-cutout)"
+      "sha256": "9a4ed4772366f918e71bf645266ad10c662170dc707596021212fdcac858fb8a",
+      "reason": "Open Graph card for the site (paper-cutout) (re-encoded smaller in the 2026-11-27 design pass)"
     },
     {
       "rule": "media-unlisted",

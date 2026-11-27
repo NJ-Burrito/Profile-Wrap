@@ -372,7 +372,11 @@ h1{font-size:clamp(3.4rem,10vw,6rem);line-height:.95;letter-spacing:-.04em}
 @media (max-width:48rem){.steps{grid-template-columns:1fr}}
 .steps li{padding:2.1rem 1.5rem 1.6rem;text-align:left;counter-increment:s}
 .steps li:nth-child(1){rotate:-1.2deg}.steps li:nth-child(2){rotate:.9deg}.steps li:nth-child(3){rotate:-.6deg}
-.steps .num{display:grid;place-items:center;width:3rem;height:3rem;margin-bottom:1rem;border-radius:50%;background:var(--rust);color:var(--on-dark);font:700 1.35rem "PW Display",serif}
+.steps .num{display:block;width:3.1rem;height:2.9rem;margin-bottom:1rem;clip-path:polygon(0 0,100% 0,50% 100%);background:var(--rust)}
+.steps li:nth-child(2) .num{background:var(--teal-2)}.steps li:nth-child(3) .num{background:var(--blue)}
+.needs{max-width:34rem;margin-top:2rem;padding-top:1.1rem;border-top:2px dashed rgba(27,26,46,.28);color:var(--mute);font-size:1rem;line-height:1.6}
+.needs strong{color:var(--fg)}
+@media (prefers-color-scheme:dark){.needs{border-top-color:rgba(251,246,232,.3)}}
 .steps h3{font-size:clamp(1.5rem,3vw,2rem);line-height:1.1;letter-spacing:-.02em}
 .steps p{margin-top:.5rem;color:var(--paper-mute)}
 
@@ -503,13 +507,13 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
           <div class="flags"><span class="flag">Plan</span><span class="flag">Write</span><span class="flag">Allow</span></div>
         </div>
         <h1><span translate="no">Profile-Wrap</span><span class="h1d">Free, open-source LinkedIn post manager</span></h1>
-        <p class="lead">Your LinkedIn week, drafted and checked. You approve. You stay the boss.</p>
-        <p class="sub">Profile-Wrap is a free, open-source LinkedIn post manager and scheduler. It plans your week of posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
-        <p class="sub"><strong>What you need first.</strong> The demo and copy mode need no LinkedIn account. A writing helper is required: Claude Code, a paid key from an AI provider, or a free local model (a ChatGPT or Claude chat subscription is not a key). Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page you create yourself, plus a sign-in about every 60 days. The desktop app writes text drafts only. Slides and GIFs need the command line, Node, Chrome and ffmpeg.</p>
+        <p class="lead">Your LinkedIn week, drafted and checked. You approve every post.</p>
+        <p class="sub">It plans your week of LinkedIn posts, writes them in your voice and checks each one. Nothing goes out until you tap Allow.</p>
         <div class="ctas">
           <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download the free app</a>
           <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         </div>
+        <p class="needs"><strong>What you need first.</strong> The demo and copy mode need no LinkedIn account. A writing helper is required: Claude Code, a paid key from an AI provider, or a free local model (a ChatGPT or Claude chat subscription is not a key). Posting from Profile-Wrap needs a free LinkedIn developer app and a LinkedIn Page you create yourself, plus a sign-in about every 60 days. The desktop app writes text drafts only. Slides and GIFs need the command line, Node, Chrome and ffmpeg.</p>
       </div>
       <figure class="film" style="margin:0">
         <div class="paper taped">
@@ -526,11 +530,11 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
 
   <section class="band b-teal" id="how">
     <div class="wrap center">
-      <h2>3 steps. That is all.</h2>
+      <h2>Install, ask, tap.</h2>
       <ol class="steps">
-        <li class="paper taped pin"><span class="num" aria-hidden="true">1</span><h3>Install it</h3><p>Plugin, skills, MCP server or desktop app. All free.</p></li>
-        <li class="paper taped pin"><span class="num" aria-hidden="true">2</span><h3>Ask for your week of posts</h3><p>It plans the week and writes each post in your voice.</p></li>
-        <li class="paper taped pin"><span class="num" aria-hidden="true">3</span><h3>Tap Allow on each post you like</h3><p>Nothing goes out without you.</p></li>
+        <li class="paper taped pin"><span class="num" aria-hidden="true"></span><h3>Install it</h3><p>Plugin, skills, MCP server or desktop app. All free.</p></li>
+        <li class="paper taped pin"><span class="num" aria-hidden="true"></span><h3>Ask for your week of posts</h3><p>It plans the week and writes each post in your voice.</p></li>
+        <li class="paper taped pin"><span class="num" aria-hidden="true"></span><h3>Tap Allow on each post you like</h3><p>Nothing goes out without you.</p></li>
       </ol>
     </div>
   </section>
@@ -550,7 +554,7 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
 
   <section class="band b-sky" id="does">
     <div class="wrap center">
-      <h2>What it does for you</h2>
+      <h2>What it handles</h2>
       <ul class="tags">
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Plans your week of posts</li>
         <li class="paper pin"><svg class="i" aria-hidden="true"><use href="#i-pen"/></svg>Writes them in your voice</li>
@@ -651,12 +655,11 @@ footer .family{list-style:none;margin:0;padding:0;display:grid;grid-template-col
 
   <section class="band b-rust final">
     <div class="wrap center">
-      <h2>Free, and you can stop any time.</h2>
+      <h2>Download it and plan your week.</h2>
       <p class="sub">Profile-Wrap is free under the MIT licence.</p>
       <div class="ctas">
         <a class="btn primary" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest"><svg class="i" aria-hidden="true"><use href="#i-download"/></svg>Download the free app</a>
         <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap">Source on GitHub <svg class="i" aria-hidden="true"><use href="#i-code"/></svg></a>
-        <a class="link" href="https://github.com/NJ-Burrito/Profile-Wrap/releases/latest">Download <svg class="i" aria-hidden="true"><use href="#i-package"/></svg></a>
       </div>
     </div>
   </section>

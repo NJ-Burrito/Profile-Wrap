@@ -38,6 +38,10 @@ Not related to woodworking machines or other products with a similar name.
 - [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/): a working method and 40 skills for Claude Code
 - [QA-Wrap](https://nj-burrito.github.io/QA-Wrap/): browser extension that turns a test session into a bug report
 - [NJ-Whip](https://nj-burrito.github.io/NJ-Whip/): an on-screen whip that steers Claude Code
+- [Business-Wrap](https://nj-burrito.github.io/Business-Wrap/): evidence in, one document in two languages
+- [NJ-Flush](https://nj-burrito.github.io/NJ-Flush/): a free Windows RAM cleaner
+- [NJ-Sort](https://nj-burrito.github.io/NJ-Sort/): keeps your Windows desktop icons where you put them, even after File Explorer restarts
+- [Story-Wrap](https://nj-burrito.github.io/story-wrap/): the series «مكتب المفقودات»
 
 ## Answers
 

@@ -26,9 +26,11 @@
 [![Stars](https://img.shields.io/github/stars/NJ-Burrito/Profile-Wrap?style=social)](https://github.com/NJ-Burrito/Profile-Wrap/stargazers)
 [![Website](https://img.shields.io/badge/Website-nj--burrito.github.io-B4491F)](https://nj-burrito.github.io/Profile-Wrap/)
 
-**Profile-Wrap is a free, open-source LinkedIn post manager, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
+**Profile-Wrap is a free, open-source LinkedIn post manager and scheduler, made by [Nader Alzghoul](https://nj-burrito.github.io/) (NJ-Burrito).**
 It plans your week of posts, writes them in your voice and checks each one.
-[🌐 Website](https://nj-burrito.github.io/Profile-Wrap/)
+[🌐 Website](https://nj-burrito.github.io/Profile-Wrap/) · [العربية](https://nj-burrito.github.io/Profile-Wrap/ar/)
+
+**More free tools by NJ-Burrito:** [QA-Wrap](https://nj-burrito.github.io/QA-Wrap/) · [Business-Wrap](https://nj-burrito.github.io/Business-Wrap/) · [NJ-Kit](https://nj-burrito.github.io/NJ-Kit/) · [NJ-Whip](https://nj-burrito.github.io/NJ-Whip/) · [Story-Wrap](https://nj-burrito.github.io/story-wrap/) · [NJ-Flush](https://nj-burrito.github.io/NJ-Flush/) (free Windows RAM cleaner) · [NJ-Sort](https://nj-burrito.github.io/NJ-Sort/) (keeps Windows desktop icons where you put them, even after File Explorer restarts) · [Portfolio](https://nj-burrito.github.io/)
 
 ### What you need first
 

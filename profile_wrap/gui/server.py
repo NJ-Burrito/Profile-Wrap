@@ -21,7 +21,9 @@ from urllib.parse import parse_qs, urlsplit
 from .. import __version__
 from .. import config as config_mod
 from .. import i18n, paths, updates
+from ..board import security as board_security
 from ..board.security import CSP, host_allowed, origin_allowed, token_ok
+from ..board.server import FAMILY_RE
 from . import logic
 from .logic import GuiError
 
@@ -102,6 +104,28 @@ class GuiApp:
             return i18n.normalize(config_mod.load(self.ws).get("board", {}).get("ui_language", "en"))
         except Exception:  # a broken config still gets a page, in English
             return i18n.DEFAULT_LANG
+
+    def fonts_css(self) -> bytes:
+        """The workspace's brand fonts (cfg brand.fonts), built exactly like the board's fonts.css."""
+        try:
+            fonts = config_mod.load(self.ws).get("brand", {}).get("fonts", {})
+        except Exception:  # a broken config still gets a page, with the fallback stack
+            fonts = {}
+        fonts = fonts if isinstance(fonts, dict) else {}
+        faces, vars_ = [], []
+        for role in ("display", "text", "arabic"):
+            spec = fonts.get(role) if isinstance(fonts.get(role), dict) else {}
+            family = spec.get("family")
+            files = spec.get("files", [])
+            usable = [Path(n).name for n in (files if isinstance(files, list) else []) if isinstance(n, str)
+                      and board_security.resolve_font(self.ws, Path(n).name)]
+            if isinstance(family, str) and FAMILY_RE.match(family) and usable:
+                for base in usable:
+                    fmt = {"woff2": "woff2", "woff": "woff", "ttf": "truetype", "otf": "opentype"}[base.rsplit(".", 1)[-1].lower()]
+                    faces.append(f'@font-face{{font-family:"{family}";src:url("/fonts/{base}") format("{fmt}");font-display:swap}}')
+                vars_.append(f'--font-{role}:"{family}",system-ui,sans-serif;')
+        css = "\n".join(faces) + ("\n:root{" + "".join(vars_) + "}\n" if vars_ else "\n")
+        return css.encode("utf-8")
 
     def page(self, screen: str) -> bytes:
         html = (assets_dir() / "index.html").read_text(encoding="utf-8")
@@ -329,6 +353,18 @@ def _make_handler(app: GuiApp):
             path = url.path
             if path == "/health":
                 return self.send_json(200, app.health())
+            if path == "/assets/fonts.css":
+                return self.send_bytes(200, app.fonts_css(), "text/css; charset=utf-8")
+            if path.startswith("/fonts/"):
+                name = path[len("/fonts/"):]
+                found = board_security.resolve_font(app.ws, name) if "/" not in name else None
+                try:
+                    data = found[0].read_bytes() if found else None
+                except OSError:
+                    data = None
+                if data is None:
+                    return self.fail(404, "not found")
+                return self.send_bytes(200, data, found[1])
             if path.startswith("/assets/"):
                 name = path[len("/assets/"):]
                 ctype = ASSET_TYPES.get(name)

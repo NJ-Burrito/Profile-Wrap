@@ -3,6 +3,21 @@
 All notable changes to Profile-Wrap. The format follows [Keep a Changelog](https://keepachangelog.com/),
 and versions follow [Semantic Versioning](https://semver.org/).
 
+## [0.6.0] - 2026-11-28
+
+### Added
+
+- New logo and app icon: a profile card wrapped by a rust band (`brand/`, drawn by `brand/make_brand.py`), used by the GUI, the review board and the site, with a real favicon set in place of the placeholder.
+- The desktop GUI loads the workspace's brand fonts (`brand.fonts` in the config) the way the review board does, through `/assets/fonts.css` and `/fonts/<file>`; no font name or file is in the repository.
+- Off-screen renderers for the GUI (`tools/render_gui.py`) and the review board (`tools/render_board.py`), and `media/make_media.py`, which rebuilds the README and site pictures from a throwaway demo workspace.
+
+### Changed
+
+- The desktop GUI is redesigned: stat tiles and a "next post" card on Home, a health-check list, a stepper on Connect, an update banner, empty states, dark mode and a narrow layout. About 125 strings that were hard-coded English now come from the English and Arabic string files. Same screens, controls and API calls.
+- The review board is redesigned: cards with a status stripe, decision, gate and council cards, stat tiles for metrics, a progress meter on Profile, dark mode and a narrow layout; Arabic mirrors right to left. Same data, actions and API calls.
+- The motion library `brand-kit/motion/core.js` is split into modules under `brand-kit/motion/core/`; `core.js` re-exports every name as before. Project sync and the motion upgrade copy and hash the `core/` folder too.
+- README, site (English and Arabic) and `docs/GUI.md` describe 0.6.0, with new screenshots, hero and social card.
+
 ## [0.5.0] - 2026-11-23
 
 ### Added

@@ -177,7 +177,7 @@ CHANGELOG = """# Changelog
 ### Added
 - A thing.
 
-## [0.5.5] - 2026-10-10
+## [0.8.5] - 2026-10-10
 
 ### Fixed
 - Another.
@@ -191,15 +191,15 @@ CHANGELOG = """# Changelog
 
 def test_changelog_sections_between_installed_and_latest():
     got = updates.parse_changelog(CHANGELOG, "0.3.0", "0.9.0")
-    assert [r["tag"] for r in got] == ["v0.9.0", "v0.5.5"]
+    assert [r["tag"] for r in got] == ["v0.9.0", "v0.8.5"]
     assert "A thing." in got[0]["body"] and "Old." not in json.dumps(got)
     assert updates.parse_changelog(CHANGELOG, "0.9.0") == []
 
 
 def test_empty_release_notes_fall_back_to_the_changelog(env):
-    fake = Fake([rel("v0.9.0", body=""), rel("v0.5.5", body="  ")], changelog=CHANGELOG)
+    fake = Fake([rel("v0.9.0", body=""), rel("v0.8.5", body="  ")], changelog=CHANGELOG)
     s = st(env, fake)
-    assert s["latest"] == "0.9.0" and [r["tag"] for r in s["news"]] == ["v0.9.0", "v0.5.5"]
+    assert s["latest"] == "0.9.0" and [r["tag"] for r in s["news"]] == ["v0.9.0", "v0.8.5"]
     assert "A thing." in s["news"][0]["body"]
     assert any("contents/CHANGELOG.md" in c for c in fake.calls)
 

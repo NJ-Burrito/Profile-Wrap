@@ -1,6 +1,6 @@
-// Packs objects/core/*.svg and objects/maker/*.svg into ../motion/objects.data.js (one JS module core.js imports)
+// Packs objects/core/*.svg and objects/maker/*.svg into ../motion/objects.data.js (one JS module core/objects.js imports through core.js)
 // and writes preview.html (a contact sheet). Run: node brand-kit/objects/build.mjs
-// A project-local motion/ copy then needs only core.js, objects.data.js, motion.css (and identity.js if it uses the card).
+// A project-local motion/ copy then needs only core.js, the core/ folder, objects.data.js, motion.css (and identity.js if it uses the card).
 import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";

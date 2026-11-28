@@ -36,7 +36,7 @@ def test_manifest_required_and_directory_fields():
     m = load(PLUGIN / ".claude-plugin" / "plugin.json")
     assert m["name"] == "profile-wrap" and KEBAB.match(m["name"]) and len(m["name"]) <= 64
     assert m["name"] not in RESERVED
-    assert m["version"] == "0.5.0"
+    assert m["version"] == "0.6.0"
     assert m["license"] == "MIT"
     assert m["description"] and m["author"]["name"] and m["keywords"]
     for key in ("homepage", "repository", "documentationUrl", "supportUrl", "privacyPolicyUrl", "termsOfServiceUrl", "icon"):

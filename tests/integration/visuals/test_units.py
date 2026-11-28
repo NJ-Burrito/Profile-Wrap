@@ -445,7 +445,8 @@ def test_shipped_visual_sources_are_clean():
 def test_core_has_no_default_identity_and_identity_reads_brand():
     ident = (KIT / "motion" / "identity.js").read_text(encoding="utf-8")
     assert "window.__brand" in ident and "names nobody by default" in ident
-    assert "ID_COPY" not in (KIT / "motion" / "core.js").read_text(encoding="utf-8")
+    for rel in ["core.js"] + gif.core_parts(KIT / "motion"):
+        assert "ID_COPY" not in (KIT / "motion" / rel).read_text(encoding="utf-8"), rel
 
 
 def test_objects_pack_is_rebuilt_from_the_svgs():
@@ -479,3 +480,25 @@ def test_cli_registers_every_visual_command():
 def test_cli_fonts_check_fails_without_fonts(ws):
     r = _cli("fonts", "check", "--workspace", str(ws))
     assert r.returncode == 1 and "NOT ready" in r.stdout
+
+
+# ------------------------------------------------------------------ core.js is a facade over core/*.js
+
+def test_core_facade_modules_all_exist_and_sync(tmp_path):
+    motion = KIT / "motion"
+    core = (motion / "core.js").read_text(encoding="utf-8")
+    parts = gif.core_parts(motion)
+    assert parts, "brand-kit/motion/core/ holds the split modules"
+    for rel in re.findall(r'from "\./(core/[\w-]+\.js)"', core):
+        assert rel in parts, f"core.js imports {rel} which is missing"
+    for rel in parts:
+        assert len((motion / rel).read_text(encoding="utf-8").splitlines()) <= 400, rel
+    ws = new_workspace(tmp_path)
+    proj = ws / "videos" / "p1"
+    copied = gif.sync_motion(proj, ws, load_cfg(ws))
+    for rel in parts:
+        assert (proj / "motion" / rel).read_bytes() == (motion / rel).read_bytes()
+        assert rel in copied
+    assert gif.core_hash(proj / "motion") == gif.core_hash(motion)
+    (proj / "motion" / parts[0]).write_text("// edited", encoding="utf-8")
+    assert gif.core_hash(proj / "motion") != gif.core_hash(motion)

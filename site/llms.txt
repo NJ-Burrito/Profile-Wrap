@@ -7,8 +7,15 @@ Not related to woodworking machines or other products with a similar name.
 - [Website](https://nj-burrito.github.io/Profile-Wrap/): what it does, the 3 steps, the review board, a price comparison, FAQ, a short Arabic summary
 - [الموقع بالعربية](https://nj-burrito.github.io/Profile-Wrap/ar/): Arabic version of the website, with its own FAQ
 - [Source code](https://github.com/NJ-Burrito/Profile-Wrap): README, issues, MIT licence
-- [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.5.0 at the time of writing
+- [Latest release](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest): desktop app for Windows, Mac and Linux; version 0.6.0 is the current line
 - [Download (GitHub release)](https://github.com/NJ-Burrito/Profile-Wrap/releases/latest)
+
+## New in 0.6
+
+- A new logo and app icon.
+- The desktop app is redesigned: stat tiles, a next-post card, a health list, a stepper on Connect, dark mode, Arabic right to left, about 125 more strings translated.
+- The review board is redesigned: cards with status stripes, decision, gate and council cards, stat tiles, a narrow-window layout.
+- The motion library is split into modules.
 
 ## Four ways to use it (all free)
 

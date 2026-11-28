@@ -101,6 +101,91 @@
       "rule": "font-binary",
       "sha256": "de60b809e36b2d684ef8fd1c3aac08f04b17eaac6fe2c6ed8796cac50d00be4f",
       "reason": "Latin subset of the site's licensed web font"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "857184db4d25d543572b9e9fec81a97ce0a2569cdc6d10a8c0fd7391e10d67e2",
+      "reason": "Profile-Wrap app icon (site/favicon.ico), drawn by brand/make_brand.py, no third-party art"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "5dbec82d54b451329a6cc95a5b12edd3e9c1d81cd930dbca519232c92c480b9c",
+      "reason": "Profile-Wrap app icon (site/icon-512.png), drawn by brand/make_brand.py, no third-party art"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "b165f3cf260400741edea6356fdef345a76d03b1fb88a9c1576198ca8c8b44d6",
+      "reason": "Profile-Wrap app icon (site/apple-touch-icon.png), drawn by brand/make_brand.py, no third-party art"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "5a9513b65aab1619385aab0382211838a4d829880fa4793d15e56f77b75f77a2",
+      "reason": "Profile-Wrap app icon (brand/png/icon-192.png), drawn by brand/make_brand.py, no third-party art"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "48cf321613597d1389af4c10607102499936d7c1d4e7c4ccace73d767f7eef59",
+      "reason": "Profile-Wrap app icon (brand/png/icon-32.png), drawn by brand/make_brand.py, no third-party art"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "29b63fd71241289c1c7d5878bdca7738ac755147f16a6c8f7304f7894aeb4edf",
+      "reason": "Profile-Wrap 0.6.0 media (docs/assets/hero.gif): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "6f726f26b7582f9d13af8bc85b37a001a19ebbf2ce4ce6fbcf3a5497cd48143a",
+      "reason": "Profile-Wrap 0.6.0 media (docs/assets/board.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "a8662eb1243e91d2de54898c5fa1f2834411f0b9bcff550deb6ca96853b41b56",
+      "reason": "Profile-Wrap 0.6.0 media (docs/assets/gui.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "cf86c8662618384e78f77a72f71ab45e170e5be679f42b3fee596438ccc8a591",
+      "reason": "Profile-Wrap 0.6.0 media (docs/assets/gui-ar.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "906d81747d1403652ac91f1f748aef93fb569c235fb72291e5a2007f3f60219d",
+      "reason": "Profile-Wrap 0.6.0 media (site/board.webp): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "d3de1b45fc3e9717be1710d84e963bf61d43e62db18c4e18f207b90bf9277fbe",
+      "reason": "Profile-Wrap 0.6.0 media (site/og.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "641139130b75baaf27e03616ee322d872524396f5ab1dfb20112983dfe31bbc4",
+      "reason": "Profile-Wrap 0.6.0 media (site/hero-still.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "c48451242c787d774518331cb4854d238d3ba1afd29fd5690e6060f48224355b",
+      "reason": "Profile-Wrap 0.6.0 media (media/banner.png): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "388e46463b0fbf87608cc024222634cc2e36e9b8d3cdca5ae15677d4f87343cf",
+      "reason": "Profile-Wrap 0.6.0 media (site/brand/lockup-dark.svg): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "9d0e9f1e6f9359b01a1c95bf7ca817bcc65c846753d4a8dcbf3670cabb51a5a7",
+      "reason": "Profile-Wrap 0.6.0 media (site/brand/lockup-light.svg): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "2449a4a9405916101490ee89877ca502070f8eeebf5feab4f2ec25315da87551",
+      "reason": "Profile-Wrap 0.6.0 media (site/brand/lockup-rtl-dark.svg): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
+    },
+    {
+      "rule": "media-unlisted",
+      "sha256": "912efcbcdb1dda4a25271e7e71185a12ad1630ab0ec2f86f00fde43a20d4e24b",
+      "reason": "Profile-Wrap 0.6.0 media (site/brand/lockup-rtl-light.svg): rendered from the demo workspace or drawn by brand/make_brand.py, fictional content"
     }
   ]
 }

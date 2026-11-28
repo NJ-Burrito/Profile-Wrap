@@ -21,6 +21,7 @@ from . import MAX_FRAMES, VisualsError, assets, browser, fonts, kit_dir, probe, 
 from .render import _canvas, draft_dir, now_iso, read_meta
 
 MOTION_FILES = ("core.js", "identity.js", "motion.css", "objects.data.js", "VERSION")
+CORE_DIR = "core"   # core.js is a thin facade over motion/core/*.js; the folder travels with it
 DATA_FILES = ("objects.data.js",)   # a project-local variant is never overwritten (new objects live in the project)
 LEGACY_FILE = "motion.legacy.js"
 TEMPLATE_TEXT = ("index.html", "shot-plan.json", "package.json")
@@ -47,6 +48,29 @@ def motion_source(workspace: Path) -> Path:
 
 def file_hash(path: Path) -> Optional[str]:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+def core_parts(motion: Path) -> List[str]:
+    """The ``core/*.js`` modules next to a motion library's core.js, as names relative to that folder."""
+    d = Path(motion) / CORE_DIR
+    return [f"{CORE_DIR}/{p.name}" for p in sorted(d.glob("*.js"))] if d.is_dir() else []
+
+
+def motion_names(src: Path) -> List[str]:
+    """Every library file to copy from ``src``: the fixed files plus the core/ modules it carries."""
+    return list(MOTION_FILES) + core_parts(src)
+
+
+def core_hash(motion: Path) -> Optional[str]:
+    """One hash over core.js and its core/ modules (None when there is no core.js)."""
+    base = file_hash(Path(motion) / "core.js")
+    if base is None:
+        return None
+    h = hashlib.sha256(base.encode())
+    for name in core_parts(motion):
+        h.update(name.encode())
+        h.update((file_hash(Path(motion) / name) or "").encode())
+    return h.hexdigest()
 
 
 def brand_js(cfg: dict, workspace: Path, project: Path) -> str:
@@ -79,7 +103,7 @@ def sync_motion(project: Path, workspace: Path, cfg: dict, legacy: bool = False)
     dst.mkdir(parents=True, exist_ok=True)
     copied: List[str] = []
     kept: List[str] = []
-    names = list(MOTION_FILES) + ([LEGACY_FILE] if legacy or (dst / LEGACY_FILE).is_file() else [])
+    names = motion_names(src) + ([LEGACY_FILE] if legacy or (dst / LEGACY_FILE).is_file() else [])
     for name in names:
         s = src / name
         if not s.is_file():
@@ -88,6 +112,7 @@ def sync_motion(project: Path, workspace: Path, cfg: dict, legacy: bool = False)
             kept.append(name)
             continue
         if file_hash(s) != file_hash(dst / name):
+            (dst / name).parent.mkdir(parents=True, exist_ok=True)
             atomic.atomic_write_bytes(dst / name, s.read_bytes())
             copied.append(name)
     atomic.atomic_write_text(dst / "brand.js", brand_js(cfg, workspace, project))

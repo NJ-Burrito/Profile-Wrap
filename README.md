@@ -1,5 +1,10 @@
 <div align="center">
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="brand/svg/lockup-dark.svg">
+  <img src="brand/svg/lockup-light.svg" alt="Profile-Wrap" height="64">
+</picture>
+
 <img src="docs/assets/hero.gif" alt="Profile-Wrap turns an idea into a checked LinkedIn post: idea, facts, GIF post, review, official API, posted. You tap Allow." width="640">
 
 # Profile-Wrap
@@ -55,7 +60,7 @@ A ChatGPT or Claude chat subscription is not a key and does not work on its own.
 - Existing workspaces keep the posting mode they already have; nothing is switched for you.
 
 **Good to know**
-- The desktop app has a Connect LinkedIn screen in English and Arabic (the new screens carry both; the older ones are English for now).
+- The desktop app has a Connect LinkedIn screen in English and Arabic (every screen has an English and an Arabic string set, and the app reads right to left in Arabic).
 - The desktop app writes **text drafts only**. Slides and GIFs need the command line (`build-week`) plus Node 22 or newer, Chrome and ffmpeg ([details](docs/GUI.md)).
 - The downloads are unsigned, so your computer will warn you once ([how to open them](docs/INSTALL-DESKTOP.md)).
 
@@ -70,7 +75,7 @@ A ChatGPT or Claude chat subscription is not a key and does not work on its own.
 
 ## 🧩 Plugin
 
-Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl`
+Needs [uv](https://docs.astral.sh/uv/) once: `uv tool install https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap-0.6.0-py3-none-any.whl`
 
 Claude Code, type these two lines:
 
@@ -98,7 +103,7 @@ Get them on [Smithery](https://smithery.ai/skills), or copy the [`.agents/skills
 8 tools: check your setup, see your calendar, draft a post, check facts, read your board, and post only what you allowed. Needs [uv](https://docs.astral.sh/uv/).
 
 ```
-claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp
+claude mcp add profile-wrap -- uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap_mcp-0.6.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap-0.6.0-py3-none-any.whl profile-wrap-mcp
 ```
 
 Other apps: [MCP guide](docs/MCP.md). Also on the [MCP Registry](https://registry.modelcontextprotocol.io) and graded A on mcprush:
@@ -125,9 +130,20 @@ That is all.
 
 Stuck? [Step-by-step guide with pictures of what you will see](docs/INSTALL-DESKTOP.md)
 
-![Your review board: every post waits here until you tap Allow](docs/assets/board.png)
+| The desktop app | The review board |
+|:---:|:---:|
+| ![The redesigned desktop app: stat tiles, the next-post card and the health list on Home](docs/assets/gui.png) | ![The redesigned review board: post cards with status stripes and the Allow, Reject and Improve buttons](docs/assets/board.png) |
 
-👆 Your board. Allow, Reject or Improve. Every post waits here until you say go.
+👆 The desktop app (left) and your board (right). Allow, Reject or Improve. Every post waits here until you say go.
+
+## ✨ New in 0.6
+
+A new look. The rule is the same: nothing posts until you tap Allow.
+
+- **A new logo and app icon.** One mark for the desktop app, the website and the release files (`brand/`).
+- **A redesigned desktop app.** Stat tiles, a next-post card, a health list, a stepper on Connect LinkedIn, dark mode, and Arabic that reads right to left. About 125 more strings are translated ([the screens](docs/GUI.md)).
+- **A redesigned review board.** Cards with status stripes, clear cards for each decision, stat tiles, and a layout that fits a narrow window.
+- **The motion library is split into modules** (`brand-kit/motion/core/`), easier to read and reuse.
 
 ## What it does for you
 

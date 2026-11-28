@@ -7,31 +7,37 @@
 <meta name="pw-token" content="__TOKEN__">
 <title>__TITLE__ - Profile-Wrap</title>
 <link rel="icon" href="/assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/gui.css">
 </head>
 <body data-screen="__SCREEN__">
-<a class="skip" href="#main">Skip to content</a>
+<a class="skip" href="#main" data-i18n="ui.skip">Skip to content</a>
 <div class="shell">
   <header class="side">
-    <div class="brand"><img src="/assets/mark.svg" alt="" width="28" height="28"><span>Profile-Wrap</span></div>
-    <nav aria-label="Screens" id="nav">
-      <a href="/?t=__TOKEN__" data-nav="home"><span class="kbd" aria-hidden="true">1</span>Home</a>
-      <a href="/board?t=__TOKEN__" data-nav="board"><span class="kbd" aria-hidden="true">2</span>Board</a>
-      <a href="/providers?t=__TOKEN__" data-nav="providers"><span class="kbd" aria-hidden="true">3</span>Providers</a>
-      <a href="/build?t=__TOKEN__" data-nav="build"><span class="kbd" aria-hidden="true">4</span>Build</a>
-      <a href="/settings?t=__TOKEN__" data-nav="settings"><span class="kbd" aria-hidden="true">5</span>Settings</a>
-      <a href="/connect?t=__TOKEN__" data-nav="connect"><span class="kbd" aria-hidden="true">6</span><span data-i18n="nav.connect">Connect</span></a>
+    <div class="brand"><img src="/assets/mark.svg" alt="" width="34" height="34"><span>Profile-Wrap</span></div>
+    <nav aria-label="Screens" data-i18n-label="ui.screens" id="nav">
+      <a href="/?t=__TOKEN__" data-nav="home"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11.2 12 4l8 7.2V20a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1z"/></svg><span class="nav-label" data-i18n="nav.home">Home</span><span class="kbd" aria-hidden="true">1</span></a>
+      <a href="/board?t=__TOKEN__" data-nav="board"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="m8.5 12.3 2.5 2.5 4.5-5"/></svg><span class="nav-label" data-i18n="nav.board">Board</span><span class="kbd" aria-hidden="true">2</span></a>
+      <a href="/providers?t=__TOKEN__" data-nav="providers"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="12" r="3.5"/><path d="M12 12h8.5M17 12v3M20.5 12v2"/></svg><span class="nav-label" data-i18n="nav.providers">Providers</span><span class="kbd" aria-hidden="true">3</span></a>
+      <a href="/build?t=__TOKEN__" data-nav="build"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19l1-4L16.5 4.5a2.1 2.1 0 0 1 3 3L9 18z"/><path d="M14.5 6.5l3 3"/></svg><span class="nav-label" data-i18n="nav.build">Build</span><span class="kbd" aria-hidden="true">4</span></a>
+      <a href="/settings?t=__TOKEN__" data-nav="settings"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h9M18 7h1M5 17h1M10 17h9"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg><span class="nav-label" data-i18n="nav.settings">Settings</span><span class="kbd" aria-hidden="true">5</span></a>
+      <a href="/connect?t=__TOKEN__" data-nav="connect"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg><span class="nav-label" data-i18n="nav.connect">Connect</span><span class="kbd" aria-hidden="true">6</span></a>
     </nav>
     <div class="side-foot">
-      <button type="button" id="theme" class="ghost" aria-label="Switch between light and dark">Theme</button>
-      <button type="button" id="lang" class="ghost" data-i18n="lang.switch" data-i18n-label="lang.switch_label" aria-label="Switch to Arabic">العربية</button>
-      <p class="muted small">Version __VERSION__<br>Independent, not affiliated with LinkedIn.</p>
+      <div class="seg">
+        <button type="button" id="theme" class="ghost" data-i18n="ui.theme" data-i18n-label="ui.theme_label" aria-label="Switch between light and dark">Theme</button>
+        <button type="button" id="lang" class="ghost" data-i18n="lang.switch" data-i18n-label="lang.switch_label" aria-label="Switch to Arabic">العربية</button>
+      </div>
+      <p class="small foot-note"><span data-i18n-fmt="ui.version" data-v="__VERSION__">Version __VERSION__</span><br><span data-i18n="ui.independent">Independent, not affiliated with LinkedIn.</span></p>
     </div>
   </header>
   <main id="main" tabindex="-1">
-    <section id="update" class="update" aria-label="Update available" hidden></section>
-    <h1 id="title">__TITLE__</h1>
-    <div id="view" aria-live="polite" aria-busy="true"><p class="muted">Loading</p></div>
+    <section id="update" class="update" aria-label="Update available" data-i18n-label="upd.label" hidden></section>
+    <div class="page-head">
+      <h1 id="title">__TITLE__</h1>
+      <p id="subtitle" class="subtitle"></p>
+    </div>
+    <div id="view" aria-live="polite" aria-busy="true"><p class="muted loading" data-i18n="ui.loading">Loading</p></div>
     <p id="status" class="status" role="status" aria-live="polite"></p>
   </main>
 </div>

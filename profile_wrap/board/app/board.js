@@ -34,6 +34,8 @@
     const d = new Date(iso);
     return isNaN(d) ? iso : new Intl.DateTimeFormat(S.lang || "en", { dateStyle: "medium", timeStyle: "short" }).format(d);
   }
+  // One short entrance when a tab or a post opens; the 5-second refresh never replays it.
+  function enter(el) { if (!el) return; el.classList.remove("enter"); void el.offsetWidth; el.classList.add("enter"); el.addEventListener("animationend", () => el.classList.remove("enter"), { once: true }); }
   function toast(msg) {
     const el = document.getElementById("toast");
     el.textContent = msg; el.classList.add("show");
@@ -127,7 +129,7 @@
     live.textContent = S.offline ? t("live.offline") : t("live.on");
     live.className = "live" + (S.offline ? " bad" : "");
   }
-  function switchTab(id) { S.tab = id; location.hash = id; render(); loadTab(); }
+  function switchTab(id) { S.tab = id; location.hash = id; render(); enter(document.getElementById("view")); loadTab(); }
 
   // ------------------------------------------------------------ posts tab
   function badge(kind, text) { return h("span", { class: "badge " + kind, text: text ?? kind }); }
@@ -140,15 +142,18 @@
       h("button", { class: "chip", "aria-pressed": String(S.filter === s), onclick: () => { S.filter = s; render(); } },
         s === "all" ? t("posts.all", { n: st.total }) : t("status." + s) + " " + st.counts[s])));
     const posts = st.posts.filter((p) => S.filter === "all" || p.status === S.filter);
-    const list = h("div", { class: "list" }, posts.map((p) => h("button", { class: "row", "aria-current": String(p.slug === S.slug), onclick: () => openPost(p.slug) },
+    const list = h("div", { class: "list" }, posts.map((p) => h("button", { class: "row s-" + p.status, "data-slug": p.slug, "aria-current": String(p.slug === S.slug), onclick: () => openPost(p.slug) },
       h("span", { class: "title", text: p.title }),
-      h("span", { class: "meta" }, badge(p.status, t("status." + p.status)), p.gate ? badge(p.gate.toLowerCase(), t("gate." + p.gate.toLowerCase())) : null, h("span", { text: when(p.scheduled_at) }), p.format ? h("span", { text: p.format }) : null))));
-    return h("div", { class: "split" }, h("div", {}, chips, list), h("div", { id: "detail" }, detailView()));
+      h("span", { class: "meta" }, badge(p.status, t("status." + p.status)), p.gate ? badge(p.gate.toLowerCase(), t("gate." + p.gate.toLowerCase())) : null, h("span", { text: when(p.scheduled_at) }), p.format ? h("span", { class: "fmt", text: p.format }) : null))));
+    return h("div", { class: "split" }, h("div", { class: "side" }, chips, list), h("div", { id: "detail" }, detailView()));
   }
   async function openPost(slug) {
     S.slug = slug; S.rejectArmed = null; S.detail = null; S.detailKey = "";
     render();
     await loadDetail();
+    const box = document.getElementById("detail");
+    enter(box);
+    if (box && window.matchMedia("(max-width: 860px)").matches) box.scrollIntoView({ block: "start", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
   }
   async function loadDetail() {
     if (!S.slug) return;
@@ -187,11 +192,11 @@
       d.degraded ? h("div", { class: "sub", text: t("detail.degraded") }) : null);
 
     const councilPanel = d.seats.length ? h("section", { class: "card" }, h("h3", { text: t("council.title") }),
-      h("ul", { class: "plain" }, d.seats.map((s) => h("li", {}, badge(s.verdict, t("verdict." + s.verdict)), " ", s.seat,
+      h("ul", { class: "plain" }, d.seats.map((s) => h("li", { class: "seat" }, badge(s.verdict, t("verdict." + s.verdict)), h("span", { text: s.seat }),
         s.blockers.length ? h("ul", { class: "plain" }, s.blockers.map((b) => h("li", { class: "fail", text: [b.where, b.quote, b.fix].filter(Boolean).join(" | ") }))) : null)))) : null;
 
     const histPanel = d.history.length ? h("section", { class: "card" }, h("h3", { text: t("history.title") }),
-      h("ul", { class: "plain" }, d.history.slice().reverse().map((x) => h("li", { class: "sub", text: [when(x.at), x.action, x.to ? "→ " + x.to : "", x.gates || "", x.note || "", x.error || ""].filter(Boolean).join("  ") })))) : null;
+      h("ul", { class: "plain" }, d.history.slice().reverse().map((x) => h("li", { class: "sub", text: [when(x.at), x.action, x.to ? (S.lang === "ar" ? "← " : "→ ") + x.to : "", x.gates || "", x.note || "", x.error || ""].filter(Boolean).join("  ") })))) : null;
     const revision = d.revision_note ? h("div", { class: "banner" }, h("strong", { text: t("detail.revnote") + ": " }), d.revision_note) : null;
     return h("div", {}, revision, preview, gatePanel, councilPanel, actionsView(d), histPanel);
   }
@@ -199,11 +204,11 @@
     if (d.read_only) return h("section", { class: "card" }, h("div", { class: "sub", text: t("actions.readonly", { status: t("status." + d.status) }) }));
     const note = h("textarea", { "aria-label": t("actions.note"), placeholder: t("actions.note.ph"), value: S.notes[d.slug] || "", oninput: (e) => { S.notes[d.slug] = e.target.value; } });
     const armed = S.rejectArmed === d.slug;
-    const allow = h("button", { class: "btn primary", disabled: !d.can.allow || S.busy.has("allow"), title: d.can.allow ? "" : t("actions.allow.no", { status: t("status." + d.status) }), onclick: () => act(d, "allow") }, t("actions.allow"));
+    const allow = h("button", { class: "btn allow", disabled: !d.can.allow || S.busy.has("allow"), title: d.can.allow ? "" : t("actions.allow.no", { status: t("status." + d.status) }), onclick: () => act(d, "allow") }, t("actions.allow"));
     const reject = h("button", { class: "btn danger" + (armed ? " on" : ""), disabled: !d.can.reject, onclick: () => { if (!armed) { S.rejectArmed = d.slug; refreshDetailBox(); } else act(d, "reject"); } }, armed ? t("actions.reject.confirm") : t("actions.reject"));
     const improve = h("button", { class: "btn", disabled: !d.can.improve || !state_worker(), title: state_worker() ? "" : t("actions.improve.noworker"), onclick: () => act(d, "improve") }, t("actions.improve"));
     const posted = d.can_mark_posted ? h("button", { class: "btn", disabled: S.busy.has("posted"), title: t("actions.posted.hint"), onclick: () => markPosted(d) }, t("actions.posted")) : null;
-    return h("section", { class: "card" }, h("h3", { text: t("actions.title") }), note, h("div", { class: "actions" }, allow, reject, improve, posted),
+    return h("section", { class: "card decision" }, h("h3", { text: t("actions.title") }), note, h("div", { class: "actions" }, allow, reject, improve, posted),
       armed ? h("div", { class: "sub", text: t("actions.reject.hint") }) : null);
   }
   function state_worker() { return !(S.state && S.state.worker === false); }
@@ -235,7 +240,7 @@
     const p = S.data.pending;
     if (!p) return h("div", { class: "empty" }, t("loading"));
     if (!p.pending.length) return h("div", { class: "empty" }, h("h2", { text: t("comments.empty.title") }), h("p", { text: t("comments.empty.body") }));
-    return h("div", {}, p.pending.map((c) => h("section", { class: "card" },
+    return h("div", { class: "cards" }, p.pending.map((c) => h("section", { class: "card" },
       h("div", { class: "sub", text: [t("kind." + c.kind), c.author, when(c.at)].filter(Boolean).join(" · ") }),
       h("div", { class: "copybox", dir: /^[؀-ۿ]/.test(c.text) ? "rtl" : "ltr", text: c.text }),
       c.gate ? h("div", { class: "sub", text: t("gate.title") + ": " + (c.gate.summary || "") }) : null,
@@ -245,7 +250,7 @@
     const c = S.data.connect;
     if (!c) return h("div", { class: "empty" }, t("loading"));
     if (!c.connect.length) return h("div", { class: "empty" }, h("h2", { text: t("connect.empty.title") }), h("p", { text: t("connect.empty.body", { n: c.slots_max }) }));
-    return h("div", {}, c.connect.map((r) => h("section", { class: "card" },
+    return h("div", { class: "cards" }, c.connect.map((r) => h("section", { class: "card" },
       h("h3", { text: r.name }), h("div", { class: "sub", text: [t("connect.action." + r.action), r.score ? t("connect.score", { n: r.score }) : "", r.why].filter(Boolean).join(" · ") }),
       r.note ? h("div", { class: "copybox", text: r.note }) : null,
       h("div", { class: "actions" }, r.note ? copyBtn(r.note) : null, link(r.profile_url, t("connect.open")), link(r.post_url, t("connect.post")),
@@ -257,8 +262,10 @@
     if (!p) return h("div", { class: "empty" }, t("loading"));
     if (p.empty) return h("div", { class: "empty" }, h("h2", { text: t("profile.empty.title") }), h("p", { text: t("profile.empty.body") }), h("p", {}, h("code", { text: "profile-wrap profile ingest --paste" }), " → ", h("code", { text: "profile-wrap profile score" }), " → ", h("code", { text: "profile-wrap profile steps build" })), p.degraded ? h("p", { class: "sub", text: p.problem }) : null);
     const sections = [...new Set(p.steps.map((s) => s.section))];
-    return h("div", {}, h("div", { class: "banner" }, t("profile.progress", { done: p.done, total: p.total })),
-      sections.map((sec) => h("div", {}, sec ? h("h3", { text: sec }) : null, p.steps.filter((s) => s.section === sec).map((s) => h("section", { class: "card step" + (s.done ? " done" : "") },
+    const meter = h("div", { class: "meter", role: "presentation" }, h("span", { class: "fill" }));
+    meter.firstChild.style.setProperty("width", (p.total ? Math.round(100 * p.done / p.total) : 0) + "%");
+    return h("div", { class: "stack" }, h("div", { class: "banner progress" }, h("strong", { text: t("profile.progress", { done: p.done, total: p.total }) }), meter),
+      sections.map((sec) => h("div", {}, sec ? h("h3", { class: "section-title", text: sec }) : null, p.steps.filter((s) => s.section === sec).map((s) => h("section", { class: "card step" + (s.done ? " done" : "") },
         h("h3", { text: s.title }), s.action ? h("div", { class: "sub", text: s.action }) : null, s.text ? h("div", { class: "copybox", text: s.text }) : null,
         s.open_refused ? h("div", { class: "sub", text: t("profile.open.refused") }) : null,
         h("div", { class: "actions" }, s.text ? copyBtn(s.text) : null, link(s.open, t("open")),
@@ -271,9 +278,9 @@
     const nums = snap ? Object.entries(snap).filter(([, v]) => typeof v === "number" || typeof v === "string") : [];
     return h("div", { class: "grid2" },
       h("section", { class: "card" }, h("h3", { text: t("metrics.queue") }), m.queued.length ? h("ul", { class: "plain" }, m.queued.map((q) => h("li", { text: when(q.scheduled_at) + " · " + q.title }))) : h("div", { class: "sub", text: t("metrics.queue.none") })),
-      h("section", { class: "card" }, h("h3", { text: t("metrics.latest") }), nums.length ? h("table", {}, nums.map(([k, v]) => h("tr", {}, h("th", { text: k }), h("td", { text: String(v) })))) : h("div", { class: "sub", text: t("metrics.none") }),
+      h("section", { class: "card" }, h("h3", { text: t("metrics.latest") }), nums.length ? h("div", { class: "stats" }, nums.map(([k, v]) => h("div", { class: "stat" + (k === "at" ? " wide" : "") }, h("b", { text: k === "at" ? when(v) : String(v) }), h("span", { text: k })))) : h("div", { class: "sub", text: t("metrics.none") }),
         h("div", { class: "sub", text: t("metrics.comments", { n: m.comments_total }) })),
-      h("section", { class: "card" }, h("h3", { text: t("metrics.posted") }), m.posts.length ? h("table", {}, h("tr", {}, [t("metrics.col.title"), t("metrics.col.state"), t("metrics.col.when"), ""].map((x) => h("th", { text: x }))),
+      h("section", { class: "card wide" }, h("h3", { text: t("metrics.posted") }), m.posts.length ? h("table", {}, h("tr", {}, [t("metrics.col.title"), t("metrics.col.state"), t("metrics.col.when"), ""].map((x) => h("th", { text: x }))),
         m.posts.slice().reverse().map((p) => h("tr", {}, h("td", { text: p.title || p.slug }), h("td", { text: p.state || "" }), h("td", { text: when(p.posted_at) }), h("td", {}, link(p.url, t("open")))))) : h("div", { class: "sub", text: t("metrics.posted.none") })));
   }
   function settingsView() {
@@ -282,14 +289,14 @@
     const all = s.pause.includes("all");
     const kindBtn = (kind) => h("button", { class: "btn", onclick: () => post("/api/pause", { kind, paused: !s.pause.includes(kind) }, "msg.pause") }, (s.pause.includes(kind) ? t("settings.resume") : t("settings.pause")) + " " + t("kind." + kind));
     return h("div", { class: "grid2" },
-      h("section", { class: "card" }, h("h3", { text: t("settings.kill") }), h("p", { class: "sub", text: t("settings.kill.body") }),
+      h("section", { class: "card kill" }, h("h3", { text: t("settings.kill") }), h("p", { class: "sub", text: t("settings.kill.body") }),
         h("button", { class: "pause-big" + (all ? " resume" : ""), onclick: () => post("/api/pause", { kind: "all", paused: !all }, "msg.pause") }, all ? t("settings.resume.all") : t("settings.pause.all")),
         h("div", { class: "actions" }, kindBtn("posting"), kindBtn("comments"))),
       h("section", { class: "card" }, h("h3", { text: t("settings.modes") }), h("table", {}, ["posting", "comments"].map((k) => h("tr", {}, h("th", { text: t("settings.mode." + k) }), h("td", { text: String(s.modes[k]) }))), h("tr", {}, h("th", { text: t("settings.mode.likes") }), h("td", { text: String(s.modes.likes) }))),
         (s.modes.notes || []).length ? h("ul", { class: "plain" }, s.modes.notes.map((n) => h("li", { class: "warn", text: n }))) : null),
       h("section", { class: "card" }, h("h3", { text: t("settings.acks") }), h("table", {}, Object.entries(s.acks).map(([k, v]) => h("tr", {}, h("th", { text: k }), h("td", {}, badge(v.status === "valid" ? "pass" : v.status === "missing" ? "warn" : "fail", t("ack." + v.status)), " ", h("span", { class: "sub", text: v.reason }))))),
         h("p", { class: "sub", text: t("settings.acks.how") })),
-      h("section", { class: "card" }, h("h3", { text: t("settings.doctor") }), s.doctor.checks.length ? h("ul", { class: "plain" }, s.doctor.checks.map((c) => h("li", { class: c.status === "fail" ? "fail" : c.status === "warn" ? "warn" : "" }, badge(c.status === "pass" ? "pass" : c.status === "fail" ? "fail" : "warn", c.status), " ", c.name, ": ", c.detail, c.hint ? h("div", { class: "sub", text: c.hint }) : null))) : h("div", { class: "sub", text: s.doctor.error || t("settings.doctor.none") })),
+      h("section", { class: "card wide" }, h("h3", { text: t("settings.doctor") }), s.doctor.checks.length ? h("ul", { class: "plain" }, s.doctor.checks.map((c) => h("li", { class: c.status === "fail" ? "fail" : c.status === "warn" ? "warn" : "" }, badge(c.status === "pass" ? "pass" : c.status === "fail" ? "fail" : "warn", c.status), " ", c.name, ": ", c.detail, c.hint ? h("div", { class: "sub", text: c.hint }) : null))) : h("div", { class: "sub", text: s.doctor.error || t("settings.doctor.none") })),
       h("section", { class: "card" }, h("h3", { text: t("settings.board") }), h("table", {}, h("tr", {}, h("th", { text: t("settings.board.addr") }), h("td", { text: "127.0.0.1:" + s.board.port })), h("tr", {}, h("th", { text: t("settings.board.ws") }), h("td", { text: s.workspace }))),
         h("ul", { class: "plain" }, (s.notifications || []).map((n) => h("li", { class: "sub", text: [when(n.at), n.title, n.message].join(" · ") })))));
   }
@@ -324,7 +331,7 @@
     if (!lang) { const r = await api("/api/state"); S.state = r.body; S.etag = r.etag; lang = (r.body && r.body.ui_language) || "en"; }
     await loadStrings(lang === "ar" ? "ar" : "en");
     document.getElementById("lang").addEventListener("change", async (e) => { localStorage.setItem("profile_wrapLang", e.target.value); await loadStrings(e.target.value); render(); });
-    window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (TABS.includes(id) && id !== S.tab) { S.tab = id; render(); loadTab(); } });
+    window.addEventListener("hashchange", () => { const id = location.hash.slice(1); if (TABS.includes(id) && id !== S.tab) { S.tab = id; render(); enter(document.getElementById("view")); loadTab(); } });
     await refresh(true);
     api("/api/update").then((r) => { if (r.code === 200) { S.update = r.body; renderBanners(); } }).catch(() => {});
     setInterval(() => { if (!document.hidden) refresh(false); }, 5000);

@@ -20,16 +20,24 @@ LinkedIn yourself. No developer app and no token. Workspaces made earlier keep t
 fictional demo keeps `api_click` because it posts to a fake LinkedIn on your machine). API posting is an opt-in on
 the Connect LinkedIn screen.
 
+## What 0.6 changed
+
+The window was redesigned on the Profile-Wrap paper and navy palette. Home has stat tiles, a next-post card
+and a health list; Connect LinkedIn has a stepper. Light and dark follow the
+system setting, and the Theme button overrides it. In Arabic the whole window turns right to left (the sidebar
+accent, arrows, tables and spacing mirror). About 125 more strings are translated. The new logo is the app
+icon and the sidebar mark.
+
 ## Screens
 
 | Screen | What it does |
 |---|---|
-| Home | Workspace, posting mode, pause flags, chosen provider, the next post, and the doctor result (run it again with one button). |
+| Home | Four stat tiles (workspace, posting mode, provider, pause flags), a next-post card, and a health list of the doctor result (run it again with one button). In copy mode a four-step card sits below. |
 | Board | Starts the existing review board on a random local port and links to it. The board keeps its own security rules (it refuses to be framed), so it opens in its own tab or window. |
 | Providers | Lists the six providers with the key state (last 4 characters only). Paste or replace a key in a password field, test the connection, choose provider and model, remove a stored key. |
 | Build | Pick a calendar day, generate a text draft with the chosen provider, and run the gate. Shows the caption and each gate line. |
 | Settings | Workspace folder (for this session), posting mode, and which scheduled jobs are on in the config. |
-| Connect LinkedIn | Optional, five steps with a check on each: create the developer app, add the two products, set the redirect URL, save the client id and secret, sign in. Shows your re-sign-in date (about 60 days after sign-in) and the opt-in to API posting (`api_click`, you still press Allow). |
+| Connect LinkedIn | Optional, a five-step stepper ("Step n of 5") with a check and a result line on each step: create the developer app, add the two products, set the redirect URL, save the client id and secret, sign in. Shows your re-sign-in date (about 60 days after sign-in) and the opt-in to API posting (`api_click`, you still press Allow). |
 
 Keys: the key goes from the password field to the OS keychain through `profile_wrap.providers.keystore`
 and nowhere else. The page never receives a key back (only `****` and the last 4 characters), nothing is
@@ -51,10 +59,9 @@ alt text, and a link to LinkedIn. If the gate fails, nothing is offered to copy.
 `profile-wrap copy <draft> [--part caption|first-comment|alt] [--print]` (gates, then copies; with no
 clipboard tool it prints the text).
 
-Language: the new screens and messages are in English and Arabic. The sidebar button switches and the choice
-is saved as `board.ui_language` (the review board uses the same setting). The older screens are English only
-for now. The strings live in `gui_assets/i18n/en.json` and `ar.json`, read by the page and by the terminal
-commands; a test fails if either file lacks a key the other has.
+Language: the screens and messages are in English and Arabic. The sidebar button switches and the choice
+is saved as `board.ui_language` (the review board uses the same setting). The strings live in `gui_assets/i18n/en.json` and `ar.json`, read by the page and by the terminal
+commands; a test fails if either file lacks a key the other has (both carry the same 237 keys at 0.6).
 
 Build writes drafts only (`drafts/<slug>/caption.txt`, `alt.txt`, `meta.json` with status `draft`). It
 refuses to touch a draft that is queued or posted, asks for the Replace box before overwriting a caption,
@@ -76,7 +83,7 @@ acknowledgement (`profile-wrap config ack`); the screen reports that refusal.
 * No call leaves the machine except the provider call you start (Test connection, Generate draft), to the
   provider you chose. `--selftest` uses a throwaway demo workspace, a loopback socket and no provider.
 * Fonts: system fonts, with IBM Plex Sans (SIL OFL) used when installed. No font file ships in
-  `gui_assets/`. The mark is a plain rounded square with three lines; no LinkedIn logo.
+  `gui_assets/`. The mark is the Profile-Wrap logo on a rounded navy square (`gui_assets/mark.svg`); no LinkedIn logo.
 
 ## Accessibility
 

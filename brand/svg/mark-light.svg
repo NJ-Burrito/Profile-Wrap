@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Profile-Wrap"><defs>
+<linearGradient id="At" x1="0.1" y1="0" x2="0.9" y2="1"><stop offset="0" stop-color="#34466F"/><stop offset="0.55" stop-color="#1F2B45"/><stop offset="1" stop-color="#141C31"/></linearGradient>
+<radialGradient id="Ag" cx="0.22" cy="0.12" r="0.8"><stop offset="0" stop-color="#8FA3D6" stop-opacity="0.34"/><stop offset="1" stop-color="#8FA3D6" stop-opacity="0"/></radialGradient>
+<linearGradient id="Ae" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9FB0DD" stop-opacity="0.75"/><stop offset="0.55" stop-color="#9FB0DD" stop-opacity="0.08"/><stop offset="1" stop-color="#D9A22E" stop-opacity="0.85"/></linearGradient>
+<linearGradient id="Ac" x1="0" y1="0" x2="0.35" y2="1"><stop offset="0" stop-color="#FFFFFB"/><stop offset="1" stop-color="#E4D8BD"/></linearGradient>
+<linearGradient id="Ab" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#CF5F2E"/><stop offset="0.55" stop-color="#B4491F"/><stop offset="1" stop-color="#8E3414"/></linearGradient>
+<linearGradient id="Af" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6E2810"/><stop offset="1" stop-color="#4E1A09"/></linearGradient>
+<linearGradient id="Aa" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#34466F"/><stop offset="1" stop-color="#141C31"/></linearGradient>
+</defs><rect x="16" y="16" width="480" height="480" rx="112" fill="url(#At)"/><rect x="16" y="16" width="480" height="480" rx="112" fill="url(#Ag)"/><rect x="17.5" y="17.5" width="477" height="477" rx="110.5" fill="none" stroke="url(#Ae)" stroke-width="3"/><g transform="translate(256 256) scale(1.17) translate(-256 -256)"><rect x="146" y="112" width="220" height="336" rx="34" fill="#05091A" opacity="0.075"/><rect x="143" y="110" width="226" height="340" rx="37" fill="#05091A" opacity="0.075"/><rect x="140" y="108" width="232" height="344" rx="40" fill="#05091A" opacity="0.075"/><rect x="137" y="106" width="238" height="348" rx="43" fill="#05091A" opacity="0.075"/><rect x="134" y="104" width="244" height="352" rx="46" fill="#05091A" opacity="0.075"/><rect x="131" y="102" width="250" height="356" rx="49" fill="#05091A" opacity="0.075"/><rect x="128" y="100" width="256" height="360" rx="52" fill="#05091A" opacity="0.075"/><rect x="125" y="98" width="262" height="364" rx="55" fill="#05091A" opacity="0.075"/>
+<rect x="146" y="88" width="220" height="336" rx="34" fill="url(#Ac)"/>
+<rect x="147.5" y="89.5" width="217" height="333" rx="32.5" fill="none" stroke="#FFFFFF" stroke-opacity="0.9" stroke-width="3"/>
+<circle cx="256" cy="190" r="50" fill="url(#Aa)"/>
+<ellipse cx="240" cy="172" rx="17" ry="11" fill="#FFFFFF" opacity="0.2" transform="rotate(-28 240 172)"/>
+<path d="M172 304 C172 262 208 242 256 242 C304 242 340 262 340 304 Z" fill="url(#Aa)"/>
+<path d="M126 306 L146 296 L146 360 L126 352 Z" fill="url(#Af)"/>
+<path d="M386 306 L366 296 L366 360 L386 352 Z" fill="url(#Af)"/>
+<rect x="146" y="298" width="220" height="64" fill="#2A0F05" opacity="0.28" transform="translate(0 6)"/>
+<rect x="136" y="292" width="240" height="64" rx="6" fill="url(#Ab)"/>
+<rect x="136" y="292" width="240" height="4" rx="2" fill="#FFFFFF" opacity="0.3"/>
+<line x1="152" y1="324" x2="360" y2="324" stroke="#D9A22E" stroke-width="5" stroke-linecap="round" stroke-dasharray="14 12"/>
+<rect x="190" y="382" width="132" height="14" rx="7" fill="#1F2B45" opacity="0.82"/>
+<rect x="190" y="403" width="84" height="12" rx="6" fill="#2F7F76" opacity="0.9"/></g></svg>

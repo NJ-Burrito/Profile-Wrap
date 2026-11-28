@@ -9,7 +9,7 @@ Status values: `todo`, `ready` (files done, waiting for a step), `submitted`, `l
 
 ## Order
 
-1. Release a version (tag, GitHub Release with the wheels, CI green; current: v0.5.0).
+1. Release a version (tag, GitHub Release with the wheels, CI green; current: v0.6.0).
 2. PyPI is no longer published (2026-11-23): the plugin and docs install from the GitHub release wheels.
    PyPI keeps 0.3.0; the Official MCP Registry needs PyPI and is not pursued.
 3. mcp.so, Glama, Smithery (need the public repo; Smithery also needs the bundle). 4. Anthropic plugin directory (needs 1).
@@ -49,7 +49,7 @@ Needs: a PyPI account and the repo `NJ-Burrito/Profile-Wrap` public. Files: `.gi
 **Lead/CI**: the PyPI job in `release.yml` has `permissions: id-token: write`, `environment: pypi`, builds both wheels and
 sdists and uploads with `pypa/gh-action-pypi-publish`; upload `profile-wrap` first, then `profile-wrap-mcp`.
 Commands to check before tagging: `uv build` and `uv build mcp`, then `uvx twine check dist/*`.
-Release: `git tag v0.4.0 && git push origin v0.4.0` (Lead only; use the version in `pyproject.toml`). Check after: `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp --help`.
+Release: `git tag v0.4.0 && git push origin v0.4.0` (Lead only; use the version in `pyproject.toml`). Check after: `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap_mcp-0.6.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap-0.6.0-py3-none-any.whl profile-wrap-mcp --help`.
 
 ## 2. Official MCP Registry
 
@@ -90,7 +90,7 @@ claim were not verified.
 ## 5. Smithery
 
 Needs: Smithery account; a stdio server is published as an MCPB bundle (a URL publish needs a public HTTPS server, which
-Profile-Wrap does not run). Files: `mcp/smithery.yaml` (metadata, launches `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap_mcp-0.5.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.5.0/profile_wrap-0.5.0-py3-none-any.whl profile-wrap-mcp`).
+Profile-Wrap does not run). Files: `mcp/smithery.yaml` (metadata, launches `uvx --from https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap_mcp-0.6.0-py3-none-any.whl --with https://github.com/NJ-Burrito/Profile-Wrap/releases/download/v0.6.0/profile_wrap-0.6.0-py3-none-any.whl profile-wrap-mcp`).
 **Lead**: build `profile-wrap-mcp.mcpb` (`npx @anthropic-ai/mcpb pack`, from `mcp/` with a `manifest.json`; package E owns
 the manifest). **The maintainer**: `smithery auth login`, then `smithery mcp publish ./profile-wrap-mcp.mcpb -n NJ-Burrito/profile-wrap-mcp`
 (exact namespace per his Smithery account; command from https://smithery.ai/docs/build/publish ). Paste text from

@@ -20,7 +20,7 @@ from typing import Callable, Dict, List, Optional, Tuple
 from profile_wrap import atomic
 
 from . import VisualsError, kit_dir, metrics
-from .gif import DATA_FILES, LEGACY_FILE, MOTION_FILES, file_hash, motion_source, sync_motion
+from .gif import DATA_FILES, LEGACY_FILE, core_hash, file_hash, motion_names, motion_source, sync_motion
 
 STATUSES_QUEUED = ("queued",)
 STATUSES_OPEN = ("queued", "draft", "revising", "hold", "needs_check", "missed")
@@ -115,13 +115,13 @@ def _version(path: Path) -> str:
 def status(workspace: Path) -> List[dict]:
     """Every video project with its motion version and whether it differs from the current library."""
     src = motion_source(workspace)
-    cur_core, cur_ver = file_hash(src / "core.js"), _version(src / "VERSION")
+    cur_core, cur_ver = core_hash(src), _version(src / "VERSION")
     out = []
     for proj in sorted((Path(workspace) / "videos").glob("*/")):
         if not (proj / "index.html").is_file():
             continue
         m = proj / "motion"
-        have = file_hash(m / "core.js")
+        have = core_hash(m)
         out.append({"project": proj.name, "version": _version(m / "VERSION") or None, "current": cur_ver,
                     "has_library": have is not None, "stale": have is not None and have != cur_core,
                     "legacy_only": have is None and (m / "motion.js").is_file()})
@@ -143,7 +143,7 @@ def backup(workspace: Path, slug: str, meta: dict, asset: str) -> Backup:
         shutil.rmtree(root)
     root.mkdir(parents=True)
     proj = Path(meta["video_project"])
-    rels = [str(proj / "motion" / n) for n in list(MOTION_FILES) + [LEGACY_FILE, "brand.js"]]
+    rels = [str(proj / "motion" / n) for n in motion_names(motion_source(ws)) + [LEGACY_FILE, "brand.js"]]
     rels += [str(proj / "assets" / "fonts.css"), str(proj / "renders" / "video.mp4")]
     rels += [f"drafts/{slug}/out/{asset}"] + [f"drafts/{slug}/out/{n}" for n in OUTPUTS[:1]] + \
         [f"drafts/{slug}/{OUTPUTS[1]}", f"drafts/{slug}/out/{OUTPUTS[2]}"]
@@ -190,7 +190,7 @@ def process(workspace: Path, cfg: dict, draft: Path, meta: dict, steps: Steps, *
     asset = next((a for a in meta.get("assets", []) if str(a).endswith(".gif")), f"{slug}.gif")
     gif = draft / "out" / asset
     src = motion_source(ws)
-    same_lib = all(file_hash(src / n) == file_hash(proj / "motion" / n) for n in MOTION_FILES if n not in DATA_FILES)
+    same_lib = all(file_hash(src / n) == file_hash(proj / "motion" / n) for n in motion_names(src) if n not in DATA_FILES)
     if same_lib and not force and gif.is_file() and (draft / "out" / "render.json").is_file() and \
             gif.stat().st_mtime >= (proj / "motion" / "core.js").stat().st_mtime:
         return {"slug": slug, "status": "SKIP-current"}
